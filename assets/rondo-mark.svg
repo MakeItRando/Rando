@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" role="img" aria-labelledby="title desc">
+  <title id="title">Rondo mark</title>
+  <desc id="desc">A broken circular track with a vermilion playhead.</desc>
+  <rect width="48" height="48" rx="10" fill="#0B0B0C"/>
+  <circle cx="24" cy="24" r="13.5" fill="none" stroke="#F3F0E9" stroke-width="5" stroke-linecap="round" stroke-dasharray="66 19" transform="rotate(-34 24 24)"/>
+  <circle cx="35.8" cy="14.8" r="3.4" fill="#FF4B2E"/>
+</svg>

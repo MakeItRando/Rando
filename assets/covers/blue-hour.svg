@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 560 560" role="img" aria-label="Blue hour botanical abstraction">
+  <defs>
+    <radialGradient id="bg"><stop stop-color="#2521a3"/><stop offset=".56" stop-color="#090d46"/><stop offset="1" stop-color="#020414"/></radialGradient>
+    <linearGradient id="petalA" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#6e43ff"/><stop offset=".48" stop-color="#173db5"/><stop offset="1" stop-color="#05082c"/></linearGradient>
+    <linearGradient id="petalB" x1="1" y1="0" x2="0" y2="1"><stop stop-color="#bb55df"/><stop offset=".5" stop-color="#304be2"/><stop offset="1" stop-color="#090b38"/></linearGradient>
+    <filter id="texture"><feTurbulence type="fractalNoise" baseFrequency=".06" numOctaves="4" seed="11" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="13"/><feGaussianBlur stdDeviation=".3"/></filter>
+    <filter id="grain"><feTurbulence type="fractalNoise" baseFrequency=".8" numOctaves="2" seed="9"/><feComponentTransfer><feFuncA type="table" tableValues="0 .1"/></feComponentTransfer></filter>
+  </defs>
+  <rect width="560" height="560" fill="url(#bg)"/>
+  <g filter="url(#texture)">
+    <path d="M281 293C178 276 91 203 50 78c112-8 218 29 262 135 20 49 8 71-31 80Z" fill="url(#petalA)"/>
+    <path d="M290 297C318 184 399 92 527 39c14 122-26 226-132 282-50 26-86 17-105-24Z" fill="url(#petalB)"/>
+    <path d="M279 305C379 321 468 394 521 526c-128 13-235-28-284-142-20-47-4-71 42-79Z" fill="url(#petalA)"/>
+    <path d="M268 299C228 403 141 485 21 517 15 397 63 300 170 255c47-20 80-5 98 44Z" fill="url(#petalB)"/>
+  </g>
+  <circle cx="280" cy="299" r="34" fill="#050719"/><circle cx="268" cy="286" r="8" fill="#c865ff" opacity=".8"/>
+  <rect width="560" height="560" filter="url(#grain)"/>
+</svg>
