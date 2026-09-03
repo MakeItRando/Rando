@@ -2,65 +2,66 @@
 
 ## Purpose
 
-Rondo's interface should make a large music catalog understandable without copying a streaming dashboard. The experience is artwork-led, editorial in spacing, and precise about artists, releases, credits, and genre provenance.
+Rondo's interface should make a large music catalog understandable without copying an existing streaming dashboard. The experience is artwork-led, editorial in spacing, and precise about artists, releases, credits, and genre provenance.
 
-## Primary screen hierarchy
+## Primary hierarchy
 
-`Genre → alphabetical artist → artist information → matching/all catalog → release → track → playback details`
+`Rondo account → taste profile → genre → alphabetical artist → Artist Focus → matching/all catalog → album or EP → track → Details/Lyrics/Credits`
 
 ## Desktop composition
 
-- **Navigation rail:** Discover, Genres, Library, Search, and Settings
-- **Top bar:** current genre, A–Z navigation, search, and profile
-- **Artist Focus:** artist portrait, concise information, sourced genres, catalog counts, save/skip controls, and meaningful progress ring
-- **Catalog:** releases newest-to-oldest with tracks in album order
-- **Inspector:** Details, Lyrics, and Credits tabs
-- **Transport:** persistent playback, queue, repeat mode, device state, and volume
+- **Navigation rail:** Discover, Genres, Library, Journeys, Search, and Profile
+- **Top bar:** current genre, A–Z navigation, search, and account
+- **Artist Focus:** portrait, concise information, sourced genres, catalog counts, save/skip controls, and meaningful progress ring
+- **Catalog:** albums and EPs newest-to-oldest with tracks in official order
+- **Inspector:** Details, Lyrics, and Credits
+- **Transport:** persistent playback, queue, repeat mode, availability, and volume
 
-The first prototype's circular style map is removed from the main experience. A circular form may remain only as artist-catalog progress around the artist portrait.
+The first prototype's circular style map is removed. A circular form remains only if it communicates artist-catalog progress.
 
 ## Mobile composition
 
 - compact genre and artist header;
-- swipeable A–Z artist index;
-- collapsible Artist Focus summary;
-- catalog grouped by release;
+- swipeable A–Z index;
+- collapsible Artist Focus;
+- catalog grouped by album/EP;
 - persistent mini-player;
-- full-screen Now Playing surface;
-- full-screen synchronized lyrics with controls kept reachable by one hand;
-- bottom sheet for artist completion.
+- full-screen Now Playing;
+- immersive synchronized lyrics;
+- artist-completion bottom sheet.
 
 ## Lyrics direction
-
-Lyrics should feel as immersive as a modern streaming product while remaining recognizably Rondo:
 
 - cover-derived background color with strict contrast safeguards;
 - large, left-aligned synchronized lines;
 - current line in warm ivory and upcoming lines at reduced opacity;
-- signal red used for position and interaction, not entire paragraphs;
+- signal red for position and interaction, not entire paragraphs;
 - swipe between Details, Lyrics, and Credits;
 - persistent compact transport;
-- source and songwriter attribution at the end.
+- source and songwriter attribution at the end;
+- distinctive Rondo transitions rather than a visual copy of another product.
 
-## Catalog details
+## Onboarding direction
 
-Each release header includes cover, title, type, date, track count, duration, and save state. Each song row explicitly identifies the release it belongs to, featured artists, genre/style labels, duration, and explicit status.
+Use seven or fewer focused screens, clear progress, large choices, immediate back navigation, and a review screen. Avoid gamified quizzes, forced swiping, personality labels, and vague recommendation promises.
 
 ## Touch-up checklist
 
-- Replace the unexplained orbit map with Artist Focus
+- Replace the orbit map with Artist Focus
 - Add A–Z artist navigation and Skip artist
-- Group songs under visible release headers
-- Add Matching songs / All catalog segmented control
-- Add Details / Lyrics / Credits tabs
+- Group songs under album/EP headers
+- Add Matching songs / All catalog control
+- Add Details / Lyrics / Credits views
 - Add repeat-artist state and artist-completion prompt
+- Design required onboarding and taste-review screens
+- Add library, journey progress, and resume states
 - Add skeletons without layout shift
 - Add unavailable, disconnected, and partial-metadata states
-- Increase touch targets to at least 44px on mobile
-- Preserve visible focus and reduced-motion behavior
-- Validate truncation for long artist, track, and album names
-- Never use a tooltip as the only explanation for an icon
+- Use 44px minimum mobile targets
+- Preserve focus, keyboard use, and reduced motion
+- Validate long artist, track, album, and translated-lyrics text
+- Never use a tooltip as the only icon explanation
 
 ## Prototype status
 
-The current deployed screen remains a visual prototype with fictional data and demonstrates the brand foundation. It must be redesigned to match this document before production integration begins.
+The deployed screen is a visual brand prototype with fictional data. It must be redesigned to match this document before production integration begins.

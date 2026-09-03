@@ -2,7 +2,9 @@
 
 ## Goal
 
-Keep product behavior independent from Spotify, a lyrics vendor, or any future provider. UI components consume Rondo domain objects and commands, never raw vendor responses.
+Rondo owns the account, product behavior, library, personalization, journeys, and user experience. Catalog, audio, metadata, artwork, and lyrics providers are replaceable infrastructure—not the product identity.
+
+UI components consume Rondo domain objects and commands, never raw provider responses.
 
 ## Layers
 
@@ -17,19 +19,20 @@ Domain models and connector ports
     ↓
 Provider adapters
     ↓
-Spotify, lyrics provider, metadata provider, Rondo database
+Licensed catalog, playback, lyrics, metadata, and Rondo persistence
 ```
 
 Dependencies point inward. Domain code must not import a provider SDK.
 
-## Suggested repository structure
+## Suggested structure
 
 ```text
 src/
   app/                  routing, composition, feature flags
   domain/               normalized entities and rules
   features/
-    auth/
+    account/
+    onboarding/
     discovery/
     artist-journey/
     catalog/
@@ -37,18 +40,21 @@ src/
     lyrics/
     credits/
     library/
+    profile/
     search/
   components/           shared visual primitives
   connectors/           provider-neutral interfaces
   adapters/
-    spotify/
+    account/
+    catalog/
+    playback/
     lyrics/
     metadata/
     persistence/
-  services/             orchestration, merge, cache, queue
+  services/             orchestration, merge, cache, queue, taste
   state/                small feature stores and state machines
 server/
-  auth/                  OAuth callback and secure sessions
+  auth/                  Rondo sessions and account security
   api/                   backend-for-frontend endpoints
   jobs/                  metadata refresh and reconciliation
   persistence/           database repositories
@@ -57,54 +63,34 @@ server/
 
 ## Connector ports
 
-### CatalogConnector
-
 ```ts
 interface CatalogConnector {
   search(query: string, types: EntityType[], cursor?: string): Promise<SearchPage>
   listArtistsByGenre(genreId: string, cursor?: string): Promise<ArtistPage>
   getArtist(artistId: string): Promise<Artist>
-  listArtistReleases(artistId: string, cursor?: string): Promise<ReleasePage>
+  listArtistReleases(artistId: string, types: ('album' | 'ep')[], cursor?: string): Promise<ReleasePage>
   listReleaseTracks(releaseId: string, cursor?: string): Promise<TrackPage>
 }
-```
 
-### PlaybackConnector
-
-```ts
 interface PlaybackConnector {
-  connect(): Promise<PlaybackDevice>
+  connect(session: RondoSession): Promise<PlaybackDevice>
   play(command: PlayCommand): Promise<void>
   pause(): Promise<void>
   seek(positionMs: number): Promise<void>
   setQueue(items: PlayableRef[]): Promise<void>
   subscribe(listener: (state: PlaybackState) => void): Unsubscribe
 }
-```
 
-### LyricsConnector
-
-```ts
 interface LyricsConnector {
   getLyrics(match: RecordingMatch, locale?: string): Promise<LyricsResult>
 }
-```
 
-The result carries synchronization type, language, rights, attribution, and availability. Lyrics content is never cached or transformed beyond what the provider license permits.
-
-### MetadataConnector
-
-```ts
 interface MetadataConnector {
   getArtistContext(artist: ExternalIds): Promise<Sourced<ArtistContext>>
   getGenreTags(entity: ExternalIds): Promise<Sourced<GenreTag>[]>
   getCredits(recording: ExternalIds): Promise<Sourced<Credit>[]>
 }
-```
 
-### LibraryConnector
-
-```ts
 interface LibraryConnector {
   save(entity: EntityRef): Promise<void>
   unsave(entity: EntityRef): Promise<void>
@@ -113,81 +99,71 @@ interface LibraryConnector {
 }
 ```
 
-Rondo persistence and Spotify-library synchronization are separate adapters behind this port.
+## Provider independence
 
-## Spotify adapter
+- No external music account is required by the product contract.
+- Provider IDs live in an `externalIds` map and never become Rondo primary IDs.
+- Authentication is Rondo authentication.
+- A backend-for-frontend controls provider credentials, rate limits, caching, and response normalization.
+- A provider can be replaced without rewriting screens, journeys, saves, or profiles.
+- Catalog and playback may come from different licensed systems.
 
-- Use OAuth Authorization Code with PKCE or a backend authorization-code flow; never use the deprecated implicit flow.
-- Keep refresh tokens and server credentials outside the browser bundle.
-- Use the Web Playback SDK behind `PlaybackConnector`.
-- Treat subscription, browser DRM, device availability, market restrictions, and token expiry as explicit states.
-- Do not build discovery around removed or restricted recommendation, related-artist, audio-feature, or top-track endpoints.
-- Preserve Spotify attribution and linking requirements.
-- Review Spotify's current developer policy before any commercial launch.
+## Licensing boundary
 
-## Lyrics adapter
-
-Spotify is not the architectural source of truth for lyrics. Select a licensed lyrics provider separately and isolate it behind `LyricsConnector`. Match recordings using provider IDs plus ISRC, artist, title, duration, and release context. Low-confidence matches must be rejected rather than showing incorrect lyrics.
-
-## Genre and artist index
-
-Alphabetical artist journeys require a Rondo-owned index because a playback catalog alone may not expose a complete, stable list of artists by genre. The index stores sourced classifications, aliases, sort names, eligibility, and cursors. It never claims that genre classification is universal.
+The architecture does not imply a right to stream commercial recordings or display lyrics. Production only enables content for which Rondo has a valid licensed provider or direct rights agreement. Lyrics content follows the selected provider's storage, transformation, attribution, and territory rules.
 
 ## Application services
 
+- `CompleteOnboarding` validates and versions a taste profile.
 - `BuildArtistJourney` resolves eligible artists and alphabetical order.
-- `BuildArtistCatalog` merges releases, removes duplicates, applies genre matching, and preserves official track order.
-- `ResolveRecording` reconciles Spotify, metadata, credit, and lyrics identities.
-- `AdvanceArtist` creates the completion summary and waits for user confirmation.
-- `SaveEntity` writes Rondo state and optionally delegates a Spotify save.
+- `BuildArtistCatalog` merges albums/EPs, removes duplicate editions, applies genre matching, and preserves official track order.
+- `ResolveRecording` reconciles catalog, metadata, credit, and lyrics identities.
+- `AdvanceArtist` creates the completion summary and waits for confirmation.
+- `SaveEntity` writes Rondo library state.
+- `UpdateTasteProfile` combines explicit preferences with transparent listening signals.
 
 ## State machines
 
-### Authentication
-
-`unknown → signed_out → authorizing → signed_in → refreshing → expired/error`
-
-### Playback
-
-`disconnected → connecting → ready → loading → playing/paused → unavailable/error`
-
-### Artist journey
-
-`idle → loading_artist → browsing → playing → artist_complete → awaiting_confirmation → advancing`
+- **Authentication:** `unknown → signed_out → registering/signing_in → onboarding → ready → expired/error`
+- **Playback:** `disconnected → connecting → ready → loading → playing/paused → unavailable/error`
+- **Artist journey:** `idle → loading_artist → browsing → playing → artist_complete → awaiting_confirmation → advancing`
+- **Lyrics:** `idle → matching → synced/plain/unavailable → error`
 
 Explicit states prevent scattered booleans and contradictory UI.
 
 ## Data and cache rules
 
 - Every external value records provider, external ID, retrieval time, and confidence where applicable.
-- Keep provider responses at adapter boundaries.
-- Cache metadata separately from user data.
-- Do not store copyrighted lyrics outside licensed rules.
-- Use idempotency keys for save and progress writes.
-- Paginate catalogs and artist indexes.
-- Abort stale requests when genre or artist changes.
+- Provider responses stop at adapter boundaries.
+- User data and licensed content use separate storage policies.
+- Copyrighted lyrics are never stored or transformed outside license rules.
+- Saves and progress writes use idempotency keys.
+- Catalogs and artist indexes are paginated.
+- Stale requests are aborted when genre or artist changes.
 
 ## Testing
 
 - connector contract tests shared by every adapter;
-- unit tests for catalog matching, release sorting, and artist advancement;
+- unit tests for catalog matching, release sorting, onboarding, and artist advancement;
 - state-machine transition tests;
 - mocked-provider integration tests;
 - accessibility and keyboard tests;
 - visual regression at desktop and mobile sizes;
-- end-to-end tests for login, playback, lyrics fallback, saves, and resume.
+- end-to-end tests for account creation, onboarding, playback, lyrics fallback, saves, and resume.
 
 ## Anti-spaghetti rules
 
 1. No API calls inside visual components.
-2. No raw Spotify or lyrics-vendor objects outside adapters.
-3. No global store containing the whole app.
-4. No feature may read another feature's private state directly.
-5. No secrets in GitHub Pages or browser JavaScript.
+2. No raw provider objects outside adapters.
+3. No global store containing the entire app.
+4. No feature reads another feature's private state directly.
+5. No provider secrets in browser JavaScript.
 6. No invented metadata when a connector returns unknown.
-7. No second implementation of the same queue or playback rule.
-8. Architecture decisions are recorded before adding another provider.
+7. No duplicate queue, sorting, save, or playback rules.
+8. No new provider without a contract test.
+9. No feature enters implementation without loading, empty, error, and accessibility states.
+10. Record architecture decisions before changing core boundaries.
 
 ## Deployment
 
-GitHub Pages remains suitable for the static design preview. Spotify OAuth, secure sessions, Rondo persistence, and secret-backed metadata or lyrics connectors require a server-capable production host. GitHub remains the source repository regardless of deployment platform.
+GitHub Pages remains suitable for the static design preview. Rondo accounts, secure sessions, persistence, provider credentials, and licensed lyrics require a server-capable production host. GitHub remains the source repository regardless of deployment platform.

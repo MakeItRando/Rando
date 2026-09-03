@@ -2,11 +2,13 @@
 
 **Find your next repeat.**
 
-Rondo is an artist-by-artist music journey that combines genre discovery with full playback, artist context, lyrics, credits, and personal listening progress.
+Rondo is an independent artist-by-artist music journey that combines genre discovery, listening, artist context, lyrics, credits, and personal progress.
+
+Rondo is not a Spotify client or wrapper. Other music products may inform familiar interaction patterns, but Rondo owns its account system, library, journeys, recommendation rules, interface, and brand. Catalog, audio, metadata, and lyrics are supplied through replaceable licensed connectors behind the product.
 
 ## Current status
 
-The repository currently contains a responsive visual prototype with fictional sample data. The agreed production direction is now documented before the interface is rebuilt around Spotify authentication and artist chapters.
+The repository contains a responsive visual prototype with fictional sample data. The target behavior and clean production architecture are documented before the interface is rebuilt.
 
 ## Preview locally
 
@@ -18,18 +20,19 @@ Then open `http://localhost:4173`.
 
 ## Confirmed product direction
 
-- Spotify-first playback with sign-in required;
-- genre → alphabetical artist → albums newest-to-oldest → songs in album order;
+- required Rondo account and taste onboarding;
+- genre → alphabetical artist → albums and EPs newest-to-oldest → songs in release order;
 - matching-genre songs by default, with an all-catalog toggle;
 - artist information and catalog progress above the playlist;
-- Details, Lyrics, and Credits in Now Playing;
-- saved songs, albums, artists, journeys, and listening progress;
+- immersive Details, Lyrics, and Credits views;
+- Rondo-owned saves, journeys, and listening progress;
 - confirmation before continuing to the next artist;
-- typed connector boundaries so provider code never leaks into the UI.
+- provider-neutral connectors so vendor code never leaks into the interface.
 
 ## Documentation
 
 - [`docs/PRODUCT.md`](docs/PRODUCT.md) — confirmed behavior and feature scope
+- [`docs/ONBOARDING.md`](docs/ONBOARDING.md) — account and music-taste setup
 - [`docs/DESIGN.md`](docs/DESIGN.md) — screen and interaction direction
 - [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) — modules, connector contracts, and guardrails
 - [`docs/DATA_MODEL.md`](docs/DATA_MODEL.md) — normalized product entities
@@ -37,4 +40,4 @@ Then open `http://localhost:4173`.
 
 ## Important
 
-The present catalog is fictional design data. Production playback, artwork, metadata, and lyrics require licensed providers. GitHub Pages can host the static prototype; authenticated production integrations require a server-capable deployment.
+The present catalog is fictional design data. A production music service requires licensed catalog, audio, artwork, metadata, and lyrics arrangements. GitHub Pages can host the static prototype; the authenticated production product requires a server-capable deployment.

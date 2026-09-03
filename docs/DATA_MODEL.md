@@ -3,17 +3,10 @@
 Provider adapters map external payloads into these domain shapes. UI and feature code use these models only.
 
 ```ts
-type ProviderName = 'rondo' | 'spotify' | 'lyrics' | 'metadata'
-
-type ExternalIds = {
-  spotify?: string
-  isrc?: string
-  musicbrainz?: string
-  [provider: string]: string | undefined
-}
+type ExternalIds = Record<string, string | undefined>
 
 type Provenance = {
-  provider: ProviderName
+  provider: string
   sourceUrl?: string
   retrievedAt: string
   confidence?: number
@@ -22,6 +15,32 @@ type Provenance = {
 type Sourced<T> = {
   value: T
   provenance: Provenance
+}
+
+type UserProfile = {
+  id: string
+  displayName: string
+  avatar?: ImageAsset
+  region: string
+  interfaceLanguage: string
+  lyricLanguages: string[]
+  onboardingCompletedAt?: string
+  accessibility: AccessibilityPreferences
+}
+
+type TasteProfile = {
+  id: string
+  userId: string
+  version: number
+  genreWeights: Record<string, number>
+  seedArtistIds: string[]
+  preferredDecades: string[]
+  discoveryLevel: number
+  popularityBias: number
+  vocalPreference?: number
+  albumFocus: number
+  allowExplicit: boolean
+  updatedAt: string
 }
 
 type GenreTag = {
@@ -48,7 +67,7 @@ type Release = {
   id: string
   externalIds: ExternalIds
   title: string
-  type: 'album' | 'ep' | 'single' | 'compilation'
+  type: 'album' | 'ep'
   releaseDate?: string
   artwork: ImageAsset[]
   primaryArtists: EntityRef[]
@@ -79,14 +98,9 @@ type Lyrics = {
   rights?: string
 }
 
-type Credit = {
-  personOrGroup: string
-  roles: string[]
-  provenance: Provenance
-}
-
 type ArtistJourney = {
   id: string
+  userId: string
   genre: EntityRef
   artistIds: string[]
   artistCursor?: string
@@ -110,16 +124,17 @@ type JourneyProgress = {
 
 ## Identity rules
 
-- A track recording is reconciled primarily by stable provider ID and ISRC, then by normalized artist/title/duration when necessary.
-- A release edition is not automatically the same as another edition with a similar title.
+- Rondo IDs are primary; provider IDs are replaceable references.
+- A recording is reconciled by stable provider IDs and ISRC, then normalized artist/title/duration when necessary.
+- Release editions with similar titles are not automatically merged.
 - Primary and featured artists remain separate.
-- `sortName` supports alphabetical navigation and may omit leading articles while preserving the display name.
-- Unknown values remain unknown; they are never filled with plausible-looking sample data in production.
+- `sortName` supports A–Z navigation while preserving the display name.
+- Unknown values remain unknown; production never uses plausible-looking filler.
 
 ## Catalog matching
 
-`matching` mode includes a track only when a sourced genre/style mapping meets the active genre rule. `all` mode includes the full eligible catalog while preserving visible tags. Matching decisions carry provenance and can be recomputed when taxonomy changes.
+`matching` mode includes a track only when a sourced mapping meets the active genre rule. `all` mode includes the complete eligible album/EP catalog while preserving visible tags. Matching decisions carry provenance and can be recomputed when taxonomy changes.
 
 ## Persistence ownership
 
-Rondo owns journeys, progress, UI preferences, and Rondo-specific saves. Provider-library state is synchronized through a connector and is never treated as the only copy of Rondo progress.
+Rondo owns accounts, taste profiles, journeys, progress, preferences, and saves. Licensed provider data remains subject to provider-specific storage and retention rules.
