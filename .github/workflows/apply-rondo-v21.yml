@@ -1,0 +1,97 @@
+name: Apply Rondo v2.1 quality pass
+
+on:
+  push:
+    branches:
+      - rondo-v21-quality-pass
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: rondo-v21-release
+  cancel-in-progress: false
+
+jobs:
+  apply-release:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Check out release branch
+        uses: actions/checkout@v4
+        with:
+          ref: rondo-v21-quality-pass
+          fetch-depth: 0
+
+      - name: Reconstruct and verify release
+        shell: bash
+        run: |
+          set -euo pipefail
+          cat .rondo-release/part-* | tr -d '\r\n' | base64 --decode > /tmp/rondo-v21.tar.gz
+          echo '10ea4d8bd41dd09b78cd8bd43c7a0f6d046445c4dcc92fa12da6126e0d270bd0  /tmp/rondo-v21.tar.gz' | sha256sum -c -
+          tar -xzf /tmp/rondo-v21.tar.gz -C .
+          rm -rf .rondo-release
+          rm -f .github/workflows/apply-rondo-v21.yml
+
+      - name: Verify exact release files
+        shell: bash
+        run: |
+          set -euo pipefail
+          cat > /tmp/rondo-v21.sha256 <<'EOF'
+          015bfcfaded8ffd1b74eddbc4eb015221826c639e53c71416f0a1426d529222e  .gitignore
+          ae467cbe92d7f734f5a1b5872329f582652ee3541a735e3dfa1879438eb13b83  index.html
+          c64ef201d6a4188c7eefb7d53209f754bb466535175d6646578075d33c58f0be  styles.css
+          f976ae42ff79d77ad44e11d9269c6eae0073f56f7190edfc3ea5ac80299a7b7d  app.js
+          b6a51723d25889ef42b617d22f9ce8a0065b70cc7aed3f4193980d26cc75fae2  src/app.js
+          0117a7283fc842bd39c5de146edc9f41bc1f28c9692aedc9e815df0106ffd544  src/data/catalog.js
+          2e0d0d314d38e2b906e0d03cc2b0eeab36cdb4fafdbe446d49d276b3aaf15e62  src/services/journey.js
+          63770dfb4dc6d42f41408911dfae193b273389a0ac67aeb6ab83abed570b511b  src/state/store.js
+          1eb414187fd854d6c0222f755afee6a899425039345a36cdfac3ee0cb08dbc08  src/ui/views.js
+          56484588f29ec987cd93b269709985ff25003a6555ff8b36e8801398e7899ecb  scripts/build-preview.mjs
+          828250a25e32795dd6ae4a9359f10b36d436279d934a3d1f29a099f279bda803  package.json
+          6edeb67b9d969bd887dd1dc3c547af405d1c181d99c9a69a5f8ab59521d87a4e  package-lock.json
+          8aa4cb0ac7b2f4f2e90e9913249933e487cbb8e50fc98461df4e479355615f9e  tests/unit.mjs
+          874e52e2ca34e348710335e9cf6863c5916f257f8a15b017f2b30ab541872b1e  tests/smoke.mjs
+          2e80636b6dbb507e34e783cf92bc856f57e087815d1c780afa4f9f2e6cb7a8d0  tests/quality.mjs
+          EOF
+          sed -i 's/^          //' /tmp/rondo-v21.sha256
+          sha256sum -c /tmp/rondo-v21.sha256
+          test ! -e .rondo-release
+          test ! -e .github/workflows/apply-rondo-v21.yml
+
+      - name: Publish one clean release commit
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git fetch origin main
+          git reset --soft origin/main
+          git add -A
+          if git diff --cached --quiet; then
+            echo 'No release changes found.' >&2
+            exit 1
+          fi
+          git commit -m 'feat: ship Rondo v2.1 quality pass'
+          git push origin HEAD:main
+
+      - name: Configure GitHub Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload GitHub Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: .
+
+      - name: Deploy GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
+
+      - name: Remove transport branch
+        if: success()
+        shell: bash
+        run: git push origin --delete rondo-v21-quality-pass
