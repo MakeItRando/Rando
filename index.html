@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#0B0B0C" />
+  <meta name="description" content="Rondo — an artwork-led music discovery design prototype." />
+  <title>Rondo — Find your next repeat</title>
+  <link rel="icon" href="assets/rondo-mark.svg" type="image/svg+xml" />
+  <link rel="stylesheet" href="styles.css" />
+  <script src="app.js" defer></script>
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="nav-rail" aria-label="Primary navigation">
+      <a class="rail-mark" href="#" aria-label="Rondo home">
+        <svg viewBox="0 0 48 48" aria-hidden="true">
+          <circle cx="24" cy="24" r="13.5" fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round" stroke-dasharray="66 19" transform="rotate(-34 24 24)" />
+          <circle cx="35.8" cy="14.8" r="3.4" class="signal-dot" />
+        </svg>
+      </a>
+      <nav class="rail-nav">
+        <button class="rail-link active" type="button" data-view="discover" aria-label="Discover" aria-current="page">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="12" r="8"/><path d="m14.7 9.3-1.4 4-4 1.4 1.4-4 4-1.4Z"/></svg>
+          <span>Discover</span>
+        </button>
+        <button class="rail-link" type="button" data-view="genres" aria-label="Genres">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M4 7h6v6H4zM14 4h6v6h-6zM14 14h6v6h-6zM4 17h6"/></svg>
+          <span>Genres</span>
+        </button>
+        <button class="rail-link" type="button" data-view="library" aria-label="Library">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M5 4h3v16H5zM11 4h3v16h-3zM17 5l2.7-.7L23 18l-2.7.7z"/></svg>
+          <span>Library</span>
+        </button>
+      </nav>
+      <div class="rail-footer" aria-hidden="true"><span>R</span><span>01</span></div>
+    </aside>
+
+    <div class="stage">
+      <header class="topbar">
+        <a class="wordmark" href="#" aria-label="Rondo home">
+          <svg viewBox="0 0 32 32" aria-hidden="true">
+            <circle cx="16" cy="16" r="9" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-dasharray="44 12" transform="rotate(-34 16 16)" />
+            <circle cx="23.8" cy="9.8" r="2.3" class="signal-dot" />
+          </svg>
+          <span>rondo</span>
+        </a>
+        <div class="breadcrumb" aria-label="Current location">
+          <span>DISCOVER</span><span class="breadcrumb-rule"></span><strong id="breadcrumbGenre">HIP-HOP / RAP</strong>
+        </div>
+        <div class="top-actions">
+          <button class="search-button" type="button" id="searchButton" aria-label="Search Rondo">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="10.8" cy="10.8" r="6.8"/><path d="m16 16 4 4"/></svg>
+            <span>Search artists, tracks, releases</span><kbd>/</kbd>
+          </button>
+          <span class="prototype-label">DESIGN PREVIEW</span>
+          <button class="profile-button" type="button" aria-label="Open profile">M</button>
+        </div>
+      </header>
+
+      <div class="body-grid">
+        <main class="discovery" id="mainContent">
+          <section class="genre-hero" aria-labelledby="genreHeading">
+            <div class="genre-copy">
+              <div class="genre-kicker">
+                <span id="genreIndex">GENRE 01 / 18</span><span class="kicker-line"></span><label for="genreSelect">SELECT</label>
+                <span class="select-control">
+                  <select id="genreSelect" aria-label="Select a main genre">
+                    <option value="hiphop">Hip-Hop / Rap</option><option value="rnb">R&amp;B / Soul</option><option value="electronic">Electronic</option><option value="jazz">Jazz</option><option value="rock">Rock</option>
+                  </select>
+                  <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="m6 8 4 4 4-4"/></svg>
+                </span>
+              </div>
+              <h1 id="genreHeading"><span id="genreTop">HIP</span><span class="title-slash">/</span><span id="genreBottom">HOP</span></h1>
+              <p class="genre-deck" id="genreDescription">Not one sound. A family tree shaped by region, rhythm, production, and voice.</p>
+              <div class="hero-actions">
+                <button class="solid-button" id="playSpectrum" type="button"><svg viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path d="M6 4.5v11l9-5.5z"/></svg>Play the spectrum</button>
+                <button class="text-button" id="lineageButton" type="button">Explore the lineage <span aria-hidden="true">↗</span></button>
+              </div>
+            </div>
+            <div class="orbit-map" aria-label="Selected subgenre map">
+              <div class="orbit-caption"><span>STYLE MAP</span><strong id="mapCount">06</strong></div>
+              <div class="orbit-ring ring-outer"></div><div class="orbit-ring ring-mid"></div><div class="orbit-ring ring-inner"></div>
+              <div class="orbit-axis axis-x"></div><div class="orbit-axis axis-y"></div>
+              <button class="orbit-node node-one active" type="button" data-filter="all"><span>ALL</span></button>
+              <button class="orbit-node node-two" type="button" data-filter="trap"><span>TRAP</span></button>
+              <button class="orbit-node node-three" type="button" data-filter="alternative"><span>ALT</span></button>
+              <button class="orbit-node node-four" type="button" data-filter="jazz"><span>JAZZ RAP</span></button>
+              <div class="orbit-center"><span id="orbitInitial">H</span><small>RONDO<br/>INDEX</small></div>
+            </div>
+          </section>
+
+          <section class="spectrum" aria-labelledby="spectrumTitle">
+            <header class="section-header">
+              <div><p class="section-index">01 — SPECTRUM</p><h2 id="spectrumTitle">Inside <span id="insideGenre">Hip-Hop</span></h2></div>
+              <p class="section-note" id="sectionNote">Six artists. Six different edges.<br/>One track from each voice.</p>
+            </header>
+            <div class="filter-row" id="filterRow" aria-label="Filter by style"></div>
+            <div class="track-table" role="table" aria-label="Genre discovery tracks">
+              <div class="track-head" role="row"><span role="columnheader"># / TRACK</span><span role="columnheader">STYLE</span><span role="columnheader">RELEASE</span><span role="columnheader"><span class="sr-only">Duration and favorite</span></span></div>
+              <div id="trackRows" role="rowgroup"></div>
+            </div>
+          </section>
+        </main>
+
+        <aside class="inspector" aria-label="Selected track details">
+          <div class="inspector-heading"><span>NOW / <strong id="nowNumber">01</strong></span><div class="level-bars" aria-label="Audio level"><i></i><i></i><i></i><i></i><i></i></div></div>
+          <div class="cover-frame"><img id="nowCover" src="assets/covers/night-transit.svg" alt="Night Transit cover artwork" /><span class="cover-index" id="coverIndex">R / 001</span></div>
+          <div class="track-identity">
+            <div><p class="micro-label">PLAYING FROM <span id="nowAlbumTop">BLACKTOP STUDIES</span></p><h2 id="nowTitle">Night Transit</h2><p class="artist-line"><button id="nowArtist" type="button">Kairo Vale</button><span id="featureWrap"> featuring <button id="nowFeature" type="button">Mira Son</button></span></p></div>
+            <button class="heart-button" id="mainHeart" type="button" aria-label="Save Night Transit" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M20.8 4.8a5.4 5.4 0 0 0-7.7 0L12 5.9l-1.1-1.1a5.4 5.4 0 0 0-7.7 7.7l1.1 1.1L12 21l7.7-7.4 1.1-1.1a5.4 5.4 0 0 0 0-7.7Z"/></svg></button>
+          </div>
+          <div class="style-tags" id="styleTags" aria-label="Source-backed style tags"><span>Psychedelic trap</span><span>Southern hip-hop</span></div>
+          <p class="provenance">STYLE TAGS <span>EDITORIAL + ARTIST DATA</span></p>
+          <dl class="metadata-grid">
+            <div><dt>Release</dt><dd id="metaRelease">Blacktop Studies · 2026</dd></div><div><dt>Label</dt><dd id="metaLabel">Rookhouse Records</dd></div><div><dt>Tempo</dt><dd id="metaTempo">142 BPM · F minor</dd></div><div><dt>Credits</dt><dd><button id="creditsButton" type="button">View full credits <span>+</span></button></dd></div>
+          </dl>
+          <div class="credits-drawer" id="creditsDrawer" hidden><div><span>Written by</span><p id="writers">Kairo Vale, Mira Son, J. Okoye</p></div><div><span>Produced by</span><p id="producers">Duskline, M. East</p></div><div><span>ISRC</span><p id="isrc">QZRND2600101</p></div></div>
+          <div class="inspector-controls">
+            <button type="button" class="control-button" id="previousButton" aria-label="Previous track"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M5 5h2v14H5zM18.5 6v12L8.5 12z"/></svg></button>
+            <button type="button" class="main-play" id="mainPlay" aria-label="Play"><svg class="main-play-icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg></button>
+            <button type="button" class="control-button" id="nextButton" aria-label="Next track"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17 5h2v14h-2zM5.5 6v12l10-6z"/></svg></button>
+          </div>
+        </aside>
+      </div>
+
+      <footer class="transport" aria-label="Music player">
+        <div class="transport-track"><img id="barCover" src="assets/covers/night-transit.svg" alt="" /><div><strong id="barTitle">Night Transit</strong><span id="barArtist">Kairo Vale feat. Mira Son</span></div></div>
+        <div class="transport-center">
+          <div class="transport-buttons">
+            <button type="button" id="shuffleButton" aria-label="Shuffle"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M16 3h5v5M4 5h2.5c5 0 6 14 11 14H21"/><path d="m16 16 5 3-5 3M4 19h2.5c1.4 0 2.5-1.1 3.5-2.7"/></svg></button>
+            <button type="button" id="barPrevious" aria-label="Previous track"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M5 5h2v14H5zM18.5 6v12L8.5 12z"/></svg></button>
+            <button type="button" class="bar-play" id="barPlay" aria-label="Play"><svg class="bar-play-icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg></button>
+            <button type="button" id="barNext" aria-label="Next track"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17 5h2v14h-2zM5.5 6v12l10-6z"/></svg></button>
+            <button type="button" id="loopButton" aria-label="Loop off" data-mode="off"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="m16 4 4 4-4 4"/><path d="M20 8H7a4 4 0 0 0-4 4M8 20l-4-4 4-4"/><path d="M4 16h13a4 4 0 0 0 4-4"/></svg><span class="loop-one">1</span></button>
+          </div>
+          <div class="timeline"><span id="elapsed">0:43</span><button class="timeline-track" id="timeline" type="button" aria-label="Seek through preview"><i id="timelineFill"></i><b id="timelineKnob"></b></button><span id="remaining">−2:59</span></div>
+        </div>
+        <div class="transport-tools"><span class="quality">LOSSLESS <i>DESIGN</i></span><button type="button" aria-label="Open queue"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M4 6h12M4 11h12M4 16h8"/><circle cx="18" cy="16" r="3"/></svg></button><button type="button" aria-label="Volume"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M4 10v4h4l5 4V6L8 10H4Z"/><path d="M16 9a4 4 0 0 1 0 6M18.5 6.5a8 8 0 0 1 0 11"/></svg></button></div>
+      </footer>
+    </div>
+  </div>
+
+  <div class="search-overlay" id="searchOverlay" hidden>
+    <div class="search-dialog" role="dialog" aria-modal="true" aria-labelledby="searchTitle">
+      <div class="search-input-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="10.8" cy="10.8" r="6.8"/><path d="m16 16 4 4"/></svg><label class="sr-only" id="searchTitle" for="searchInput">Search Rondo</label><input id="searchInput" type="search" placeholder="Search artists, tracks, releases" autocomplete="off" /><button id="closeSearch" type="button">ESC</button></div>
+      <div class="search-empty"><span>START ANYWHERE</span><p>Try “psychedelic trap”, “Mira Son”, or “2020s jazz rap”.</p></div>
+    </div>
+  </div>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+</body>
+</html>
