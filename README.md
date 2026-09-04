@@ -2,13 +2,25 @@
 
 **Find your next repeat.**
 
-Rondo is an independent artist-by-artist music journey that combines genre discovery, listening, artist context, lyrics, credits, and personal progress.
+Rondo is an independent artist-by-artist music journey: choose a genre, move through artists alphabetically, explore albums and EPs, and keep the music worth returning to.
 
-Rondo is not a Spotify client or wrapper. Other music products may inform familiar interaction patterns, but Rondo owns its account system, library, journeys, recommendation rules, interface, and brand. Catalog, audio, metadata, and lyrics are supplied through replaceable licensed connectors behind the product.
+Rondo is not a Spotify client or wrapper. Familiar interaction patterns may inspire usability, but Rondo owns its account, library, journeys, genre system, queue, player, recommendation rules, and brand. Catalog, audio, metadata, artwork, and lyrics enter through replaceable licensed connectors.
 
-## Current status
+## Current release — v0.2.2
 
-The repository contains a responsive visual prototype with fictional sample data. The target behavior and clean production architecture are documented before the interface is rebuilt.
+The repository contains a responsive, interactive design prototype with fictional catalog data. This release adds the immersive listening system:
+
+- Night appearance by default, with a persistent Light/Night switch;
+- genre-reactive ambience for Hip-Hop, R&B, Electronic, and Jazz;
+- automatic Genre Journey collapse when playback starts;
+- manual journey reopening without interrupting playback;
+- playback-driven signal motion with reduced-motion support;
+- an Up Next artist-chapter drawer;
+- a redesigned full-screen player with lyrics, metadata, queue, and journey actions;
+- a fixed off-canvas journey on mobile with no blank layout region;
+- regression coverage for appearance, ambience, queue, focus, and mobile stacking.
+
+Motion is a product visualization driven by playback state. It is not represented as live audio analysis.
 
 ## Preview locally
 
@@ -16,28 +28,33 @@ The repository contains a responsive visual prototype with fictional sample data
 python3 -m http.server 4173
 ```
 
-Then open `http://localhost:4173`.
+Open `http://localhost:4173`.
 
-## Confirmed product direction
+To build self-contained QA previews and run the complete gate:
 
-- required Rondo account and taste onboarding;
-- genre → alphabetical artist → albums and EPs newest-to-oldest → songs in release order;
-- matching-genre songs by default, with an all-catalog toggle;
-- artist information and catalog progress above the playlist;
-- immersive Details, Lyrics, and Credits views;
-- Rondo-owned saves, journeys, and listening progress;
-- confirmation before continuing to the next artist;
-- provider-neutral connectors so vendor code never leaks into the interface.
+```bash
+npm install
+npm run build:preview
+RONDO_URL=file:///absolute/path/to/Rando/preview-test.html npm test
+```
+
+## Product hierarchy
+
+`Rondo account → taste profile → genre → alphabetical artist → Artist Focus → matching/all catalog → album or EP → track → Details/Lyrics/Credits → artist-completion confirmation`
+
+## Architecture
+
+The prototype is split into catalog data, journey rules, state, views, ambience, and orchestration modules. UI code consumes normalized Rondo objects; future provider code belongs behind connector interfaces. See [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md).
 
 ## Documentation
 
 - [`docs/PRODUCT.md`](docs/PRODUCT.md) — confirmed behavior and feature scope
 - [`docs/ONBOARDING.md`](docs/ONBOARDING.md) — account and music-taste setup
-- [`docs/DESIGN.md`](docs/DESIGN.md) — screen and interaction direction
-- [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) — modules, connector contracts, and guardrails
-- [`docs/DATA_MODEL.md`](docs/DATA_MODEL.md) — normalized product entities
+- [`docs/DESIGN.md`](docs/DESIGN.md) — interface and interaction system
+- [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) — modules, connector boundaries, and guardrails
+- [`docs/DATA_MODEL.md`](docs/DATA_MODEL.md) — normalized product entities and state ownership
 - [`docs/BRAND.md`](docs/BRAND.md) — identity and visual principles
 
-## Important
+## Rights boundary
 
-The present catalog is fictional design data. A production music service requires licensed catalog, audio, artwork, metadata, and lyrics arrangements. GitHub Pages can host the static prototype; the authenticated production product requires a server-capable deployment.
+The current catalog and lyrics are fictional design data. A production release must use recordings, artwork, metadata, and lyrics for which Rondo has authorization: licensed providers, official embeds where permitted, direct artist uploads, Creative Commons/public-domain material, or direct rights agreements. GitHub Pages hosts the static prototype; accounts, secure sessions, provider credentials, and licensed playback require a server-capable production deployment.

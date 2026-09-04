@@ -2,64 +2,63 @@
 
 ## Goal
 
-Rondo owns the account, product behavior, library, personalization, journeys, and user experience. Catalog, audio, metadata, artwork, and lyrics providers are replaceable infrastructure—not the product identity.
+Rondo owns accounts, product behavior, library, personalization, journeys, queue, playback UX, and preferences. Catalog, audio, metadata, artwork, and lyrics providers are replaceable infrastructure—not the product identity.
 
-UI components consume Rondo domain objects and commands, never raw provider responses.
+UI code consumes normalized Rondo domain objects and commands, never raw provider payloads.
 
-## Layers
-
-```text
-Presentation
-    ↓
-Feature controllers and state machines
-    ↓
-Application services / use cases
-    ↓
-Domain models and connector ports
-    ↓
-Provider adapters
-    ↓
-Licensed catalog, playback, lyrics, metadata, and Rondo persistence
-```
-
-Dependencies point inward. Domain code must not import a provider SDK.
-
-## Suggested structure
+## Dependency direction
 
 ```text
-src/
-  app/                  routing, composition, feature flags
-  domain/               normalized entities and rules
-  features/
-    account/
-    onboarding/
-    discovery/
-    artist-journey/
-    catalog/
-    player/
-    lyrics/
-    credits/
-    library/
-    profile/
-    search/
-  components/           shared visual primitives
-  connectors/           provider-neutral interfaces
-  adapters/
-    account/
-    catalog/
-    playback/
-    lyrics/
-    metadata/
-    persistence/
-  services/             orchestration, merge, cache, queue, taste
-  state/                small feature stores and state machines
-server/
-  auth/                  Rondo sessions and account security
-  api/                   backend-for-frontend endpoints
-  jobs/                  metadata refresh and reconciliation
-  persistence/           database repositories
-  observability/         logs, metrics, tracing
+Presentation → feature orchestration → application services → domain/connector ports → provider adapters
 ```
+
+Dependencies point inward. Domain and feature code never import a vendor SDK.
+
+## Current prototype modules
+
+```text
+index.html                    semantic application and dialog surfaces
+styles.css                    core editorial system and responsive layout
+listening.css                 appearance, ambience, queue, and player layer
+app.js                        browser entrypoint
+src/app.js                    orchestration and event binding
+src/data/catalog.js           fictional normalized catalog fixture
+src/services/journey.js       ordering, lookup, progress, and queue rules
+src/state/store.js            persisted preferences/library plus runtime state
+src/ui/views.js               Library, Journeys, and Profile rendering
+src/ui/ambience.js            pure genre-palette mapping and CSS token sync
+scripts/build-preview.mjs     self-contained deterministic QA previews
+tests/                        unit, smoke, quality, and listening regressions
+```
+
+The listening layer is separate from core styles so appearance can evolve without scattering genre conditions through components. `src/ui/ambience.js` owns the palette map; `src/app.js` only chooses which genre is active.
+
+## State ownership
+
+Persisted state:
+
+- onboarding completion and profile;
+- saved tracks, releases, and artists;
+- played tracks and journey progress;
+- `theme`, normalized to `dark` or `light`.
+
+Transient interface state:
+
+- active view, genre, artist, catalog mode, and selected track;
+- playing, position, repeat mode, and inspector tab;
+- `directoryCollapsed`, queue visibility, and open overlays.
+
+The profile is deep-merged with defaults during migration so a partial older record cannot erase newly introduced fields. Journey collapse is deliberately not persisted: a fresh session opens in a navigable state, then responds to playback.
+
+## Playback and ambience contract
+
+`setPlaying` is the single transition for playback UI. Starting playback marks the selected track played, closes the mobile journey, and collapses the desktop directory. Pausing restores the normal journey state. A manual toggle can reopen the journey without mutating playback.
+
+Ambient visuals consume only playback state and normalized genre. They do not access microphone, media samples, FFT data, or provider internals. Product copy describes them as playback-driven simulated motion.
+
+## Overlay and focus contract
+
+Queue, Search, Full Player, Onboarding, and Completion are explicit overlays. Opening stores the invoking element; closing returns focus synchronously when that element still exists. Escape closes the topmost open surface. Queue selection keeps the queue open and updates current state.
 
 ## Connector ports
 
@@ -85,12 +84,6 @@ interface LyricsConnector {
   getLyrics(match: RecordingMatch, locale?: string): Promise<LyricsResult>
 }
 
-interface MetadataConnector {
-  getArtistContext(artist: ExternalIds): Promise<Sourced<ArtistContext>>
-  getGenreTags(entity: ExternalIds): Promise<Sourced<GenreTag>[]>
-  getCredits(recording: ExternalIds): Promise<Sourced<Credit>[]>
-}
-
 interface LibraryConnector {
   save(entity: EntityRef): Promise<void>
   unsave(entity: EntityRef): Promise<void>
@@ -99,71 +92,29 @@ interface LibraryConnector {
 }
 ```
 
-## Provider independence
-
-- No external music account is required by the product contract.
-- Provider IDs live in an `externalIds` map and never become Rondo primary IDs.
-- Authentication is Rondo authentication.
-- A backend-for-frontend controls provider credentials, rate limits, caching, and response normalization.
-- A provider can be replaced without rewriting screens, journeys, saves, or profiles.
-- Catalog and playback may come from different licensed systems.
-
-## Licensing boundary
-
-The architecture does not imply a right to stream commercial recordings or display lyrics. Production only enables content for which Rondo has a valid licensed provider or direct rights agreement. Lyrics content follows the selected provider's storage, transformation, attribution, and territory rules.
-
-## Application services
-
-- `CompleteOnboarding` validates and versions a taste profile.
-- `BuildArtistJourney` resolves eligible artists and alphabetical order.
-- `BuildArtistCatalog` merges albums/EPs, removes duplicate editions, applies genre matching, and preserves official track order.
-- `ResolveRecording` reconciles catalog, metadata, credit, and lyrics identities.
-- `AdvanceArtist` creates the completion summary and waits for confirmation.
-- `SaveEntity` writes Rondo library state.
-- `UpdateTasteProfile` combines explicit preferences with transparent listening signals.
-
-## State machines
-
-- **Authentication:** `unknown → signed_out → registering/signing_in → onboarding → ready → expired/error`
-- **Playback:** `disconnected → connecting → ready → loading → playing/paused → unavailable/error`
-- **Artist journey:** `idle → loading_artist → browsing → playing → artist_complete → awaiting_confirmation → advancing`
-- **Lyrics:** `idle → matching → synced/plain/unavailable → error`
-
-Explicit states prevent scattered booleans and contradictory UI.
-
-## Data and cache rules
-
-- Every external value records provider, external ID, retrieval time, and confidence where applicable.
-- Provider responses stop at adapter boundaries.
-- User data and licensed content use separate storage policies.
-- Copyrighted lyrics are never stored or transformed outside license rules.
-- Saves and progress writes use idempotency keys.
-- Catalogs and artist indexes are paginated.
-- Stale requests are aborted when genre or artist changes.
+Provider IDs live in `externalIds`; they never become Rondo primary IDs. A backend-for-frontend owns credentials, rate limits, caching, reconciliation, and response normalization. Catalog, playback, lyrics, and metadata may come from separate authorized providers.
 
 ## Testing
 
-- connector contract tests shared by every adapter;
-- unit tests for catalog matching, release sorting, onboarding, and artist advancement;
-- state-machine transition tests;
-- mocked-provider integration tests;
-- accessibility and keyboard tests;
-- visual regression at desktop and mobile sizes;
-- end-to-end tests for account creation, onboarding, playback, lyrics fallback, saves, and resume.
+- unit tests for ordering, matching, completion, and normalized counts;
+- interaction smoke tests for onboarding, search, navigation, saves, and focus;
+- quality audits for responsive layout, target sizes, contrast indicators, and browser errors;
+- immersive listening tests for theme persistence, genre tokens, queue behavior, journey collapse, mobile stacking, and playback preservation;
+- visual inspection at desktop, 390px, 320px, all genre palettes, Light, queue, player, and reduced-motion states.
 
 ## Anti-spaghetti rules
 
 1. No API calls inside visual components.
 2. No raw provider objects outside adapters.
-3. No global store containing the entire app.
-4. No feature reads another feature's private state directly.
-5. No provider secrets in browser JavaScript.
-6. No invented metadata when a connector returns unknown.
-7. No duplicate queue, sorting, save, or playback rules.
-8. No new provider without a contract test.
-9. No feature enters implementation without loading, empty, error, and accessibility states.
+3. No vendor secrets in browser JavaScript.
+4. No duplicated queue, sorting, save, ambience, or playback rules.
+5. No feature reads another feature's private state directly.
+6. No invented production metadata when a connector returns unknown.
+7. No new provider without a contract test.
+8. No feature ships without loading, empty, error, accessibility, and mobile states.
+9. No hidden access broadening or cross-service save side effects.
 10. Record architecture decisions before changing core boundaries.
 
 ## Deployment
 
-GitHub Pages remains suitable for the static design preview. Rondo accounts, secure sessions, persistence, provider credentials, and licensed lyrics require a server-capable production host. GitHub remains the source repository regardless of deployment platform.
+GitHub Pages is suitable for the static prototype. Rondo accounts, secure sessions, persistence, provider credentials, and licensed playback/lyrics require a server-capable production host.

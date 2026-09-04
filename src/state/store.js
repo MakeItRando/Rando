@@ -1,19 +1,28 @@
 const STORAGE_KEY = 'rondo-prototype-v2';
 
+const defaultProfile = {
+  displayName: 'M', email: '', genres: ['hiphop', 'rnb', 'electronic'],
+  seedArtists: ['kairo-vale', 'mira-son'], discovery: 64, popularity: 45, albumFocus: 78
+};
+
 const persistedDefaults = {
-	onboardingComplete: false,
-	profile: {
-		displayName: 'M', email: '', genres: ['hiphop', 'rnb', 'electronic'],
-		seedArtists: ['kairo-vale', 'mira-son'], discovery: 64, popularity: 45, albumFocus: 78
-	},
-	savedTracks: [], savedReleases: [], savedArtists: [], playedTracks: []
+  onboardingComplete: false,
+  profile: defaultProfile,
+  savedTracks: [], savedReleases: [], savedArtists: [], playedTracks: [],
+  theme: 'dark'
 };
 
 function readPersisted() {
   try {
-    return { ...persistedDefaults, ...JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}') };
+    const raw = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
+    return {
+      ...persistedDefaults,
+      ...raw,
+      profile: { ...defaultProfile, ...(raw.profile || {}) },
+      theme: raw.theme === 'light' ? 'light' : 'dark'
+    };
   } catch {
-    return { ...persistedDefaults };
+    return { ...persistedDefaults, profile: { ...defaultProfile } };
   }
 }
 
@@ -28,7 +37,8 @@ export function createStore(initialState) {
       savedTracks: [...state.savedTracks],
       savedReleases: [...state.savedReleases],
       savedArtists: [...state.savedArtists],
-      playedTracks: [...state.playedTracks]
+      playedTracks: [...state.playedTracks],
+      theme: state.theme === 'light' ? 'light' : 'dark'
     };
     localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
   };
@@ -41,6 +51,10 @@ export function createStore(initialState) {
       listeners.forEach((listener) => listener(state));
     },
     subscribe(listener) { listeners.add(listener); return () => listeners.delete(listener); },
-    reset() { localStorage.removeItem(STORAGE_KEY); state = { ...initialState, ...persistedDefaults }; listeners.forEach((listener) => listener(state)); }
+    reset() {
+      localStorage.removeItem(STORAGE_KEY);
+      state = { ...initialState, ...persistedDefaults, profile: { ...defaultProfile } };
+      listeners.forEach((listener) => listener(state));
+    }
   };
 }
