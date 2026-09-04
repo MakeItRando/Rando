@@ -1,32 +1,34 @@
-name: Build workspace recovery bundle
-
+name: Apply Rondo v2.2 release
 on:
   push:
     branches: [rondo-v22-immersive]
-    paths-ignore:
-      - "recovery/**"
-
+    paths:
+      - 'release-v22/**'
+      - '.github/workflows/recover-workspace.yml'
 permissions:
   contents: write
-
+concurrency:
+  group: rondo-v22-release
+  cancel-in-progress: false
 jobs:
-  bundle:
+  apply-release:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
         with:
+          ref: rondo-v22-immersive
           fetch-depth: 0
-      - name: Create temporary source bundle
+      - name: Verify and apply exact tested release
         shell: bash
         run: |
           set -euo pipefail
-          tar --exclude=.git --exclude=recovery -czf /tmp/rondo-v21.tar.gz .
-          mkdir -p recovery
-          base64 -w0 /tmp/rondo-v21.tar.gz > recovery/rondo-v21.tar.gz.b64
-          printf '\n' >> recovery/rondo-v21.tar.gz.b64
-          sha256sum /tmp/rondo-v21.tar.gz > recovery/rondo-v21.sha256
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add recovery/rondo-v21.tar.gz.b64 recovery/rondo-v21.sha256
-          git diff --cached --quiet || git commit -m "chore: create temporary recovery bundle"
-          git push origin "HEAD:${GITHUB_REF_NAME}"
+          cat release-v22/part-* | base64 --decode > /tmp/rondo-v22.tar.gz
+          echo "0cd130a6a3f4164740650c4241e5efe0d21f4731f0880e53b1fb74b5169e99ef  /tmp/rondo-v22.tar.gz" | sha256sum -c -
+          tar -xzf /tmp/rondo-v22.tar.gz -C .
+          rm -rf release-v22 recovery
+          rm -f .github/workflows/recover-workspace.yml
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          git add -A
+          git diff --cached --quiet || git commit -m "feat: ship Rondo v2.2 immersive listening"
+          git push origin HEAD:rondo-v22-immersive
