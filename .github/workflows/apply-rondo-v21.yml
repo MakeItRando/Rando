@@ -12,14 +12,11 @@ permissions:
 
 concurrency:
   group: rondo-v21-release
-  cancel-in-progress: false
+  cancel-in-progress: true
 
 jobs:
   apply-release:
     runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - name: Check out release branch
         uses: actions/checkout@v4
