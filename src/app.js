@@ -2,6 +2,7 @@ import { artists, genres, onboardingArtists, onboardingGenres } from './data/cat
 import { artistProgress, findReleaseContext, findTrackContext, flattenCatalog, getArtist, getGenre, listArtistsForGenre, listReleases, nextArtistFor } from './services/journey.js';
 import { createStore } from './state/store.js';
 import { renderJourneysView, renderLibraryView, renderProfileView } from './ui/views.js';
+import { applyGenreAmbience } from './ui/ambience.js';
 
 const playPath = '<path d="M8 5v14l11-7z"/>';
 const pausePath = '<path d="M7 5h4v14H7zM13 5h4v14h-4z"/>';
@@ -16,7 +17,8 @@ const getTasteGenreLabel = (id) => genres.find((genre) => genre.id === id)?.shor
 
 const store = createStore({
   genreId: 'hiphop', artistId: 'kairo-vale', catalogMode: 'matching', selectedTrackId: 'k101',
-  inspectorTab: 'details', playing: false, position: 43, repeatMode: 'continue', view: 'discover'
+  inspectorTab: 'details', playing: false, position: 43, repeatMode: 'continue', view: 'discover',
+  theme: 'dark', directoryCollapsed: false
 });
 
 let playbackTimer = null;
@@ -47,6 +49,13 @@ const elements = {
   completionHeard: $('completionHeard'), completionSaved: $('completionSaved'), completionReleases: $('completionReleases'),
   nextArtistImage: $('nextArtistImage'), nextArtistName: $('nextArtistName'), nextArtistTags: $('nextArtistTags'), toast: $('toast')
 };
+Object.assign(elements, {
+  journeyToggle: $('journeyToggle'), journeyToggleLabel: $('journeyToggleLabel'), themeToggle: $('themeToggle'), themeToggleLabel: $('themeToggleLabel'),
+  nowGenreMode: $('nowGenreMode'), nowAudioMeta: $('nowAudioMeta'), fullGenreMode: $('fullGenreMode'), fullAudioMeta: $('fullAudioMeta'),
+  fullQueue: $('fullQueue'), fullQueueCount: $('fullQueueCount'), fullJourney: $('fullJourney'),
+  queueScrim: $('queueScrim'), queueDrawer: $('queueDrawer'), queueTitle: $('queueTitle'), queueArtist: $('queueArtist'), queueGenre: $('queueGenre'),
+  queueList: $('queueList'), queueProgress: $('queueProgress'), queueCurrent: $('queueCurrent'), closeQueue: $('closeQueue')
+});
 
 const state = () => store.get();
 const currentGenre = () => getGenre(state().genreId);
@@ -54,6 +63,56 @@ const currentArtist = () => getArtist(state().artistId);
 const currentQueue = () => flattenCatalog(currentArtist(), state().genreId, state().catalogMode);
 const currentContext = () => findTrackContext(state().selectedTrackId) || findTrackContext(currentQueue()[0]?.id);
 const includes = (list, id) => Array.isArray(list) && list.includes(id);
+const listeningGenreId = () => {
+  const context = currentContext();
+  return context?.track.genres.includes(state().genreId) ? state().genreId : (context?.track.genres[0] || state().genreId);
+};
+const audioMeta = (track) => [track?.bpm ? `${track.bpm} BPM` : null, track?.key || null].filter(Boolean).join(' · ') || 'PLAYBACK SIGNAL';
+
+function syncAppearance() {
+  const theme = state().theme === 'light' ? 'light' : 'dark';
+  const context = currentContext();
+  const genreId = listeningGenreId();
+  const ambience = applyGenreAmbience(genreId);
+  document.documentElement.dataset.theme = theme;
+  const nextTheme = theme === 'dark' ? 'light' : 'night';
+  elements.themeToggleLabel.textContent = nextTheme === 'light' ? 'Light' : 'Night';
+  elements.themeToggle.setAttribute('aria-label', `Switch to ${nextTheme} appearance`);
+  const genreLabel = context ? `${context.track.style}`.toUpperCase() : (getGenre(genreId)?.name || genreId).toUpperCase();
+  const meta = audioMeta(context?.track).toUpperCase();
+  elements.nowGenreMode.textContent = genreLabel;
+  elements.nowAudioMeta.textContent = meta;
+  elements.fullGenreMode.textContent = genreLabel;
+  elements.fullAudioMeta.textContent = `${meta} · ${ambience.signal}`;
+  const themeMeta = document.querySelector('meta[name="theme-color"]');
+  if (themeMeta) themeMeta.content = theme === 'dark' ? ambience.base : '#f3f0e9';
+}
+
+function syncJourneyVisibility() {
+  const collapsed = Boolean(state().directoryCollapsed && state().view === 'discover');
+  document.body.classList.toggle('journey-collapsed', collapsed);
+  elements.journeyToggle.setAttribute('aria-expanded', String(!collapsed));
+  elements.journeyToggle.setAttribute('aria-label', collapsed ? 'Show Genre Journey' : 'Hide Genre Journey');
+  elements.journeyToggleLabel.textContent = collapsed ? 'Show journey' : 'Hide journey';
+}
+
+function toggleTheme() {
+  store.set({ theme: state().theme === 'dark' ? 'light' : 'dark' }, { persist: true });
+  syncAppearance();
+  showToast(`${state().theme === 'dark' ? 'Night' : 'Light'} appearance active`);
+}
+
+function toggleJourney() {
+  if (window.matchMedia('(max-width: 760px)').matches) {
+    const willOpen = !elements.directory.classList.contains('open');
+    elements.directory.classList.toggle('open', willOpen);
+    store.set({ directoryCollapsed: !willOpen });
+  } else {
+    store.set({ directoryCollapsed: !state().directoryCollapsed });
+    elements.directory.classList.remove('open');
+  }
+  syncJourneyVisibility();
+}
 
 function showToast(message) {
   elements.toast.textContent = message;
@@ -62,18 +121,19 @@ function showToast(message) {
   toastTimer = setTimeout(() => elements.toast.classList.remove('show'), 1700);
 }
 
-function rememberModalFocus() {
-  modalReturnFocus = document.activeElement instanceof HTMLElement ? document.activeElement : null;
+function rememberModalFocus(preferredFocus = null) {
+  modalReturnFocus = preferredFocus instanceof HTMLElement ? preferredFocus : (document.activeElement instanceof HTMLElement ? document.activeElement : null);
 }
 
 function focusAfterOpen(id) {
-  requestAnimationFrame(() => $(id)?.focus());
+  const target = $(id);
+  if (target?.isConnected) target.focus();
 }
 
 function restoreModalFocus() {
   const target = modalReturnFocus;
   modalReturnFocus = null;
-  requestAnimationFrame(() => { if (target?.isConnected) target.focus(); });
+  if (target?.isConnected) target.focus();
 }
 
 function toggleList(list, id) {
@@ -237,6 +297,8 @@ function renderNowPlaying() {
   });
   renderInspectorPanel(context);
   renderFullPlayer(context);
+  renderQueue();
+  syncAppearance();
   updatePlayerUI();
 }
 
@@ -282,6 +344,7 @@ function updatePlayerUI() {
   elements.fullPlay.textContent = state().playing ? 'Ⅱ' : '▶';
   elements.fullPlay.setAttribute('aria-label', state().playing ? 'Pause' : 'Play');
   document.body.classList.toggle('is-playing', state().playing);
+  syncJourneyVisibility();
   const repeat = state().repeatMode;
   elements.repeatMode.dataset.repeat = repeat;
   elements.repeatBadge.textContent = repeat === 'track' ? '1' : repeat === 'artist' ? 'A' : '';
@@ -343,7 +406,8 @@ function persistPlayedTrack() {
 
 function setPlaying(playing) {
   clearInterval(playbackTimer);
-  store.set({ playing });
+  store.set({ playing, directoryCollapsed: playing });
+  if (playing) elements.directory.classList.remove('open');
   if (playing) {
     persistPlayedTrack();
     playbackTimer = setInterval(() => {
@@ -354,10 +418,56 @@ function setPlaying(playing) {
       else { store.set({ position: nextPosition }); updatePlayerUI(); }
     }, 1000);
   }
+  syncJourneyVisibility();
   updatePlayerUI();
 }
 
 function togglePlaying() { setPlaying(!state().playing); }
+
+function renderQueue() {
+  const context = currentContext();
+  if (!context) return;
+  const queue = currentQueue();
+  const index = Math.max(0, queue.findIndex((track) => track.id === context.track.id));
+  elements.fullQueueCount.textContent = pad(queue.length);
+  elements.queueTitle.textContent = context.artist.name;
+  elements.queueArtist.textContent = `${state().catalogMode === 'matching' ? 'Matching' : 'All'} catalog · albums & EPs`;
+  elements.queueGenre.textContent = `${currentGenre().name.toUpperCase()} JOURNEY`;
+  elements.queueCurrent.textContent = `${pad(index + 1)} / ${pad(queue.length)}`;
+  elements.queueProgress.style.width = `${queue.length ? ((index + 1) / queue.length) * 100 : 0}%`;
+  elements.queueList.innerHTML = queue.map((track, queueIndex) => {
+    const trackContext = findTrackContext(track.id);
+    const active = track.id === context.track.id;
+    return `<button class="queue-item ${active ? 'active' : ''}" type="button" data-queue-track="${track.id}" ${active ? 'aria-current="true"' : ''}><span>${pad(queueIndex + 1)}</span><img src="${trackContext.release.cover}" alt=""/><span><strong>${escapeHtml(track.title)}</strong><small>${escapeHtml(trackContext.release.title)} · ${escapeHtml(track.style)}</small></span><b>${formatTime(track.durationSeconds)}</b></button>`;
+  }).join('');
+  elements.queueList.querySelectorAll('[data-queue-track]').forEach((button) => button.addEventListener('click', () => {
+    selectTrack(button.dataset.queueTrack, true);
+    renderQueue();
+  }));
+}
+
+function openQueue(event) {
+  rememberModalFocus(event?.currentTarget || $('queueButton'));
+  renderQueue();
+  elements.queueScrim.hidden = false;
+  elements.queueDrawer.hidden = false;
+  requestAnimationFrame(() => elements.closeQueue.focus());
+}
+
+function closeQueue() {
+  elements.queueScrim.hidden = true;
+  elements.queueDrawer.hidden = true;
+  restoreModalFocus();
+}
+
+function openJourneyFromPlayer() {
+  closeFullPlayer();
+  store.set({ directoryCollapsed: false });
+  syncJourneyVisibility();
+  if (window.matchMedia('(max-width: 760px)').matches) elements.directory.classList.add('open');
+  requestAnimationFrame(() => (window.matchMedia('(max-width: 760px)').matches ? $('closeDirectory') : elements.genreSelect).focus());
+}
+
 
 function seekTo(position) {
   const context = currentContext();
@@ -438,7 +548,7 @@ function closeCompletion() { elements.completionOverlay.hidden = true; restoreMo
 function continueToNextArtist() { const next = nextArtistFor(state().artistId, state().genreId, 1); closeCompletion(); selectArtist(next.id, true); }
 function replayArtist() { const first = currentQueue()[0]; closeCompletion(); if (first) selectTrack(first.id, true); }
 
-function openFullPlayer() { rememberModalFocus(); elements.fullPlayer.hidden = false; renderNowPlaying(); focusAfterOpen('closeFullPlayer'); }
+function openFullPlayer(event) { rememberModalFocus(event?.currentTarget || $('openFullPlayer')); elements.fullPlayer.hidden = false; renderNowPlaying(); focusAfterOpen('closeFullPlayer'); }
 function closeFullPlayer() { elements.fullPlayer.hidden = true; restoreModalFocus(); }
 
 function renderSearchResults(query) {
@@ -608,6 +718,8 @@ function advanceOnboarding() {
 
 function bindEvents() {
   elements.genreSelect.addEventListener('change', () => selectGenre(elements.genreSelect.value));
+  elements.themeToggle.addEventListener('click', toggleTheme);
+  elements.journeyToggle.addEventListener('click', toggleJourney);
   elements.artistFilter.addEventListener('input', renderDirectory);
   elements.matchingMode.addEventListener('click', () => setCatalogMode('matching'));
   elements.allMode.addEventListener('click', () => setCatalogMode('all'));
@@ -630,14 +742,18 @@ function bindEvents() {
   $('fullNext').addEventListener('click', () => changeTrack(1));
   elements.repeatMode.addEventListener('click', cycleRepeat);
   elements.timeline.addEventListener('click', (event) => { const rect = elements.timeline.getBoundingClientRect(); const context = currentContext(); if (context) seekTo(context.track.durationSeconds * Math.max(0, Math.min(1, (event.clientX - rect.left) / rect.width))); });
-  $('queueButton').addEventListener('click', () => showToast('Queue follows this artist’s albums and EPs'));
+  $('queueButton').addEventListener('click', openQueue);
+  elements.fullQueue.addEventListener('click', openQueue);
+  elements.fullJourney.addEventListener('click', openJourneyFromPlayer);
+  elements.closeQueue.addEventListener('click', closeQueue);
+  elements.queueScrim.addEventListener('click', closeQueue);
   $('searchTrigger').addEventListener('click', openSearch);
   $('closeSearch').addEventListener('click', closeSearch);
   elements.globalSearch.addEventListener('input', () => renderSearchResults(elements.globalSearch.value));
   elements.searchOverlay.addEventListener('click', (event) => { if (event.target === elements.searchOverlay) closeSearch(); });
   $('profileTrigger').addEventListener('click', openOnboarding);
-  $('mobileDirectoryButton').addEventListener('click', () => elements.directory.classList.add('open'));
-  $('closeDirectory').addEventListener('click', () => elements.directory.classList.remove('open'));
+  $('mobileDirectoryButton').addEventListener('click', () => { store.set({ directoryCollapsed: false }); elements.directory.classList.add('open'); syncJourneyVisibility(); });
+  $('closeDirectory').addEventListener('click', () => { elements.directory.classList.remove('open'); if (!window.matchMedia('(max-width: 760px)').matches) store.set({ directoryCollapsed: true }); syncJourneyVisibility(); });
   $('closeOnboarding').addEventListener('click', closeOnboarding);
   elements.onboardingBack.addEventListener('click', () => { if (onboardingStep > 0) { onboardingStep -= 1; renderOnboardingStep(); } });
   elements.onboardingNext.addEventListener('click', advanceOnboarding);
@@ -648,7 +764,7 @@ function bindEvents() {
   document.querySelectorAll('.rail-button[data-view]').forEach((button) => button.addEventListener('click', () => showView(button.dataset.view)));
   document.addEventListener('keydown', (event) => {
     if (event.key === '/' && elements.searchOverlay.hidden && !['INPUT','TEXTAREA','SELECT'].includes(document.activeElement.tagName)) { event.preventDefault(); openSearch(); }
-    if (event.key === 'Escape') { if (!elements.searchOverlay.hidden) closeSearch(); else if (!elements.fullPlayer.hidden) closeFullPlayer(); else if (!elements.onboardingOverlay.hidden) closeOnboarding(); else if (!elements.completionOverlay.hidden) closeCompletion(); else elements.directory.classList.remove('open'); }
+    if (event.key === 'Escape') { if (!elements.queueDrawer.hidden) closeQueue(); else if (!elements.searchOverlay.hidden) closeSearch(); else if (!elements.fullPlayer.hidden) closeFullPlayer(); else if (!elements.onboardingOverlay.hidden) closeOnboarding(); else if (!elements.completionOverlay.hidden) closeCompletion(); else elements.directory.classList.remove('open'); }
     if (event.code === 'Space' && document.activeElement === document.body) { event.preventDefault(); togglePlaying(); }
   });
 }
@@ -663,4 +779,12 @@ else if (previewMode === 'lyrics') openFullPlayer();
 else if (previewMode === 'completion') openCompletion({ preview: true });
 else if (previewMode === 'library') showView('library');
 else if (previewMode === 'profile') showView('profile');
+else if (previewMode === 'queue') { setPlaying(true); openQueue(); }
+else if (previewMode === 'playing') setPlaying(true);
+else if (previewMode === 'reopened') { setPlaying(true); toggleJourney(); }
+else if (previewMode === 'player') { setPlaying(true); openFullPlayer(); }
+else if (previewMode === 'light') { store.set({ theme: 'light' }); syncAppearance(); }
+else if (previewMode?.startsWith('genre-')) selectGenre(previewMode.replace('genre-', ''));
 else if (!previewMode && !state().onboardingComplete && !params.has('skip-onboarding')) openOnboarding();
+syncAppearance();
+syncJourneyVisibility();

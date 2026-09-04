@@ -1,26 +1,23 @@
 # Rondo normalized data model
 
-Provider adapters map external payloads into these domain shapes. UI and feature code use these models only.
+Provider adapters map external payloads into Rondo-owned domain shapes. UI and feature code use these models only.
 
 ```ts
 type ExternalIds = Record<string, string | undefined>
 
-type Provenance = {
-  provider: string
-  sourceUrl?: string
-  retrievedAt: string
-  confidence?: number
-}
-
 type Sourced<T> = {
   value: T
-  provenance: Provenance
+  provenance: {
+    provider: string
+    sourceUrl?: string
+    retrievedAt: string
+    confidence?: number
+  }
 }
 
 type UserProfile = {
   id: string
   displayName: string
-  avatar?: ImageAsset
   region: string
   interfaceLanguage: string
   lyricLanguages: string[]
@@ -34,13 +31,18 @@ type TasteProfile = {
   version: number
   genreWeights: Record<string, number>
   seedArtistIds: string[]
-  preferredDecades: string[]
   discoveryLevel: number
   popularityBias: number
-  vocalPreference?: number
   albumFocus: number
   allowExplicit: boolean
   updatedAt: string
+}
+
+type AppearancePreference = {
+  theme: 'dark' | 'light'
+  reduceMotion?: boolean
+  highContrast?: boolean
+  largerText?: boolean
 }
 
 type GenreTag = {
@@ -71,7 +73,6 @@ type Release = {
   releaseDate?: string
   artwork: ImageAsset[]
   primaryArtists: EntityRef[]
-  trackCount?: number
 }
 
 type Track = {
@@ -89,21 +90,11 @@ type Track = {
   availability: Availability
 }
 
-type Lyrics = {
-  track: EntityRef
-  language?: string
-  synchronization: 'line' | 'word' | 'none'
-  lines: LyricLine[]
-  attribution: string
-  rights?: string
-}
-
 type ArtistJourney = {
   id: string
   userId: string
   genre: EntityRef
   artistIds: string[]
-  artistCursor?: string
   activeArtistIndex: number
   catalogMode: 'matching' | 'all'
   status: 'active' | 'awaiting_confirmation' | 'complete'
@@ -120,21 +111,32 @@ type JourneyProgress = {
   completedArtistIds: string[]
   updatedAt: string
 }
+
+type ListeningUiState = {
+  playing: boolean
+  positionMs: number
+  repeatMode: 'continue' | 'track' | 'artist'
+  selectedTrackId: string
+  inspectorTab: 'details' | 'lyrics' | 'credits'
+  directoryCollapsed: boolean // transient; never persisted
+  queueOpen: boolean
+}
 ```
 
-## Identity rules
+## Identity and matching rules
 
 - Rondo IDs are primary; provider IDs are replaceable references.
-- A recording is reconciled by stable provider IDs and ISRC, then normalized artist/title/duration when necessary.
-- Release editions with similar titles are not automatically merged.
 - Primary and featured artists remain separate.
-- `sortName` supports A–Z navigation while preserving the display name.
+- `sortName` supports A–Z navigation while preserving display name.
+- Release editions with similar titles are not silently merged.
 - Unknown values remain unknown; production never uses plausible-looking filler.
+- `matching` includes a track only when a sourced mapping meets the active genre rule.
+- `all` includes the complete eligible album/EP catalog while preserving visible tags.
 
-## Catalog matching
+## Appearance and ambience
 
-`matching` mode includes a track only when a sourced mapping meets the active genre rule. `all` mode includes the complete eligible album/EP catalog while preserving visible tags. Matching decisions carry provenance and can be recomputed when taxonomy changes.
+Theme is a persisted user preference. Genre ambience is derived from the active normalized genre and therefore is not stored as independent state. Playback-driven motion is presentation state; it does not imply an audio-analysis data source.
 
 ## Persistence ownership
 
-Rondo owns accounts, taste profiles, journeys, progress, preferences, and saves. Licensed provider data remains subject to provider-specific storage and retention rules.
+Rondo owns accounts, taste profiles, appearance preferences, journeys, progress, and saves. Licensed provider data remains subject to provider-specific storage, attribution, territory, and retention rules.

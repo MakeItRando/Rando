@@ -1,18 +1,20 @@
 {
   "name": "rondo-design-prototype",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "private": true,
   "type": "module",
   "description": "Artist-by-artist music journey and product design prototype.",
   "scripts": {
     "serve": "python3 -m http.server 4173",
-    "check": "node --check app.js && node --check src/app.js && node --check src/data/catalog.js && node --check src/services/journey.js && node --check src/state/store.js && node --check src/ui/views.js",
+    "check": "node --check app.js && node --check src/app.js && node --check src/data/catalog.js && node --check src/services/journey.js && node --check src/state/store.js && node --check src/ui/views.js && node --check src/ui/ambience.js",
     "build:preview": "node scripts/build-preview.mjs",
     "test:unit": "node tests/unit.mjs",
-    "test:browser": "node tests/smoke.mjs && node tests/quality.mjs",
+    "test:browser": "node tests/smoke.mjs && node tests/quality.mjs && node tests/listening.mjs",
     "test": "npm run check && npm run test:unit && npm run test:browser"
   },
-  "engines": { "node": ">=20" },
+  "engines": {
+    "node": ">=20"
+  },
   "devDependencies": {
     "esbuild": "0.25.0",
     "playwright": "1.45.0"
