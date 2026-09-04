@@ -28,7 +28,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          cat .rondo-release/part-* | tr -d '\r\n' | base64 --decode > /tmp/rondo-v21.tar.gz
+          cat .rondo-release/part-0[0-5] .rondo-release/tail-* | tr -d '\r\n' | base64 --decode > /tmp/rondo-v21.tar.gz
           echo '10ea4d8bd41dd09b78cd8bd43c7a0f6d046445c4dcc92fa12da6126e0d270bd0  /tmp/rondo-v21.tar.gz' | sha256sum -c -
           tar -xzf /tmp/rondo-v21.tar.gz -C .
           rm -rf .rondo-release
