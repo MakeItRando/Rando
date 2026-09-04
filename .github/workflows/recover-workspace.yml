@@ -1,0 +1,32 @@
+name: Build workspace recovery bundle
+
+on:
+  push:
+    branches: [rondo-v22-immersive]
+    paths-ignore:
+      - "recovery/**"
+
+permissions:
+  contents: write
+
+jobs:
+  bundle:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Create temporary source bundle
+        shell: bash
+        run: |
+          set -euo pipefail
+          tar --exclude=.git --exclude=recovery -czf /tmp/rondo-v21.tar.gz .
+          mkdir -p recovery
+          base64 -w0 /tmp/rondo-v21.tar.gz > recovery/rondo-v21.tar.gz.b64
+          printf '\n' >> recovery/rondo-v21.tar.gz.b64
+          sha256sum /tmp/rondo-v21.tar.gz > recovery/rondo-v21.sha256
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add recovery/rondo-v21.tar.gz.b64 recovery/rondo-v21.sha256
+          git diff --cached --quiet || git commit -m "chore: create temporary recovery bundle"
+          git push origin "HEAD:${GITHUB_REF_NAME}"
