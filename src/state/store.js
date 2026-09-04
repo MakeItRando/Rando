@@ -1,9 +1,12 @@
 const STORAGE_KEY = 'rondo-prototype-v2';
 
 const persistedDefaults = {
-  onboardingComplete: true,
-  profile: { displayName: 'M', genres: ['hiphop', 'rnb', 'electronic'], seedArtists: ['kairo-vale', 'mira-son'], discovery: 64 },
-  savedTracks: [], savedReleases: [], savedArtists: [], playedTracks: []
+	onboardingComplete: false,
+	profile: {
+		displayName: 'M', email: '', genres: ['hiphop', 'rnb', 'electronic'],
+		seedArtists: ['kairo-vale', 'mira-son'], discovery: 64, popularity: 45, albumFocus: 78
+	},
+	savedTracks: [], savedReleases: [], savedArtists: [], playedTracks: []
 };
 
 function readPersisted() {

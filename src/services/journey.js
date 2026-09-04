@@ -37,6 +37,14 @@ export function findTrackContext(trackId) {
   return null;
 }
 
+export function findReleaseContext(releaseId) {
+  for (const artist of artists) {
+    const release = artist.releases.find((item) => item.id === releaseId);
+    if (release) return { artist, release };
+  }
+  return null;
+}
+
 export function nextArtistFor(artistId, genreId, direction = 1) {
   const eligible = listArtistsForGenre(genreId);
   const index = Math.max(0, eligible.findIndex((artist) => artist.id === artistId));
