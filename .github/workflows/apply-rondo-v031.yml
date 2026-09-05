@@ -1,4 +1,4 @@
-name: Apply Rondo v0.3.1 user-test release
+name: Diagnose Rondo v0.3.1 release
 
 on:
   push:
@@ -11,7 +11,7 @@ permissions:
   contents: write
 
 jobs:
-  apply-release:
+  diagnose-release:
     runs-on: ubuntu-latest
     steps:
       - name: Check out release branch
@@ -20,39 +20,36 @@ jobs:
           ref: rondo-v031-user-ready
           fetch-depth: 0
 
-      - name: Verify, apply, and validate release
+      - name: Capture release diagnostics
         shell: bash
         run: |
-          set -euo pipefail
-          cat .release-v031/patch.part-* | base64 -d | gzip -d > /tmp/rondo-v031.patch
-          echo "ebc77be5404edbff5e14d0d5b44aced72effeafa07fda978cb4846321e663044  /tmp/rondo-v031.patch" | sha256sum -c -
-          git apply --check /tmp/rondo-v031.patch
-          git apply /tmp/rondo-v031.patch
-          cat > /tmp/expected-files <<'EOF'
-          README.md
-          docs/DESIGN.md
-          index.html
-          package-lock.json
-          package.json
-          song-room.css
-          src/app.js
-          tests/user-ready.mjs
-          EOF
-          git diff --name-only | LC_ALL=C sort > /tmp/actual-files
-          diff -u /tmp/expected-files /tmp/actual-files
-          test "$(node -p "require('./package.json').version")" = "0.3.1"
-          test "$(node -p "require('./package-lock.json').version")" = "0.3.1"
-          npm run check
-          npm run test:unit
-
-      - name: Commit validated release
-        shell: bash
-        run: |
-          set -euo pipefail
-          rm -rf .release-v031 .github/workflows/apply-rondo-v031.yml
-          git add -A
-          git diff --cached --check
+          set -u
+          log=.release-v031/diagnostic.txt
+          : > "$log"
+          run_step() {
+            label="$1"
+            shift
+            echo "=== $label ===" >> "$log"
+            "$@" >> "$log" 2>&1
+            code=$?
+            echo "exit=$code" >> "$log"
+            echo >> "$log"
+            return 0
+          }
+          run_step "reconstruct payload" bash -o pipefail -c 'cat .release-v031/patch.part-* | base64 -d | gzip -d > /tmp/rondo-v031.patch'
+          run_step "patch checksum" bash -c 'echo "ebc77be5404edbff5e14d0d5b44aced72effeafa07fda978cb4846321e663044  /tmp/rondo-v031.patch" | sha256sum -c -'
+          run_step "patch dry run" git apply --check /tmp/rondo-v031.patch
+          run_step "apply patch" git apply /tmp/rondo-v031.patch
+          run_step "changed files" git diff --name-status
+          run_step "package version" node -p "require('./package.json').version"
+          run_step "lock version" node -p "require('./package-lock.json').version"
+          run_step "syntax checks" npm run check
+          run_step "unit checks" npm run test:unit
+          cp "$log" /tmp/rondo-v031-diagnostic.txt
+          git reset --hard HEAD
+          cp /tmp/rondo-v031-diagnostic.txt "$log"
+          git add -f "$log"
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git commit -m "Rondo v0.3.1: user-test polish"
+          git commit -m "Diagnose Rondo v0.3.1 assembly"
           git push origin HEAD:rondo-v031-user-ready
