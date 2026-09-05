@@ -1,4 +1,4 @@
-name: Apply Rondo v0.3.1 user-test release
+name: Diagnose Rondo v0.3.1 commit
 
 on:
   push:
@@ -11,7 +11,7 @@ permissions:
   contents: write
 
 jobs:
-  apply-release:
+  diagnose-commit:
     runs-on: ubuntu-latest
     steps:
       - name: Check out release branch
@@ -20,27 +20,33 @@ jobs:
           ref: rondo-v031-user-ready
           fetch-depth: 0
 
-      - name: Verify, apply, and validate release
+      - name: Capture commit diagnostics
         shell: bash
         run: |
-          set -euo pipefail
-          cat .release-v031/patch.part-* | base64 -d | gzip -d > /tmp/rondo-v031.patch
-          echo "ebc77be5404edbff5e14d0d5b44aced72effeafa07fda978cb4846321e663044  /tmp/rondo-v031.patch" | sha256sum -c -
-          git apply --check /tmp/rondo-v031.patch
-          git apply /tmp/rondo-v031.patch
-          test -f tests/user-ready.mjs
-          test "$(node -p "require('./package.json').version")" = "0.3.1"
-          test "$(node -p "require('./package-lock.json').version")" = "0.3.1"
-          npm run check
-          npm run test:unit
-
-      - name: Commit validated release
-        shell: bash
-        run: |
-          set -euo pipefail
-          rm -rf .release-v031 .github/workflows/apply-rondo-v031.yml
-          git add -A
-          git diff --cached --check
+          set -u
+          original="$(git rev-parse HEAD)"
+          log=/tmp/rondo-v031-commit-diagnostic.txt
+          : > "$log"
+          run_step() {
+            label="$1"
+            shift
+            echo "=== $label ===" >> "$log"
+            "$@" >> "$log" 2>&1
+            code=$?
+            echo "exit=$code" >> "$log"
+            echo >> "$log"
+            return 0
+          }
+          run_step "reconstruct payload" bash -o pipefail -c 'cat .release-v031/patch.part-* | base64 -d | gzip -d > /tmp/rondo-v031.patch'
+          run_step "patch checksum" bash -c 'echo "ebc77be5404edbff5e14d0d5b44aced72effeafa07fda978cb4846321e663044  /tmp/rondo-v031.patch" | sha256sum -c -'
+          run_step "patch dry run" git apply --check /tmp/rondo-v031.patch
+          run_step "apply patch" git apply /tmp/rondo-v031.patch
+          run_step "syntax checks" npm run check
+          run_step "unit checks" npm run test:unit
+          run_step "remove transport" bash -c 'rm -rf .release-v031 .github/workflows/apply-rondo-v031.yml'
+          run_step "stage release" git add -A
+          run_step "cached whitespace check" git diff --cached --check
+          run_step "cached files" git diff --cached --name-status
           cat > /tmp/expected-product-files <<'EOF'
           README.md
           docs/DESIGN.md
@@ -51,9 +57,14 @@ jobs:
           src/app.js
           tests/user-ready.mjs
           EOF
-          git diff --cached --name-only | grep -Ev '^(\.release-v031/|\.github/workflows/apply-rondo-v031\.yml)$' | LC_ALL=C sort > /tmp/actual-product-files
-          diff -u /tmp/expected-product-files /tmp/actual-product-files
+          run_step "actual product files" bash -o pipefail -c "git diff --cached --name-only | grep -Ev '^(\\.release-v031/|\\.github/workflows/apply-rondo-v031\\.yml)$' | LC_ALL=C sort > /tmp/actual-product-files; cat /tmp/actual-product-files"
+          run_step "product file comparison" diff -u /tmp/expected-product-files /tmp/actual-product-files
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git commit -m "Rondo v0.3.1: user-test polish"
+          run_step "create release commit" git commit -m "Rondo v0.3.1: user-test polish"
+          run_step "push dry run" git push --dry-run origin HEAD:rondo-v031-user-ready
+          git reset --hard "$original"
+          cp "$log" .release-v031/diagnostic-commit.txt
+          git add -f .release-v031/diagnostic-commit.txt
+          git commit -m "Diagnose Rondo v0.3.1 commit"
           git push origin HEAD:rondo-v031-user-ready
