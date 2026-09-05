@@ -21,7 +21,10 @@ const track = (id, title, duration, genres, style, options = {}) => ({
   lyrics: options.lyrics || lyricSet(['Instrumental passage', 'No synchronized words available']),
   writers: options.writers || [], producers: options.producers || [],
   isrc: options.isrc || `QZRND26${id.replace(/\D/g, '').padStart(6, '0').slice(-6)}`,
-  bpm: options.bpm || null, key: options.key || null
+  bpm: options.bpm || null, key: options.key || null, version: options.version || 'Original album version',
+  story: options.story || null, soundPalette: options.soundPalette || [],
+  source: options.source || { label: 'Prototype context', detail: 'Fictional demo metadata · not a commercial catalog claim', status: 'demo' },
+  previewUrl: options.previewUrl || null, previewDurationSeconds: options.previewDurationSeconds || null
 });
 
 export const genres = [
@@ -39,7 +42,7 @@ export const artists = [
     bio: 'Asha North writes close-mic soul around patient drums, modular textures, and carefully layered harmony.',
     releases: [
       { id: 'silver-weather', title: 'Silver Weather', type: 'Album', year: 2026, date: '2026-04-18', label: 'Kite String', cover: cover.ring, tracks: [
-        track('a101', 'Continuum', '3:48', ['rnb'], 'Alternative R&B', { durationSeconds: 228, features: ['Daye'], bpm: 82, key: 'B minor', writers: ['Asha North', 'Daye Cole'], producers: ['Asha North', 'L. Penn'], lyrics: lyricSet(['Hold the room a little longer', 'Silver weather at the door', 'Every answer bends in silence', 'I can hear the current turn', 'Stay until the signal settles', 'Stay until we know for sure']) }),
+        track('a101', 'Continuum', '3:48', ['rnb'], 'Alternative R&B', { durationSeconds: 228, previewUrl: 'assets/audio/continuum.mp3', previewDurationSeconds: 32, source: { label: 'Rondo Originals', detail: 'Original 32-second demo recording created for this prototype', status: 'authorized' }, features: ['Daye'], bpm: 82, key: 'B minor', writers: ['Asha North', 'Daye Cole'], producers: ['Asha North', 'L. Penn'], lyrics: lyricSet(['Hold the room a little longer', 'Silver weather at the door', 'Every answer bends in silence', 'I can hear the current turn', 'Stay until the signal settles', 'Stay until we know for sure']) }),
         track('a102', 'Half Awake', '4:02', ['rnb'], 'Neo-soul', { durationSeconds: 242, writers: ['Asha North'], producers: ['L. Penn'] }),
         track('a103', 'Slow Meridian', '3:17', ['rnb'], 'Quiet storm', { durationSeconds: 197, writers: ['Asha North'], producers: ['Asha North'] })
       ]},
@@ -56,13 +59,13 @@ export const artists = [
     bio: 'Kairo Vale pairs low-slung Southern rhythm with widescreen synths and detailed, nocturnal writing.',
     releases: [
       { id: 'blacktop-studies', title: 'Blacktop Studies', type: 'Album', year: 2026, date: '2026-07-11', label: 'Rookhouse Records', cover: cover.night, tracks: [
-        track('k101', 'Night Transit', '3:42', ['hiphop'], 'Psychedelic trap', { durationSeconds: 222, features: ['Mira Son'], explicit: true, bpm: 142, key: 'F minor', writers: ['Kairo Vale', 'Mira Son', 'J. Okoye'], producers: ['Duskline', 'M. East'], isrc: 'QZRND2600101', lyrics: lyricSet(['Headlights fold into the rain', 'One more exit, say my name', 'City breathing through the glass', 'We move slow, the night moves fast', 'Red line running through the dark', 'Every mile becomes a mark', 'No map left for where we are', 'Only signal, only stars']) }),
+        track('k101', 'Night Transit', '3:42', ['hiphop'], 'Psychedelic trap', { durationSeconds: 222, features: ['Mira Son'], explicit: true, bpm: 142, key: 'F minor', writers: ['Kairo Vale', 'Mira Son', 'J. Okoye'], producers: ['Duskline', 'M. East'], isrc: 'QZRND2600101', previewUrl: 'assets/audio/night-transit.mp3', previewDurationSeconds: 32, source: { label: 'Rondo Originals', detail: 'Original 32-second demo recording created for this prototype', status: 'authorized' }, story: { headline: 'A nocturnal bridge between psychedelic trap and alternative R&B.', body: 'Low-slung drums and glassy synth layers keep the track inside Kairo Vale’s Hip-Hop chapter, while Mira Son’s featured vocal opens the door to the neighboring R&B journey.' }, soundPalette: ['Psychedelic trap', 'Sub-bass', 'Glass synth', 'Half-time drums'], lyrics: lyricSet(['Headlights fold into the rain', 'One more exit, say my name', 'City breathing through the glass', 'We move slow, the night moves fast', 'Red line running through the dark', 'Every mile becomes a mark', 'No map left for where we are', 'Only signal, only stars']) }),
         track('k102', 'Kilometer Zero', '3:09', ['hiphop'], 'Southern hip-hop', { durationSeconds: 189, explicit: true, bpm: 138, key: 'D minor', writers: ['Kairo Vale'], producers: ['M. East'] }),
         track('k103', 'Third Exit', '2:54', ['hiphop'], 'Trap', { durationSeconds: 174, features: ['Rook'], bpm: 146, key: 'A minor' }),
         track('k104', 'Ivory Static', '4:12', ['rnb'], 'Alternative R&B', { durationSeconds: 252, features: ['Asha North'], bpm: 76, key: 'E major' })
       ]},
       { id: 'signal-memory', title: 'Signal Memory', type: 'EP', year: 2024, date: '2024-10-03', label: 'Rookhouse Records', cover: cover.red, tracks: [
-        track('k105', 'Afterimage', '3:19', ['hiphop'], 'Experimental hip-hop', { durationSeconds: 199, explicit: true }),
+        track('k105', 'Afterimage', '3:19', ['hiphop'], 'Experimental hip-hop', { durationSeconds: 199, explicit: true, bpm: 110, key: 'E minor', previewUrl: 'assets/audio/afterimage.mp3', previewDurationSeconds: 32, source: { label: 'Rondo Originals', detail: 'Original 32-second demo recording created for this prototype', status: 'authorized' } }),
         track('k106', 'Passing Lights', '4:04', ['electronic'], 'Ambient electronic', { durationSeconds: 244 }),
         track('k107', 'No Address', '3:31', ['hiphop'], 'Alternative hip-hop', { durationSeconds: 211 })
       ]},
@@ -97,7 +100,7 @@ export const artists = [
     bio: 'Moni Gray treats verses like ensemble parts, trading rigid loops for live drums, brass, and open space.',
     releases: [
       { id: 'margins', title: 'Margins', type: 'Album', year: 2025, date: '2025-08-29', label: 'Parcel 12', cover: cover.ring, tracks: [
-        track('g101', 'Open Circuit', '4:06', ['hiphop', 'jazz'], 'Jazz rap', { durationSeconds: 246, features: ['Theo June'] }),
+        track('g101', 'Open Circuit', '4:06', ['hiphop', 'jazz'], 'Jazz rap', { durationSeconds: 246, features: ['Theo June'], bpm: 94, key: 'G minor', previewUrl: 'assets/audio/open-circuit.mp3', previewDurationSeconds: 32, source: { label: 'Rondo Originals', detail: 'Original 32-second demo recording created for this prototype', status: 'authorized' } }),
         track('g102', 'Pencil Marks', '3:44', ['hiphop'], 'Abstract hip-hop', { durationSeconds: 224 }),
         track('g103', 'Counterweight', '5:01', ['jazz'], 'Contemporary jazz', { durationSeconds: 301 })
       ]},
@@ -131,7 +134,7 @@ export const artists = [
     bio: 'Sora K works with small rhythmic shifts, field recordings, and saturated color to create patient electronic forms.',
     releases: [
       { id: 'no-fixed-address', title: 'No Fixed Address', type: 'Album', year: 2026, date: '2026-02-20', label: 'North Window', cover: cover.blue, tracks: [
-        track('s101', 'Blue Hour', '2:58', ['electronic'], 'Ambient', { durationSeconds: 178 }),
+        track('s101', 'Blue Hour', '2:58', ['electronic'], 'Ambient', { durationSeconds: 178, bpm: 92, key: 'C sharp minor', previewUrl: 'assets/audio/blue-hour.mp3', previewDurationSeconds: 32, source: { label: 'Rondo Originals', detail: 'Original 32-second demo recording created for this prototype', status: 'authorized' } }),
         track('s102', 'Folded Map', '5:09', ['electronic'], 'Microhouse', { durationSeconds: 309 }),
         track('s103', 'Carrier', '4:37', ['electronic'], 'Dub techno', { durationSeconds: 277 })
       ]},
@@ -146,7 +149,7 @@ export const artists = [
     origin: 'New Orleans, United States', activeYears: '2012—present', genreIds: ['jazz', 'hiphop'],
     tags: ['Spiritual jazz', 'Jazz rap'], bio: 'A saxophonist and producer connecting modal improvisation with sampled rhythm.',
     releases: [{ id: 'first-light', title: 'First Light', type: 'Album', year: 2026, date: '2026-01-23', label: 'Open Form', cover: cover.ring, tracks: [
-      track('t101', 'First Light, Again', '6:18', ['jazz'], 'Spiritual jazz', { durationSeconds: 378 }),
+      track('t101', 'First Light, Again', '6:18', ['jazz'], 'Spiritual jazz', { durationSeconds: 378, bpm: 78, key: 'D minor', previewUrl: 'assets/audio/first-light-again.mp3', previewDurationSeconds: 32, source: { label: 'Rondo Originals', detail: 'Original 32-second demo recording created for this prototype', status: 'authorized' } }),
       track('t102', 'Open Circuit Reprise', '4:34', ['hiphop', 'jazz'], 'Jazz rap', { durationSeconds: 274, features: ['Moni Gray'] })
     ]}]
   },

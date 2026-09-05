@@ -4,88 +4,62 @@
 
 Rondo helps a listener understand a genre by moving through artists one at a time, hearing albums and EPs in a deliberate order, and preserving everything worth returning to.
 
-Rondo is equally a music player and a genre/artist explorer. It is not an article feed, a social feed, or a skin over another streaming application.
+Rondo is equally a music player and a genre/artist explorer. It is not an article feed, social feed, or skin over another streaming application.
 
 ## Confirmed decisions
 
 - **Account:** required Rondo account and editable taste setup
-- **Artist order:** alphabetical within the selected genre
+- **Artist order:** alphabetical inside the selected genre
 - **Artist chapter:** one artist at a time
 - **Core releases:** albums and EPs, newest to oldest
 - **Track order:** official disc and track order
-- **Catalog default:** tracks matching the selected genre
-- **Catalog escape hatch:** All catalog toggle
-- **Boundary:** ask before continuing after an artist's final eligible track
-- **Saves:** tracks, releases, artists, journeys, and progress owned by Rondo
-- **Lyrics:** immersive synchronized presentation using Rondo's visual language
+- **Catalog default:** tracks matching the selected genre, with an All catalog escape hatch
+- **Boundary:** ask before continuing after the artist's final eligible track
+- **Saves:** tracks, releases, artists, moments, private notes, journeys, and progress owned by Rondo
 - **External accounts:** not required by the product concept
 
 ## Core hierarchy
 
-`Create Rondo account → complete taste setup → choose genre → choose or resume artist → Artist Focus → matching/all catalog → album or EP → track → Details/Lyrics/Credits → completion summary → continue, replay, choose, or stop`
+`Create account → taste setup → genre → artist → matching/all catalog → release → track → Song Room → completion summary → continue, replay, choose, or stop`
 
-## Genre Journey
+## Genre Journey and Artist Focus
 
-The journey provides a main genre selector, A–Z artist index, eligible-artist count, artist search, current chapter, and progress. A genre may contain thousands of artists; production results are paginated rather than presented as a fictional universal list.
+Genre Journey provides the selector, A–Z artist index, search, chapter, and progress. Playback collapses it to prioritize listening; reopening never stops playback. Artist Focus retains biography, sourced styles, catalog counts, alphabetical position, save/skip/play actions, and completion.
 
-When playback begins, the journey collapses so listening content gets the strongest visual priority. The listener can reopen or close it at any time without stopping playback. On mobile, the journey is a fixed off-canvas drawer and never reserves an empty layout column.
+## Song Room
 
-## Artist Focus
+The Song Room makes one recording feel understandable rather than adding another dashboard. Its modes are:
 
-The panel includes artist portrait, name, location, active years, concise biography, sourced style tags, eligible-release and track counts, current alphabetical position, save/skip/play actions, and catalog completion.
+1. **Room** — artwork, identity, current lyric, journey position, and core controls.
+2. **Lyrics** — synchronized authorized/demo words with line seeking.
+3. **Story** — why the song belongs, exact style, release, signal, featured roles, and provenance.
+4. **Credits** — supplied writers, producers, artists, version, and recording ID; unknown roles remain unknown.
+5. **Up Next** — current artist chapter in release order without silently crossing the artist boundary.
 
-## Artist catalog
+The visual accent comes from the active release artwork. Genre remains a labeled classification and controls the surrounding journey ambience. Rondo red is the missing-artwork fallback.
 
-**Matching** includes only tracks classified within the active genre. **All catalog** reveals the complete eligible album/EP catalog while keeping style labels visible. Tracks retain primary and featured artist distinctions, release, year, order, duration, explicit state, availability, and save action.
+## Playback source policy
 
-## Immersive listening system
+The prototype contains six original 32-second stereo MP3 instrumentals from Rondo Originals. Authorized tracks use the real media clock for progress and seeking. Tracks without a recording use an explicitly labeled demo timeline so the product never pretends simulated progress is streamed audio.
 
-### Appearance
+Production sources may include direct artist uploads, official embeds, Creative Commons/public-domain recordings, or licensed catalog providers. Unlicensed full recordings and lyrics are out of scope.
 
-- Night is the default appearance.
-- Light and Night are both first-class, persistent preferences.
-- The active genre changes the ambient accent, secondary signal, surface tint, progress treatments, and listening glow.
-- Genre color never replaces text labels or semantic state.
+## Personal listening
 
-### Genre signals
+Listeners can save an exact timestamp and write a private note for a song. Moments and notes persist locally in the prototype, appear as first-class Library cards, and reopen the correct Song Room context. Volume persists independently of the current track.
 
-| Genre | Signal |
-| --- | --- |
-| Hip-Hop | Ember / ultraviolet |
-| R&B | Rose / violet |
-| Electronic | Cyan / cobalt |
-| Jazz | Amber / burgundy |
+## Motion and accessibility
 
-### Motion
-
-Signal bars, ambient drift, and artwork halos respond to the binary playback state. They are intentionally simulated interface motion—not frequency analysis or a claim that the browser is reading the audio signal. `prefers-reduced-motion` disables movement while preserving state and hierarchy.
-
-### Up Next
-
-Up Next shows the active artist chapter in release order, the current track, chapter progress, release context, style, and duration. Selecting a track updates playback without leaving the drawer. The queue does not silently cross the artist boundary.
-
-### Full player
-
-The full player combines artwork, track/release identity, featured artists, exact genre/style tags, tempo/key when supplied, progress, controls, Up Next, Genre Journey, synchronized demo lyrics, credits, and save state.
+Playback-driven bars, ambient drift, and artwork halos are interface visualization—not frequency analysis. Reduced Motion removes nonessential animation. Controls support visible focus, keyboard operation, focus-contained dialogs, 44px touch targets, mobile safe areas, and non-color selected states.
 
 ## Artist completion
 
-After the final eligible track, playback pauses and displays tracks heard/saved, releases completed, artist progress, the next alphabetical artist, and Continue, Replay artist, Choose another artist, and Stop actions.
-
-## Personalization
-
-Onboarding creates the first taste profile. Behavior can later adjust suggested genres, subgenres, releases, and resume points transparently, but it never changes alphabetical artist order. Users can inspect and edit every explicit signal.
-
-## Quality states
-
-Every production feature defines loading, empty, partial-data, offline, unauthorized, rate-limited, unavailable-territory, and provider-error states. Controls must support keyboard use, visible focus, screen readers, 44px touch targets, safe areas, WCAG AA contrast, and reduced motion.
+After the final eligible track, playback pauses and shows tracks heard/saved, releases completed, progress, the next alphabetical artist, and Continue, Replay artist, Choose another artist, and Stop actions.
 
 ## Out of scope for version one
 
-- social feeds and comments;
+- social feeds, public comments, and follower counts;
+- fake AI DJs or unsupported audio-analysis claims;
 - podcasts and news;
-- AI chat;
-- public follower counts;
 - collaborative listening;
-- unsupported claims of real-time audio analysis;
 - unlicensed commercial recordings or lyrics.

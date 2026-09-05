@@ -2,75 +2,63 @@
 
 ## Intent
 
-Rondo should make a large music catalog understandable without copying an existing streaming dashboard. The visual system is editorial, artwork-led, dark by default, and precise about artists, releases, features, credits, and genre provenance.
+Rondo is cinematic, editorial, artwork-led, dark by default, and precise about artists, releases, featured roles, credits, and provenance. The song—not the application chrome—is the emotional center.
 
 ## Primary hierarchy
 
-`Rondo account → taste profile → genre → alphabetical artist → Artist Focus → matching/all catalog → album or EP → track → Details/Lyrics/Credits`
+`Account → taste profile → genre → artist → release → track → Song Room → context and memory`
 
-## Visual system
+## Artwork-adaptive system
 
-- Neutral interface chrome lets artwork and the active genre carry color.
-- Lines, alignment, scale, and whitespace come before cards or heavy shadows.
-- Warm ivory remains the light canvas; near-black listening surfaces define Night.
-- Signal red remains the identity color, while runtime genre signals tint playback controls and ambience.
-- Rounded pills are reserved for filters, tags, and compact status—not every surface.
+Neutral near-black chrome prevents competing colors. Each release supplies one accessible signal used for focus, progress, selected states, and ambience. Artwork carries emotion; genre remains visible text. Selected states never rely on color alone.
 
-### Listening palettes
+| Palette | Accent | Use |
+| --- | --- | --- |
+| Night | `#6F9DFF` | Cobalt release signal |
+| Continuum | `#E3A35F` | Amber release signal |
+| Blue | `#51C8D8` | Cyan release signal |
+| Afterimage | `#E66D9A` | Rose release signal |
+| Fallback | `#FF4B2E` | Missing/inaccessible artwork |
 
-| Genre | Accent | Secondary | Base |
-| --- | --- | --- | --- |
-| Hip-Hop | `#FF6846` | `#8C63FF` | `#09080D` |
-| R&B | `#FF79BD` | `#8B7BFF` | `#0E0810` |
-| Electronic | `#47E0CF` | `#5F7CFF` | `#050D11` |
-| Jazz | `#F4B85F` | `#C45F7D` | `#100B08` |
+## Song Room composition
 
-Color is always paired with labels and position. It never communicates state alone.
+### Desktop
 
-## Desktop composition
+- asymmetrical title and artwork stage;
+- live lyric line and saved-moment action anchored to the stage;
+- dedicated context panel for Story, Lyrics, Credits, and Up Next;
+- restrained fixed transport with timeline, repeat, previous/next, and volume.
 
-- **Navigation rail:** Discover, Genres, Library, Journeys, Search, and Profile
-- **Top bar:** location, journey visibility, appearance, search, and account
-- **Genre Journey:** genre selector, A–Z index, artist list, and chapter context
-- **Artist Focus:** portrait, biography, styles, counts, actions, and progress
-- **Catalog:** albums/EPs newest-to-oldest with official track order
-- **Inspector:** listening signals plus Details, Lyrics, and Credits
-- **Transport:** persistent playback, progress, repeat, queue, availability, and volume
+### Mobile
 
-Playback collapses Genre Journey and widens the listening canvas. The control remains available in the top bar.
+- artwork and title remain primary;
+- context becomes a scrollable lower sheet;
+- Room, Lyrics, Story, Credits, and Queue use persistent bottom navigation;
+- transport and sheet respect safe areas and 320px layouts.
 
-## Mobile composition
+## Personal memory
 
-- compact top bar with journey, identity, appearance, search, and profile;
-- fixed off-canvas Genre Journey above the app stack;
-- condensed Artist Focus with no horizontal overflow;
-- grouped album/EP catalog and persistent mini-player;
-- full-screen player, immersive lyrics, queue, and completion sheet.
+Private notes sit below provenance rather than competing with the song story. They use quiet typography, explicit “Only you” language, and a clear save action. Library cards separate moments from notes and reopen the exact listening context.
 
-At 320px and 390px, the artist content begins directly below the top bar; the hidden journey occupies no normal-flow space.
+## Surrounding application
 
-## Full player and lyrics
-
-The full player uses a three-part desktop rhythm: haloed artwork, track/control column, and large synchronized lyrics. On mobile it becomes a single reading flow. Current lyrics use warm ivory; past and future lines use controlled opacity; genre color marks interaction and time.
+Genre Journey collapses when playback starts and can reopen without interruption. The surrounding app retains genre-reactive ambience while the Song Room uses the release artwork signal. Light and Night remain persistent preferences outside the immersive room.
 
 ## Motion contract
 
 - Motion follows playback, loading, or navigation state.
-- Spectrum bars and halo drift are playback-driven simulations.
-- No copy or UI claims real audio analysis.
-- Paused motion becomes still rather than disappearing.
-- Reduced-motion mode removes nonessential animation and smooth scrolling.
+- Spectrum and halo movement are playback-driven simulations.
+- No UI claims microphone, FFT, or live signal analysis.
+- Reduced Motion freezes nonessential movement while preserving hierarchy.
 
 ## Interaction quality
 
-- 44×44px minimum for important controls;
-- strong visible focus and synchronous focus return for dialogs;
-- AA contrast for readable text and meaningful boundaries;
-- no tooltip-only explanations;
-- Escape closes the topmost overlay first;
-- queue, player, and journey actions preserve playback;
-- long names, metadata gaps, translated lyrics, and unavailable states must remain usable.
+- visible keyboard focus and focus containment in modal surfaces;
+- 44×44px important controls;
+- synchronized lyrics and timelines support direct seeking;
+- unknown metadata remains unavailable instead of invented;
+- long names, instrumental tracks, missing artwork, and unavailable sources retain usable states.
 
 ## Prototype status
 
-Version 0.2.2 implements the immersive listening direction with fictional sample data. Production integration still requires licensed connectors and server-backed accounts.
+Version 0.3.0 implements the artwork-adaptive Song Room, six authorized Rondo Originals demos, personal moments/notes, real volume, and regression coverage across desktop, mobile, compact, and Reduced Motion states.
