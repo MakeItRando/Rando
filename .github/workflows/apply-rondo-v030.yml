@@ -17,34 +17,47 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      - name: Verify and unpack source bundle
+      - name: Assemble and validate release
         shell: bash
         run: |
-          set -euo pipefail
+          set -Eeuo pipefail
+          exec > >(tee .release-v030/workflow.log) 2>&1
+
+          record_failure() {
+            status=$?
+            trap - ERR
+            set +e
+            printf 'status=%s\nfailed_at=%s\n' "$status" "$(date -u +%FT%TZ)" > .release-v030/ASSEMBLY_FAILURE.txt
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add .release-v030/workflow.log .release-v030/ASSEMBLY_FAILURE.txt
+            git commit -m "Record Rondo v0.3 assembly diagnostics"
+            git push origin HEAD:rondo-v23-song-room
+            exit "$status"
+          }
+          trap record_failure ERR
+
+          echo 'Verifying source bundle'
           base64 --decode .release-v030/bundle.b64 > /tmp/rondo-v030-text.tar.gz
-          echo "$(cat .release-v030/SHA256)  /tmp/rondo-v030-text.tar.gz" | sha256sum --check --strict
+          printf '%s  %s\n' "$(cat .release-v030/SHA256)" /tmp/rondo-v030-text.tar.gz | sha256sum --check --strict
           tar -xzf /tmp/rondo-v030-text.tar.gz -C .
-      - name: Generate authorized Rondo Originals
-        shell: bash
-        run: |
-          set -euo pipefail
-          python3 -m pip install --disable-pip-version-check --quiet numpy==2.2.6
-          python3 scripts/generate-demo-audio.py
+
+          echo 'Generating authorized Rondo Originals'
+          python3 -m venv /tmp/rondo-venv
+          /tmp/rondo-venv/bin/pip install --disable-pip-version-check --quiet numpy==2.2.6
+          /tmp/rondo-venv/bin/python scripts/generate-demo-audio.py
           for file in assets/audio/*.mp3; do
             ffprobe -v error -select_streams a:0 -show_entries stream=codec_name,sample_rate,channels -show_entries format=duration -of default=noprint_wrappers=1 "$file"
           done
-      - name: Validate source
-        shell: bash
-        run: |
-          set -euo pipefail
+
+          echo 'Validating source'
           npm ci --ignore-scripts
           npm run check
           npm run test:unit
           npm run build:preview
-      - name: Commit assembled release
-        shell: bash
-        run: |
-          set -euo pipefail
+
+          echo 'Committing assembled release'
+          trap - ERR
           rm -rf .release-v030
           rm -f .github/workflows/apply-rondo-v030.yml
           git config user.name "github-actions[bot]"
