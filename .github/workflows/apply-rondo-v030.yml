@@ -42,6 +42,13 @@ jobs:
           printf '%s  %s\n' "$(cat .release-v030/SHA256)" /tmp/rondo-v030-text.tar.gz | sha256sum --check --strict
           tar -xzf /tmp/rondo-v030-text.tar.gz -C .
 
+          echo 'Preparing authorized-audio toolchain'
+          if ! command -v ffmpeg >/dev/null 2>&1; then
+            sudo apt-get update
+            sudo apt-get install -y ffmpeg
+          fi
+          ffmpeg -version | head -n 1
+
           echo 'Generating authorized Rondo Originals'
           python3 -m venv /tmp/rondo-venv
           /tmp/rondo-venv/bin/pip install --disable-pip-version-check --quiet numpy==2.2.6
