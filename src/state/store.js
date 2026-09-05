@@ -8,8 +8,8 @@ const defaultProfile = {
 const persistedDefaults = {
   onboardingComplete: false,
   profile: defaultProfile,
-  savedTracks: [], savedReleases: [], savedArtists: [], playedTracks: [],
-  theme: 'dark'
+  savedTracks: [], savedReleases: [], savedArtists: [], playedTracks: [], savedMoments: [],
+  songNotes: {}, volume: 0.82, theme: 'dark'
 };
 
 function readPersisted() {
@@ -19,6 +19,8 @@ function readPersisted() {
       ...persistedDefaults,
       ...raw,
       profile: { ...defaultProfile, ...(raw.profile || {}) },
+      songNotes: raw.songNotes && typeof raw.songNotes === 'object' ? raw.songNotes : {},
+      volume: Number.isFinite(raw.volume) ? Math.min(1, Math.max(0, raw.volume)) : 0.82,
       theme: raw.theme === 'light' ? 'light' : 'dark'
     };
   } catch {
@@ -38,6 +40,9 @@ export function createStore(initialState) {
       savedReleases: [...state.savedReleases],
       savedArtists: [...state.savedArtists],
       playedTracks: [...state.playedTracks],
+      savedMoments: [...(state.savedMoments || [])],
+      songNotes: { ...(state.songNotes || {}) },
+      volume: Math.min(1, Math.max(0, Number(state.volume) || 0)),
       theme: state.theme === 'light' ? 'light' : 'dark'
     };
     localStorage.setItem(STORAGE_KEY, JSON.stringify(data));

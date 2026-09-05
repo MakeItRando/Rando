@@ -5,120 +5,75 @@ Provider adapters map external payloads into Rondo-owned domain shapes. UI and f
 ```ts
 type ExternalIds = Record<string, string | undefined>
 
-type Sourced<T> = {
-  value: T
-  provenance: {
-    provider: string
-    sourceUrl?: string
-    retrievedAt: string
-    confidence?: number
-  }
-}
-
-type UserProfile = {
-  id: string
-  displayName: string
-  region: string
-  interfaceLanguage: string
-  lyricLanguages: string[]
-  onboardingCompletedAt?: string
-  accessibility: AccessibilityPreferences
-}
-
-type TasteProfile = {
-  id: string
-  userId: string
-  version: number
-  genreWeights: Record<string, number>
-  seedArtistIds: string[]
-  discoveryLevel: number
-  popularityBias: number
-  albumFocus: number
-  allowExplicit: boolean
-  updatedAt: string
-}
-
-type AppearancePreference = {
-  theme: 'dark' | 'light'
-  reduceMotion?: boolean
-  highContrast?: boolean
-  largerText?: boolean
-}
-
-type GenreTag = {
-  id: string
-  name: string
-  parentId?: string
-  kind: 'main' | 'subgenre' | 'style' | 'scene'
-}
-
-type Artist = {
-  id: string
-  externalIds: ExternalIds
-  name: string
-  sortName: string
-  aliases: string[]
-  images: ImageAsset[]
-  origin?: Sourced<string>
-  activeYears?: Sourced<string>
-  biography?: Sourced<string>
-  genres: Sourced<GenreTag>[]
-}
-
-type Release = {
-  id: string
-  externalIds: ExternalIds
-  title: string
-  type: 'album' | 'ep'
-  releaseDate?: string
-  artwork: ImageAsset[]
-  primaryArtists: EntityRef[]
+type SourceProvenance = {
+  label: string
+  detail: string
+  status: 'authorized' | 'demo' | 'unavailable'
 }
 
 type Track = {
   id: string
   externalIds: ExternalIds
   title: string
-  release: EntityRef
-  primaryArtists: EntityRef[]
-  featuredArtists: EntityRef[]
+  releaseId: string
+  primaryArtistIds: string[]
+  featuredArtists: string[]
   discNumber?: number
   trackNumber?: number
-  durationMs: number
+  durationSeconds: number
+  previewUrl?: string
+  previewDurationSeconds?: number
   explicit?: boolean
-  genres: Sourced<GenreTag>[]
-  availability: Availability
+  genreIds: string[]
+  style: string
+  bpm?: number
+  key?: string
+  version?: string
+  story?: { headline: string; body: string }
+  soundPalette?: string[]
+  writers: string[]
+  producers: string[]
+  source: SourceProvenance
 }
 
-type ArtistJourney = {
-  id: string
-  userId: string
-  genre: EntityRef
-  artistIds: string[]
-  activeArtistIndex: number
-  catalogMode: 'matching' | 'all'
-  status: 'active' | 'awaiting_confirmation' | 'complete'
+type SavedMoment = {
+  id: `${string}:${number}`
+  trackId: string
+  position: number
+  createdAt: string
 }
+
+type SongNotes = Record<string, string> // Rondo track ID → private note
 
 type JourneyProgress = {
-  journeyId: string
+  genreId: string
   artistId: string
-  releaseId?: string
   trackId?: string
-  positionMs: number
+  position: number
   playedTrackIds: string[]
-  completedReleaseIds: string[]
   completedArtistIds: string[]
-  updatedAt: string
+}
+
+type PersistedState = {
+  onboardingComplete: boolean
+  profile: UserProfile
+  savedTracks: string[]
+  savedReleases: string[]
+  savedArtists: string[]
+  playedTracks: string[]
+  savedMoments: SavedMoment[]
+  songNotes: SongNotes
+  theme: 'dark' | 'light'
+  volume: number // 0–1
 }
 
 type ListeningUiState = {
   playing: boolean
-  positionMs: number
+  position: number
   repeatMode: 'continue' | 'track' | 'artist'
   selectedTrackId: string
-  inspectorTab: 'details' | 'lyrics' | 'credits'
-  directoryCollapsed: boolean // transient; never persisted
+  songRoomMode: 'room' | 'lyrics' | 'story' | 'credits' | 'queue'
+  directoryCollapsed: boolean
   queueOpen: boolean
 }
 ```
@@ -127,16 +82,14 @@ type ListeningUiState = {
 
 - Rondo IDs are primary; provider IDs are replaceable references.
 - Primary and featured artists remain separate.
-- `sortName` supports A–Z navigation while preserving display name.
-- Release editions with similar titles are not silently merged.
-- Unknown values remain unknown; production never uses plausible-looking filler.
-- `matching` includes a track only when a sourced mapping meets the active genre rule.
-- `all` includes the complete eligible album/EP catalog while preserving visible tags.
+- Release editions and recording versions are not silently merged.
+- Unknown values remain unknown; production never uses plausible filler.
+- Matching mode includes only tracks mapped to the active genre; All retains visible style labels.
 
-## Appearance and ambience
+## Playback source rules
 
-Theme is a persisted user preference. Genre ambience is derived from the active normalized genre and therefore is not stored as independent state. Playback-driven motion is presentation state; it does not imply an audio-analysis data source.
+`previewUrl` is present only when Rondo may play that recording. `previewDurationSeconds` represents the playable asset and may be shorter than catalog duration. Source provenance is always visible. A track without an authorized URL can remain discoverable but uses a clearly labeled simulated timeline in this prototype.
 
 ## Persistence ownership
 
-Rondo owns accounts, taste profiles, appearance preferences, journeys, progress, and saves. Licensed provider data remains subject to provider-specific storage, attribution, territory, and retention rules.
+Rondo owns accounts, taste profiles, preferences, journeys, progress, saves, moments, and private notes. Licensed provider data remains subject to provider-specific storage, attribution, territory, and retention rules. The static prototype stores personal state only in browser local storage.

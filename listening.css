@@ -416,3 +416,13 @@ body.is-playing .workspace::before { animation: ambient-drift 12s ease-in-out in
   .micro-spectrum i, .full-spectrum i, .queue-drawer { animation: none !important; }
   .micro-spectrum i, .full-spectrum i { transform: scaleY(.72); opacity: .76; }
 }
+
+
+/* v0.3 release hardening: real volume control */
+.volume-control { display:flex; align-items:center; gap:8px; min-height:44px; padding:0 8px; color:var(--muted); }
+.volume-control svg { width:18px; height:18px; flex:none; }
+.volume-control input { width:76px; accent-color:var(--genre-accent); cursor:pointer; }
+.view-card-moment span, .view-card-note span { color:var(--genre-accent); }
+.view-card-note p { display:-webkit-box; -webkit-line-clamp:3; -webkit-box-orient:vertical; overflow:hidden; }
+@media (max-width:760px) { .volume-control input { width:54px; } }
+@media (max-width:390px) { .volume-control { display:none; } }

@@ -1,16 +1,1 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 560 560" role="img" aria-label="Sculptural metal ring artwork">
-  <defs>
-    <linearGradient id="sand" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#fbf6e9"/><stop offset="1" stop-color="#d9ceb9"/></linearGradient>
-    <linearGradient id="metal" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#3e4a50"/><stop offset=".18" stop-color="#f7f5ee"/><stop offset=".42" stop-color="#76868e"/><stop offset=".62" stop-color="#20282c"/><stop offset=".82" stop-color="#e6e7e3"/><stop offset="1" stop-color="#56646a"/></linearGradient>
-    <filter id="shadow" x="-40%" y="-40%" width="180%" height="180%"><feGaussianBlur stdDeviation="18"/></filter>
-    <filter id="grain"><feTurbulence type="fractalNoise" baseFrequency=".45" numOctaves="2" seed="4"/><feComponentTransfer><feFuncA type="table" tableValues="0 .08"/></feComponentTransfer></filter>
-  </defs>
-  <rect width="560" height="560" fill="url(#sand)"/>
-  <g opacity=".2" stroke="#8f8169" fill="none">
-    <path d="M-20 78c112-35 218-34 320 3s195 38 280 8"/><path d="M-25 112c105-30 211-29 317 5s205 36 291 4"/><path d="M-10 449c106-31 207-27 302 10s192 39 286 8"/>
-  </g>
-  <ellipse cx="340" cy="427" rx="178" ry="48" fill="#26333a" opacity=".36" transform="rotate(18 340 427)" filter="url(#shadow)"/>
-  <circle cx="276" cy="259" r="139" fill="none" stroke="url(#metal)" stroke-width="78"/>
-  <circle cx="252" cy="220" r="133" fill="none" stroke="#fff" stroke-opacity=".36" stroke-width="5" stroke-dasharray="210 650" transform="rotate(-28 252 220)"/>
-  <rect width="560" height="560" filter="url(#grain)"/>
-</svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 420 420" role="img" aria-label="CONTINUUM abstract artwork"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#8d5427"/><stop offset="1" stop-color="#e3a35f"/></linearGradient><filter id="n"><feTurbulence baseFrequency=".75" numOctaves="2" seed="253" type="fractalNoise"/><feColorMatrix values="1 0 0 0 0 0 1 0 0 0 0 0 1 0 0 0 0 0 .13 0"/></filter></defs><rect width="100%" height="100%" fill="#0b0b0f"/><circle cx="302.4" cy="92.4" r="151.2" fill="url(#g)" opacity=".92"/><path d="M-42.0 327.6 Q 147.0 142.8 462.00000000000006 302.4 V 462.00000000000006 H -42.0Z" fill="url(#g)" opacity=".7"/><rect width="100%" height="100%" filter="url(#n)" opacity=".7"/><g fill="none" stroke="rgba(255,255,255,.72)" stroke-width="2"><circle cx="210.0" cy="210.0" r="113.4" stroke-dasharray="378.0 92.4" transform="rotate(-32 210.0 210.0)"/><path d="M50.4 63.0H218.4M201.6 361.2H369.6" opacity=".45"/></g><text x="33.6" y="382.2" fill="white" font-family="Arial,sans-serif" font-size="14.700000000000001" font-weight="700" letter-spacing="3">RONDO / DEMO</text></svg>

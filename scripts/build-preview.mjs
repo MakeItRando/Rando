@@ -11,7 +11,7 @@ const esbuild = [process.env.ESBUILD_BIN, resolve(root, 'node_modules/.bin/esbui
 if (!esbuild) throw new Error('esbuild is required. Run npm install before building previews.');
 execFileSync(esbuild, [resolve(root, 'src/app.js'), '--bundle', '--format=iife', '--target=es2020', `--outfile=${bundle}`], { stdio: 'inherit' });
 
-const css = [readFileSync(resolve(root, 'styles.css'), 'utf8'), readFileSync(resolve(root, 'listening.css'), 'utf8')].join('\n');
+const css = [readFileSync(resolve(root, 'styles.css'), 'utf8'), readFileSync(resolve(root, 'listening.css'), 'utf8'), readFileSync(resolve(root, 'song-room.css'), 'utf8')].join('\n');
 let js = readFileSync(bundle, 'utf8');
 let html = readFileSync(resolve(root, 'index.html'), 'utf8');
 const assets = new Set(`${html}\n${js}`.match(/assets\/[A-Za-z0-9_./-]+\.svg/g) || []);
@@ -24,6 +24,7 @@ for (const asset of assets) {
 }
 html = html.replace(/\s*<link rel="stylesheet" href="styles\.css" \/>/, `\n  <style>${css}</style>`);
 html = html.replace(/\s*<link rel="stylesheet" href="listening\.css" \/>/, '');
+html = html.replace(/\s*<link rel="stylesheet" href="song-room\.css" \/>/, '');
 html = html.replace(/\s*<script type="module" src="app\.js"><\/script>/, '');
 html = html.replace('</body>', `<script>${js}</script>\n</body>`);
 const withMode = (mode) => html.replace('<body>', `<body data-preview="${mode}">`);

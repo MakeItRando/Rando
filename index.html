@@ -9,6 +9,7 @@
   <link rel="icon" href="assets/rondo-mark.svg" type="image/svg+xml" />
   <link rel="stylesheet" href="styles.css" />
   <link rel="stylesheet" href="listening.css" />
+  <link rel="stylesheet" href="song-room.css" />
   <script type="module" src="app.js"></script>
 </head>
 <body>
@@ -107,16 +108,45 @@
           <div class="transport-buttons"><button id="previousTrack" type="button" aria-label="Previous track"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M5 5h2v14H5zM18.5 6v12L8.5 12z"/></svg></button><button class="transport-play" id="transportPlay" type="button" aria-label="Play"><svg id="transportPlayIcon" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></button><button id="nextTrack" type="button" aria-label="Next track"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M17 5h2v14h-2zM5.5 6v12l10-6z"/></svg></button><button id="repeatMode" type="button" aria-label="Continue mode" data-repeat="continue"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="m16 4 4 4-4 4"/><path d="M20 8H7a4 4 0 0 0-4 4M8 20l-4-4 4-4"/><path d="M4 16h13a4 4 0 0 0 4-4"/></svg><span id="repeatBadge"></span></button></div>
           <div class="timeline"><span id="elapsed">0:43</span><button id="timeline" type="button" aria-label="Seek"><i id="timelineFill"></i><b id="timelineKnob"></b></button><span id="remaining">−2:59</span></div>
         </div>
-        <div class="transport-meta"><span id="transportMode">MATCHING CATALOG</span><button id="queueButton" type="button" aria-label="Open queue"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 6h13M4 11h13M4 16h8"/><circle cx="18" cy="16" r="3"/></svg></button><button type="button" aria-label="Volume"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 10v4h4l5 4V6L8 10H4Z"/><path d="M16 9a4 4 0 0 1 0 6M18.5 6.5a8 8 0 0 1 0 11"/></svg></button></div>
+        <div class="transport-meta"><span id="transportMode">MATCHING CATALOG</span><button id="queueButton" type="button" aria-label="Open queue"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 6h13M4 11h13M4 16h8"/><circle cx="18" cy="16" r="3"/></svg></button><label class="volume-control"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M4 10v4h4l5 4V6L8 10H4Z"/><path d="M16 9a4 4 0 0 1 0 6M18.5 6.5a8 8 0 0 1 0 11"/></svg><input id="volumeControl" type="range" min="0" max="100" value="82" aria-label="Volume"/></label></div>
       </footer>
     </section>
   </div>
 
   <div class="overlay" id="searchOverlay" hidden><section class="search-dialog" role="dialog" aria-modal="true" aria-label="Search Rondo"><div class="search-field"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="10.8" cy="10.8" r="6.8"/><path d="m16 16 4 4"/></svg><input id="globalSearch" type="search" aria-label="Search artists, albums, tracks, and genres" placeholder="Search artists, albums, tracks, genres"/><button id="closeSearch" type="button">ESC</button></div><div class="search-results" id="searchResults"><span>START ANYWHERE</span><p>Search across artists, albums, tracks, and genres.</p></div></section></div>
 
-  <div class="full-player" id="fullPlayer" role="dialog" aria-modal="true" aria-labelledby="fullTitle" hidden>
-    <header><button id="closeFullPlayer" type="button" aria-label="Close full player">↓</button><span>NOW PLAYING</span><button id="fullSave" type="button" aria-label="Save track">♡</button></header>
-    <div class="full-player-grid"><div class="full-art"><img id="fullCover" src="assets/covers/night-transit.svg" alt=""/></div><div class="full-content"><p id="fullRelease">BLACKTOP STUDIES · 2026</p><h2 id="fullTitle">Night Transit</h2><span id="fullArtist">Kairo Vale featuring Mira Son</span><div class="full-tags" id="fullTags"></div><div class="full-signal-row" aria-label="Listening signals"><span id="fullGenreMode">ALTERNATIVE HIP-HOP</span><span id="fullAudioMeta">94 BPM · F♯ MINOR</span></div><div class="full-spectrum" aria-label="Playback-driven visual motion"><i style="--h:15px;--n:1"></i><i style="--h:30px;--n:2"></i><i style="--h:21px;--n:3"></i><i style="--h:42px;--n:4"></i><i style="--h:28px;--n:5"></i><i style="--h:36px;--n:6"></i><i style="--h:18px;--n:7"></i><i style="--h:45px;--n:8"></i><i style="--h:31px;--n:9"></i><i style="--h:23px;--n:10"></i><i style="--h:39px;--n:11"></i><i style="--h:16px;--n:12"></i><i style="--h:29px;--n:13"></i><i style="--h:43px;--n:14"></i><i style="--h:25px;--n:15"></i><i style="--h:34px;--n:16"></i></div><div class="full-timeline"><i id="fullTimelineFill"></i></div><div class="full-times"><span id="fullElapsed">0:43</span><span id="fullRemaining">−2:59</span></div><div class="full-controls"><button id="fullPrevious" type="button" aria-label="Previous">◀</button><button id="fullPlay" type="button" aria-label="Play">▶</button><button id="fullNext" type="button" aria-label="Next">▶</button></div><div class="full-actions"><button id="fullQueue" type="button">Up next <b id="fullQueueCount">00</b></button><button id="fullJourney" type="button">Genre journey</button></div></div><div class="full-lyrics"><div class="full-lyrics-head"><span>LYRICS</span><small>DEMO WORDS · SYNCHRONIZED</small></div><div id="fullLyricsLines"></div></div></div>
+  <div class="full-player song-room" id="fullPlayer" role="dialog" aria-modal="true" aria-labelledby="fullTitle" data-mode="story" hidden>
+    <div class="song-room-backdrop" aria-hidden="true"></div><div class="song-room-grain" aria-hidden="true"></div>
+    <header class="song-room-header">
+      <button id="closeFullPlayer" type="button" aria-label="Close Song Room">↓</button>
+      <div class="song-room-brand" aria-label="Rondo"><svg viewBox="0 0 44 44" aria-hidden="true"><circle cx="22" cy="22" r="14" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-dasharray="66 22" transform="rotate(-35 22 22)"/><circle cx="34" cy="12" r="4" fill="var(--song-accent)"/></svg><span>rondo</span></div>
+      <div class="song-room-journey"><div class="song-room-journey-progress" id="songRoomJourneyProgress"><span id="songRoomJourneyPercent">14</span></div><div><strong id="songRoomJourneyText">Kairo Vale chapter</strong><small id="songRoomJourneyMeta">Hip-Hop journey · 01 of 07</small></div></div>
+      <button id="fullJourney" type="button">Journey</button>
+      <button id="fullSave" type="button" aria-label="Save track">♡</button>
+    </header>
+    <div class="song-room-shell">
+      <section class="song-room-stage" aria-label="Current song">
+        <div class="song-room-release-line"><span id="fullRelease">BLACKTOP STUDIES · 2026</span><span id="fullGenreMode">PSYCHEDELIC TRAP</span></div>
+        <div class="song-room-title"><h2 id="fullTitle">Night Transit</h2><span id="fullArtist"><b>Kairo Vale</b> featuring Mira Son</span><div class="full-tags" id="fullTags"></div></div>
+        <div class="song-room-art"><img id="fullCover" src="assets/covers/night-transit.svg" alt="Night Transit artwork"/></div>
+        <div class="song-room-lyric-peek"><p id="songRoomPreviousLyric">One more exit, say my name</p><p class="active" id="songRoomActiveLyric">City breathing through the glass</p><div class="song-room-lyric-caption">Synchronized demo words · open Lyrics to follow</div></div>
+        <button class="song-room-moment" id="songRoomMoment" type="button">Save this moment · 0:43</button>
+      </section>
+      <aside class="song-room-panel" aria-label="Song context">
+        <div class="song-room-panel-top"><span id="songRoomModeLabel">Song story</span><small>SONG ROOM · 01</small></div>
+        <div class="song-room-tabs" id="songRoomTabs" role="tablist" aria-label="Song Room modes"><button type="button" role="tab" data-song-room-mode="lyrics" aria-selected="false">Lyrics</button><button class="active" type="button" role="tab" data-song-room-mode="story" aria-selected="true">Story</button><button type="button" role="tab" data-song-room-mode="credits" aria-selected="false">Credits</button><button id="fullQueue" type="button" role="tab" data-song-room-mode="queue" aria-selected="false">Queue <b id="fullQueueCount">00</b></button></div>
+        <div class="song-room-panel-content" id="songRoomPanel" aria-live="polite"></div>
+        <div id="fullLyricsLines" hidden></div>
+      </aside>
+    </div>
+    <footer class="song-room-player">
+      <div class="song-room-player-grid">
+        <div class="song-room-mini"><img id="songRoomMiniCover" src="assets/covers/night-transit.svg" alt=""/><span><strong id="songRoomMiniTitle">Night Transit</strong><span id="songRoomMiniArtist">Kairo Vale feat. Mira Son</span></span></div>
+        <div class="song-room-transport"><div class="song-room-wave" aria-label="Playback-driven visual motion"><i style="--h:9px"></i><i style="--h:18px"></i><i style="--h:12px"></i><i style="--h:25px"></i><i style="--h:15px"></i><i style="--h:22px"></i><i style="--h:11px"></i><i style="--h:27px"></i><i style="--h:17px"></i><i style="--h:13px"></i><i style="--h:23px"></i><i style="--h:10px"></i><i style="--h:18px"></i><i style="--h:26px"></i><i style="--h:14px"></i><i style="--h:21px"></i></div><div class="full-timeline" id="fullTimeline" role="slider" aria-label="Song progress" tabindex="0"><i id="fullTimelineFill"></i><span id="songRoomTimelineKnob"></span></div><div class="full-times"><span id="fullElapsed">0:43</span><span id="fullAudioMeta">142 BPM · F MINOR · COBALT / ARTWORK</span><span id="fullRemaining">−2:59</span></div></div>
+        <div class="song-room-controls"><button id="fullRepeat" type="button" aria-label="Continue mode" data-repeat="continue">↻</button><button id="fullPrevious" type="button" aria-label="Previous track">◀</button><button id="fullPlay" type="button" aria-label="Play">▶</button><button id="fullNext" type="button" aria-label="Next track">▶</button></div>
+      </div>
+    </footer>
+    <nav class="song-room-mobile-nav" aria-label="Song Room modes"><button class="active" type="button" data-song-room-mode="room">Room</button><button type="button" data-song-room-mode="lyrics">Lyrics</button><button type="button" data-song-room-mode="story">Story</button><button type="button" data-song-room-mode="credits">Credits</button><button type="button" data-song-room-mode="queue">Queue</button></nav>
   </div>
 
   <div class="queue-scrim" id="queueScrim" hidden></div>

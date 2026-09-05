@@ -1,13 +1,1 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 560 560" role="img" aria-label="Scarlet movement abstraction">
-  <defs>
-    <linearGradient id="redA" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#ff6a47"/><stop offset=".45" stop-color="#de1f20"/><stop offset="1" stop-color="#5f0710"/></linearGradient>
-    <linearGradient id="redB" x1="1" y1="0" x2="0" y2="1"><stop stop-color="#ffb07b"/><stop offset=".24" stop-color="#f43d2d"/><stop offset="1" stop-color="#31040a"/></linearGradient>
-    <filter id="blur"><feGaussianBlur stdDeviation="7"/></filter>
-    <filter id="grain"><feTurbulence type="fractalNoise" baseFrequency=".64" numOctaves="3" seed="14"/><feComponentTransfer><feFuncA type="table" tableValues="0 .11"/></feComponentTransfer></filter>
-  </defs>
-  <rect width="560" height="560" fill="#050506"/>
-  <path d="M73 39c88 78 132 152 128 222-5 85-87 126-114 260 86-73 162-119 226-136 84-23 142 2 211-19-89-46-135-94-137-144-2-60 59-105 98-176-105 65-196 85-273 60C158 88 116 60 73 39Z" fill="url(#redA)" opacity=".94" filter="url(#blur)"/>
-  <path d="M112 21c60 95 75 177 45 246-24 56-71 104-82 243 69-107 131-162 187-183 80-30 162-10 248-54-116-4-184-35-203-94-14-45 10-92 47-153-70 65-129 94-178 87-25-4-46-34-64-92Z" fill="url(#redB)" opacity=".72"/>
-  <path d="M225 63c16 95 7 167-27 217-37 55-94 113-115 224" fill="none" stroke="#ffd1bb" stroke-opacity=".42" stroke-width="7" filter="url(#blur)"/>
-  <rect width="560" height="560" filter="url(#grain)"/>
-</svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 420 420" role="img" aria-label="AFTERIMAGE abstract artwork"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#7e2c4f"/><stop offset="1" stop-color="#e66d9a"/></linearGradient><filter id="n"><feTurbulence baseFrequency=".75" numOctaves="2" seed="229" type="fractalNoise"/><feColorMatrix values="1 0 0 0 0 0 1 0 0 0 0 0 1 0 0 0 0 0 .13 0"/></filter></defs><rect width="100%" height="100%" fill="#0b0b0f"/><circle cx="302.4" cy="92.4" r="151.2" fill="url(#g)" opacity=".92"/><path d="M-42.0 327.6 Q 147.0 142.8 462.00000000000006 302.4 V 462.00000000000006 H -42.0Z" fill="url(#g)" opacity=".7"/><rect width="100%" height="100%" filter="url(#n)" opacity=".7"/><g fill="none" stroke="rgba(255,255,255,.72)" stroke-width="2"><circle cx="210.0" cy="210.0" r="113.4" stroke-dasharray="378.0 92.4" transform="rotate(-32 210.0 210.0)"/><path d="M50.4 63.0H218.4M201.6 361.2H369.6" opacity=".45"/></g><text x="33.6" y="382.2" fill="white" font-family="Arial,sans-serif" font-size="14.700000000000001" font-weight="700" letter-spacing="3">RONDO / DEMO</text></svg>

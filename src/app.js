@@ -1,8 +1,10 @@
 import { artists, genres, onboardingArtists, onboardingGenres } from './data/catalog.js';
 import { artistProgress, findReleaseContext, findTrackContext, flattenCatalog, getArtist, getGenre, listArtistsForGenre, listReleases, nextArtistFor } from './services/journey.js';
+import { createAudioEngine } from './services/audio.js';
 import { createStore } from './state/store.js';
 import { renderJourneysView, renderLibraryView, renderProfileView } from './ui/views.js';
 import { applyGenreAmbience } from './ui/ambience.js';
+import { applyArtworkPalette, renderSongRoomPanel, songRoomModes } from './ui/songRoom.js';
 
 const playPath = '<path d="M8 5v14l11-7z"/>';
 const pausePath = '<path d="M7 5h4v14H7zM13 5h4v14h-4z"/>';
@@ -17,8 +19,8 @@ const getTasteGenreLabel = (id) => genres.find((genre) => genre.id === id)?.shor
 
 const store = createStore({
   genreId: 'hiphop', artistId: 'kairo-vale', catalogMode: 'matching', selectedTrackId: 'k101',
-  inspectorTab: 'details', playing: false, position: 43, repeatMode: 'continue', view: 'discover',
-  theme: 'dark', directoryCollapsed: false
+  inspectorTab: 'details', playing: false, position: 7, repeatMode: 'continue', view: 'discover',
+  theme: 'dark', directoryCollapsed: false, songRoomMode: 'story'
 });
 
 let playbackTimer = null;
@@ -26,6 +28,17 @@ let onboardingStep = 0;
 let onboardingDraft = null;
 let toastTimer = null;
 let modalReturnFocus = null;
+
+const audioEngine = createAudioEngine({
+  onTime(position) {
+    const context = currentContext();
+    if (!context?.track.previewUrl || !state().playing) return;
+    store.set({ position });
+    updatePlayerUI();
+  },
+  onEnded() { if (state().playing) handleTrackEnd(); },
+  onError() { if (state().playing) { startSimulatedPlayback(); showToast('Audio unavailable — demo timeline continues'); } }
+});
 
 const elements = {
   appShell: $('appShell'), workspace: document.querySelector('.workspace'), directory: $('directory'), journey: $('journey'),
@@ -52,12 +65,16 @@ const elements = {
 Object.assign(elements, {
   journeyToggle: $('journeyToggle'), journeyToggleLabel: $('journeyToggleLabel'), themeToggle: $('themeToggle'), themeToggleLabel: $('themeToggleLabel'),
   nowGenreMode: $('nowGenreMode'), nowAudioMeta: $('nowAudioMeta'), fullGenreMode: $('fullGenreMode'), fullAudioMeta: $('fullAudioMeta'),
-  fullQueue: $('fullQueue'), fullQueueCount: $('fullQueueCount'), fullJourney: $('fullJourney'),
+  fullQueue: $('fullQueue'), fullQueueCount: $('fullQueueCount'), fullJourney: $('fullJourney'), fullRepeat: $('fullRepeat'), fullTimeline: $('fullTimeline'),
+  songRoomPanel: $('songRoomPanel'), songRoomTabs: $('songRoomTabs'), songRoomActiveLyric: $('songRoomActiveLyric'), songRoomPreviousLyric: $('songRoomPreviousLyric'),
+  songRoomJourneyProgress: $('songRoomJourneyProgress'), songRoomJourneyPercent: $('songRoomJourneyPercent'), songRoomJourneyText: $('songRoomJourneyText'), songRoomJourneyMeta: $('songRoomJourneyMeta'),
+  songRoomModeLabel: $('songRoomModeLabel'), songRoomMoment: $('songRoomMoment'), songRoomTimelineKnob: $('songRoomTimelineKnob'), songRoomMiniCover: $('songRoomMiniCover'), songRoomMiniTitle: $('songRoomMiniTitle'), songRoomMiniArtist: $('songRoomMiniArtist'),
   queueScrim: $('queueScrim'), queueDrawer: $('queueDrawer'), queueTitle: $('queueTitle'), queueArtist: $('queueArtist'), queueGenre: $('queueGenre'),
-  queueList: $('queueList'), queueProgress: $('queueProgress'), queueCurrent: $('queueCurrent'), closeQueue: $('closeQueue')
+  queueList: $('queueList'), queueProgress: $('queueProgress'), queueCurrent: $('queueCurrent'), closeQueue: $('closeQueue'), volumeControl: $('volumeControl')
 });
 
 const state = () => store.get();
+audioEngine.setVolume(state().volume);
 const currentGenre = () => getGenre(state().genreId);
 const currentArtist = () => getArtist(state().artistId);
 const currentQueue = () => flattenCatalog(currentArtist(), state().genreId, state().catalogMode);
@@ -68,12 +85,15 @@ const listeningGenreId = () => {
   return context?.track.genres.includes(state().genreId) ? state().genreId : (context?.track.genres[0] || state().genreId);
 };
 const audioMeta = (track) => [track?.bpm ? `${track.bpm} BPM` : null, track?.key || null].filter(Boolean).join(' · ') || 'PLAYBACK SIGNAL';
+const playbackDuration = (track) => track?.previewUrl && track?.previewDurationSeconds ? track.previewDurationSeconds : track?.durationSeconds || 0;
+const playbackSource = (track) => track?.previewUrl ? 'RONDO ORIGINAL' : 'DEMO TIMELINE';
 
 function syncAppearance() {
   const theme = state().theme === 'light' ? 'light' : 'dark';
   const context = currentContext();
   const genreId = listeningGenreId();
   const ambience = applyGenreAmbience(genreId);
+  const songPalette = applyArtworkPalette(context?.release);
   document.documentElement.dataset.theme = theme;
   const nextTheme = theme === 'dark' ? 'light' : 'night';
   elements.themeToggleLabel.textContent = nextTheme === 'light' ? 'Light' : 'Night';
@@ -83,9 +103,9 @@ function syncAppearance() {
   elements.nowGenreMode.textContent = genreLabel;
   elements.nowAudioMeta.textContent = meta;
   elements.fullGenreMode.textContent = genreLabel;
-  elements.fullAudioMeta.textContent = `${meta} · ${ambience.signal}`;
+  elements.fullAudioMeta.textContent = `${meta} · ${playbackSource(context?.track)}`;
   const themeMeta = document.querySelector('meta[name="theme-color"]');
-  if (themeMeta) themeMeta.content = theme === 'dark' ? ambience.base : '#f3f0e9';
+  if (themeMeta) themeMeta.content = theme === 'dark' ? songPalette.base : '#f3f0e9';
 }
 
 function syncJourneyVisibility() {
@@ -302,43 +322,133 @@ function renderNowPlaying() {
   updatePlayerUI();
 }
 
+function songRoomLabel(mode) {
+  return ({ room: 'Song Room', lyrics: 'Lyrics', story: 'Song story', credits: 'Credits', queue: 'Up next' })[mode] || 'Song Room';
+}
+
+function setSongRoomMode(mode) {
+  const nextMode = songRoomModes.includes(mode) ? mode : 'story';
+  store.set({ songRoomMode: nextMode });
+  renderFullPlayer();
+}
+
+function updateMomentUI(context = currentContext()) {
+  if (!context || !elements.songRoomMoment) return;
+  const position = Math.round(state().position);
+  const saved = (state().savedMoments || []).some((moment) => moment.trackId === context.track.id && Math.abs(moment.position - position) <= 2);
+  elements.songRoomMoment.classList.toggle('saved', saved);
+  elements.songRoomMoment.textContent = saved ? `Moment saved · ${formatTime(position)}` : `Save this moment · ${formatTime(position)}`;
+  elements.songRoomMoment.setAttribute('aria-pressed', String(saved));
+}
+
+function toggleSavedMoment() {
+  const context = currentContext();
+  if (!context) return;
+  const position = Math.round(state().position);
+  const moments = [...(state().savedMoments || [])];
+  const existing = moments.findIndex((moment) => moment.trackId === context.track.id && Math.abs(moment.position - position) <= 2);
+  if (existing >= 0) moments.splice(existing, 1);
+  else moments.push({ id: `${context.track.id}:${position}`, trackId: context.track.id, position, createdAt: new Date().toISOString() });
+  store.set({ savedMoments: moments }, { persist: true });
+  updateMomentUI(context);
+  showToast(existing >= 0 ? 'Saved moment removed' : `Moment saved at ${formatTime(position)}`);
+}
+
+function saveSongNote() {
+  const context = currentContext();
+  const input = $('songRoomPrivateNote');
+  if (!context || !input) return;
+  const note = input.value.trim().slice(0, 280);
+  const songNotes = { ...(state().songNotes || {}) };
+  if (note) songNotes[context.track.id] = note;
+  else delete songNotes[context.track.id];
+  store.set({ songNotes }, { persist: true });
+  showToast(note ? 'Private song note saved' : 'Private song note removed');
+}
+
+function bindSongRoomPanel() {
+  elements.songRoomPanel.querySelectorAll('[data-time]').forEach((line) => line.addEventListener('click', () => seekTo(Number(line.dataset.time))));
+  elements.songRoomPanel.querySelectorAll('[data-song-room-track]').forEach((button) => button.addEventListener('click', () => {
+    selectTrack(button.dataset.songRoomTrack, state().playing);
+    setSongRoomMode('queue');
+  }));
+  elements.songRoomPanel.querySelector('[data-save-song-note]')?.addEventListener('click', saveSongNote);
+}
+
 function renderFullPlayer(context = currentContext()) {
   if (!context) return;
   const { artist, release, track } = context;
+  const queue = currentQueue();
+  const queueIndex = Math.max(0, queue.findIndex((item) => item.id === track.id));
+  const mode = songRoomModes.includes(state().songRoomMode) ? state().songRoomMode : 'story';
   const saved = includes(state().savedTracks, track.id);
+  const palette = applyArtworkPalette(release);
+  elements.fullPlayer.dataset.mode = mode;
   elements.fullCover.src = release.cover;
+  elements.fullCover.alt = `${track.title} artwork`;
   elements.fullRelease.textContent = `${release.title.toUpperCase()} · ${release.year}`;
   elements.fullTitle.textContent = track.title;
-  elements.fullArtist.textContent = trackArtistLine(track, artist);
+  elements.fullArtist.innerHTML = `<b>${escapeHtml(artist.name)}</b>${track.features.length ? ` featuring ${escapeHtml(track.features.join(', '))}` : ''}`;
   elements.fullTags.innerHTML = [...track.genres.map((id) => getGenre(id).short), track.style].map((tag) => `<span>${escapeHtml(tag)}</span>`).join('');
   elements.fullSave.textContent = saved ? '♥' : '♡';
+  elements.fullSave.setAttribute('aria-label', `${saved ? 'Remove' : 'Save'} ${track.title}`);
+  elements.fullQueueCount.textContent = pad(queue.length);
+  elements.songRoomMiniCover.src = release.cover;
+  elements.songRoomMiniTitle.textContent = track.title;
+  elements.songRoomMiniArtist.textContent = track.features.length ? `${artist.name} feat. ${track.features.join(', ')}` : artist.name;
+  elements.songRoomJourneyText.textContent = `${artist.name} chapter`;
+  elements.songRoomJourneyMeta.textContent = `${currentGenre().short} journey · ${pad(queueIndex + 1)} of ${pad(queue.length)}`;
+  const journeyPercent = queue.length ? ((queueIndex + 1) / queue.length) * 100 : 0;
+  elements.songRoomJourneyProgress.style.setProperty('--song-room-progress', `${journeyPercent}%`);
+  elements.songRoomJourneyPercent.textContent = String(Math.round(journeyPercent));
+  elements.songRoomModeLabel.textContent = songRoomLabel(mode);
+  elements.fullAudioMeta.textContent = `${audioMeta(track).toUpperCase()} · ${palette.signal} · ${playbackSource(track)}`;
+  elements.fullPlayer.dataset.playbackSource = track.previewUrl ? 'audio' : 'simulated';
   elements.fullLyricsLines.innerHTML = track.lyrics.map((line) => `<p data-time="${line.time}">${escapeHtml(line.text)}</p>`).join('');
-  elements.fullLyricsLines.querySelectorAll('[data-time]').forEach((line) => line.addEventListener('click', () => seekTo(Number(line.dataset.time))));
+  const queueEntries = queue.map((item) => ({ track: item, release: findTrackContext(item.id).release, active: item.id === track.id }));
+  elements.songRoomPanel.innerHTML = renderSongRoomPanel({ mode, context, queueEntries, genreName: currentGenre().name, note: state().songNotes?.[track.id] || '' });
+  document.querySelectorAll('[data-song-room-mode]').forEach((button) => {
+    const active = button.dataset.songRoomMode === mode;
+    button.classList.toggle('active', active);
+    if (button.getAttribute('role') === 'tab') button.setAttribute('aria-selected', String(active));
+  });
+  bindSongRoomPanel();
   updateLyricHighlights();
+  updateMomentUI(context);
 }
 
 function updateLyricHighlights() {
   const context = currentContext();
   if (!context) return;
-  const active = activeLyricIndex(context.track);
-  document.querySelectorAll('.lyric-preview [data-time], #fullLyricsLines [data-time]').forEach((line) => {
-    line.classList.toggle('active', Number(line.dataset.time) === context.track.lyrics[active]?.time);
+  const activeIndex = activeLyricIndex(context.track);
+  const activeLine = context.track.lyrics[activeIndex];
+  const previousLine = context.track.lyrics[Math.max(0, activeIndex - 1)];
+  document.querySelectorAll('.lyric-preview [data-time], #fullLyricsLines [data-time], .song-room-lyric-list [data-time]').forEach((line) => {
+    line.classList.toggle('active', Number(line.dataset.time) === activeLine?.time);
   });
+  elements.songRoomActiveLyric.textContent = activeLine?.text || 'No synchronized words available';
+  elements.songRoomPreviousLyric.textContent = previousLine?.time === activeLine?.time ? '' : previousLine?.text || '';
+  updateMomentUI(context);
 }
 
 function updatePlayerUI() {
   const context = currentContext();
   if (!context) return;
   const { track } = context;
-  const ratio = Math.max(0, Math.min(1, state().position / track.durationSeconds));
+  const duration = playbackDuration(track);
+  const ratio = Math.max(0, Math.min(1, state().position / duration));
   const percentage = `${ratio * 100}%`;
   elements.elapsed.textContent = formatTime(state().position);
-  elements.remaining.textContent = `−${formatTime(track.durationSeconds - state().position)}`;
+  elements.remaining.textContent = `−${formatTime(duration - state().position)}`;
   elements.timelineFill.style.width = percentage;
   elements.timelineKnob.style.left = percentage;
   elements.fullTimelineFill.style.width = percentage;
+  elements.songRoomTimelineKnob.style.left = percentage;
   elements.fullElapsed.textContent = elements.elapsed.textContent;
   elements.fullRemaining.textContent = elements.remaining.textContent;
+  elements.fullTimeline.setAttribute('aria-valuemin', '0');
+  elements.fullTimeline.setAttribute('aria-valuemax', String(Math.round(duration)));
+  elements.fullTimeline.setAttribute('aria-valuenow', String(Math.round(state().position)));
   elements.transportPlayIcon.innerHTML = state().playing ? pausePath : playPath;
   elements.transportPlay.setAttribute('aria-label', state().playing ? 'Pause' : 'Play');
   elements.fullPlay.textContent = state().playing ? 'Ⅱ' : '▶';
@@ -349,6 +459,8 @@ function updatePlayerUI() {
   elements.repeatMode.dataset.repeat = repeat;
   elements.repeatBadge.textContent = repeat === 'track' ? '1' : repeat === 'artist' ? 'A' : '';
   elements.repeatMode.setAttribute('aria-label', repeat === 'continue' ? 'Continue mode' : `Repeat ${repeat}`);
+  elements.fullRepeat.dataset.repeat = repeat;
+  elements.fullRepeat.setAttribute('aria-label', repeat === 'continue' ? 'Continue mode' : `Repeat ${repeat}`);
   updateLyricHighlights();
 }
 
@@ -362,29 +474,36 @@ function renderAll() {
 }
 
 function selectGenre(genreId) {
+  const continuePlaying = state().playing;
+  audioEngine.pause();
   const eligible = listArtistsForGenre(genreId);
   const artist = eligible[0] || artists[0];
   store.set({ genreId, artistId: artist.id, catalogMode: 'matching', selectedTrackId: flattenCatalog(artist, genreId, 'matching')[0]?.id || artist.releases[0].tracks[0].id, position: 0, inspectorTab: 'details' });
   renderAll();
   elements.journey.scrollTo({ top: 0, behavior: 'smooth' });
   showToast(`${getGenre(genreId).short} journey loaded`);
+  if (continuePlaying) setPlaying(true);
 }
 
 function selectArtist(artistId, shouldPlay = false) {
+  const continuePlaying = shouldPlay || state().playing;
+  audioEngine.pause();
   const artist = getArtist(artistId);
   const queue = flattenCatalog(artist, state().genreId, state().catalogMode);
   store.set({ artistId, selectedTrackId: queue[0]?.id || artist.releases[0].tracks[0].id, position: 0, inspectorTab: 'details' });
   elements.directory.classList.remove('open');
   renderAll();
   elements.journey.scrollTo({ top: 0, behavior: 'smooth' });
-  if (shouldPlay) setPlaying(true);
+  if (continuePlaying) setPlaying(true);
 }
 
 function selectTrack(trackId, shouldPlay = false) {
+  const continuePlaying = shouldPlay || state().playing;
+  audioEngine.pause();
   store.set({ selectedTrackId: trackId, position: 0 });
   renderCatalog();
   renderNowPlaying();
-  if (shouldPlay) setPlaying(true);
+  if (continuePlaying) setPlaying(true);
 }
 
 function setCatalogMode(mode) {
@@ -404,19 +523,44 @@ function persistPlayedTrack() {
   }
 }
 
+function startSimulatedPlayback() {
+  clearInterval(playbackTimer);
+  playbackTimer = setInterval(() => {
+    const context = currentContext();
+    if (!context || !state().playing) return;
+    const nextPosition = state().position + 1;
+    if (nextPosition >= playbackDuration(context.track)) handleTrackEnd();
+    else { store.set({ position: nextPosition }); updatePlayerUI(); }
+  }, 1000);
+}
+
 function setPlaying(playing) {
   clearInterval(playbackTimer);
-  store.set({ playing, directoryCollapsed: playing });
-  if (playing) elements.directory.classList.remove('open');
-  if (playing) {
-    persistPlayedTrack();
-    playbackTimer = setInterval(() => {
-      const context = currentContext();
-      if (!context) return;
-      const nextPosition = state().position + 1;
-      if (nextPosition >= context.track.durationSeconds) handleTrackEnd();
-      else { store.set({ position: nextPosition }); updatePlayerUI(); }
-    }, 1000);
+  const context = currentContext();
+  if (!context) return;
+  if (!playing) {
+    audioEngine.pause();
+    store.set({ playing: false, directoryCollapsed: false });
+    document.body.dataset.playbackSource = context.track.previewUrl ? 'audio' : 'simulated';
+    syncJourneyVisibility();
+    updatePlayerUI();
+    return;
+  }
+  const duration = playbackDuration(context.track);
+  const nextPosition = state().position >= duration - .1 ? 0 : state().position;
+  store.set({ playing: true, directoryCollapsed: true, position: nextPosition });
+  elements.directory.classList.remove('open');
+  persistPlayedTrack();
+  document.body.dataset.playbackSource = context.track.previewUrl ? 'audio' : 'simulated';
+  if (context.track.previewUrl) {
+    audioEngine.play(context.track, nextPosition).catch(() => {
+      if (!state().playing) return;
+      startSimulatedPlayback();
+      showToast('Audio unavailable — demo timeline continues');
+    });
+  } else {
+    audioEngine.stop();
+    startSimulatedPlayback();
   }
   syncJourneyVisibility();
   updatePlayerUI();
@@ -472,7 +616,9 @@ function openJourneyFromPlayer() {
 function seekTo(position) {
   const context = currentContext();
   if (!context) return;
-  store.set({ position: Math.max(0, Math.min(context.track.durationSeconds, position)) });
+  const nextPosition = Math.max(0, Math.min(playbackDuration(context.track), position));
+  store.set({ position: nextPosition });
+  if (context.track.previewUrl) audioEngine.seek(nextPosition);
   updatePlayerUI();
 }
 
@@ -488,7 +634,7 @@ function changeTrack(direction) {
 function handleTrackEnd() {
   const queue = currentQueue();
   const index = queue.findIndex((track) => track.id === state().selectedTrackId);
-  if (state().repeatMode === 'track') { seekTo(0); return; }
+  if (state().repeatMode === 'track') { seekTo(0); setPlaying(true); return; }
   if (index < queue.length - 1) { selectTrack(queue[index + 1].id, true); return; }
   if (state().repeatMode === 'artist') { selectTrack(queue[0].id, true); return; }
   setPlaying(false);
@@ -548,7 +694,25 @@ function closeCompletion() { elements.completionOverlay.hidden = true; restoreMo
 function continueToNextArtist() { const next = nextArtistFor(state().artistId, state().genreId, 1); closeCompletion(); selectArtist(next.id, true); }
 function replayArtist() { const first = currentQueue()[0]; closeCompletion(); if (first) selectTrack(first.id, true); }
 
-function openFullPlayer(event) { rememberModalFocus(event?.currentTarget || $('openFullPlayer')); elements.fullPlayer.hidden = false; renderNowPlaying(); focusAfterOpen('closeFullPlayer'); }
+function focusableWithin(container) {
+  return [...container.querySelectorAll('button:not([disabled]), input:not([disabled]), textarea:not([disabled]), select:not([disabled]), [href], [tabindex]:not([tabindex="-1"])')].filter((element) => element.getClientRects().length && !element.closest('[hidden]'));
+}
+
+function trapModalFocus(event, container) {
+  const focusable = focusableWithin(container);
+  if (!focusable.length) return false;
+  const first = focusable[0];
+  const last = focusable[focusable.length - 1];
+  if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last.focus(); return true; }
+  if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first.focus(); return true; }
+  return false;
+}
+
+function topModal() {
+  return [elements.queueDrawer, elements.searchOverlay, elements.fullPlayer, elements.onboardingOverlay, elements.completionOverlay].find((element) => element && !element.hidden) || null;
+}
+
+function openFullPlayer(event, mode = state().songRoomMode || 'story') { rememberModalFocus(event?.currentTarget || $('openFullPlayer')); store.set({ songRoomMode: songRoomModes.includes(mode) ? mode : 'story' }); elements.fullPlayer.hidden = false; renderNowPlaying(); focusAfterOpen('closeFullPlayer'); }
 function closeFullPlayer() { elements.fullPlayer.hidden = true; restoreModalFocus(); }
 
 function renderSearchResults(query) {
@@ -624,7 +788,9 @@ function showView(view) {
     const savedArtists = artists.filter((artist) => includes(state().savedArtists, artist.id));
     const savedReleaseContexts = (state().savedReleases || []).map(findReleaseContext).filter(Boolean);
     const savedTrackContexts = (state().savedTracks || []).map(findTrackContext).filter(Boolean);
-    viewSurface.innerHTML = renderLibraryView({ savedArtists, savedReleaseContexts, savedTrackContexts });
+    const savedMomentContexts = (state().savedMoments || []).map((moment) => { const context = findTrackContext(moment.trackId); return context ? { ...context, moment } : null; }).filter(Boolean);
+    const songNoteContexts = Object.entries(state().songNotes || {}).map(([trackId, note]) => { const context = findTrackContext(trackId); return context && note ? { ...context, note } : null; }).filter(Boolean);
+    viewSurface.innerHTML = renderLibraryView({ savedArtists, savedReleaseContexts, savedTrackContexts, savedMomentContexts, songNoteContexts });
   } else if (view === 'journeys') {
     const genre = currentGenre();
     const artist = currentArtist();
@@ -645,6 +811,7 @@ function showView(view) {
     showView('discover');
   }));
   viewSurface.querySelectorAll('[data-open-track]').forEach((button) => button.addEventListener('click', () => { const context = findTrackContext(button.dataset.openTrack); store.set({ genreId: context.track.genres[0], artistId: context.artist.id, catalogMode: 'all', selectedTrackId: context.track.id }); showView('discover'); selectTrack(context.track.id, true); }));
+  viewSurface.querySelectorAll('[data-open-moment], [data-open-note]').forEach((button) => button.addEventListener('click', () => { const trackId = button.dataset.openMoment || button.dataset.openNote; const context = findTrackContext(trackId); if (!context) return; audioEngine.pause(); store.set({ genreId: context.track.genres[0], artistId: context.artist.id, catalogMode: 'all', selectedTrackId: trackId, position: Number(button.dataset.position || 0) }); showView('discover'); openFullPlayer(undefined, button.dataset.openNote ? 'story' : 'room'); seekTo(Number(button.dataset.position || 0)); }));
   viewSurface.querySelectorAll('[data-return-discover]').forEach((button) => button.addEventListener('click', () => showView('discover')));
   viewSurface.querySelectorAll('[data-genre]').forEach((button) => button.addEventListener('click', () => { showView('discover'); selectGenre(button.dataset.genre); }));
   viewSurface.querySelectorAll('[data-edit-profile]').forEach((button) => button.addEventListener('click', openOnboarding));
@@ -729,21 +896,27 @@ function bindEvents() {
   $('previewCompletion').addEventListener('click', openCompletion);
   elements.saveTrack.addEventListener('click', () => toggleTrackSave());
   document.querySelectorAll('.inspector-tabs [data-tab]').forEach((button) => button.addEventListener('click', () => { store.set({ inspectorTab: button.dataset.tab }); renderNowPlaying(); }));
-  elements.lyricsCta.addEventListener('click', openFullPlayer);
-  $('openFullPlayer').addEventListener('click', openFullPlayer);
-  $('mobileTrack').addEventListener('click', openFullPlayer);
+  elements.lyricsCta.addEventListener('click', (event) => openFullPlayer(event, 'lyrics'));
+  $('openFullPlayer').addEventListener('click', (event) => openFullPlayer(event, 'story'));
+  $('mobileTrack').addEventListener('click', (event) => openFullPlayer(event, 'room'));
   $('closeFullPlayer').addEventListener('click', closeFullPlayer);
   elements.fullSave.addEventListener('click', () => toggleTrackSave());
   elements.transportPlay.addEventListener('click', togglePlaying);
+  elements.volumeControl.value = String(Math.round(state().volume * 100));
+  elements.volumeControl.addEventListener('input', () => { const volume = Number(elements.volumeControl.value) / 100; audioEngine.setVolume(volume); store.set({ volume }, { persist: true }); });
   elements.fullPlay.addEventListener('click', togglePlaying);
   $('previousTrack').addEventListener('click', () => changeTrack(-1));
   $('nextTrack').addEventListener('click', () => changeTrack(1));
   $('fullPrevious').addEventListener('click', () => changeTrack(-1));
   $('fullNext').addEventListener('click', () => changeTrack(1));
   elements.repeatMode.addEventListener('click', cycleRepeat);
-  elements.timeline.addEventListener('click', (event) => { const rect = elements.timeline.getBoundingClientRect(); const context = currentContext(); if (context) seekTo(context.track.durationSeconds * Math.max(0, Math.min(1, (event.clientX - rect.left) / rect.width))); });
+  elements.timeline.addEventListener('click', (event) => { const rect = elements.timeline.getBoundingClientRect(); const context = currentContext(); if (context) seekTo(playbackDuration(context.track) * Math.max(0, Math.min(1, (event.clientX - rect.left) / rect.width))); });
   $('queueButton').addEventListener('click', openQueue);
-  elements.fullQueue.addEventListener('click', openQueue);
+  document.querySelectorAll('[data-song-room-mode]').forEach((button) => button.addEventListener('click', () => setSongRoomMode(button.dataset.songRoomMode)));
+  elements.fullRepeat.addEventListener('click', cycleRepeat);
+  elements.songRoomMoment.addEventListener('click', toggleSavedMoment);
+  elements.fullTimeline.addEventListener('click', (event) => { const rect = elements.fullTimeline.getBoundingClientRect(); const context = currentContext(); if (context) seekTo(playbackDuration(context.track) * Math.max(0, Math.min(1, (event.clientX - rect.left) / rect.width))); });
+  elements.fullTimeline.addEventListener('keydown', (event) => { if (event.key === 'ArrowLeft' || event.key === 'ArrowRight') { event.preventDefault(); seekTo(state().position + (event.key === 'ArrowRight' ? 5 : -5)); } });
   elements.fullJourney.addEventListener('click', openJourneyFromPlayer);
   elements.closeQueue.addEventListener('click', closeQueue);
   elements.queueScrim.addEventListener('click', closeQueue);
@@ -763,6 +936,7 @@ function bindEvents() {
   $('stopJourney').addEventListener('click', () => { closeCompletion(); setPlaying(false); showToast('Journey paused'); });
   document.querySelectorAll('.rail-button[data-view]').forEach((button) => button.addEventListener('click', () => showView(button.dataset.view)));
   document.addEventListener('keydown', (event) => {
+    if (event.key === 'Tab') { const modal = topModal(); if (modal && trapModalFocus(event, modal)) return; }
     if (event.key === '/' && elements.searchOverlay.hidden && !['INPUT','TEXTAREA','SELECT'].includes(document.activeElement.tagName)) { event.preventDefault(); openSearch(); }
     if (event.key === 'Escape') { if (!elements.queueDrawer.hidden) closeQueue(); else if (!elements.searchOverlay.hidden) closeSearch(); else if (!elements.fullPlayer.hidden) closeFullPlayer(); else if (!elements.onboardingOverlay.hidden) closeOnboarding(); else if (!elements.completionOverlay.hidden) closeCompletion(); else elements.directory.classList.remove('open'); }
     if (event.code === 'Space' && document.activeElement === document.body) { event.preventDefault(); togglePlaying(); }
@@ -775,14 +949,14 @@ $('profileTrigger').textContent = (state().profile?.displayName || 'M').charAt(0
 const params = new URLSearchParams(window.location.search);
 const previewMode = document.body.dataset.preview || (params.has('onboarding') ? 'onboarding' : params.get('screen'));
 if (previewMode === 'onboarding') openOnboarding();
-else if (previewMode === 'lyrics') openFullPlayer();
+else if (previewMode === 'lyrics') openFullPlayer(undefined, 'lyrics');
 else if (previewMode === 'completion') openCompletion({ preview: true });
 else if (previewMode === 'library') showView('library');
 else if (previewMode === 'profile') showView('profile');
 else if (previewMode === 'queue') { setPlaying(true); openQueue(); }
 else if (previewMode === 'playing') setPlaying(true);
 else if (previewMode === 'reopened') { setPlaying(true); toggleJourney(); }
-else if (previewMode === 'player') { setPlaying(true); openFullPlayer(); }
+else if (previewMode === 'player') { setPlaying(true); openFullPlayer(undefined, 'story'); }
 else if (previewMode === 'light') { store.set({ theme: 'light' }); syncAppearance(); }
 else if (previewMode?.startsWith('genre-')) selectGenre(previewMode.replace('genre-', ''));
 else if (!previewMode && !state().onboardingComplete && !params.has('skip-onboarding')) openOnboarding();
