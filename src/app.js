@@ -70,7 +70,8 @@ Object.assign(elements, {
   songRoomJourneyProgress: $('songRoomJourneyProgress'), songRoomJourneyPercent: $('songRoomJourneyPercent'), songRoomJourneyText: $('songRoomJourneyText'), songRoomJourneyMeta: $('songRoomJourneyMeta'),
   songRoomModeLabel: $('songRoomModeLabel'), songRoomMoment: $('songRoomMoment'), songRoomTimelineKnob: $('songRoomTimelineKnob'), songRoomMiniCover: $('songRoomMiniCover'), songRoomMiniTitle: $('songRoomMiniTitle'), songRoomMiniArtist: $('songRoomMiniArtist'),
   queueScrim: $('queueScrim'), queueDrawer: $('queueDrawer'), queueTitle: $('queueTitle'), queueArtist: $('queueArtist'), queueGenre: $('queueGenre'),
-  queueList: $('queueList'), queueProgress: $('queueProgress'), queueCurrent: $('queueCurrent'), closeQueue: $('closeQueue'), volumeControl: $('volumeControl')
+  queueList: $('queueList'), queueProgress: $('queueProgress'), queueCurrent: $('queueCurrent'), closeQueue: $('closeQueue'), volumeControl: $('volumeControl'),
+  mobileDirectoryButton: $('mobileDirectoryButton')
 });
 
 const state = () => store.get();
@@ -110,10 +111,16 @@ function syncAppearance() {
 
 function syncJourneyVisibility() {
   const collapsed = Boolean(state().directoryCollapsed && state().view === 'discover');
+  const isMobile = window.matchMedia('(max-width: 760px)').matches;
+  const mobileOpen = elements.directory.classList.contains('open');
+  const directoryVisible = isMobile ? mobileOpen : !collapsed;
   document.body.classList.toggle('journey-collapsed', collapsed);
   elements.journeyToggle.setAttribute('aria-expanded', String(!collapsed));
   elements.journeyToggle.setAttribute('aria-label', collapsed ? 'Show Genre Journey' : 'Hide Genre Journey');
   elements.journeyToggleLabel.textContent = collapsed ? 'Show journey' : 'Hide journey';
+  elements.directory.inert = !directoryVisible;
+  elements.directory.setAttribute('aria-hidden', String(!directoryVisible));
+  elements.mobileDirectoryButton.setAttribute('aria-expanded', String(isMobile ? mobileOpen : !collapsed));
 }
 
 function toggleTheme() {
@@ -411,6 +418,10 @@ function renderFullPlayer(context = currentContext()) {
     const active = button.dataset.songRoomMode === mode;
     button.classList.toggle('active', active);
     if (button.getAttribute('role') === 'tab') button.setAttribute('aria-selected', String(active));
+    if (button.closest('.song-room-mobile-nav')) {
+      if (active) button.setAttribute('aria-current', 'page');
+      else button.removeAttribute('aria-current');
+    }
   });
   bindSongRoomPanel();
   updateLyricHighlights();
@@ -449,6 +460,7 @@ function updatePlayerUI() {
   elements.fullTimeline.setAttribute('aria-valuemin', '0');
   elements.fullTimeline.setAttribute('aria-valuemax', String(Math.round(duration)));
   elements.fullTimeline.setAttribute('aria-valuenow', String(Math.round(state().position)));
+  elements.fullTimeline.setAttribute('aria-valuetext', `${formatTime(state().position)} of ${formatTime(duration)}`);
   elements.transportPlayIcon.innerHTML = state().playing ? pausePath : playPath;
   elements.transportPlay.setAttribute('aria-label', state().playing ? 'Pause' : 'Play');
   elements.fullPlay.textContent = state().playing ? 'Ⅱ' : '▶';
@@ -607,8 +619,8 @@ function closeQueue() {
 function openJourneyFromPlayer() {
   closeFullPlayer();
   store.set({ directoryCollapsed: false });
-  syncJourneyVisibility();
   if (window.matchMedia('(max-width: 760px)').matches) elements.directory.classList.add('open');
+  syncJourneyVisibility();
   requestAnimationFrame(() => (window.matchMedia('(max-width: 760px)').matches ? $('closeDirectory') : elements.genreSelect).focus());
 }
 
@@ -912,7 +924,18 @@ function bindEvents() {
   elements.repeatMode.addEventListener('click', cycleRepeat);
   elements.timeline.addEventListener('click', (event) => { const rect = elements.timeline.getBoundingClientRect(); const context = currentContext(); if (context) seekTo(playbackDuration(context.track) * Math.max(0, Math.min(1, (event.clientX - rect.left) / rect.width))); });
   $('queueButton').addEventListener('click', openQueue);
-  document.querySelectorAll('[data-song-room-mode]').forEach((button) => button.addEventListener('click', () => setSongRoomMode(button.dataset.songRoomMode)));
+  document.querySelectorAll('[data-song-room-mode]').forEach((button) => {
+    button.addEventListener('click', () => setSongRoomMode(button.dataset.songRoomMode));
+    button.addEventListener('keydown', (event) => {
+      if (!['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(event.key)) return;
+      const peers = [...button.parentElement.querySelectorAll('[data-song-room-mode]')];
+      const current = peers.indexOf(button);
+      const next = event.key === 'Home' ? 0 : event.key === 'End' ? peers.length - 1 : (current + (event.key === 'ArrowRight' ? 1 : -1) + peers.length) % peers.length;
+      event.preventDefault();
+      setSongRoomMode(peers[next].dataset.songRoomMode);
+      peers[next].focus();
+    });
+  });
   elements.fullRepeat.addEventListener('click', cycleRepeat);
   elements.songRoomMoment.addEventListener('click', toggleSavedMoment);
   elements.fullTimeline.addEventListener('click', (event) => { const rect = elements.fullTimeline.getBoundingClientRect(); const context = currentContext(); if (context) seekTo(playbackDuration(context.track) * Math.max(0, Math.min(1, (event.clientX - rect.left) / rect.width))); });
@@ -925,8 +948,8 @@ function bindEvents() {
   elements.globalSearch.addEventListener('input', () => renderSearchResults(elements.globalSearch.value));
   elements.searchOverlay.addEventListener('click', (event) => { if (event.target === elements.searchOverlay) closeSearch(); });
   $('profileTrigger').addEventListener('click', openOnboarding);
-  $('mobileDirectoryButton').addEventListener('click', () => { store.set({ directoryCollapsed: false }); elements.directory.classList.add('open'); syncJourneyVisibility(); });
-  $('closeDirectory').addEventListener('click', () => { elements.directory.classList.remove('open'); if (!window.matchMedia('(max-width: 760px)').matches) store.set({ directoryCollapsed: true }); syncJourneyVisibility(); });
+  elements.mobileDirectoryButton.addEventListener('click', () => { store.set({ directoryCollapsed: false }); elements.directory.classList.add('open'); syncJourneyVisibility(); requestAnimationFrame(() => $('closeDirectory').focus()); });
+  $('closeDirectory').addEventListener('click', () => { elements.directory.classList.remove('open'); if (!window.matchMedia('(max-width: 760px)').matches) store.set({ directoryCollapsed: true }); syncJourneyVisibility(); if (window.matchMedia('(max-width: 760px)').matches) elements.mobileDirectoryButton.focus(); });
   $('closeOnboarding').addEventListener('click', closeOnboarding);
   elements.onboardingBack.addEventListener('click', () => { if (onboardingStep > 0) { onboardingStep -= 1; renderOnboardingStep(); } });
   elements.onboardingNext.addEventListener('click', advanceOnboarding);
@@ -938,9 +961,10 @@ function bindEvents() {
   document.addEventListener('keydown', (event) => {
     if (event.key === 'Tab') { const modal = topModal(); if (modal && trapModalFocus(event, modal)) return; }
     if (event.key === '/' && elements.searchOverlay.hidden && !['INPUT','TEXTAREA','SELECT'].includes(document.activeElement.tagName)) { event.preventDefault(); openSearch(); }
-    if (event.key === 'Escape') { if (!elements.queueDrawer.hidden) closeQueue(); else if (!elements.searchOverlay.hidden) closeSearch(); else if (!elements.fullPlayer.hidden) closeFullPlayer(); else if (!elements.onboardingOverlay.hidden) closeOnboarding(); else if (!elements.completionOverlay.hidden) closeCompletion(); else elements.directory.classList.remove('open'); }
+    if (event.key === 'Escape') { if (!elements.queueDrawer.hidden) closeQueue(); else if (!elements.searchOverlay.hidden) closeSearch(); else if (!elements.fullPlayer.hidden) closeFullPlayer(); else if (!elements.onboardingOverlay.hidden) closeOnboarding(); else if (!elements.completionOverlay.hidden) closeCompletion(); else if (elements.directory.classList.contains('open')) { elements.directory.classList.remove('open'); syncJourneyVisibility(); elements.mobileDirectoryButton.focus(); } }
     if (event.code === 'Space' && document.activeElement === document.body) { event.preventDefault(); togglePlaying(); }
   });
+  window.addEventListener('resize', syncJourneyVisibility);
 }
 
 bindEvents();
@@ -956,7 +980,7 @@ else if (previewMode === 'profile') showView('profile');
 else if (previewMode === 'queue') { setPlaying(true); openQueue(); }
 else if (previewMode === 'playing') setPlaying(true);
 else if (previewMode === 'reopened') { setPlaying(true); toggleJourney(); }
-else if (previewMode === 'player') { setPlaying(true); openFullPlayer(undefined, 'story'); }
+else if (previewMode === 'player') { setPlaying(true); openFullPlayer(undefined, 'room'); }
 else if (previewMode === 'light') { store.set({ theme: 'light' }); syncAppearance(); }
 else if (previewMode?.startsWith('genre-')) selectGenre(previewMode.replace('genre-', ''));
 else if (!previewMode && !state().onboardingComplete && !params.has('skip-onboarding')) openOnboarding();

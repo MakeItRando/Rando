@@ -6,7 +6,9 @@ Rondo is an independent artist-by-artist music journey: choose a genre, move thr
 
 Rondo is not a Spotify client or wrapper. It owns its account, library, journeys, genre system, queue, player, recommendation rules, and brand. Catalog, audio, metadata, artwork, and lyrics enter through replaceable authorized connectors.
 
-## Current release — v0.3.0
+## Current release — v0.3.1 user-test candidate
+
+This polish release makes the mobile Song Room safely escapable, restores previous/next controls, keeps the off-canvas Genre Journey out of keyboard and assistive-technology navigation, adds readable timeline values, and supports arrow-key mode switching.
 
 This release makes the song the emotional center of Rondo:
 

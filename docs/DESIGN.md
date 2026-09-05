@@ -61,4 +61,4 @@ Genre Journey collapses when playback starts and can reopen without interruption
 
 ## Prototype status
 
-Version 0.3.0 implements the artwork-adaptive Song Room, six authorized Rondo Originals demos, personal moments/notes, real volume, and regression coverage across desktop, mobile, compact, and Reduced Motion states.
+Version 0.3.1 is the user-test candidate. It includes the artwork-adaptive Song Room, six authorized Rondo Originals demos, personal moments/notes, real volume, visible mobile exit and track controls, accessible off-canvas navigation, keyboard mode switching, and regression coverage across desktop, mobile, compact, and Reduced Motion states.
