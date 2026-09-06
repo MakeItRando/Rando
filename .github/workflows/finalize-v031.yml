@@ -70,7 +70,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          git rm -r --ignore-unmatch \
+          git rm -r -f --ignore-unmatch \
             .finalize-v031 \
             .finalize-v031-trigger \
             .repo-export \
