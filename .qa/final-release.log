@@ -36,37 +36,20 @@ Rondo unit tests passed: 8 artists, 15 releases, 39 tracks.
 
 Rondo interaction smoke test passed
 {
-  "checkedAt": "2026-09-06T16:01:28.938Z",
+  "checkedAt": "2026-09-06T16:05:03.649Z",
   "findings": [],
   "metadata": {
     "genreCount": 4,
     "browserErrors": []
   }
 }
-node:internal/modules/run_main:123
-    triggerUncaughtException(
-    ^
+Immersive listening test passed.
+file:///home/runner/work/Rando/Rando/tests/song-room.mjs:9
+const assert = (condition, message) => { if (!condition) throw new Error(message); };
+                                                               ^
 
-page.selectOption: Timeout 30000ms exceeded.
-Call log:
-  - waiting for locator('#genreSelect')
-    - locator resolved to <select id="genreSelect">…</select>
-  - attempting select option action
-    2 × waiting for element to be visible and enabled
-      - element is not visible
-    - retrying select option action
-    - waiting 20ms
-    2 × waiting for element to be visible and enabled
-      - element is not visible
-    - retrying select option action
-      - waiting 100ms
-    59 × waiting for element to be visible and enabled
-       - element is not visible
-     - retrying select option action
-       - waiting 500ms
-
-    at /home/runner/work/Rando/Rando/tests/listening.mjs:43:16 {
-  name: 'TimeoutError'
-}
+Error: Story mode should explain why the song is present.
+    at assert (file:///home/runner/work/Rando/Rando/tests/song-room.mjs:9:64)
+    at file:///home/runner/work/Rando/Rando/tests/song-room.mjs:24:3
 
 Node.js v20.20.2
