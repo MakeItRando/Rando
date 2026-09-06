@@ -8,10 +8,11 @@ on:
       - .live-preview-trigger
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
   validate:
+    if: github.actor != 'github-actions[bot]'
     runs-on: ubuntu-latest
     steps:
       - name: Check out candidate
@@ -26,9 +27,27 @@ jobs:
       - name: Validate public branch preview
         shell: bash
         run: |
+          set +e
+          mkdir -p .live-preview
+          (
+            set -euo pipefail
+            URL="https://raw.githack.com/MakeItRando/Rando/rondo-v031-user-ready/index.html"
+            echo "Preview URL: $URL"
+            curl --fail --location --retry 3 --silent --show-error "$URL" | grep -q '<title>Rondo'
+            CHROME="$(command -v google-chrome || command -v chromium || command -v chromium-browser)"
+            npm run build:preview
+            CHROMIUM_PATH="$CHROME" RONDO_URL="$URL" npm test
+          ) 2>&1 | tee .live-preview/validation.log
+          STATUS=${PIPESTATUS[0]}
+          echo "EXIT_STATUS:$STATUS" | tee -a .live-preview/validation.log
+          exit "$STATUS"
+      - name: Preserve preview diagnostic
+        if: failure()
+        shell: bash
+        run: |
           set -euo pipefail
-          URL="https://raw.githack.com/MakeItRando/Rando/rondo-v031-user-ready/index.html"
-          curl --fail --location --retry 3 --silent --show-error "$URL" | grep -q '<title>Rondo'
-          CHROME="$(command -v google-chrome || command -v chromium || command -v chromium-browser)"
-          npm run build:preview
-          CHROMIUM_PATH="$CHROME" RONDO_URL="$URL" npm test
+          git add -f .live-preview/validation.log
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -m "chore: record public preview diagnostic"
+          git push
