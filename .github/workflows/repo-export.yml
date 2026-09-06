@@ -1,0 +1,37 @@
+name: Temporary repository export
+
+on:
+  push:
+    branches:
+      - rondo-v031-user-ready
+    paths:
+      - .repo-export-trigger
+
+permissions:
+  contents: write
+
+jobs:
+  export:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Package repository for local QA
+        shell: bash
+        run: |
+          set -euo pipefail
+          rm -rf .repo-export
+          mkdir -p .repo-export
+          tar --exclude=.git --exclude=.repo-export -czf /tmp/rondo-repo.tar.gz .
+          sha256sum /tmp/rondo-repo.tar.gz | sed 's#/tmp/rondo-repo.tar.gz#rondo-repo.tar.gz#' > .repo-export/SHA256SUMS
+          tar -tzf /tmp/rondo-repo.tar.gz > .repo-export/MANIFEST.txt
+          base64 -w0 /tmp/rondo-repo.tar.gz | split -b 700000 -d -a 2 - .repo-export/part-
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add .repo-export
+          git commit -m "chore: export repository for local QA"
+          git push
