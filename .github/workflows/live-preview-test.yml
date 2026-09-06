@@ -1,0 +1,34 @@
+name: Validate public v0.3.1 preview
+
+on:
+  push:
+    branches:
+      - rondo-v031-user-ready
+    paths:
+      - .live-preview-trigger
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out candidate
+        uses: actions/checkout@v4
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - name: Install exact dependencies
+        run: npm ci
+      - name: Validate public branch preview
+        shell: bash
+        run: |
+          set -euo pipefail
+          URL="https://raw.githack.com/MakeItRando/Rando/rondo-v031-user-ready/index.html"
+          curl --fail --location --retry 3 --silent --show-error "$URL" | grep -q '<title>Rondo'
+          CHROME="$(command -v google-chrome || command -v chromium || command -v chromium-browser)"
+          npm run build:preview
+          CHROMIUM_PATH="$CHROME" RONDO_URL="$URL" npm test
