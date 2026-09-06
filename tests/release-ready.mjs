@@ -136,6 +136,8 @@ try {
       const summary = await mobile.locator('.view-surface-head > p').boundingBox();
       assert(title && summary && title.y + title.height <= summary.y + 1, 'Mobile Library title and collection totals should not overlap.');
       assert(await contrastFor(mobile.locator('.empty-library-copy p')) >= 4.5, 'Empty Library guidance should meet normal-text contrast.');
+      const discoveryTarget = await mobile.locator('.empty-library-copy [data-return-discover]').boundingBox();
+      assert(discoveryTarget && discoveryTarget.width >= 44 && discoveryTarget.height >= 44, 'Empty Library discovery action should meet a 44px mobile target.');
     }
   }
   await mobile.click('[data-mobile-view="discover"]');

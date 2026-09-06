@@ -711,3 +711,9 @@ html[data-theme="light"] .empty-library { background-color: #fbf9f4; }
   .artist-actions .text-action { grid-column: 1 / -1; grid-row: 2; justify-self: start; width: max-content; min-width: 44px; min-height: 44px; }
   .artist-stats .artist-chapter-note { display: none; }
 }
+
+
+/* Final mobile Library action target */
+@media (max-width: 760px) {
+  .empty-library-copy .primary-action { min-height: 44px; }
+}
