@@ -1,4 +1,4 @@
-== ALIGN REMOVED PREVIEW CONTROL AND STARTUP ASSERTION ==
+== APPLY RELEASE FIXES ==
 == UPDATE PLAYWRIGHT ==
 
 added 4 packages, and audited 5 packages in 2s
@@ -13,7 +13,7 @@ found 0 vulnerabilities
 
   .preview/app.bundle.js  117.2kb
 
-⚡ Done in 8ms
+⚡ Done in 6ms
 /home/runner/work/Rando/Rando/preview.html
 == START PREVIEW SERVER ==
 == TEST ==
@@ -36,26 +36,54 @@ Rondo unit tests passed: 8 artists, 15 releases, 39 tracks.
 
 Rondo interaction smoke test passed
 {
-  "checkedAt": "2026-09-06T15:55:22.636Z",
-  "findings": [
-    {
-      "severity": "medium",
-      "area": "targets",
-      "message": "320px Discover has undersized key controls: #skipArtist 63×32"
-    },
-    {
-      "severity": "medium",
-      "area": "targets",
-      "message": "375px Discover has undersized key controls: #skipArtist 63×32"
-    },
-    {
-      "severity": "medium",
-      "area": "targets",
-      "message": "390px Discover has undersized key controls: #skipArtist 63×32"
-    }
-  ],
+  "checkedAt": "2026-09-06T15:57:37.219Z",
+  "findings": [],
   "metadata": {
     "genreCount": 4,
     "browserErrors": []
   }
 }
+node:internal/modules/run_main:123
+    triggerUncaughtException(
+    ^
+
+page.selectOption: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator('#genreSelect')
+    - locator resolved to <select id="genreSelect">…</select>
+  - attempting select option action
+    2 × waiting for element to be visible and enabled
+      - element is not visible
+    - retrying select option action
+    - waiting 20ms
+    2 × waiting for element to be visible and enabled
+      - element is not visible
+    - retrying select option action
+      - waiting 100ms
+    59 × waiting for element to be visible and enabled
+       - element is not visible
+     - retrying select option action
+       - waiting 500ms
+
+    at /home/runner/work/Rando/Rando/tests/listening.mjs:40:16 {
+  log: [
+    "  - waiting for locator('#genreSelect')",
+    '    - locator resolved to <select id="genreSelect">…</select>',
+    '  - attempting select option action',
+    '    2 × waiting for element to be visible and enabled',
+    '      - element is not visible',
+    '    - retrying select option action',
+    '    - waiting 20ms',
+    '    2 × waiting for element to be visible and enabled',
+    '      - element is not visible',
+    '    - retrying select option action',
+    '      - waiting 100ms',
+    '    59 × waiting for element to be visible and enabled',
+    '       - element is not visible',
+    '     - retrying select option action',
+    '       - waiting 500ms'
+  ],
+  name: 'TimeoutError'
+}
+
+Node.js v20.20.2
