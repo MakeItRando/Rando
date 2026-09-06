@@ -24,7 +24,7 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          set -uo pipefail
+          set +e
           mkdir -p .pages-debug
           API="https://api.github.com/repos/${GITHUB_REPOSITORY}/pages"
           request() {
@@ -48,8 +48,10 @@ jobs:
             request PUT .pages-debug/enable.txt --header "Content-Type: application/json" --data '{"build_type":"workflow"}'
           fi
           request GET .pages-debug/after.txt
+          exit 0
 
       - name: Preserve Pages diagnostic
+        if: always()
         shell: bash
         run: |
           set -euo pipefail
