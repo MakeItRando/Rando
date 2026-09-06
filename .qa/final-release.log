@@ -1,0 +1,50 @@
+== UPDATE PLAYWRIGHT ==
+
+added 4 packages, and audited 5 packages in 2s
+
+found 0 vulnerabilities
+== AUDIT ==
+== BUILD ==
+
+> rondo-design-prototype@0.3.1 build:preview
+> node scripts/build-preview.mjs
+
+
+  .preview/app.bundle.js  117.2kb
+
+⚡ Done in 8ms
+/home/runner/work/Rando/Rando/preview.html
+== TEST ==
+
+> rondo-design-prototype@0.3.1 test
+> npm run check && npm run test:unit && npm run test:browser
+
+
+> rondo-design-prototype@0.3.1 check
+> node --check app.js && node --check src/app.js && node --check src/data/catalog.js && node --check src/services/journey.js && node --check src/state/store.js && node --check src/ui/views.js && node --check src/ui/ambience.js && node --check src/ui/songRoom.js && node --check src/services/audio.js
+
+
+> rondo-design-prototype@0.3.1 test:unit
+> node tests/unit.mjs
+
+Rondo unit tests passed: 8 artists, 15 releases, 39 tracks.
+
+> rondo-design-prototype@0.3.1 test:browser
+> node tests/smoke.mjs && node tests/quality.mjs && node tests/listening.mjs && node tests/song-room.mjs && node tests/audio.mjs && node tests/personal.mjs && node tests/user-ready.mjs && node tests/experience.mjs && node tests/release-ready.mjs
+
+node:internal/modules/run_main:123
+    triggerUncaughtException(
+    ^
+
+page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:4173/index.html?skip-onboarding=1
+Call log:
+  - navigating to "http://127.0.0.1:4173/index.html?skip-onboarding=1", waiting until "networkidle"
+
+    at /home/runner/work/Rando/Rando/tests/smoke.mjs:23:14 {
+  log: [
+    '  - navigating to "http://127.0.0.1:4173/index.html?skip-onboarding=1", waiting until "networkidle"'
+  ],
+  name: 'Error'
+}
+
+Node.js v20.20.2
