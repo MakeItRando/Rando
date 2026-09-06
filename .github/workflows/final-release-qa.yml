@@ -84,9 +84,22 @@ jobs:
           if old_completion not in smoke:
               raise SystemExit('Completion assertion anchor not found')
           smoke_path.write_text(smoke.replace(old_completion, new_completion, 1))
+
+          listening_path = Path('tests/listening.mjs')
+          listening = listening_path.read_text()
+          old_return = """  await page.click('#fullJourney');
+            assert(await page.locator('#fullPlayer').isHidden(), 'Journey action should close the immersive player.');"""
+          new_return = """  await page.click('#fullJourney');
+            assert(await page.locator('#fullPlayer').isHidden(), 'Journey action should close the immersive player.');
+            await page.waitForTimeout(500);
+            const journeyRestored = await page.locator('#directory').evaluate((element) => ({ hidden: element.hidden, inert: element.inert, collapsed: document.body.classList.contains('journey-collapsed'), visibility: getComputedStyle(element).visibility }));
+            assert(!journeyRestored.hidden && !journeyRestored.inert && !journeyRestored.collapsed && journeyRestored.visibility === 'visible', 'Journey action should reveal the desktop Genre Journey: ' + JSON.stringify(journeyRestored));"""
+          if old_return not in listening:
+              raise SystemExit('Journey return anchor not found')
+          listening_path.write_text(listening.replace(old_return, new_return, 1))
           PY
             echo '== UPDATE PLAYWRIGHT =='
-            npm install --save-dev playwright@1.63.0 --ignore-scripts
+            npm install --save-dev playwright@1.55.1 --ignore-scripts
             echo '== AUDIT =='
             npm audit --json > .qa/npm-audit.json
             node -e "const a=JSON.parse(require('node:fs').readFileSync('.qa/npm-audit.json')); if(a.metadata.vulnerabilities.total) throw new Error('Audit findings remain')"
