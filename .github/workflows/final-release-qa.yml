@@ -53,6 +53,15 @@ jobs:
             node -e "const a=JSON.parse(require('node:fs').readFileSync('.qa/npm-audit.json')); if(a.metadata.vulnerabilities.total) throw new Error('Audit findings remain')"
             echo '== BUILD =='
             npm run build:preview
+            echo '== START PREVIEW SERVER =='
+            python3 -m http.server 4173 > /tmp/rondo-preview.log 2>&1 &
+            server_pid=$!
+            trap 'kill "$server_pid" 2>/dev/null || true' EXIT
+            for attempt in {1..30}; do
+              if curl --fail --silent http://127.0.0.1:4173/index.html > /dev/null; then break; fi
+              sleep 1
+            done
+            curl --fail --silent http://127.0.0.1:4173/index.html > /dev/null
             echo '== TEST =='
             npm test
             echo '== CAPTURE =='
