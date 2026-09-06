@@ -3,6 +3,8 @@ name: Finish Rondo user experience
 on:
   push:
     branches: [rondo-v031-user-ready]
+    paths-ignore:
+      - .qa/final-ux.log
 
 permissions:
   contents: write
@@ -27,23 +29,35 @@ jobs:
         with:
           node-version: 20
           cache: npm
-      - name: Install dependencies
-        run: npm ci
-      - name: Apply final interaction and copy pass
-        run: node scripts/apply-ux-finish.mjs
-      - name: Build deterministic preview
-        run: npm run build:preview
-      - name: Run complete release gate
-        env:
-          RONDO_URL: file://${{ github.workspace }}/preview-test.html
-        run: npm test
-      - name: Capture final visual states
-        run: node tests/capture-final.mjs
-      - name: Publish tested source and QA captures
+      - name: Apply, validate, and publish
+        shell: bash
         run: |
+          set +e
+          mkdir -p .qa
+          {
+            echo "== install =="
+            npm ci
+            echo "== patch =="
+            node scripts/apply-ux-finish.mjs
+            echo "== build =="
+            npm run build:preview
+            echo "== complete gate =="
+            RONDO_URL="file://${GITHUB_WORKSPACE}/preview-test.html" npm test
+            echo "== captures =="
+            node tests/capture-final.mjs
+          } > .qa/final-ux.log 2>&1
+          status=$?
+          cat .qa/final-ux.log
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          if [ "$status" -ne 0 ]; then
+            git add -f .qa/final-ux.log
+            git commit -m "chore: record final UX gate failure" || true
+            git push origin HEAD:rondo-v031-user-ready
+            exit "$status"
+          fi
           git add README.md package.json index.html styles.css src/app.js src/ui/views.js src/ui/songRoom.js tests/experience.mjs tests/capture-final.mjs .qa/*.png
           git rm .github/workflows/final-ux-finish.yml scripts/apply-ux-finish.mjs
+          git rm -f --ignore-unmatch .qa/final-ux.log
           git commit -m "feat: finish Rondo listening experience"
           git push origin HEAD:rondo-v031-user-ready
