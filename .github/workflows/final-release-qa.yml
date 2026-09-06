@@ -46,18 +46,27 @@ jobs:
           set +e
           (
             set -e
-            echo '== STABILIZE STARTUP ASSERTION =='
+            echo '== FIX OPTIONAL CONTROL AND STABILIZE STARTUP ASSERTION =='
             python3 - <<'PY'
           from pathlib import Path
-          path = Path('tests/smoke.mjs')
-          source = path.read_text()
-          old = "  if (await page.locator('.track-row').count() !== 7) throw new Error('Matching catalog should contain seven Kairo tracks');"
-          new = """  await page.waitForTimeout(300);
+
+          app_path = Path('src/app.js')
+          app = app_path.read_text()
+          old_binding = "  $('previewCompletion').addEventListener('click', openCompletion);"
+          new_binding = "  $('previewCompletion')?.addEventListener('click', openCompletion);"
+          if old_binding not in app:
+              raise SystemExit('Preview control binding anchor not found')
+          app_path.write_text(app.replace(old_binding, new_binding, 1))
+
+          smoke_path = Path('tests/smoke.mjs')
+          smoke = smoke_path.read_text()
+          old_assertion = "  if (await page.locator('.track-row').count() !== 7) throw new Error('Matching catalog should contain seven Kairo tracks');"
+          new_assertion = """  await page.waitForTimeout(300);
             const initialTrackCount = await page.locator('.track-row').count();
             if (initialTrackCount !== 7) throw new Error('Matching catalog should contain seven Kairo tracks; got ' + initialTrackCount + '; browser errors: ' + errors.join(' | '));"""
-          if old not in source:
+          if old_assertion not in smoke:
               raise SystemExit('Startup assertion anchor not found')
-          path.write_text(source.replace(old, new, 1))
+          smoke_path.write_text(smoke.replace(old_assertion, new_assertion, 1))
           PY
             echo '== UPDATE PLAYWRIGHT =='
             npm install --save-dev playwright@1.63.0 --ignore-scripts
