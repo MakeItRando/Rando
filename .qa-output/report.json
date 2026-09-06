@@ -1,5 +1,5 @@
 {
-  "checkedAt": "2026-09-06T05:48:32.159Z",
+  "checkedAt": "2026-09-06T05:51:33.317Z",
   "states": [
     {
       "name": "01-desktop-discover",
@@ -88,11 +88,11 @@
         "clippedControls": [
           {
             "id": "Theo JuneSpiritual jazz ",
-            "left": 57,
+            "left": 59,
             "top": 850,
-            "right": 128,
+            "right": 153,
             "bottom": 914,
-            "width": 71,
+            "width": 94,
             "height": 64
           }
         ]
@@ -538,17 +538,7 @@
         "duplicateIds": [],
         "brokenImages": [],
         "unnamedButtons": [],
-        "clippedControls": [
-          {
-            "id": "W",
-            "left": 60,
-            "top": 885,
-            "right": 69,
-            "bottom": 909,
-            "width": 9,
-            "height": 24
-          }
-        ]
+        "clippedControls": []
       },
       "expectations": {
         "#closeFullPlayer": true,
