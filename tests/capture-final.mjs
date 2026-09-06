@@ -30,7 +30,6 @@ await capture('mobile-discover', { width: 390, height: 844 }, async (page) => {
 await capture('desktop-song-room', { width: 1440, height: 960 }, async (page) => {
   await page.click('#playArtist');
   await page.click('#openFullPlayer');
-  await page.click('[data-song-room-mode="story"]');
 });
 await capture('mobile-library', { width: 390, height: 844 }, async (page) => {
   await page.click('[data-mobile-view="library"]');

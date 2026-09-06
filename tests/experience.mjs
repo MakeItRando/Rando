@@ -67,7 +67,6 @@ try {
   assert(!(await page.locator('.empty-library-copy').innerText()).includes('never interrupts'), 'Empty Library should not overexplain the save model.');
   await page.click('.rail-button[data-view="discover"]');
   await page.click('#openFullPlayer');
-  await page.click('[data-song-room-mode="story"]');
   assert((await page.locator('#songRoomPanel .song-room-eyebrow').innerText()).trim() === 'Inside the track', 'Song story should invite curiosity.');
   await page.keyboard.press('Escape');
 
