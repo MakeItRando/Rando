@@ -1,5 +1,5 @@
 {
-  "checkedAt": "2026-09-06T05:51:33.317Z",
+  "checkedAt": "2026-09-06T05:53:24.849Z",
   "states": [
     {
       "name": "01-desktop-discover",
@@ -538,7 +538,17 @@
         "duplicateIds": [],
         "brokenImages": [],
         "unnamedButtons": [],
-        "clippedControls": []
+        "clippedControls": [
+          {
+            "id": "W",
+            "left": 60,
+            "top": 885,
+            "right": 69,
+            "bottom": 909,
+            "width": 9,
+            "height": 24
+          }
+        ]
       },
       "expectations": {
         "#closeFullPlayer": true,
