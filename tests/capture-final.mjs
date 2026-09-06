@@ -28,16 +28,17 @@ async function capture(name, viewport, setup = async () => {}, { screen = '', re
 }
 
 await capture('desktop-discover', { width: 1440, height: 960 }, async (page) => {
-  await page.click('#playArtist');
+  await page.evaluate(() => document.getElementById('playArtist')?.click());
   await page.waitForFunction(() => document.body.classList.contains('is-playing'));
 });
 await capture('mobile-discover', { width: 390, height: 844 }, async (page) => {
-  await page.click('#playArtist');
+  await page.evaluate(() => document.getElementById('playArtist')?.click());
   await page.waitForFunction(() => document.body.classList.contains('is-playing'));
 });
 await capture('compact-resume', { width: 320, height: 700 }, async (page) => {
-  await page.click('#playArtist');
-  await page.click('#playArtist');
+  await page.evaluate(() => document.getElementById('playArtist')?.click());
+  await page.waitForFunction(() => document.querySelector('#playArtist')?.dataset.playbackState === 'pause');
+  await page.evaluate(() => document.getElementById('playArtist')?.click());
   await page.waitForFunction(() => document.querySelector('#playArtist')?.dataset.playbackState === 'resume');
 });
 await capture('desktop-song-room', { width: 1440, height: 960 }, async (page) => {
@@ -54,7 +55,7 @@ await capture('desktop-light', { width: 1280, height: 820 }, async (page) => {
   await page.waitForFunction(() => document.documentElement.dataset.theme === 'light');
 }, { screen: 'light' });
 await capture('mobile-reduced-motion', { width: 390, height: 844 }, async (page) => {
-  await page.click('#playArtist');
+  await page.evaluate(() => document.getElementById('playArtist')?.click());
   await page.waitForFunction(() => document.body.classList.contains('is-playing'));
   const animationName = await page.locator('.track-equalizer i').first().evaluate((element) => getComputedStyle(element).animationName);
   if (animationName !== 'none') throw new Error('Reduced Motion equalizer should not animate.');

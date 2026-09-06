@@ -1,0 +1,77 @@
+name: Final release QA
+
+on:
+  push:
+    branches: [rondo-v031-user-ready]
+    paths:
+      - .github/workflows/final-release-qa.yml
+
+permissions:
+  contents: write
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout candidate
+        uses: actions/checkout@v4
+        with:
+          ref: rondo-v031-user-ready
+          fetch-depth: 0
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Locate Chromium
+        shell: bash
+        run: |
+          browser="$(command -v chromium || command -v chromium-browser || command -v google-chrome || command -v google-chrome-stable || true)"
+          if [ -z "$browser" ]; then
+            sudo apt-get update
+            sudo apt-get install -y chromium-browser || sudo apt-get install -y chromium
+            browser="$(command -v chromium || command -v chromium-browser)"
+          fi
+          test -n "$browser"
+          echo "CHROMIUM_PATH=$browser" >> "$GITHUB_ENV"
+
+      - name: Run final gate
+        shell: bash
+        env:
+          PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: "1"
+        run: |
+          mkdir -p .qa
+          set +e
+          (
+            set -e
+            echo '== UPDATE PLAYWRIGHT =='
+            npm install --save-dev playwright@1.63.0 --ignore-scripts
+            echo '== AUDIT =='
+            npm audit --json > .qa/npm-audit.json
+            node -e "const a=JSON.parse(require('node:fs').readFileSync('.qa/npm-audit.json')); if(a.metadata.vulnerabilities.total) throw new Error('Audit findings remain')"
+            echo '== BUILD =='
+            npm run build:preview
+            echo '== TEST =='
+            npm test
+            echo '== CAPTURE =='
+            node tests/capture-final.mjs
+            test "$(find .qa -maxdepth 1 -name '*.png' | wc -l)" -eq 8
+            echo '== DIFF CHECK =='
+            git diff --check
+          ) > .qa/final-release.log 2>&1
+          status=$?
+          cat .qa/final-release.log
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          if [ "$status" -ne 0 ]; then
+            git add .qa/final-release.log
+            git commit -m "chore: capture final release QA failure" || true
+            git push origin HEAD:rondo-v031-user-ready || true
+            exit "$status"
+          fi
+          rm -f .github/workflows/final-release-qa.yml .qa/final-release.log
+          git add -A
+          git diff --cached --quiet || git commit -m "chore: verify responsive release candidate"
+          git push origin HEAD:rondo-v031-user-ready
