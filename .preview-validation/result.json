@@ -1,6 +1,6 @@
 {
   "previewUrl": "https://htmlpreview.github.io/?https://raw.githubusercontent.com/MakeItRando/Rando/rondo-v031-preview/rondo-v031-preview.html",
-  "passed": false,
+  "passed": true,
   "desktop": {
     "status": 200,
     "finalUrl": "https://htmlpreview.github.io/?https://raw.githubusercontent.com/MakeItRando/Rando/rondo-v031-preview/rondo-v031-preview.html",
@@ -9,6 +9,12 @@
     "trackRows": 7,
     "bodyWidth": 1440,
     "viewportWidth": 1440,
+    "audio": {
+      "currentSrc": "https://raw.githubusercontent.com/MakeItRando/Rando/rondo-v031-preview/assets/audio/night-transit.mp3",
+      "readyState": 4,
+      "networkState": 1,
+      "errorCode": null
+    },
     "songRoomVisible": true,
     "lyricsSelected": "true"
   },
@@ -18,10 +24,14 @@
     "focusedId": "closeDirectory",
     "bodyWidth": 390,
     "viewportWidth": 390,
-    "directoryDismissed": false
+    "directoryDismissed": true
   },
-  "errors": [
-    "desktop console: Failed to load resource: the server responded with a status of 404 ()",
-    "desktop console: Failed to load resource: the server responded with a status of 404 ()"
-  ]
+  "pageErrors": [],
+  "consoleErrors": [
+    "desktop: Failed to load resource: the server responded with a status of 404 ()",
+    "desktop: Failed to load resource: the server responded with a status of 404 ()"
+  ],
+  "httpFailures": [],
+  "requestFailures": [],
+  "validationErrors": []
 }
