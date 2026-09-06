@@ -35,12 +35,27 @@ jobs:
           import { chromium } from 'playwright';
           import { writeFileSync } from 'node:fs';
           const previewUrl = 'https://htmlpreview.github.io/?https://raw.githubusercontent.com/MakeItRando/Rando/rondo-v031-preview/rondo-v031-preview.html';
-          const result = { previewUrl, passed: false, desktop: {}, mobile: {}, errors: [] };
+          const result = {
+            previewUrl,
+            passed: false,
+            desktop: {},
+            mobile: {},
+            pageErrors: [],
+            consoleErrors: [],
+            httpFailures: [],
+            requestFailures: [],
+            validationErrors: []
+          };
+          const watch = (page, label) => {
+            page.on('pageerror', (error) => result.pageErrors.push(`${label}: ${error.message}`));
+            page.on('console', (message) => { if (message.type() === 'error') result.consoleErrors.push(`${label}: ${message.text()}`); });
+            page.on('response', (response) => { if (response.status() >= 400) result.httpFailures.push({ label, status: response.status(), url: response.url() }); });
+            page.on('requestfailed', (request) => result.requestFailures.push({ label, url: request.url(), error: request.failure()?.errorText || 'unknown' }));
+          };
           const browser = await chromium.launch({ headless: true, executablePath: process.env.CHROMIUM_PATH, args: ['--no-sandbox'] });
           try {
             const desktop = await browser.newPage({ viewport: { width: 1440, height: 960 } });
-            desktop.on('pageerror', (error) => result.errors.push(`desktop pageerror: ${error.message}`));
-            desktop.on('console', (message) => { if (message.type() === 'error') result.errors.push(`desktop console: ${message.text()}`); });
+            watch(desktop, 'desktop');
             const response = await desktop.goto(previewUrl, { waitUntil: 'domcontentloaded', timeout: 60000 });
             await desktop.locator('#artistName').waitFor({ state: 'visible', timeout: 60000 });
             result.desktop = {
@@ -55,6 +70,16 @@ jobs:
             await desktop.locator('.rail-button[data-view="library"]').click();
             await desktop.locator('.rail-button[data-view="discover"]').click();
             await desktop.locator('.track-play').first().click();
+            await desktop.waitForTimeout(1500);
+            result.desktop.audio = await desktop.evaluate(() => {
+              const audio = document.querySelector('audio');
+              return audio ? {
+                currentSrc: audio.currentSrc,
+                readyState: audio.readyState,
+                networkState: audio.networkState,
+                errorCode: audio.error?.code ?? null
+              } : null;
+            });
             await desktop.locator('#openFullPlayer').click();
             await desktop.locator('.song-room-tabs [data-song-room-mode="lyrics"]').click();
             result.desktop.songRoomVisible = await desktop.locator('#fullPlayer').isVisible();
@@ -62,8 +87,7 @@ jobs:
             await desktop.close();
 
             const mobile = await browser.newPage({ viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true });
-            mobile.on('pageerror', (error) => result.errors.push(`mobile pageerror: ${error.message}`));
-            mobile.on('console', (message) => { if (message.type() === 'error') result.errors.push(`mobile console: ${message.text()}`); });
+            watch(mobile, 'mobile');
             await mobile.goto(previewUrl, { waitUntil: 'domcontentloaded', timeout: 60000 });
             await mobile.locator('#artistName').waitFor({ state: 'visible', timeout: 60000 });
             await mobile.locator('.mobile-nav-button[data-mobile-view="library"]').click();
@@ -79,7 +103,8 @@ jobs:
               viewportWidth: await mobile.evaluate(() => document.documentElement.clientWidth)
             };
             await mobile.locator('#directoryScrim').click({ position: { x: 10, y: 10 } });
-            result.mobile.directoryDismissed = !(await mobile.locator('#directory').isVisible());
+            await mobile.waitForFunction(() => document.querySelector('#directory')?.getAttribute('aria-hidden') === 'true', null, { timeout: 3000 });
+            result.mobile.directoryDismissed = true;
             await mobile.close();
 
             result.passed = result.desktop.title.includes('Rondo')
@@ -88,14 +113,18 @@ jobs:
               && result.desktop.songRoomVisible
               && result.desktop.lyricsSelected === 'true'
               && result.desktop.bodyWidth <= result.desktop.viewportWidth
+              && result.desktop.audio?.currentSrc.includes('/assets/audio/')
+              && result.desktop.audio?.errorCode === null
               && Boolean(result.mobile.artistName)
               && result.mobile.directoryVisible
               && result.mobile.focusedId === 'closeDirectory'
               && result.mobile.directoryDismissed
               && result.mobile.bodyWidth <= result.mobile.viewportWidth
-              && result.errors.length === 0;
+              && result.pageErrors.length === 0
+              && result.httpFailures.length === 0
+              && result.requestFailures.length === 0;
           } catch (error) {
-            result.errors.push(`validation: ${error.stack || error.message}`);
+            result.validationErrors.push(error.stack || error.message);
           } finally {
             await browser.close();
             writeFileSync('.preview-validation/result.json', `${JSON.stringify(result, null, 2)}\n`);
