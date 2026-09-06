@@ -22,7 +22,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          cat .finalize-v031/patch.part-* | base64 --decode | xz --decompress --stdout > /tmp/rondo-final.patch
+          cat .finalize-v031/payload.part-* | base64 --decode | xz --decompress --stdout > /tmp/rondo-final.patch
           echo "425c1836a5c237a568a23c8a879d90b087c8508d64a5531e3ced38e52510809d  /tmp/rondo-final.patch" | sha256sum --check
           git apply --check /tmp/rondo-final.patch
           git apply /tmp/rondo-final.patch
