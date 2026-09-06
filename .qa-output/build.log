@@ -1,9 +1,0 @@
-
-> rondo-design-prototype@0.3.1 build:preview
-> node scripts/build-preview.mjs
-
-
-  .preview/app.bundle.js  106.5kb
-
-⚡ Done in 5ms
-/home/runner/work/Rando/Rando/preview.html

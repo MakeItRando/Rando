@@ -42,7 +42,7 @@ Private notes sit below provenance rather than competing with the song story. Th
 
 ## Surrounding application
 
-Genre Journey collapses when playback starts and can reopen without interruption. The surrounding app retains genre-reactive ambience while the Song Room uses the release artwork signal. Light and Night remain persistent preferences outside the immersive room.
+Genre Journey collapses when playback starts and can reopen without interruption. On mobile, persistent Discover, Library, Journeys, and Profile navigation remains reachable above the compact player; the artist directory becomes a focus-contained drawer with a clear outside-dismiss surface. The surrounding app retains genre-reactive ambience while the Song Room uses the release artwork signal. Light and Night remain persistent preferences outside the immersive room.
 
 ## Motion contract
 
@@ -61,4 +61,4 @@ Genre Journey collapses when playback starts and can reopen without interruption
 
 ## Prototype status
 
-Version 0.3.1 is the user-test candidate. It includes the artwork-adaptive Song Room, six authorized Rondo Originals demos, personal moments/notes, real volume, visible mobile exit and track controls, accessible off-canvas navigation, keyboard mode switching, and regression coverage across desktop, mobile, compact, and Reduced Motion states.
+Version 0.3.1 is the user-test candidate. It includes the artwork-adaptive Song Room, six authorized Rondo Originals demos, personal moments/notes, real volume, persistent mobile primary navigation, semantic catalog controls, mutually exclusive modal layers, accessible off-canvas navigation, complete keyboard seeking and mode switching, readable Light/Night supporting text, and regression coverage across desktop, mobile, compact, unavailable-audio, and Reduced Motion states.

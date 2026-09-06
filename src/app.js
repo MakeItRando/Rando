@@ -9,6 +9,8 @@ import { applyArtworkPalette, renderSongRoomPanel, songRoomModes } from './ui/so
 const playPath = '<path d="M8 5v14l11-7z"/>';
 const pausePath = '<path d="M7 5h4v14H7zM13 5h4v14h-4z"/>';
 const heartPath = '<path d="M20.8 4.8a5.4 5.4 0 0 0-7.7 0L12 5.9l-1.1-1.1a5.4 5.4 0 0 0-7.7 7.7l1.1 1.1L12 21l7.7-7.4 1.1-1.1a5.4 5.4 0 0 0 0-7.7Z"/>';
+const plusPath = '<path d="M10 4v12M4 10h12"/>';
+const checkPath = '<path d="m4 10 3.6 3.6L16 5.8"/>';
 const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
 const $ = (id) => document.getElementById(id);
 const escapeHtml = (value = '') => String(value).replace(/[&<>"']/g, (character) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[character]);
@@ -43,7 +45,7 @@ const audioEngine = createAudioEngine({
 const elements = {
   appShell: $('appShell'), workspace: document.querySelector('.workspace'), directory: $('directory'), journey: $('journey'),
   genreSelect: $('genreSelect'), artistFilter: $('artistFilter'), alphabet: $('alphabet'), artistList: $('artistList'), artistCount: $('artistCount'),
-  locationGenre: $('locationGenre'), locationArtist: $('locationArtist'), artistPortrait: $('artistPortrait'), artistProgressRing: $('artistProgressRing'),
+  topbar: document.querySelector('.topbar'), locationSection: $('locationSection'), locationGenre: $('locationGenre'), locationArtist: $('locationArtist'), artistPortrait: $('artistPortrait'), artistProgressRing: $('artistProgressRing'),
   artistProgressPercent: $('artistProgressPercent'), artistPosition: $('artistPosition'), artistLetter: $('artistLetter'), artistName: $('artistName'),
   artistOrigin: $('artistOrigin'), artistYears: $('artistYears'), artistTags: $('artistTags'), artistBio: $('artistBio'), saveArtist: $('saveArtist'),
   statPosition: $('statPosition'), statReleases: $('statReleases'), statTracks: $('statTracks'), catalogSummary: $('catalogSummary'),
@@ -60,7 +62,8 @@ const elements = {
   onboardingTitle: $('onboardingTitle'), onboardingDescription: $('onboardingDescription'), onboardingStep: $('onboardingStep'),
   onboardingBack: $('onboardingBack'), onboardingNext: $('onboardingNext'), completionOverlay: $('completionOverlay'), completionTitle: $('completionTitle'),
   completionHeard: $('completionHeard'), completionSaved: $('completionSaved'), completionReleases: $('completionReleases'),
-  nextArtistImage: $('nextArtistImage'), nextArtistName: $('nextArtistName'), nextArtistTags: $('nextArtistTags'), toast: $('toast')
+  nextArtistImage: $('nextArtistImage'), nextArtistName: $('nextArtistName'), nextArtistTags: $('nextArtistTags'), toast: $('toast'),
+  inspector: document.querySelector('.inspector'), transport: document.querySelector('.transport'), mobilePrimaryNav: $('mobilePrimaryNav'), directoryScrim: $('directoryScrim')
 };
 Object.assign(elements, {
   journeyToggle: $('journeyToggle'), journeyToggleLabel: $('journeyToggleLabel'), themeToggle: $('themeToggle'), themeToggleLabel: $('themeToggleLabel'),
@@ -109,18 +112,70 @@ function syncAppearance() {
   if (themeMeta) themeMeta.content = theme === 'dark' ? songPalette.base : '#f3f0e9';
 }
 
+function syncLocation() {
+  const view = state().view;
+  if (view === 'discover') {
+    elements.locationSection.textContent = 'DISCOVER';
+    elements.locationGenre.textContent = currentGenre().name.toUpperCase();
+    elements.locationArtist.textContent = currentArtist().name.toUpperCase();
+    return;
+  }
+  if (view === 'library') {
+    const savedCount = (state().savedArtists?.length || 0) + (state().savedReleases?.length || 0) + (state().savedTracks?.length || 0);
+    elements.locationSection.textContent = 'LIBRARY';
+    elements.locationGenre.textContent = `${pad(savedCount)} SAVES`;
+    elements.locationArtist.textContent = 'YOUR COLLECTION';
+    return;
+  }
+  if (view === 'journeys') {
+    elements.locationSection.textContent = 'JOURNEYS';
+    elements.locationGenre.textContent = currentGenre().name.toUpperCase();
+    elements.locationArtist.textContent = currentArtist().name.toUpperCase();
+    return;
+  }
+  elements.locationSection.textContent = 'PROFILE';
+  elements.locationGenre.textContent = 'TASTE SETTINGS';
+  elements.locationArtist.textContent = (state().profile?.displayName || 'LOCAL PROFILE').toUpperCase();
+}
+
 function syncJourneyVisibility() {
-  const collapsed = Boolean(state().directoryCollapsed && state().view === 'discover');
   const isMobile = window.matchMedia('(max-width: 760px)').matches;
-  const mobileOpen = elements.directory.classList.contains('open');
-  const directoryVisible = isMobile ? mobileOpen : !collapsed;
+  if (!isMobile) elements.directory.classList.remove('open');
+  const discover = state().view === 'discover';
+  const collapsed = Boolean(state().directoryCollapsed && discover);
+  const mobileOpen = discover && isMobile && elements.directory.classList.contains('open');
+  const directoryVisible = discover && (isMobile ? mobileOpen : !collapsed);
   document.body.classList.toggle('journey-collapsed', collapsed);
+  document.body.classList.toggle('mobile-directory-open', mobileOpen);
+  elements.directory.hidden = !discover;
+  elements.mobileDirectoryButton.hidden = !discover;
+  elements.journeyToggle.hidden = !discover;
   elements.journeyToggle.setAttribute('aria-expanded', String(!collapsed));
   elements.journeyToggle.setAttribute('aria-label', collapsed ? 'Show Genre Journey' : 'Hide Genre Journey');
   elements.journeyToggleLabel.textContent = collapsed ? 'Show journey' : 'Hide journey';
   elements.directory.inert = !directoryVisible;
   elements.directory.setAttribute('aria-hidden', String(!directoryVisible));
-  elements.mobileDirectoryButton.setAttribute('aria-expanded', String(isMobile ? mobileOpen : !collapsed));
+  elements.mobileDirectoryButton.setAttribute('aria-expanded', String(discover && (isMobile ? mobileOpen : !collapsed)));
+  elements.directoryScrim.hidden = !mobileOpen;
+  [elements.topbar, elements.journey, elements.inspector, elements.transport, elements.mobilePrimaryNav, $('viewSurface')]
+    .filter(Boolean)
+    .forEach((element) => { element.inert = mobileOpen; });
+}
+
+function openMobileDirectory() {
+  if (state().view !== 'discover' || topModal()) return;
+  store.set({ directoryCollapsed: false });
+  elements.directory.classList.add('open');
+  syncJourneyVisibility();
+  $('closeDirectory').focus();
+}
+
+function closeMobileDirectory({ restoreFocus = true } = {}) {
+  const wasOpen = elements.directory.classList.contains('open');
+  elements.directory.classList.remove('open');
+  if (!window.matchMedia('(max-width: 760px)').matches) store.set({ directoryCollapsed: true });
+  syncJourneyVisibility();
+  if (restoreFocus && wasOpen && window.matchMedia('(max-width: 760px)').matches) elements.mobileDirectoryButton.focus();
 }
 
 function toggleTheme() {
@@ -161,6 +216,15 @@ function restoreModalFocus() {
   const target = modalReturnFocus;
   modalReturnFocus = null;
   if (target?.isConnected) target.focus();
+}
+
+function syncModalState() {
+  const active = topModal();
+  elements.appShell.inert = Boolean(active);
+  document.body.classList.toggle('modal-open', Boolean(active));
+  [elements.queueDrawer, elements.searchOverlay, elements.fullPlayer, elements.onboardingOverlay, elements.completionOverlay]
+    .filter(Boolean)
+    .forEach((surface) => { surface.inert = Boolean(active && surface !== active); });
 }
 
 function toggleList(list, id) {
@@ -237,8 +301,9 @@ function renderArtistFocus() {
   elements.transportMode.textContent = state().catalogMode === 'matching' ? 'MATCHING CATALOG' : 'ALL CATALOG';
   const saved = includes(state().savedArtists, artist.id);
   elements.saveArtist.classList.toggle('saved', saved);
-  elements.saveArtist.innerHTML = `<span class="save-artist-symbol" aria-hidden="true">${saved ? '✓' : '＋'}</span><span class="save-artist-label">${saved ? 'Artist saved' : 'Save artist'}</span>`;
+  elements.saveArtist.innerHTML = `<span class="save-artist-symbol" aria-hidden="true"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8">${saved ? checkPath : plusPath}</svg></span><span class="save-artist-label">${saved ? 'Artist saved' : 'Save artist'}</span>`;
   elements.saveArtist.setAttribute('aria-label', saved ? 'Remove artist from Library' : 'Save artist to Library');
+  syncLocation();
 }
 
 function trackArtistLine(track, artist) {
@@ -256,7 +321,7 @@ function renderCatalog() {
       <div class="release-tracks">${release.tracks.map((track, trackIndex) => {
         const selected = track.id === state().selectedTrackId;
         const saved = includes(state().savedTracks, track.id);
-        return `<div class="track-row ${selected ? 'active' : ''}" role="button" tabindex="0" data-track="${track.id}" aria-label="Play ${escapeHtml(track.title)}"><span class="track-number">${pad(trackIndex + 1)}</span><span class="track-name"><strong>${escapeHtml(track.title)}${track.explicit ? ' <sup>E</sup>' : ''}</strong><small>${escapeHtml(release.title)}${track.features.length ? ` · feat. ${escapeHtml(track.features.join(', '))}` : ''}</small></span><span class="track-style">${escapeHtml(track.style)}</span><span class="track-duration">${track.duration}</span><button class="track-save ${saved ? 'saved' : ''}" type="button" data-save-track="${track.id}" aria-label="${saved ? 'Remove' : 'Save'} ${escapeHtml(track.title)}"><svg viewBox="0 0 24 24" fill="${saved ? 'currentColor' : 'none'}" stroke="currentColor" stroke-width="1.8">${heartPath}</svg></button></div>`;
+        return `<div class="track-row ${selected ? 'active' : ''}" data-track="${track.id}"><button class="track-play" type="button" data-play-track="${track.id}" aria-label="Play ${escapeHtml(track.title)}" ${selected ? 'aria-current="true"' : ''}><span class="track-number">${pad(trackIndex + 1)}</span><span class="track-name"><strong>${escapeHtml(track.title)}${track.explicit ? ' <sup>E</sup>' : ''}</strong><small>${escapeHtml(release.title)}${track.features.length ? ` · feat. ${escapeHtml(track.features.join(', '))}` : ''}</small></span><span class="track-style">${escapeHtml(track.style)}</span><span class="track-duration">${track.duration}</span></button><button class="track-save ${saved ? 'saved' : ''}" type="button" data-save-track="${track.id}" aria-label="${saved ? 'Remove' : 'Save'} ${escapeHtml(track.title)}"><svg viewBox="0 0 24 24" fill="${saved ? 'currentColor' : 'none'}" stroke="currentColor" stroke-width="1.8">${heartPath}</svg></button></div>`;
       }).join('')}</div>
     </section>`;
   }).join('') : '<p class="catalog-empty">No albums or EPs match this genre yet. Switch to All catalog.</p>';
@@ -266,9 +331,6 @@ function renderCatalog() {
       const saveButton = event.target.closest('[data-save-track]');
       if (saveButton) { event.stopPropagation(); toggleTrackSave(saveButton.dataset.saveTrack); return; }
       selectTrack(row.dataset.track, true);
-    });
-    row.addEventListener('keydown', (event) => {
-      if ((event.key === 'Enter' || event.key === ' ') && !event.target.closest('[data-save-track]')) { event.preventDefault(); selectTrack(row.dataset.track, true); }
     });
   });
   elements.releases.querySelectorAll('[data-save-release]').forEach((button) => button.addEventListener('click', () => toggleReleaseSave(button.dataset.saveRelease)));
@@ -447,7 +509,7 @@ function updatePlayerUI() {
   if (!context) return;
   const { track } = context;
   const duration = playbackDuration(track);
-  const ratio = Math.max(0, Math.min(1, state().position / duration));
+  const ratio = duration ? Math.max(0, Math.min(1, state().position / duration)) : 0;
   const percentage = `${ratio * 100}%`;
   elements.elapsed.textContent = formatTime(state().position);
   elements.remaining.textContent = `−${formatTime(duration - state().position)}`;
@@ -457,6 +519,10 @@ function updatePlayerUI() {
   elements.songRoomTimelineKnob.style.left = percentage;
   elements.fullElapsed.textContent = elements.elapsed.textContent;
   elements.fullRemaining.textContent = elements.remaining.textContent;
+  elements.timeline.setAttribute('aria-valuemin', '0');
+  elements.timeline.setAttribute('aria-valuemax', String(Math.round(duration)));
+  elements.timeline.setAttribute('aria-valuenow', String(Math.round(state().position)));
+  elements.timeline.setAttribute('aria-valuetext', `${formatTime(state().position)} of ${formatTime(duration)}`);
   elements.fullTimeline.setAttribute('aria-valuemin', '0');
   elements.fullTimeline.setAttribute('aria-valuemax', String(Math.round(duration)));
   elements.fullTimeline.setAttribute('aria-valuenow', String(Math.round(state().position)));
@@ -603,17 +669,20 @@ function renderQueue() {
 }
 
 function openQueue(event) {
+  if (topModal()) return;
   rememberModalFocus(event?.currentTarget || $('queueButton'));
   renderQueue();
   elements.queueScrim.hidden = false;
   elements.queueDrawer.hidden = false;
+  syncModalState();
   requestAnimationFrame(() => elements.closeQueue.focus());
 }
 
-function closeQueue() {
+function closeQueue({ restoreFocus = true } = {}) {
   elements.queueScrim.hidden = true;
   elements.queueDrawer.hidden = true;
-  restoreModalFocus();
+  syncModalState();
+  if (restoreFocus) restoreModalFocus();
 }
 
 function openJourneyFromPlayer() {
@@ -634,8 +703,30 @@ function seekTo(position) {
   updatePlayerUI();
 }
 
+function seekFromPointer(event, element) {
+  const rect = element.getBoundingClientRect();
+  const context = currentContext();
+  if (!context || !rect.width) return;
+  seekTo(playbackDuration(context.track) * Math.max(0, Math.min(1, (event.clientX - rect.left) / rect.width)));
+}
+
+function handleTimelineKeydown(event) {
+  if (!['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(event.key)) return;
+  const context = currentContext();
+  if (!context) return;
+  const duration = playbackDuration(context.track);
+  const nextPosition = event.key === 'Home'
+    ? 0
+    : event.key === 'End'
+      ? duration
+      : state().position + (event.key === 'ArrowRight' ? 5 : -5);
+  event.preventDefault();
+  seekTo(nextPosition);
+}
+
 function changeTrack(direction) {
   const queue = currentQueue();
+  if (!queue.length) return;
   const index = queue.findIndex((track) => track.id === state().selectedTrackId);
   const nextIndex = index + direction;
   if (nextIndex >= queue.length) { openCompletion(); return; }
@@ -683,8 +774,16 @@ function toggleArtistSave() {
   showToast(next.includes(artistId) ? 'Artist saved to Rondo' : 'Artist removed from Rondo');
 }
 
-function openCompletion({ preview = false } = {}) {
-  rememberModalFocus();
+function openCompletion(options = {}) {
+  const preview = Boolean(options?.preview);
+  const trigger = options?.currentTarget instanceof HTMLElement ? options.currentTarget : null;
+  const active = topModal();
+  if (active && active !== elements.fullPlayer && active !== elements.queueDrawer) return;
+  const preservedReturnFocus = !elements.fullPlayer.hidden ? modalReturnFocus : null;
+  if (!elements.queueDrawer.hidden) closeQueue({ restoreFocus: false });
+  if (!elements.fullPlayer.hidden) closeFullPlayer({ restoreFocus: false });
+  if (state().playing) setPlaying(false);
+  rememberModalFocus(preservedReturnFocus || trigger);
   const artist = currentArtist();
   const progress = artistProgress(artist, new Set(state().playedTracks || []), state().genreId, state().catalogMode);
   const queueIds = new Set(currentQueue().map((track) => track.id));
@@ -699,10 +798,11 @@ function openCompletion({ preview = false } = {}) {
   elements.nextArtistName.textContent = nextArtist.name;
   elements.nextArtistTags.textContent = nextArtist.tags.join(' · ');
   elements.completionOverlay.hidden = false;
+  syncModalState();
   focusAfterOpen('closeCompletion');
 }
 
-function closeCompletion() { elements.completionOverlay.hidden = true; restoreModalFocus(); }
+function closeCompletion({ restoreFocus = true } = {}) { elements.completionOverlay.hidden = true; syncModalState(); if (restoreFocus) restoreModalFocus(); }
 function continueToNextArtist() { const next = nextArtistFor(state().artistId, state().genreId, 1); closeCompletion(); selectArtist(next.id, true); }
 function replayArtist() { const first = currentQueue()[0]; closeCompletion(); if (first) selectTrack(first.id, true); }
 
@@ -715,17 +815,26 @@ function trapModalFocus(event, container) {
   if (!focusable.length) return false;
   const first = focusable[0];
   const last = focusable[focusable.length - 1];
+  if (!container.contains(document.activeElement)) { event.preventDefault(); (event.shiftKey ? last : first).focus(); return true; }
   if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last.focus(); return true; }
   if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first.focus(); return true; }
   return false;
 }
 
 function topModal() {
-  return [elements.queueDrawer, elements.searchOverlay, elements.fullPlayer, elements.onboardingOverlay, elements.completionOverlay].find((element) => element && !element.hidden) || null;
+  return [elements.queueDrawer, elements.completionOverlay, elements.onboardingOverlay, elements.searchOverlay, elements.fullPlayer].find((element) => element && !element.hidden) || null;
 }
 
-function openFullPlayer(event, mode = state().songRoomMode || 'story') { rememberModalFocus(event?.currentTarget || $('openFullPlayer')); store.set({ songRoomMode: songRoomModes.includes(mode) ? mode : 'story' }); elements.fullPlayer.hidden = false; renderNowPlaying(); focusAfterOpen('closeFullPlayer'); }
-function closeFullPlayer() { elements.fullPlayer.hidden = true; restoreModalFocus(); }
+function openFullPlayer(event, mode = state().songRoomMode || 'story') {
+  if (topModal()) return;
+  rememberModalFocus(event?.currentTarget || $('openFullPlayer'));
+  store.set({ songRoomMode: songRoomModes.includes(mode) ? mode : 'story' });
+  elements.fullPlayer.hidden = false;
+  renderNowPlaying();
+  syncModalState();
+  focusAfterOpen('closeFullPlayer');
+}
+function closeFullPlayer({ restoreFocus = true } = {}) { elements.fullPlayer.hidden = true; syncModalState(); if (restoreFocus) restoreModalFocus(); }
 
 function renderSearchResults(query) {
   const normalized = query.trim().toLowerCase();
@@ -742,11 +851,13 @@ function renderSearchResults(query) {
   elements.searchResults.innerHTML = results.length ? results.slice(0, 14).map((result) => `<button class="search-result" type="button" data-result-type="${result.type}" data-result-id="${result.id}" data-artist-id="${result.artistId || ''}"><img src="${result.image}" alt=""/><span><strong>${escapeHtml(result.title)}</strong><small>${escapeHtml(result.subtitle)}</small></span><span>${result.type}</span></button>`).join('') : '<span>NO RESULTS</span><p>Try another artist, album, track, or genre.</p>';
   elements.searchResults.querySelectorAll('[data-result-type]').forEach((button) => button.addEventListener('click', () => {
     const type = button.dataset.resultType;
-    if (type === 'genre') selectGenre(button.dataset.resultId);
+    closeSearch();
+    if (type === 'genre') { showView('discover'); selectGenre(button.dataset.resultId); }
     else if (type === 'artist') {
       const artist = getArtist(button.dataset.resultId);
       const genreId = artist.genreIds.includes(state().genreId) ? state().genreId : artist.genreIds[0];
       if (genreId !== state().genreId) store.set({ genreId });
+      showView('discover');
       selectArtist(artist.id);
     } else if (type === 'release') {
       const artist = getArtist(button.dataset.artistId);
@@ -755,22 +866,29 @@ function renderSearchResults(query) {
       if (track) {
         const genreId = track.genres.includes(state().genreId) ? state().genreId : track.genres[0];
         store.set({ genreId, artistId: artist.id, catalogMode: 'all', selectedTrackId: track.id, position: 0 });
-        renderAll();
+        showView('discover');
       }
     } else {
       const context = findTrackContext(button.dataset.resultId);
       if (context) {
         const genreId = context.track.genres.includes(state().genreId) ? state().genreId : context.track.genres[0];
         store.set({ genreId, artistId: context.artist.id, catalogMode: 'all', selectedTrackId: context.track.id, position: 0 });
-        renderAll();
+        showView('discover');
       }
     }
-    closeSearch();
   }));
 }
 
-function openSearch() { rememberModalFocus(); elements.searchOverlay.hidden = false; elements.globalSearch.value = ''; renderSearchResults(''); focusAfterOpen('globalSearch'); }
-function closeSearch() { elements.searchOverlay.hidden = true; restoreModalFocus(); }
+function openSearch(event) {
+  if (topModal()) return;
+  rememberModalFocus(event?.currentTarget || null);
+  elements.searchOverlay.hidden = false;
+  elements.globalSearch.value = '';
+  renderSearchResults('');
+  syncModalState();
+  focusAfterOpen('globalSearch');
+}
+function closeSearch({ restoreFocus = true } = {}) { elements.searchOverlay.hidden = true; syncModalState(); if (restoreFocus) restoreModalFocus(); }
 
 function createViewSurface() {
   const surface = document.createElement('section');
@@ -783,9 +901,13 @@ function createViewSurface() {
 const viewSurface = createViewSurface();
 
 function showView(view) {
+  if (!['discover', 'library', 'journeys', 'profile'].includes(view)) return;
+  if (view !== 'discover' && elements.directory.classList.contains('open')) closeMobileDirectory({ restoreFocus: false });
   store.set({ view });
-  document.querySelectorAll('.rail-button[data-view]').forEach((button) => {
-    const active = button.dataset.view === view;
+  document.body.dataset.view = view;
+  elements.appShell.dataset.view = view;
+  document.querySelectorAll('.rail-button[data-view], .mobile-nav-button[data-mobile-view]').forEach((button) => {
+    const active = (button.dataset.view || button.dataset.mobileView) === view;
     button.classList.toggle('active', active);
     active ? button.setAttribute('aria-current', 'page') : button.removeAttribute('aria-current');
   });
@@ -794,6 +916,8 @@ function showView(view) {
   elements.journey.hidden = !discover;
   document.querySelector('.inspector').hidden = !discover;
   viewSurface.hidden = discover;
+  syncLocation();
+  syncJourneyVisibility();
   if (discover) { renderAll(); return; }
   const profile = state().profile || {};
   if (view === 'library') {
@@ -827,10 +951,12 @@ function showView(view) {
   viewSurface.querySelectorAll('[data-return-discover]').forEach((button) => button.addEventListener('click', () => showView('discover')));
   viewSurface.querySelectorAll('[data-genre]').forEach((button) => button.addEventListener('click', () => { showView('discover'); selectGenre(button.dataset.genre); }));
   viewSurface.querySelectorAll('[data-edit-profile]').forEach((button) => button.addEventListener('click', openOnboarding));
+  syncLocation();
 }
 
-function openOnboarding() {
-  rememberModalFocus();
+function openOnboarding(event) {
+  if (topModal()) return;
+  rememberModalFocus(event?.currentTarget || null);
   const profile = state().profile || {};
   onboardingDraft = {
     displayName: profile.displayName || 'M', email: profile.email || '',
@@ -841,12 +967,13 @@ function openOnboarding() {
   onboardingStep = 0;
   elements.onboardingOverlay.hidden = false;
   renderOnboardingStep();
+  syncModalState();
   focusAfterOpen('draftName');
 }
 
-function closeOnboarding() { elements.onboardingOverlay.hidden = true; restoreModalFocus(); }
+function closeOnboarding({ restoreFocus = true } = {}) { elements.onboardingOverlay.hidden = true; syncModalState(); if (restoreFocus) restoreModalFocus(); }
 
-function renderOnboardingStep() {
+function renderOnboardingStep({ focusSelector = null } = {}) {
   const stepData = [
     { eyebrow: 'CREATE YOUR RONDO', title: 'A profile that belongs to you.', description: 'This prototype keeps your setup locally. Production will use a secure Rondo account.' },
     { eyebrow: 'TASTE / 01', title: 'Choose the sounds you return to.', description: 'Pick at least three. These set your opening journeys and can be changed later.' },
@@ -865,17 +992,18 @@ function renderOnboardingStep() {
     $('draftName').addEventListener('input', (event) => { onboardingDraft.displayName = event.target.value; });
     $('draftEmail').addEventListener('input', (event) => { onboardingDraft.email = event.target.value; });
   } else if (onboardingStep === 1) {
-    elements.onboardingStep.innerHTML = `<div class="onboarding-step choice-grid">${onboardingGenres.map((name) => { const id = genres.find((genre) => genre.short === name)?.id || name.toLowerCase(); return `<button class="choice-chip ${onboardingDraft.genres.includes(id) ? 'selected' : ''}" type="button" data-genre-choice="${id}">${escapeHtml(name)}</button>`; }).join('')}</div>`;
-    elements.onboardingStep.querySelectorAll('[data-genre-choice]').forEach((button) => button.addEventListener('click', () => { onboardingDraft.genres = toggleList(onboardingDraft.genres, button.dataset.genreChoice); renderOnboardingStep(); }));
+    elements.onboardingStep.innerHTML = `<div class="onboarding-step choice-grid">${onboardingGenres.map((name) => { const id = genres.find((genre) => genre.short === name)?.id || name.toLowerCase(); const selected = onboardingDraft.genres.includes(id); return `<button class="choice-chip ${selected ? 'selected' : ''}" type="button" data-genre-choice="${id}" aria-pressed="${selected}">${escapeHtml(name)}</button>`; }).join('')}</div>`;
+    elements.onboardingStep.querySelectorAll('[data-genre-choice]').forEach((button) => button.addEventListener('click', () => { const selector = `[data-genre-choice="${button.dataset.genreChoice}"]`; onboardingDraft.genres = toggleList(onboardingDraft.genres, button.dataset.genreChoice); renderOnboardingStep({ focusSelector: selector }); }));
   } else if (onboardingStep === 2) {
-    elements.onboardingStep.innerHTML = `<div class="onboarding-step seed-grid">${onboardingArtists.map((artist) => `<button class="seed-card ${onboardingDraft.seedArtists.includes(artist.id) ? 'selected' : ''}" type="button" data-seed="${artist.id}"><img src="${artist.image}" alt=""/><span><strong>${escapeHtml(artist.name)}</strong><span>${escapeHtml(artist.tags[0])}</span></span><b>${onboardingDraft.seedArtists.includes(artist.id) ? '✓' : '+'}</b></button>`).join('')}</div>`;
-    elements.onboardingStep.querySelectorAll('[data-seed]').forEach((button) => button.addEventListener('click', () => { onboardingDraft.seedArtists = toggleList(onboardingDraft.seedArtists, button.dataset.seed); renderOnboardingStep(); }));
+    elements.onboardingStep.innerHTML = `<div class="onboarding-step seed-grid">${onboardingArtists.map((artist) => { const selected = onboardingDraft.seedArtists.includes(artist.id); return `<button class="seed-card ${selected ? 'selected' : ''}" type="button" data-seed="${artist.id}" aria-pressed="${selected}"><img src="${artist.image}" alt=""/><span><strong>${escapeHtml(artist.name)}</strong><span>${escapeHtml(artist.tags[0])}</span></span><b>${selected ? '✓' : '+'}</b></button>`; }).join('')}</div>`;
+    elements.onboardingStep.querySelectorAll('[data-seed]').forEach((button) => button.addEventListener('click', () => { const selector = `[data-seed="${button.dataset.seed}"]`; onboardingDraft.seedArtists = toggleList(onboardingDraft.seedArtists, button.dataset.seed); renderOnboardingStep({ focusSelector: selector }); }));
   } else {
     elements.onboardingStep.innerHTML = `<div class="onboarding-step"><label class="taste-control"><div><strong>Discovery</strong><span>Familiar ↔ Unfamiliar</span></div><input id="draftDiscovery" type="range" min="0" max="100" value="${onboardingDraft.discovery}"/></label><label class="taste-control"><div><strong>Track selection</strong><span>Popular ↔ Deep cuts</span></div><input id="draftPopularity" type="range" min="0" max="100" value="${onboardingDraft.popularity}"/></label><label class="taste-control"><div><strong>Listening shape</strong><span>Individual tracks ↔ Full releases</span></div><input id="draftAlbumFocus" type="range" min="0" max="100" value="${onboardingDraft.albumFocus}"/></label><div class="taste-summary">${onboardingDraft.genres.length} genres · ${onboardingDraft.seedArtists.length} seed artists · ${onboardingDraft.discovery}% discovery</div></div>`;
     $('draftDiscovery').addEventListener('input', (event) => { onboardingDraft.discovery = Number(event.target.value); });
     $('draftPopularity').addEventListener('input', (event) => { onboardingDraft.popularity = Number(event.target.value); });
     $('draftAlbumFocus').addEventListener('input', (event) => { onboardingDraft.albumFocus = Number(event.target.value); });
   }
+  if (focusSelector) elements.onboardingStep.querySelector(focusSelector)?.focus();
 }
 
 function advanceOnboarding() {
@@ -887,7 +1015,12 @@ function advanceOnboarding() {
   }
   if (onboardingStep === 1 && onboardingDraft.genres.length < 3) { showToast('Choose at least three genres'); return; }
   if (onboardingStep === 2 && onboardingDraft.seedArtists.length < 2) { showToast('Choose at least two artists'); return; }
-  if (onboardingStep < 3) { onboardingStep += 1; renderOnboardingStep(); return; }
+  if (onboardingStep < 3) {
+    onboardingStep += 1;
+    renderOnboardingStep();
+    focusableWithin(elements.onboardingStep)[0]?.focus();
+    return;
+  }
   store.set({ profile: onboardingDraft, onboardingComplete: true }, { persist: true });
   $('profileTrigger').textContent = (onboardingDraft.displayName || 'M').charAt(0).toUpperCase();
   closeOnboarding();
@@ -922,7 +1055,8 @@ function bindEvents() {
   $('fullPrevious').addEventListener('click', () => changeTrack(-1));
   $('fullNext').addEventListener('click', () => changeTrack(1));
   elements.repeatMode.addEventListener('click', cycleRepeat);
-  elements.timeline.addEventListener('click', (event) => { const rect = elements.timeline.getBoundingClientRect(); const context = currentContext(); if (context) seekTo(playbackDuration(context.track) * Math.max(0, Math.min(1, (event.clientX - rect.left) / rect.width))); });
+  elements.timeline.addEventListener('click', (event) => seekFromPointer(event, elements.timeline));
+  elements.timeline.addEventListener('keydown', handleTimelineKeydown);
   $('queueButton').addEventListener('click', openQueue);
   document.querySelectorAll('[data-song-room-mode]').forEach((button) => {
     button.addEventListener('click', () => setSongRoomMode(button.dataset.songRoomMode));
@@ -938,8 +1072,8 @@ function bindEvents() {
   });
   elements.fullRepeat.addEventListener('click', cycleRepeat);
   elements.songRoomMoment.addEventListener('click', toggleSavedMoment);
-  elements.fullTimeline.addEventListener('click', (event) => { const rect = elements.fullTimeline.getBoundingClientRect(); const context = currentContext(); if (context) seekTo(playbackDuration(context.track) * Math.max(0, Math.min(1, (event.clientX - rect.left) / rect.width))); });
-  elements.fullTimeline.addEventListener('keydown', (event) => { if (event.key === 'ArrowLeft' || event.key === 'ArrowRight') { event.preventDefault(); seekTo(state().position + (event.key === 'ArrowRight' ? 5 : -5)); } });
+  elements.fullTimeline.addEventListener('click', (event) => seekFromPointer(event, elements.fullTimeline));
+  elements.fullTimeline.addEventListener('keydown', handleTimelineKeydown);
   elements.fullJourney.addEventListener('click', openJourneyFromPlayer);
   elements.closeQueue.addEventListener('click', closeQueue);
   elements.queueScrim.addEventListener('click', closeQueue);
@@ -948,27 +1082,40 @@ function bindEvents() {
   elements.globalSearch.addEventListener('input', () => renderSearchResults(elements.globalSearch.value));
   elements.searchOverlay.addEventListener('click', (event) => { if (event.target === elements.searchOverlay) closeSearch(); });
   $('profileTrigger').addEventListener('click', openOnboarding);
-  elements.mobileDirectoryButton.addEventListener('click', () => { store.set({ directoryCollapsed: false }); elements.directory.classList.add('open'); syncJourneyVisibility(); requestAnimationFrame(() => $('closeDirectory').focus()); });
-  $('closeDirectory').addEventListener('click', () => { elements.directory.classList.remove('open'); if (!window.matchMedia('(max-width: 760px)').matches) store.set({ directoryCollapsed: true }); syncJourneyVisibility(); if (window.matchMedia('(max-width: 760px)').matches) elements.mobileDirectoryButton.focus(); });
+  elements.mobileDirectoryButton.addEventListener('click', openMobileDirectory);
+  elements.directoryScrim.addEventListener('click', closeMobileDirectory);
+  $('closeDirectory').addEventListener('click', closeMobileDirectory);
   $('closeOnboarding').addEventListener('click', closeOnboarding);
-  elements.onboardingBack.addEventListener('click', () => { if (onboardingStep > 0) { onboardingStep -= 1; renderOnboardingStep(); } });
+  elements.onboardingBack.addEventListener('click', () => { if (onboardingStep > 0) { onboardingStep -= 1; renderOnboardingStep(); focusableWithin(elements.onboardingStep)[0]?.focus(); } });
   elements.onboardingNext.addEventListener('click', advanceOnboarding);
   $('closeCompletion').addEventListener('click', closeCompletion);
   $('continueArtist').addEventListener('click', continueToNextArtist);
   $('replayArtist').addEventListener('click', replayArtist);
   $('stopJourney').addEventListener('click', () => { closeCompletion(); setPlaying(false); showToast('Journey paused'); });
-  document.querySelectorAll('.rail-button[data-view]').forEach((button) => button.addEventListener('click', () => showView(button.dataset.view)));
+  document.querySelectorAll('.rail-button[data-view], .mobile-nav-button[data-mobile-view]').forEach((button) => button.addEventListener('click', () => showView(button.dataset.view || button.dataset.mobileView)));
+  document.querySelectorAll('.rail-logo, .wordmark').forEach((link) => link.addEventListener('click', (event) => { event.preventDefault(); showView('discover'); }));
   document.addEventListener('keydown', (event) => {
-    if (event.key === 'Tab') { const modal = topModal(); if (modal && trapModalFocus(event, modal)) return; }
-    if (event.key === '/' && elements.searchOverlay.hidden && !['INPUT','TEXTAREA','SELECT'].includes(document.activeElement.tagName)) { event.preventDefault(); openSearch(); }
-    if (event.key === 'Escape') { if (!elements.queueDrawer.hidden) closeQueue(); else if (!elements.searchOverlay.hidden) closeSearch(); else if (!elements.fullPlayer.hidden) closeFullPlayer(); else if (!elements.onboardingOverlay.hidden) closeOnboarding(); else if (!elements.completionOverlay.hidden) closeCompletion(); else if (elements.directory.classList.contains('open')) { elements.directory.classList.remove('open'); syncJourneyVisibility(); elements.mobileDirectoryButton.focus(); } }
+    if (event.key === 'Tab') {
+      const focusLayer = topModal() || (elements.directory.classList.contains('open') && window.matchMedia('(max-width: 760px)').matches ? elements.directory : null);
+      if (focusLayer && trapModalFocus(event, focusLayer)) return;
+    }
+    if (event.key === '/' && !topModal() && elements.searchOverlay.hidden && !['INPUT','TEXTAREA','SELECT'].includes(document.activeElement.tagName)) { event.preventDefault(); openSearch(); }
+    if (event.key === 'Escape') {
+      const modal = topModal();
+      if (modal === elements.queueDrawer) closeQueue();
+      else if (modal === elements.completionOverlay) closeCompletion();
+      else if (modal === elements.onboardingOverlay) closeOnboarding();
+      else if (modal === elements.searchOverlay) closeSearch();
+      else if (modal === elements.fullPlayer) closeFullPlayer();
+      else if (elements.directory.classList.contains('open')) closeMobileDirectory();
+    }
     if (event.code === 'Space' && document.activeElement === document.body) { event.preventDefault(); togglePlaying(); }
   });
   window.addEventListener('resize', syncJourneyVisibility);
 }
 
 bindEvents();
-renderAll();
+showView('discover');
 $('profileTrigger').textContent = (state().profile?.displayName || 'M').charAt(0).toUpperCase();
 const params = new URLSearchParams(window.location.search);
 const previewMode = document.body.dataset.preview || (params.has('onboarding') ? 'onboarding' : params.get('screen'));
@@ -986,3 +1133,4 @@ else if (previewMode?.startsWith('genre-')) selectGenre(previewMode.replace('gen
 else if (!previewMode && !state().onboardingComplete && !params.has('skip-onboarding')) openOnboarding();
 syncAppearance();
 syncJourneyVisibility();
+syncModalState();

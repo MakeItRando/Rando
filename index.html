@@ -31,7 +31,7 @@
       <header class="topbar">
         <button class="mobile-directory-button" id="mobileDirectoryButton" type="button" aria-label="Open artist directory" aria-controls="directory" aria-expanded="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
         <a class="wordmark" href="#" aria-label="Rondo home"><svg viewBox="0 0 32 32" aria-hidden="true"><circle cx="16" cy="16" r="9" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-dasharray="44 12" transform="rotate(-34 16 16)"/><circle cx="23.8" cy="9.8" r="2.3" fill="#ff4b2e"/></svg><span>rondo</span></a>
-        <div class="location"><span>DISCOVER</span><i></i><strong id="locationGenre">HIP-HOP / RAP</strong><i></i><b id="locationArtist">KAIRO VALE</b></div>
+        <div class="location" aria-label="Current location"><span id="locationSection">DISCOVER</span><i></i><strong id="locationGenre">HIP-HOP / RAP</strong><i></i><b id="locationArtist">KAIRO VALE</b></div>
         <div class="top-actions">
           <button class="journey-toggle" id="journeyToggle" type="button" aria-label="Hide Genre Journey" aria-expanded="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 6h16M4 12h10M4 18h16"/><path d="m17 9 3 3-3 3"/></svg><span id="journeyToggleLabel">Hide journey</span></button>
           <button class="theme-toggle" id="themeToggle" type="button" aria-label="Switch to light appearance"><span class="theme-orbit" aria-hidden="true"></span><span id="themeToggleLabel">Light</span></button>
@@ -42,6 +42,7 @@
       </header>
 
       <div class="workspace">
+        <button class="directory-scrim" id="directoryScrim" type="button" aria-label="Close artist directory" hidden></button>
         <aside class="directory" id="directory" aria-label="Artist directory">
           <div class="directory-top">
             <div class="directory-title"><span>GENRE JOURNEY</span><button id="closeDirectory" type="button" aria-label="Close artist directory">×</button></div>
@@ -69,7 +70,7 @@
               <p class="artist-bio" id="artistBio"></p>
               <div class="artist-actions">
                 <button class="primary-action" id="playArtist" type="button"><svg viewBox="0 0 20 20" fill="currentColor"><path d="M6 4.5v11l9-5.5z"/></svg>Play artist</button>
-                <button class="secondary-action" id="saveArtist" type="button">＋ Save artist</button>
+                <button class="secondary-action" id="saveArtist" type="button" aria-label="Save artist to Library"><span class="save-artist-symbol" aria-hidden="true"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M10 4v12M4 10h12"/></svg></span><span class="save-artist-label">Save artist</span></button>
                 <button class="text-action" id="skipArtist" type="button">Skip artist <span>→</span></button>
               </div>
             </div>
@@ -102,11 +103,18 @@
         </aside>
       </div>
 
+      <nav class="mobile-primary-nav" id="mobilePrimaryNav" aria-label="Primary navigation">
+        <button class="mobile-nav-button active" type="button" data-mobile-view="discover" aria-current="page"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="12" r="8"/><path d="m14.7 9.3-1.4 4-4 1.4 1.4-4 4-1.4Z"/></svg><span>Discover</span></button>
+        <button class="mobile-nav-button" type="button" data-mobile-view="library"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M5 4h3v16H5zM11 4h3v16h-3zM17 5l2.7-.7L23 18l-2.7.7z"/></svg><span>Library</span></button>
+        <button class="mobile-nav-button" type="button" data-mobile-view="journeys"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M5 19V7m0 0 4 4M5 7 1 11M19 5v12m0 0 4-4m-4 4-4-4M9 5h6"/></svg><span>Journeys</span></button>
+        <button class="mobile-nav-button" type="button" data-mobile-view="profile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21c.9-5 3.6-7 8-7s7.1 2 8 7"/></svg><span>Profile</span></button>
+      </nav>
+
       <footer class="transport" aria-label="Player">
         <button class="mobile-track" id="mobileTrack" type="button" aria-label="Open full player"><img id="barCover" src="assets/covers/night-transit.svg" alt=""/><span><strong id="barTitle">Night Transit</strong><small id="barArtist">Kairo Vale feat. Mira Son</small></span></button>
         <div class="transport-center">
           <div class="transport-buttons"><button id="previousTrack" type="button" aria-label="Previous track"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M5 5h2v14H5zM18.5 6v12L8.5 12z"/></svg></button><button class="transport-play" id="transportPlay" type="button" aria-label="Play"><svg id="transportPlayIcon" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></button><button id="nextTrack" type="button" aria-label="Next track"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M17 5h2v14h-2zM5.5 6v12l10-6z"/></svg></button><button id="repeatMode" type="button" aria-label="Continue mode" data-repeat="continue"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="m16 4 4 4-4 4"/><path d="M20 8H7a4 4 0 0 0-4 4M8 20l-4-4 4-4"/><path d="M4 16h13a4 4 0 0 0 4-4"/></svg><span id="repeatBadge"></span></button></div>
-          <div class="timeline"><span id="elapsed">0:43</span><button id="timeline" type="button" aria-label="Seek"><i id="timelineFill"></i><b id="timelineKnob"></b></button><span id="remaining">−2:59</span></div>
+          <div class="timeline"><span id="elapsed">0:43</span><div class="timeline-scrubber" id="timeline" role="slider" tabindex="0" aria-label="Song progress" aria-valuemin="0" aria-valuemax="32" aria-valuenow="7" aria-valuetext="0:07 of 0:32"><i id="timelineFill"></i><b id="timelineKnob"></b></div><span id="remaining">−2:59</span></div>
         </div>
         <div class="transport-meta"><span id="transportMode">MATCHING CATALOG</span><button id="queueButton" type="button" aria-label="Open queue"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 6h13M4 11h13M4 16h8"/><circle cx="18" cy="16" r="3"/></svg></button><label class="volume-control"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M4 10v4h4l5 4V6L8 10H4Z"/><path d="M16 9a4 4 0 0 1 0 6M18.5 6.5a8 8 0 0 1 0 11"/></svg><input id="volumeControl" type="range" min="0" max="100" value="82" aria-label="Volume"/></label></div>
       </footer>
