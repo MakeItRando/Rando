@@ -30,15 +30,18 @@ jobs:
             --exclude=.git \
             --exclude=.repo-export \
             --exclude=.release-v031 \
+            --exclude=.qa-output \
+            --exclude=.qa-temp \
             --exclude=.github/workflows/repo-export.yml \
+            --exclude=.github/workflows/qa-audit.yml \
             --exclude=.repo-export-trigger \
+            --exclude=.qa-trigger \
             --exclude='assets/audio/*.mp3' \
-            -czf /tmp/rondo-source.tar.gz .
-          sha256sum /tmp/rondo-source.tar.gz | sed 's#/tmp/rondo-source.tar.gz#rondo-source.tar.gz#' > .repo-export/SHA256SUMS
-          tar -tzf /tmp/rondo-source.tar.gz > .repo-export/MANIFEST.txt
-          base64 -w0 /tmp/rondo-source.tar.gz | split -b 20000 -d -a 2 - .repo-export/part-
+            -cf .repo-export/rondo-source.tar .
+          sha256sum .repo-export/rondo-source.tar > .repo-export/SHA256SUMS
+          tar -tf .repo-export/rondo-source.tar > .repo-export/MANIFEST.txt
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add -A .repo-export
-          git commit -m "chore: export source in QA chunks"
+          git commit -m "chore: export local QA source bundle"
           git push
