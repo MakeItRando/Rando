@@ -257,7 +257,7 @@ function renderDirectory() {
   const eligible = allEligible.filter((artist) => artist.name.toLowerCase().includes(query));
   const availableLetters = new Set(allEligible.map((artist) => artist.sortName.charAt(0).toUpperCase()));
   const activeLetter = currentArtist().sortName.charAt(0).toUpperCase();
-  elements.artistCount.textContent = `${pad(allEligible.length)} sample artists`;
+  elements.artistCount.textContent = `${pad(allEligible.length)} artists`;
   elements.alphabet.innerHTML = alphabet.map((letter) => `<button type="button" data-letter="${letter}" class="${letter === activeLetter ? 'active' : ''}" ${availableLetters.has(letter) ? '' : 'disabled'}>${letter}</button>`).join('');
   elements.artistList.innerHTML = eligible.length ? eligible.map((artist, index) => `<button class="artist-list-item ${artist.id === state().artistId ? 'active' : ''}" type="button" data-artist="${artist.id}" data-letter="${artist.sortName.charAt(0).toUpperCase()}"><img src="${artist.image}" alt=""/><span><strong>${escapeHtml(artist.name)}</strong><span>${escapeHtml(artist.tags.join(' · '))}</span></span><b>${pad(allEligible.indexOf(artist) + 1)}</b></button>`).join('') : '<p class="directory-empty">No artists match that search.</p>';
 
@@ -1132,7 +1132,7 @@ function bindEvents() {
   });
   elements.saveArtist.addEventListener('click', toggleArtistSave);
   $('skipArtist').addEventListener('click', () => selectArtist(nextArtistFor(state().artistId, state().genreId, 1).id, state().playing));
-  $('previewCompletion').addEventListener('click', openCompletion);
+  $('previewCompletion')?.addEventListener('click', openCompletion);
   elements.saveTrack.addEventListener('click', () => toggleTrackSave());
   document.querySelectorAll('.inspector-tabs [data-tab]').forEach((button) => button.addEventListener('click', () => { store.set({ inspectorTab: button.dataset.tab }); renderNowPlaying(); }));
   elements.lyricsCta.addEventListener('click', (event) => openFullPlayer(event, 'lyrics'));

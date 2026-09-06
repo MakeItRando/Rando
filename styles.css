@@ -708,6 +708,6 @@ html[data-theme="light"] .empty-library { background-color: #fbf9f4; }
   .artist-actions { width: 100%; display: grid; grid-template-columns: minmax(0, 1fr) 44px; align-items: center; gap: 6px; }
   #playArtist { grid-column: 1; grid-row: 1; min-width: 0; width: 100%; }
   .artist-actions .secondary-action { grid-column: 2; grid-row: 1; width: 44px; }
-  .artist-actions .text-action { grid-column: 1 / -1; grid-row: 2; justify-self: start; width: max-content; min-width: 44px; min-height: 32px; }
+  .artist-actions .text-action { grid-column: 1 / -1; grid-row: 2; justify-self: start; width: max-content; min-width: 44px; min-height: 44px; }
   .artist-stats .artist-chapter-note { display: none; }
 }

@@ -22,7 +22,9 @@ const expectText = async (selector, value) => {
 try {
   await page.goto(url.href, { waitUntil: 'networkidle' });
   await expectText('#artistName', 'Kairo Vale');
-  if (await page.locator('.track-row').count() !== 7) throw new Error('Matching catalog should contain seven Kairo tracks');
+  await page.waitForTimeout(300);
+  const initialTrackCount = await page.locator('.track-row').count();
+  if (initialTrackCount !== 7) throw new Error('Matching catalog should contain seven Kairo tracks; got ' + initialTrackCount + '; browser errors: ' + errors.join(' | '));
 
   await page.click('#saveArtist');
   await page.locator('[data-save-release]').first().click();
@@ -67,8 +69,10 @@ try {
   await expectText('#onboardingProgress', '02 / 04');
   await page.click('#closeOnboarding');
 
-  await page.click('#previewCompletion');
-  if (await page.locator('#completionOverlay').evaluate((node) => node.hidden)) throw new Error('Completion dialog did not open');
+  for (let attempts = 0; attempts < 12 && await page.locator('#completionOverlay').evaluate((node) => node.hidden); attempts += 1) {
+    await page.click('#nextTrack');
+  }
+  if (await page.locator('#completionOverlay').evaluate((node) => node.hidden)) throw new Error('Completion dialog did not open through the real end-of-artist path');
   await page.click('#continueArtist');
   await expectText('#artistName', 'Mira Son');
 

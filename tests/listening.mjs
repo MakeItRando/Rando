@@ -34,11 +34,23 @@ try {
   assert((await page.locator('#fullAudioMeta').textContent()).includes('BPM'), 'Immersive player should show audio metadata.');
   await page.click('#fullJourney');
   assert(await page.locator('#fullPlayer').isHidden(), 'Journey action should close the immersive player.');
+  await page.waitForTimeout(500);
+  const journeyRestored = await page.locator('#directory').evaluate((element) => ({ hidden: element.hidden, inert: element.inert, collapsed: document.body.classList.contains('journey-collapsed'), visibility: getComputedStyle(element).visibility }));
+  assert(!journeyRestored.hidden && !journeyRestored.inert && !journeyRestored.collapsed && journeyRestored.visibility === 'visible', 'Journey action should reveal the desktop Genre Journey: ' + JSON.stringify(journeyRestored));
+  assert(await page.locator('#genreSelect').isVisible(), 'Genre picker should be visible after returning from Song Room.');
 
-  const paletteSignals = {};
-  for (const genre of ['hiphop', 'rnb', 'electronic', 'jazz']) {
+  const paletteSignals = {
+    hiphop: await page.locator('html').evaluate((el) => getComputedStyle(el).getPropertyValue('--genre-accent').trim())
+  };
+  for (const genre of ['rnb', 'electronic', 'jazz']) {
+    if (await page.locator('body').evaluate((el) => el.classList.contains('journey-collapsed'))) {
+      await page.click('#journeyToggle');
+      await page.waitForTimeout(500);
+    }
+    assert(await page.locator('#genreSelect').isVisible(), 'Genre picker should reopen before choosing ' + genre + '.');
     await page.selectOption('#genreSelect', genre);
     paletteSignals[genre] = await page.locator('html').evaluate((el) => getComputedStyle(el).getPropertyValue('--genre-accent').trim());
+    assert(await page.locator('body').evaluate((el) => el.classList.contains('journey-collapsed')), 'Changing genre during playback should return to the listening canvas.');
   }
   assert(new Set(Object.values(paletteSignals)).size === 4, 'All four genres should have distinct ambience signals.');
   await page.close();

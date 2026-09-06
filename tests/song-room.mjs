@@ -21,7 +21,7 @@ try {
   assert(await page.locator('#fullPlayer').evaluate((el) => el.classList.contains('song-room')), 'The immersive player should use the Song Room surface.');
   assert(await page.locator('html').getAttribute('data-song-palette') === 'night', 'Night Transit should apply its artwork palette.');
   assert((await page.locator('html').evaluate((el) => getComputedStyle(el).getPropertyValue('--song-accent').trim())) === '#6f9dff', 'Artwork palette should set one dominant accent.');
-  assert((await page.locator('#songRoomPanel').textContent()).includes('Why this song is here'), 'Story mode should explain why the song is present.');
+  assert((await page.locator('#songRoomPanel').textContent()).includes('Inside the track'), 'Story mode should explain why the song is present.');
   await page.click('[data-song-room-mode="credits"]');
   assert((await page.locator('#songRoomPanel').textContent()).includes('Everyone behind the recording'), 'Credits mode should render roles.');
   await page.click('[data-song-room-mode="lyrics"]');
@@ -49,7 +49,7 @@ try {
   const roomPanel = await mobile.locator('.song-room-panel').evaluate((el) => ({ opacity: getComputedStyle(el).opacity, pointerEvents: getComputedStyle(el).pointerEvents }));
   assert(roomPanel.pointerEvents === 'none', 'Room mode should return focus to the artwork on mobile.');
   await mobile.click('.song-room-mobile-nav [data-song-room-mode="story"]');
-  assert((await mobile.locator('#songRoomPanel').textContent()).includes('Why this song is here'), 'Mobile Story mode should open the context sheet.');
+  assert((await mobile.locator('#songRoomPanel').textContent()).includes('Inside the track'), 'Mobile Story mode should open the context sheet.');
   await mobile.click('.song-room-mobile-nav [data-song-room-mode="lyrics"]');
   assert(await mobile.locator('.song-room-lyric-list').isVisible(), 'Mobile Lyrics mode should be readable.');
   await mobile.close();

@@ -68,7 +68,7 @@ try {
   await page.click('.rail-button[data-view="discover"]');
   await page.click('#openFullPlayer');
   assert(await page.locator('#fullPlayer').isVisible(), 'Expand should open Song Room.');
-  assert((await page.locator('#songRoomPanel .song-room-eyebrow').innerText()).trim() === 'Inside the track', 'Song story should invite curiosity.');
+  assert((await page.locator('#songRoomPanel .song-room-eyebrow').textContent()).trim() === 'Inside the track', 'Song story should invite curiosity.');
   await page.keyboard.press('Escape');
 
   await page.setViewportSize({ width: 390, height: 844 });
