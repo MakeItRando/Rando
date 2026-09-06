@@ -46,7 +46,7 @@ jobs:
           set +e
           (
             set -e
-            echo '== FIX OPTIONAL CONTROL AND STABILIZE STARTUP ASSERTION =='
+            echo '== ALIGN REMOVED PREVIEW CONTROL AND STARTUP ASSERTION =='
             python3 - <<'PY'
           from pathlib import Path
 
@@ -66,7 +66,16 @@ jobs:
             if (initialTrackCount !== 7) throw new Error('Matching catalog should contain seven Kairo tracks; got ' + initialTrackCount + '; browser errors: ' + errors.join(' | '));"""
           if old_assertion not in smoke:
               raise SystemExit('Startup assertion anchor not found')
-          smoke_path.write_text(smoke.replace(old_assertion, new_assertion, 1))
+          smoke = smoke.replace(old_assertion, new_assertion, 1)
+          old_completion = """  await page.click('#previewCompletion');
+            if (await page.locator('#completionOverlay').evaluate((node) => node.hidden)) throw new Error('Completion dialog did not open');"""
+          new_completion = """  for (let attempts = 0; attempts < 12 && await page.locator('#completionOverlay').evaluate((node) => node.hidden); attempts += 1) {
+              await page.click('#nextTrack');
+            }
+            if (await page.locator('#completionOverlay').evaluate((node) => node.hidden)) throw new Error('Completion dialog did not open through the real end-of-artist path');"""
+          if old_completion not in smoke:
+              raise SystemExit('Completion assertion anchor not found')
+          smoke_path.write_text(smoke.replace(old_completion, new_completion, 1))
           PY
             echo '== UPDATE PLAYWRIGHT =='
             npm install --save-dev playwright@1.63.0 --ignore-scripts
