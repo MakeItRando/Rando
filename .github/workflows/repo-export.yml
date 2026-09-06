@@ -36,9 +36,9 @@ jobs:
             -czf /tmp/rondo-source.tar.gz .
           sha256sum /tmp/rondo-source.tar.gz | sed 's#/tmp/rondo-source.tar.gz#rondo-source.tar.gz#' > .repo-export/SHA256SUMS
           tar -tzf /tmp/rondo-source.tar.gz > .repo-export/MANIFEST.txt
-          base64 -w0 /tmp/rondo-source.tar.gz | split -b 100000 -d -a 2 - .repo-export/part-
+          base64 -w0 /tmp/rondo-source.tar.gz | split -b 20000 -d -a 2 - .repo-export/part-
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add -A .repo-export
-          git commit -m "chore: export source for local QA"
+          git commit -m "chore: export source in QA chunks"
           git push
