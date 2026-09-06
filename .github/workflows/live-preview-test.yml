@@ -31,7 +31,7 @@ jobs:
           mkdir -p .live-preview
           (
             set -euo pipefail
-            URL="https://raw.githack.com/MakeItRando/Rando/rondo-v031-user-ready/index.html"
+            URL="https://cdn.jsdelivr.net/gh/MakeItRando/Rando@472b251e85ef4782367b914e3f552c71d5fdf336/index.html"
             echo "Preview URL: $URL"
             curl --fail --location --retry 3 --silent --show-error --output /tmp/rondo-public-preview.html "$URL"
             grep -q '<title>Rondo' /tmp/rondo-public-preview.html
