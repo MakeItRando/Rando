@@ -93,10 +93,32 @@ jobs:
             assert(await page.locator('#fullPlayer').isHidden(), 'Journey action should close the immersive player.');
             await page.waitForTimeout(500);
             const journeyRestored = await page.locator('#directory').evaluate((element) => ({ hidden: element.hidden, inert: element.inert, collapsed: document.body.classList.contains('journey-collapsed'), visibility: getComputedStyle(element).visibility }));
-            assert(!journeyRestored.hidden && !journeyRestored.inert && !journeyRestored.collapsed && journeyRestored.visibility === 'visible', 'Journey action should reveal the desktop Genre Journey: ' + JSON.stringify(journeyRestored));"""
+            assert(!journeyRestored.hidden && !journeyRestored.inert && !journeyRestored.collapsed && journeyRestored.visibility === 'visible', 'Journey action should reveal the desktop Genre Journey: ' + JSON.stringify(journeyRestored));
+            assert(await page.locator('#genreSelect').isVisible(), 'Genre picker should be visible after returning from Song Room.');"""
           if old_return not in listening:
               raise SystemExit('Journey return anchor not found')
-          listening_path.write_text(listening.replace(old_return, new_return, 1))
+          listening = listening.replace(old_return, new_return, 1)
+          old_palette = """  const paletteSignals = {};
+            for (const genre of ['hiphop', 'rnb', 'electronic', 'jazz']) {
+              await page.selectOption('#genreSelect', genre);
+              paletteSignals[genre] = await page.locator('html').evaluate((el) => getComputedStyle(el).getPropertyValue('--genre-accent').trim());
+            }"""
+          new_palette = """  const paletteSignals = {
+              hiphop: await page.locator('html').evaluate((el) => getComputedStyle(el).getPropertyValue('--genre-accent').trim())
+            };
+            for (const genre of ['rnb', 'electronic', 'jazz']) {
+              if (await page.locator('body').evaluate((el) => el.classList.contains('journey-collapsed'))) {
+                await page.click('#journeyToggle');
+                await page.waitForTimeout(500);
+              }
+              assert(await page.locator('#genreSelect').isVisible(), 'Genre picker should reopen before choosing ' + genre + '.');
+              await page.selectOption('#genreSelect', genre);
+              paletteSignals[genre] = await page.locator('html').evaluate((el) => getComputedStyle(el).getPropertyValue('--genre-accent').trim());
+              assert(await page.locator('body').evaluate((el) => el.classList.contains('journey-collapsed')), 'Changing genre during playback should return to the listening canvas.');
+            }"""
+          if old_palette not in listening:
+              raise SystemExit('Palette loop anchor not found')
+          listening_path.write_text(listening.replace(old_palette, new_palette, 1))
           PY
             echo '== UPDATE PLAYWRIGHT =='
             npm install --save-dev playwright@1.55.1 --ignore-scripts
