@@ -1,7 +1,6 @@
 <!doctype html>
 <html lang="en" data-theme="dark" data-genre="hiphop">
 <head>
-  <base href="https://cdn.jsdelivr.net/gh/MakeItRando/Rando@472b251e85ef4782367b914e3f552c71d5fdf336/" />
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="theme-color" content="#0b0b0c" />
@@ -693,6 +692,33 @@ html[data-theme="light"] .empty-library { background-color: #fbf9f4; }
 
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .001ms !important; animation-iteration-count: 1 !important; transition-duration: .001ms !important; }
+}
+
+
+/* Final listening polish */
+#playArtist { min-width: 150px; justify-content: center; }
+#playArtist span { white-space: nowrap; }
+#playArtist[data-playback-state="pause"] { box-shadow: 0 0 0 1px rgba(var(--genre-rgb), .45), 0 10px 30px rgba(var(--genre-rgb), .16); }
+#playArtist[data-playback-state="resume"] { box-shadow: inset 0 0 0 1px rgba(var(--genre-rgb), .28); }
+.artist-chapter-note { grid-column: 1 / -1; align-self: end; color: var(--muted); font-size: 9px; font-weight: 700; letter-spacing: .16em; }
+.track-state-icon { display: block; width: 15px; height: 15px; fill: currentColor; }
+.track-equalizer { display: inline-flex; align-items: flex-end; justify-content: center; gap: 2px; width: 15px; height: 15px; }
+.track-equalizer i { width: 2px; min-height: 4px; border-radius: 2px; background: currentColor; animation: rondo-track-level .72s ease-in-out infinite alternate; }
+.track-equalizer i:nth-child(2) { animation-delay: -.28s; }
+.track-equalizer i:nth-child(3) { animation-delay: -.48s; }
+.track-row[data-playback-state="playing"] .track-number { color: var(--signal); }
+@keyframes rondo-track-level { from { height: 4px; } to { height: 14px; } }
+@media (max-width: 760px) { .artist-chapter-note { display: none; } #playArtist { min-width: 142px; } }
+@media (prefers-reduced-motion: reduce) { .track-equalizer i { animation: none; height: 9px; } .track-equalizer i:nth-child(2) { height: 14px; } .track-equalizer i:nth-child(3) { height: 6px; } }
+
+
+/* Final compact artist-action fit */
+@media (max-width: 760px) {
+  .artist-actions { width: 100%; display: grid; grid-template-columns: minmax(0, 1fr) 44px; align-items: center; gap: 6px; }
+  #playArtist { grid-column: 1; grid-row: 1; min-width: 0; width: 100%; }
+  .artist-actions .secondary-action { grid-column: 2; grid-row: 1; width: 44px; }
+  .artist-actions .text-action { grid-column: 1 / -1; grid-row: 2; justify-self: start; width: max-content; min-width: 44px; min-height: 44px; }
+  .artist-stats .artist-chapter-note { display: none; }
 }
 
 /* Rondo v2.2 — immersive, genre-reactive listening layer */
@@ -1387,7 +1413,7 @@ body.is-playing .workspace::before { animation: ambient-drift 12s ease-in-out in
           <button class="journey-toggle" id="journeyToggle" type="button" aria-label="Hide Genre Journey" aria-expanded="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 6h16M4 12h10M4 18h16"/><path d="m17 9 3 3-3 3"/></svg><span id="journeyToggleLabel">Hide journey</span></button>
           <button class="theme-toggle" id="themeToggle" type="button" aria-label="Switch to light appearance"><span class="theme-orbit" aria-hidden="true"></span><span id="themeToggleLabel">Light</span></button>
           <button class="search-trigger" id="searchTrigger" type="button" aria-label="Search Rondo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="10.8" cy="10.8" r="6.8"/><path d="m16 16 4 4"/></svg><span>Search Rondo</span><kbd>/</kbd></button>
-          <span class="demo-label">DESIGN PROTOTYPE</span>
+          <span class="demo-label">PRIVATE PREVIEW</span>
           <button class="profile-trigger" id="profileTrigger" type="button" aria-label="Open profile setup">M</button>
         </div>
       </header>
@@ -1403,7 +1429,7 @@ body.is-playing .workspace::before { animation: ambient-drift 12s ease-in-out in
           </div>
           <nav class="alphabet" id="alphabet" aria-label="Artist alphabet"></nav>
           <div class="artist-list" id="artistList"></div>
-          <div class="directory-foot"><span>DEMO CATALOG</span><p>Fictional artists and releases for product design.</p></div>
+          <div class="directory-foot"><span>RONDO EDITION / 01</span><p>A small listening world, for now.</p></div>
         </aside>
 
         <main class="journey" id="journey">
@@ -1420,7 +1446,7 @@ body.is-playing .workspace::before { animation: ambient-drift 12s ease-in-out in
               <div class="artist-tags" id="artistTags"></div>
               <p class="artist-bio" id="artistBio"></p>
               <div class="artist-actions">
-                <button class="primary-action" id="playArtist" type="button"><svg viewBox="0 0 20 20" fill="currentColor"><path d="M6 4.5v11l9-5.5z"/></svg>Play artist</button>
+                <button class="primary-action" id="playArtist" type="button" aria-pressed="false" data-playback-state="play"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg><span>Play artist</span></button>
                 <button class="secondary-action" id="saveArtist" type="button" aria-label="Save artist to Library"><span class="save-artist-symbol" aria-hidden="true"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M10 4v12M4 10h12"/></svg></span><span class="save-artist-label">Save artist</span></button>
                 <button class="text-action" id="skipArtist" type="button">Skip artist <span>→</span></button>
               </div>
@@ -1429,7 +1455,7 @@ body.is-playing .workspace::before { animation: ambient-drift 12s ease-in-out in
               <div><span>POSITION</span><strong id="statPosition">01 / 05</strong></div>
               <div><span>RELEASES</span><strong id="statReleases">03</strong></div>
               <div><span>TRACKS</span><strong id="statTracks">08</strong></div>
-              <button id="previewCompletion" type="button">Preview completion <span>↗</span></button>
+              <span class="artist-chapter-note">ONE ARTIST AT A TIME</span>
             </div>
           </section>
 
@@ -1450,7 +1476,7 @@ body.is-playing .workspace::before { animation: ambient-drift 12s ease-in-out in
           <div class="now-identity"><div><p id="nowReleaseTop">BLACKTOP STUDIES · 2026</p><h2 id="nowTitle">Night Transit</h2><span id="nowArtist">Kairo Vale featuring Mira Son</span></div><button class="circle-save" id="saveTrack" type="button" aria-label="Save track"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M20.8 4.8a5.4 5.4 0 0 0-7.7 0L12 5.9l-1.1-1.1a5.4 5.4 0 0 0-7.7 7.7l1.1 1.1L12 21l7.7-7.4 1.1-1.1a5.4 5.4 0 0 0 0-7.7Z"/></svg></button></div>
           <div class="inspector-tabs" role="tablist"><button class="active" role="tab" type="button" data-tab="details" aria-selected="true">Details</button><button role="tab" type="button" data-tab="lyrics" aria-selected="false">Lyrics</button><button role="tab" type="button" data-tab="credits" aria-selected="false">Credits</button></div>
           <div class="inspector-panel" id="inspectorPanel"></div>
-          <button class="lyrics-cta" id="lyricsCta" type="button"><span>Open immersive lyrics</span><b>↗</b></button>
+          <button class="lyrics-cta" id="lyricsCta" type="button"><span>Enter lyrics</span><b>↗</b></button>
         </aside>
       </div>
 
@@ -1465,14 +1491,14 @@ body.is-playing .workspace::before { animation: ambient-drift 12s ease-in-out in
         <button class="mobile-track" id="mobileTrack" type="button" aria-label="Open full player"><img id="barCover" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA0MjAgNDIwIiByb2xlPSJpbWciIGFyaWEtbGFiZWw9Ik5JR0hUIFRSQU5TSVQgYWJzdHJhY3QgYXJ0d29yayI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJnIiB4MT0iMCIgeTE9IjAiIHgyPSIxIiB5Mj0iMSI+PHN0b3Agc3RvcC1jb2xvcj0iIzMxNThiZSIvPjxzdG9wIG9mZnNldD0iMSIgc3RvcC1jb2xvcj0iIzdmYThmZiIvPjwvbGluZWFyR3JhZGllbnQ+PGZpbHRlciBpZD0ibiI+PGZlVHVyYnVsZW5jZSBiYXNlRnJlcXVlbmN5PSIuNzUiIG51bU9jdGF2ZXM9IjIiIHNlZWQ9IjkyIiB0eXBlPSJmcmFjdGFsTm9pc2UiLz48ZmVDb2xvck1hdHJpeCB2YWx1ZXM9IjEgMCAwIDAgMCAwIDEgMCAwIDAgMCAwIDEgMCAwIDAgMCAwIC4xMyAwIi8+PC9maWx0ZXI+PC9kZWZzPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9IiMwYjBiMGYiLz48Y2lyY2xlIGN4PSIzMDIuNCIgY3k9IjkyLjQiIHI9IjE1MS4yIiBmaWxsPSJ1cmwoI2cpIiBvcGFjaXR5PSIuOTIiLz48cGF0aCBkPSJNLTQyLjAgMzI3LjYgUSAxNDcuMCAxNDIuOCA0NjIuMDAwMDAwMDAwMDAwMDYgMzAyLjQgViA0NjIuMDAwMDAwMDAwMDAwMDYgSCAtNDIuMFoiIGZpbGw9InVybCgjZykiIG9wYWNpdHk9Ii43Ii8+PHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsdGVyPSJ1cmwoI24pIiBvcGFjaXR5PSIuNyIvPjxnIGZpbGw9Im5vbmUiIHN0cm9rZT0icmdiYSgyNTUsMjU1LDI1NSwuNzIpIiBzdHJva2Utd2lkdGg9IjIiPjxjaXJjbGUgY3g9IjIxMC4wIiBjeT0iMjEwLjAiIHI9IjExMy40IiBzdHJva2UtZGFzaGFycmF5PSIzNzguMCA5Mi40IiB0cmFuc2Zvcm09InJvdGF0ZSgtMzIgMjEwLjAgMjEwLjApIi8+PHBhdGggZD0iTTUwLjQgNjMuMEgyMTguNE0yMDEuNiAzNjEuMkgzNjkuNiIgb3BhY2l0eT0iLjQ1Ii8+PC9nPjx0ZXh0IHg9IjMzLjYiIHk9IjM4Mi4yIiBmaWxsPSJ3aGl0ZSIgZm9udC1mYW1pbHk9IkFyaWFsLHNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMTQuNzAwMDAwMDAwMDAwMDAxIiBmb250LXdlaWdodD0iNzAwIiBsZXR0ZXItc3BhY2luZz0iMyI+Uk9ORE8gLyBERU1PPC90ZXh0Pjwvc3ZnPg==" alt=""/><span><strong id="barTitle">Night Transit</strong><small id="barArtist">Kairo Vale feat. Mira Son</small></span></button>
         <div class="transport-center">
           <div class="transport-buttons"><button id="previousTrack" type="button" aria-label="Previous track"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M5 5h2v14H5zM18.5 6v12L8.5 12z"/></svg></button><button class="transport-play" id="transportPlay" type="button" aria-label="Play"><svg id="transportPlayIcon" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></button><button id="nextTrack" type="button" aria-label="Next track"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M17 5h2v14h-2zM5.5 6v12l10-6z"/></svg></button><button id="repeatMode" type="button" aria-label="Continue mode" data-repeat="continue"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="m16 4 4 4-4 4"/><path d="M20 8H7a4 4 0 0 0-4 4M8 20l-4-4 4-4"/><path d="M4 16h13a4 4 0 0 0 4-4"/></svg><span id="repeatBadge"></span></button></div>
-          <div class="timeline"><span id="elapsed">0:43</span><div class="timeline-scrubber" id="timeline" role="slider" tabindex="0" aria-label="Song progress" aria-valuemin="0" aria-valuemax="32" aria-valuenow="7" aria-valuetext="0:07 of 0:32"><i id="timelineFill"></i><b id="timelineKnob"></b></div><span id="remaining">−2:59</span></div>
+          <div class="timeline"><span id="elapsed">0:00</span><div class="timeline-scrubber" id="timeline" role="slider" tabindex="0" aria-label="Song progress" aria-valuemin="0" aria-valuemax="32" aria-valuenow="0" aria-valuetext="0:00 of 0:32"><i id="timelineFill"></i><b id="timelineKnob"></b></div><span id="remaining">−0:32</span></div>
         </div>
         <div class="transport-meta"><span id="transportMode">MATCHING CATALOG</span><button id="queueButton" type="button" aria-label="Open queue"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 6h13M4 11h13M4 16h8"/><circle cx="18" cy="16" r="3"/></svg></button><label class="volume-control"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M4 10v4h4l5 4V6L8 10H4Z"/><path d="M16 9a4 4 0 0 1 0 6M18.5 6.5a8 8 0 0 1 0 11"/></svg><input id="volumeControl" type="range" min="0" max="100" value="82" aria-label="Volume"/></label></div>
       </footer>
     </section>
   </div>
 
-  <div class="overlay" id="searchOverlay" hidden><section class="search-dialog" role="dialog" aria-modal="true" aria-label="Search Rondo"><div class="search-field"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="10.8" cy="10.8" r="6.8"/><path d="m16 16 4 4"/></svg><input id="globalSearch" type="search" aria-label="Search artists, albums, tracks, and genres" placeholder="Search artists, albums, tracks, genres"/><button id="closeSearch" type="button">ESC</button></div><div class="search-results" id="searchResults"><span>START ANYWHERE</span><p>Search across artists, albums, tracks, and genres.</p></div></section></div>
+  <div class="overlay" id="searchOverlay" hidden><section class="search-dialog" role="dialog" aria-modal="true" aria-label="Search Rondo"><div class="search-field"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="10.8" cy="10.8" r="6.8"/><path d="m16 16 4 4"/></svg><input id="globalSearch" type="search" aria-label="Search artists, albums, tracks, and genres" placeholder="Search artists, albums, tracks, genres"/><button id="closeSearch" type="button">ESC</button></div><div class="search-results" id="searchResults"><span>START ANYWHERE</span><p>Artists, releases, tracks, genres.</p></div></section></div>
 
   <div class="full-player song-room" id="fullPlayer" role="dialog" aria-modal="true" aria-labelledby="fullTitle" data-mode="story" hidden>
     <div class="song-room-backdrop" aria-hidden="true"></div><div class="song-room-grain" aria-hidden="true"></div>
@@ -1488,8 +1514,8 @@ body.is-playing .workspace::before { animation: ambient-drift 12s ease-in-out in
         <div class="song-room-release-line"><span id="fullRelease">BLACKTOP STUDIES · 2026</span><span id="fullGenreMode">PSYCHEDELIC TRAP</span></div>
         <div class="song-room-title"><h2 id="fullTitle">Night Transit</h2><span id="fullArtist"><b>Kairo Vale</b> featuring Mira Son</span><div class="full-tags" id="fullTags"></div></div>
         <div class="song-room-art"><img id="fullCover" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA0MjAgNDIwIiByb2xlPSJpbWciIGFyaWEtbGFiZWw9Ik5JR0hUIFRSQU5TSVQgYWJzdHJhY3QgYXJ0d29yayI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJnIiB4MT0iMCIgeTE9IjAiIHgyPSIxIiB5Mj0iMSI+PHN0b3Agc3RvcC1jb2xvcj0iIzMxNThiZSIvPjxzdG9wIG9mZnNldD0iMSIgc3RvcC1jb2xvcj0iIzdmYThmZiIvPjwvbGluZWFyR3JhZGllbnQ+PGZpbHRlciBpZD0ibiI+PGZlVHVyYnVsZW5jZSBiYXNlRnJlcXVlbmN5PSIuNzUiIG51bU9jdGF2ZXM9IjIiIHNlZWQ9IjkyIiB0eXBlPSJmcmFjdGFsTm9pc2UiLz48ZmVDb2xvck1hdHJpeCB2YWx1ZXM9IjEgMCAwIDAgMCAwIDEgMCAwIDAgMCAwIDEgMCAwIDAgMCAwIC4xMyAwIi8+PC9maWx0ZXI+PC9kZWZzPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9IiMwYjBiMGYiLz48Y2lyY2xlIGN4PSIzMDIuNCIgY3k9IjkyLjQiIHI9IjE1MS4yIiBmaWxsPSJ1cmwoI2cpIiBvcGFjaXR5PSIuOTIiLz48cGF0aCBkPSJNLTQyLjAgMzI3LjYgUSAxNDcuMCAxNDIuOCA0NjIuMDAwMDAwMDAwMDAwMDYgMzAyLjQgViA0NjIuMDAwMDAwMDAwMDAwMDYgSCAtNDIuMFoiIGZpbGw9InVybCgjZykiIG9wYWNpdHk9Ii43Ii8+PHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsdGVyPSJ1cmwoI24pIiBvcGFjaXR5PSIuNyIvPjxnIGZpbGw9Im5vbmUiIHN0cm9rZT0icmdiYSgyNTUsMjU1LDI1NSwuNzIpIiBzdHJva2Utd2lkdGg9IjIiPjxjaXJjbGUgY3g9IjIxMC4wIiBjeT0iMjEwLjAiIHI9IjExMy40IiBzdHJva2UtZGFzaGFycmF5PSIzNzguMCA5Mi40IiB0cmFuc2Zvcm09InJvdGF0ZSgtMzIgMjEwLjAgMjEwLjApIi8+PHBhdGggZD0iTTUwLjQgNjMuMEgyMTguNE0yMDEuNiAzNjEuMkgzNjkuNiIgb3BhY2l0eT0iLjQ1Ii8+PC9nPjx0ZXh0IHg9IjMzLjYiIHk9IjM4Mi4yIiBmaWxsPSJ3aGl0ZSIgZm9udC1mYW1pbHk9IkFyaWFsLHNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMTQuNzAwMDAwMDAwMDAwMDAxIiBmb250LXdlaWdodD0iNzAwIiBsZXR0ZXItc3BhY2luZz0iMyI+Uk9ORE8gLyBERU1PPC90ZXh0Pjwvc3ZnPg==" alt="Night Transit artwork"/></div>
-        <div class="song-room-lyric-peek"><p id="songRoomPreviousLyric">One more exit, say my name</p><p class="active" id="songRoomActiveLyric">City breathing through the glass</p><div class="song-room-lyric-caption">Synchronized demo words · open Lyrics to follow</div></div>
-        <button class="song-room-moment" id="songRoomMoment" type="button">Save this moment · 0:43</button>
+        <div class="song-room-lyric-peek"><p id="songRoomPreviousLyric">One more exit, say my name</p><p class="active" id="songRoomActiveLyric">City breathing through the glass</p><div class="song-room-lyric-caption">Lyrics unfold with the song.</div></div>
+        <button class="song-room-moment" id="songRoomMoment" type="button">Save this moment · 0:00</button>
       </section>
       <aside class="song-room-panel" aria-label="Song context">
         <div class="song-room-panel-top"><span id="songRoomModeLabel">Song story</span><small>SONG ROOM · 01</small></div>
@@ -1501,7 +1527,7 @@ body.is-playing .workspace::before { animation: ambient-drift 12s ease-in-out in
     <footer class="song-room-player">
       <div class="song-room-player-grid">
         <div class="song-room-mini"><img id="songRoomMiniCover" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA0MjAgNDIwIiByb2xlPSJpbWciIGFyaWEtbGFiZWw9Ik5JR0hUIFRSQU5TSVQgYWJzdHJhY3QgYXJ0d29yayI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJnIiB4MT0iMCIgeTE9IjAiIHgyPSIxIiB5Mj0iMSI+PHN0b3Agc3RvcC1jb2xvcj0iIzMxNThiZSIvPjxzdG9wIG9mZnNldD0iMSIgc3RvcC1jb2xvcj0iIzdmYThmZiIvPjwvbGluZWFyR3JhZGllbnQ+PGZpbHRlciBpZD0ibiI+PGZlVHVyYnVsZW5jZSBiYXNlRnJlcXVlbmN5PSIuNzUiIG51bU9jdGF2ZXM9IjIiIHNlZWQ9IjkyIiB0eXBlPSJmcmFjdGFsTm9pc2UiLz48ZmVDb2xvck1hdHJpeCB2YWx1ZXM9IjEgMCAwIDAgMCAwIDEgMCAwIDAgMCAwIDEgMCAwIDAgMCAwIC4xMyAwIi8+PC9maWx0ZXI+PC9kZWZzPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9IiMwYjBiMGYiLz48Y2lyY2xlIGN4PSIzMDIuNCIgY3k9IjkyLjQiIHI9IjE1MS4yIiBmaWxsPSJ1cmwoI2cpIiBvcGFjaXR5PSIuOTIiLz48cGF0aCBkPSJNLTQyLjAgMzI3LjYgUSAxNDcuMCAxNDIuOCA0NjIuMDAwMDAwMDAwMDAwMDYgMzAyLjQgViA0NjIuMDAwMDAwMDAwMDAwMDYgSCAtNDIuMFoiIGZpbGw9InVybCgjZykiIG9wYWNpdHk9Ii43Ii8+PHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsdGVyPSJ1cmwoI24pIiBvcGFjaXR5PSIuNyIvPjxnIGZpbGw9Im5vbmUiIHN0cm9rZT0icmdiYSgyNTUsMjU1LDI1NSwuNzIpIiBzdHJva2Utd2lkdGg9IjIiPjxjaXJjbGUgY3g9IjIxMC4wIiBjeT0iMjEwLjAiIHI9IjExMy40IiBzdHJva2UtZGFzaGFycmF5PSIzNzguMCA5Mi40IiB0cmFuc2Zvcm09InJvdGF0ZSgtMzIgMjEwLjAgMjEwLjApIi8+PHBhdGggZD0iTTUwLjQgNjMuMEgyMTguNE0yMDEuNiAzNjEuMkgzNjkuNiIgb3BhY2l0eT0iLjQ1Ii8+PC9nPjx0ZXh0IHg9IjMzLjYiIHk9IjM4Mi4yIiBmaWxsPSJ3aGl0ZSIgZm9udC1mYW1pbHk9IkFyaWFsLHNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMTQuNzAwMDAwMDAwMDAwMDAxIiBmb250LXdlaWdodD0iNzAwIiBsZXR0ZXItc3BhY2luZz0iMyI+Uk9ORE8gLyBERU1PPC90ZXh0Pjwvc3ZnPg==" alt=""/><span><strong id="songRoomMiniTitle">Night Transit</strong><span id="songRoomMiniArtist">Kairo Vale feat. Mira Son</span></span></div>
-        <div class="song-room-transport"><div class="song-room-wave" aria-label="Playback-driven visual motion"><i style="--h:9px"></i><i style="--h:18px"></i><i style="--h:12px"></i><i style="--h:25px"></i><i style="--h:15px"></i><i style="--h:22px"></i><i style="--h:11px"></i><i style="--h:27px"></i><i style="--h:17px"></i><i style="--h:13px"></i><i style="--h:23px"></i><i style="--h:10px"></i><i style="--h:18px"></i><i style="--h:26px"></i><i style="--h:14px"></i><i style="--h:21px"></i></div><div class="full-timeline" id="fullTimeline" role="slider" aria-label="Song progress" aria-valuemin="0" aria-valuemax="32" aria-valuenow="7" aria-valuetext="0:07 of 0:32" tabindex="0"><i id="fullTimelineFill"></i><span id="songRoomTimelineKnob"></span></div><div class="full-times"><span id="fullElapsed">0:43</span><span id="fullAudioMeta">142 BPM · F MINOR · COBALT / ARTWORK</span><span id="fullRemaining">−2:59</span></div></div>
+        <div class="song-room-transport"><div class="song-room-wave" aria-label="Playback-driven visual motion"><i style="--h:9px"></i><i style="--h:18px"></i><i style="--h:12px"></i><i style="--h:25px"></i><i style="--h:15px"></i><i style="--h:22px"></i><i style="--h:11px"></i><i style="--h:27px"></i><i style="--h:17px"></i><i style="--h:13px"></i><i style="--h:23px"></i><i style="--h:10px"></i><i style="--h:18px"></i><i style="--h:26px"></i><i style="--h:14px"></i><i style="--h:21px"></i></div><div class="full-timeline" id="fullTimeline" role="slider" aria-label="Song progress" aria-valuemin="0" aria-valuemax="32" aria-valuenow="7" aria-valuetext="0:07 of 0:32" tabindex="0"><i id="fullTimelineFill"></i><span id="songRoomTimelineKnob"></span></div><div class="full-times"><span id="fullElapsed">0:00</span><span id="fullAudioMeta">142 BPM · F MINOR · COBALT / ARTWORK</span><span id="fullRemaining">−0:32</span></div></div>
         <div class="song-room-controls"><button id="fullRepeat" type="button" aria-label="Continue mode" data-repeat="continue">↻</button><button id="fullPrevious" type="button" aria-label="Previous track">◀</button><button id="fullPlay" type="button" aria-label="Play">▶</button><button id="fullNext" type="button" aria-label="Next track">▶</button></div>
       </div>
     </footer>
@@ -1939,7 +1965,7 @@ body.is-playing .workspace::before { animation: ambient-drift 12s ease-in-out in
       ...savedMomentContexts.map(({ artist, release, track: track2, moment }) => `<article class="view-card view-card-moment"><img src="${release.cover}" alt=""/><span>SAVED MOMENT \xB7 ${Math.floor(moment.position / 60)}:${String(moment.position % 60).padStart(2, "0")}</span><h3>${escapeHtml(track2.title)}</h3><p>${escapeHtml(artist.name)} \xB7 ${escapeHtml(release.title)}</p><button type="button" data-open-moment="${track2.id}" data-position="${moment.position}">Open moment</button></article>`),
       ...songNoteContexts.map(({ artist, release, track: track2, note }) => `<article class="view-card view-card-note"><img src="${release.cover}" alt=""/><span>PRIVATE SONG NOTE</span><h3>${escapeHtml(track2.title)}</h3><p>\u201C${escapeHtml(note)}\u201D</p><button type="button" data-open-note="${track2.id}">Open Song Room</button></article>`)
     ].join("");
-    const empty = `<section class="empty-library"><div class="empty-library-orbit" aria-hidden="true"></div><div class="empty-library-copy"><span>EMPTY LIBRARY</span><h2>Keep the music that stays with you.</h2><p>Save artists, releases, tracks, exact moments, and private song notes. Your progress remains separate, so a save never interrupts the journey.</p><button class="primary-action" type="button" data-return-discover>Start discovering</button></div><ol class="empty-library-features"><li><span>01</span><div><strong>Artists</strong><p>Return to a full catalog chapter.</p></div></li><li><span>02</span><div><strong>Albums & EPs</strong><p>Keep a release without losing its context.</p></div></li><li><span>03</span><div><strong>Moments & notes</strong><p>Remember exactly why a song stayed with you.</p></div></li></ol></section>`;
+    const empty = `<section class="empty-library"><div class="empty-library-orbit" aria-hidden="true"></div><div class="empty-library-copy"><span>EMPTY LIBRARY</span><h2>Keep what stays.</h2><p>Artists, releases, tracks, moments, and notes \u2014 together.</p><button class="primary-action" type="button" data-return-discover>Start discovering</button></div><ol class="empty-library-features"><li><span>01</span><div><strong>Artists</strong><p>Return to the whole chapter.</p></div></li><li><span>02</span><div><strong>Albums & EPs</strong><p>Keep the record intact.</p></div></li><li><span>03</span><div><strong>Moments & notes</strong><p>Save the second. Write the why.</p></div></li></ol></section>`;
     return `${viewHeader("YOUR RONDO", "Library", `${pad(savedArtists.length)} artists \xB7 ${pad(savedReleaseContexts.length)} releases \xB7 ${pad(savedTrackContexts.length)} tracks \xB7 ${pad(savedMomentContexts.length)} moments \xB7 ${pad(songNoteContexts.length)} notes`)}<div class="view-grid${hasItems ? "" : " view-grid-empty"}">${hasItems ? cards : empty}</div>`;
   }
   function renderJourneysView({ genre, artist, progress }) {
@@ -1957,7 +1983,7 @@ body.is-playing .workspace::before { animation: ambient-drift 12s ease-in-out in
       { label: "ALBUM FOCUS", value: albumFocus, description: albumFocus >= 60 ? "Prioritizes complete release context." : "Moves more quickly between tracks." }
     ];
     const seedMarkup = seedArtists.length ? seedArtists.map((artist) => `<article class="profile-seed"><img src="${artist.image}" alt=""/><div><span>SEED ARTIST</span><strong>${escapeHtml(artist.name)}</strong><small>${escapeHtml(artist.tags.join(" \xB7 "))}</small></div></article>`).join("") : '<p class="profile-seed-empty">Choose at least two artists to shape your starting points.</p>';
-    return `${viewHeader("RONDO ACCOUNT", "Profile", "Taste profile \xB7 editable anytime")}<section class="profile-summary"><div class="profile-avatar-large">${escapeHtml(displayName.charAt(0).toUpperCase())}</div><div class="profile-details"><h2>${escapeHtml(displayName)}</h2><p>Your explicit choices shape starting points and highlights. Alphabetical artist order remains stable.</p><p class="profile-account">${escapeHtml(accountNote)}</p><div class="profile-tags">${tasteGenres.map((genre) => `<span>${escapeHtml(genre)}</span>`).join("")}</div><button class="primary-action" type="button" data-edit-profile>Edit taste profile</button></div></section><section class="profile-metrics" aria-label="Taste controls">${metrics.map((metric) => `<article class="profile-metric"><span>${metric.label}</span><strong>${pad(metric.value)}%</strong><p>${escapeHtml(metric.description)}</p><div class="metric-track" aria-hidden="true"><i style="width:${metric.value}%"></i></div></article>`).join("")}</section><section class="profile-seeds"><header><div><span>STARTING POINTS</span><h3>Seed artists</h3></div><p>${pad(seedArtists.length)} selected</p></header><div class="profile-seed-list">${seedMarkup}</div></section>`;
+    return `${viewHeader("RONDO ACCOUNT", "Profile", "Taste profile \xB7 editable anytime")}<section class="profile-summary"><div class="profile-avatar-large">${escapeHtml(displayName.charAt(0).toUpperCase())}</div><div class="profile-details"><h2>${escapeHtml(displayName)}</h2><p>Your choices shape discovery. Artist order stays steady.</p><p class="profile-account">${escapeHtml(accountNote)}</p><div class="profile-tags">${tasteGenres.map((genre) => `<span>${escapeHtml(genre)}</span>`).join("")}</div><button class="primary-action" type="button" data-edit-profile>Edit taste profile</button></div></section><section class="profile-metrics" aria-label="Taste controls">${metrics.map((metric) => `<article class="profile-metric"><span>${metric.label}</span><strong>${pad(metric.value)}%</strong><p>${escapeHtml(metric.description)}</p><div class="metric-track" aria-hidden="true"><i style="width:${metric.value}%"></i></div></article>`).join("")}</section><section class="profile-seeds"><header><div><span>STARTING POINTS</span><h3>Seed artists</h3></div><p>${pad(seedArtists.length)} selected</p></header><div class="profile-seed-list">${seedMarkup}</div></section>`;
   }
 
   // src/ui/ambience.js
@@ -2119,7 +2145,7 @@ body.is-playing .workspace::before { animation: ambient-drift 12s ease-in-out in
     if (!hasWords) {
       return `<div class="song-room-empty"><span>LYRICS</span><h3>No synchronized words.</h3><p>This track may be instrumental, or lyrics have not been supplied by an authorized source.</p></div>`;
     }
-    return `<div class="song-room-copy song-room-lyrics"><p class="song-room-eyebrow">Synchronized demo words</p><h3>Follow the song.</h3><div class="song-room-lyric-list">${lyrics.map((line) => `<button type="button" data-time="${line.time}">${escapeHtml2(line.text)}</button>`).join("")}</div><small>Prototype lyrics only \xB7 tap a line to seek</small></div>`;
+    return `<div class="song-room-copy song-room-lyrics"><p class="song-room-eyebrow">Rondo demo words</p><h3>Follow the song.</h3><div class="song-room-lyric-list">${lyrics.map((line) => `<button type="button" data-time="${line.time}">${escapeHtml2(line.text)}</button>`).join("")}</div><small>Tap a line to seek.</small></div>`;
   }
   function renderStory({ artist, release, track: track2 }, note = "") {
     const story = track2.story || {
@@ -2127,7 +2153,7 @@ body.is-playing .workspace::before { animation: ambient-drift 12s ease-in-out in
       body: `${artist.name}'s ${track2.title} is presented as a ${track2.style.toLowerCase()} entry in Rondo's fictional design catalog. Production context will only appear when an authorized source supplies it.`
     };
     const sounds = track2.soundPalette?.length ? track2.soundPalette : [track2.style, ...track2.bpm ? [`${track2.bpm} BPM`] : [], track2.key || "Key unavailable"];
-    return `<div class="song-room-copy"><p class="song-room-eyebrow">Why this song is here</p><h3>${escapeHtml2(story.headline)}</h3><p class="song-room-lead">${escapeHtml2(story.body)}</p><dl class="song-room-facts"><div><dt>Release</dt><dd>${escapeHtml2(release.title)} \xB7 ${escapeHtml2(release.type)} \xB7 ${release.year}</dd></div><div><dt>Exact style</dt><dd>${escapeHtml2(track2.style)}</dd></div><div><dt>Signal</dt><dd>${track2.bpm ? `${track2.bpm} BPM` : "Tempo unavailable"} \xB7 ${escapeHtml2(track2.key || "Key unavailable")}</dd></div><div><dt>Featured</dt><dd>${escapeHtml2(track2.features.length ? track2.features.join(", ") : "None")}</dd></div></dl><div class="song-room-sounds">${sounds.map((item, index) => `<span class="${index === 0 ? "active" : ""}">${escapeHtml2(item)}</span>`).join("")}</div><div class="song-room-provenance"><span><b>${escapeHtml2(track2.source?.label || "Prototype context")}</b><small>${escapeHtml2(track2.source?.detail || "Fictional demo metadata \xB7 not a commercial catalog claim")}</small></span><strong>${escapeHtml2((track2.source?.status || "demo").toUpperCase())}</strong></div><section class="song-room-private-note"><label for="songRoomPrivateNote"><span>Private song note</span><small>Only you</small></label><textarea id="songRoomPrivateNote" maxlength="280" placeholder="What made this song stay with you?">${escapeHtml2(note)}</textarea><div><small>Stored in your Rondo Library on this device.</small><button type="button" data-save-song-note>Save note</button></div></section></div>`;
+    return `<div class="song-room-copy"><p class="song-room-eyebrow">Inside the track</p><h3>${escapeHtml2(story.headline)}</h3><p class="song-room-lead">${escapeHtml2(story.body)}</p><dl class="song-room-facts"><div><dt>Release</dt><dd>${escapeHtml2(release.title)} \xB7 ${escapeHtml2(release.type)} \xB7 ${release.year}</dd></div><div><dt>Exact style</dt><dd>${escapeHtml2(track2.style)}</dd></div><div><dt>Signal</dt><dd>${track2.bpm ? `${track2.bpm} BPM` : "Tempo unavailable"} \xB7 ${escapeHtml2(track2.key || "Key unavailable")}</dd></div><div><dt>Featured</dt><dd>${escapeHtml2(track2.features.length ? track2.features.join(", ") : "None")}</dd></div></dl><div class="song-room-sounds">${sounds.map((item, index) => `<span class="${index === 0 ? "active" : ""}">${escapeHtml2(item)}</span>`).join("")}</div><div class="song-room-provenance"><span><b>${escapeHtml2(track2.source?.label || "Prototype context")}</b><small>${escapeHtml2(track2.source?.detail || "Fictional demo metadata \xB7 not a commercial catalog claim")}</small></span><strong>${escapeHtml2((track2.source?.status || "demo").toUpperCase())}</strong></div><section class="song-room-private-note"><label for="songRoomPrivateNote"><span>Private song note</span><small>Only you</small></label><textarea id="songRoomPrivateNote" maxlength="280" placeholder="What made this song stay with you?">${escapeHtml2(note)}</textarea><div><small>Only on this device.</small><button type="button" data-save-song-note>Save note</button></div></section></div>`;
   }
   function renderCredits({ artist, track: track2 }) {
     const credits = [
@@ -2144,7 +2170,7 @@ body.is-playing .workspace::before { animation: ambient-drift 12s ease-in-out in
     return `<div class="song-room-copy song-room-queue"><p class="song-room-eyebrow">Up next \xB7 artist chapter</p><h3>${escapeHtml2(artist.name)}</h3><p class="song-room-lead">${escapeHtml2(genreName)} journey \xB7 albums and EPs \xB7 newest to oldest</p><div class="song-room-queue-progress"><i style="width:${queueEntries.length ? (queueEntries.findIndex((entry) => entry.active) + 1) / queueEntries.length * 100 : 0}%"></i></div><div class="song-room-queue-list">${queueEntries.map((entry, index) => `<button type="button" data-song-room-track="${escapeHtml2(entry.track.id)}" class="${entry.active ? "active" : ""}" ${entry.active ? 'aria-current="true"' : ""}><span>${String(index + 1).padStart(2, "0")}</span><img src="${escapeHtml2(entry.release.cover)}" alt=""/><span><b>${escapeHtml2(entry.track.title)}</b><small>${escapeHtml2(entry.release.title)} \xB7 ${escapeHtml2(entry.track.style)}</small></span><time>${formatTime(entry.track.durationSeconds)}</time></button>`).join("")}</div></div>`;
   }
   function renderRoom({ artist, release, track: track2 }) {
-    return `<div class="song-room-copy song-room-mobile-summary"><p class="song-room-eyebrow">Song Room</p><h3>${escapeHtml2(track2.title)}</h3><p class="song-room-lead">${escapeHtml2(artist.name)} \xB7 ${escapeHtml2(release.title)} \xB7 ${release.year}</p><div class="song-room-room-actions"><span>${escapeHtml2(track2.style)}</span><span>${track2.bpm ? `${track2.bpm} BPM` : "Tempo unavailable"}</span><span>${escapeHtml2(track2.key || "Key unavailable")}</span></div><p class="song-room-room-note">Choose Lyrics, Story, Credits, or Queue below without leaving playback.</p></div>`;
+    return `<div class="song-room-copy song-room-mobile-summary"><p class="song-room-eyebrow">Song Room</p><h3>${escapeHtml2(track2.title)}</h3><p class="song-room-lead">${escapeHtml2(artist.name)} \xB7 ${escapeHtml2(release.title)} \xB7 ${release.year}</p><div class="song-room-room-actions"><span>${escapeHtml2(track2.style)}</span><span>${track2.bpm ? `${track2.bpm} BPM` : "Tempo unavailable"}</span><span>${escapeHtml2(track2.key || "Key unavailable")}</span></div><p class="song-room-room-note">Stay with the song, or go deeper.</p></div>`;
   }
   function renderSongRoomPanel({ mode, context, queueEntries, genreName, note = "" }) {
     if (mode === "lyrics") return renderLyrics(context.track);
@@ -2174,7 +2200,7 @@ body.is-playing .workspace::before { animation: ambient-drift 12s ease-in-out in
     selectedTrackId: "k101",
     inspectorTab: "details",
     playing: false,
-    position: 7,
+    position: 0,
     repeatMode: "continue",
     view: "discover",
     theme: "dark",
@@ -2186,6 +2212,8 @@ body.is-playing .workspace::before { animation: ambient-drift 12s ease-in-out in
   var onboardingDraft = null;
   var toastTimer = null;
   var modalReturnFocus = null;
+  var activeArtistSessionId = null;
+  var mediaSessionTrackId = null;
   var audioEngine = createAudioEngine({
     onTime(position) {
       const context = currentContext();
@@ -2228,6 +2256,7 @@ body.is-playing .workspace::before { animation: ambient-drift 12s ease-in-out in
     artistTags: $("artistTags"),
     artistBio: $("artistBio"),
     saveArtist: $("saveArtist"),
+    playArtist: $("playArtist"),
     statPosition: $("statPosition"),
     statReleases: $("statReleases"),
     statTracks: $("statTracks"),
@@ -2497,7 +2526,7 @@ body.is-playing .workspace::before { animation: ambient-drift 12s ease-in-out in
     const eligible = allEligible.filter((artist) => artist.name.toLowerCase().includes(query));
     const availableLetters = new Set(allEligible.map((artist) => artist.sortName.charAt(0).toUpperCase()));
     const activeLetter = currentArtist().sortName.charAt(0).toUpperCase();
-    elements.artistCount.textContent = `${pad2(allEligible.length)} sample artists`;
+    elements.artistCount.textContent = `${pad2(allEligible.length)} artists`;
     elements.alphabet.innerHTML = alphabet.map((letter) => `<button type="button" data-letter="${letter}" class="${letter === activeLetter ? "active" : ""}" ${availableLetters.has(letter) ? "" : "disabled"}>${letter}</button>`).join("");
     elements.artistList.innerHTML = eligible.length ? eligible.map((artist, index) => `<button class="artist-list-item ${artist.id === state().artistId ? "active" : ""}" type="button" data-artist="${artist.id}" data-letter="${artist.sortName.charAt(0).toUpperCase()}"><img src="${artist.image}" alt=""/><span><strong>${escapeHtml3(artist.name)}</strong><span>${escapeHtml3(artist.tags.join(" \xB7 "))}</span></span><b>${pad2(allEligible.indexOf(artist) + 1)}</b></button>`).join("") : '<p class="directory-empty">No artists match that search.</p>';
     elements.artistList.querySelectorAll("[data-artist]").forEach((button) => button.addEventListener("click", () => selectArtist(button.dataset.artist)));
@@ -2505,6 +2534,79 @@ body.is-playing .workspace::before { animation: ambient-drift 12s ease-in-out in
       const target = elements.artistList.querySelector(`[data-letter="${button.dataset.letter}"]`);
       if (target) target.scrollIntoView({ block: "start", behavior: "smooth" });
     }));
+  }
+  function syncArtistPlaybackAction() {
+    const artist = currentArtist();
+    const currentSession = activeArtistSessionId === artist.id;
+    const playing = Boolean(state().playing && currentSession);
+    const playbackState = playing ? "pause" : currentSession ? "resume" : "play";
+    const label = playbackState === "pause" ? "Pause artist" : playbackState === "resume" ? "Resume artist" : "Play artist";
+    if (elements.playArtist.dataset.playbackState !== playbackState || elements.playArtist.dataset.artistId !== artist.id) {
+      elements.playArtist.dataset.playbackState = playbackState;
+      elements.playArtist.dataset.artistId = artist.id;
+      elements.playArtist.innerHTML = `<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">${playing ? pausePath : playPath}</svg><span>${label}</span>`;
+    }
+    elements.playArtist.classList.toggle("playing", playing);
+    elements.playArtist.setAttribute("aria-pressed", String(playing));
+    elements.playArtist.setAttribute("aria-label", `${label} \xB7 ${artist.name}`);
+  }
+  function syncCatalogPlaybackControls() {
+    document.querySelectorAll(".track-row").forEach((row) => {
+      const button = row.querySelector("[data-play-track]");
+      const number = row.querySelector(".track-number");
+      if (!button || !number) return;
+      if (!number.dataset.index) number.dataset.index = number.textContent.trim();
+      const selected = row.dataset.track === state().selectedTrackId;
+      const playing = selected && state().playing;
+      const label = playing ? "Pause" : selected && activeArtistSessionId === state().artistId ? "Resume" : "Play";
+      const title = row.querySelector(".track-name strong")?.textContent.trim() || "track";
+      row.dataset.playbackState = playing ? "playing" : selected ? "selected" : "idle";
+      button.setAttribute("aria-label", `${label} ${title}`);
+      button.setAttribute("aria-pressed", String(playing));
+      number.innerHTML = playing ? '<span class="track-equalizer" aria-hidden="true"><i></i><i></i><i></i></span>' : selected ? `<svg class="track-state-icon" viewBox="0 0 24 24" aria-hidden="true">${playPath}</svg>` : escapeHtml3(number.dataset.index);
+    });
+  }
+  function syncMediaSession(context = currentContext()) {
+    if (!context || !("mediaSession" in navigator)) return;
+    const { artist, release, track: track2 } = context;
+    try {
+      if (mediaSessionTrackId !== track2.id && "MediaMetadata" in window) {
+        mediaSessionTrackId = track2.id;
+        navigator.mediaSession.metadata = new MediaMetadata({
+          title: track2.title,
+          artist: trackArtistLine(track2, artist),
+          album: release.title,
+          artwork: [{ src: new URL(release.cover, window.location.href).href, type: "image/svg+xml" }]
+        });
+      }
+      navigator.mediaSession.playbackState = state().playing ? "playing" : "paused";
+      if (navigator.mediaSession.setPositionState) {
+        const duration = Math.max(1, playbackDuration(track2));
+        navigator.mediaSession.setPositionState({ duration, position: Math.min(duration, Math.max(0, state().position)), playbackRate: 1 });
+      }
+    } catch {
+    }
+  }
+  function bindMediaSession() {
+    if (!("mediaSession" in navigator)) return;
+    const handlers = {
+      play: () => setPlaying(true),
+      pause: () => setPlaying(false),
+      previoustrack: () => changeTrack(-1),
+      nexttrack: () => changeTrack(1),
+      seekbackward: (details = {}) => seekTo(state().position - (details.seekOffset || 10)),
+      seekforward: (details = {}) => seekTo(state().position + (details.seekOffset || 10)),
+      seekto: (details = {}) => {
+        if (Number.isFinite(details.seekTime)) seekTo(details.seekTime);
+      },
+      stop: () => setPlaying(false)
+    };
+    Object.entries(handlers).forEach(([action, handler]) => {
+      try {
+        navigator.mediaSession.setActionHandler(action, handler);
+      } catch {
+      }
+    });
   }
   function renderArtistFocus() {
     const genre = currentGenre();
@@ -2542,6 +2644,7 @@ body.is-playing .workspace::before { animation: ambient-drift 12s ease-in-out in
     elements.saveArtist.classList.toggle("saved", saved);
     elements.saveArtist.innerHTML = `<span class="save-artist-symbol" aria-hidden="true"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8">${saved ? checkPath : plusPath}</svg></span><span class="save-artist-label">${saved ? "Artist saved" : "Save artist"}</span>`;
     elements.saveArtist.setAttribute("aria-label", saved ? "Remove artist from Library" : "Save artist to Library");
+    syncArtistPlaybackAction();
     syncLocation();
   }
   function trackArtistLine(track2, artist) {
@@ -2570,10 +2673,15 @@ body.is-playing .workspace::before { animation: ambient-drift 12s ease-in-out in
           toggleTrackSave(saveButton.dataset.saveTrack);
           return;
         }
+        if (row.dataset.track === state().selectedTrackId) {
+          togglePlaying();
+          return;
+        }
         selectTrack(row.dataset.track, true);
       });
     });
     elements.releases.querySelectorAll("[data-save-release]").forEach((button) => button.addEventListener("click", () => toggleReleaseSave(button.dataset.saveRelease)));
+    syncCatalogPlaybackControls();
   }
   function activeLyricIndex(track2, position = state().position) {
     let active = 0;
@@ -2762,6 +2870,9 @@ body.is-playing .workspace::before { animation: ambient-drift 12s ease-in-out in
     elements.fullPlay.textContent = state().playing ? "\u2161" : "\u25B6";
     elements.fullPlay.setAttribute("aria-label", state().playing ? "Pause" : "Play");
     document.body.classList.toggle("is-playing", state().playing);
+    syncArtistPlaybackAction();
+    syncCatalogPlaybackControls();
+    syncMediaSession(context);
     syncJourneyVisibility();
     const repeat = state().repeatMode;
     elements.repeatMode.dataset.repeat = repeat;
@@ -2781,6 +2892,7 @@ body.is-playing .workspace::before { animation: ambient-drift 12s ease-in-out in
   }
   function selectGenre(genreId) {
     const continuePlaying = state().playing;
+    if (!continuePlaying) activeArtistSessionId = null;
     audioEngine.pause();
     const eligible = listArtistsForGenre(genreId);
     const artist = eligible[0] || artists[0];
@@ -2792,6 +2904,7 @@ body.is-playing .workspace::before { animation: ambient-drift 12s ease-in-out in
   }
   function selectArtist(artistId, shouldPlay = false) {
     const continuePlaying = shouldPlay || state().playing;
+    if (!continuePlaying) activeArtistSessionId = null;
     audioEngine.pause();
     const artist = getArtist(artistId);
     const queue = flattenCatalog(artist, state().genreId, state().catalogMode);
@@ -2843,7 +2956,7 @@ body.is-playing .workspace::before { animation: ambient-drift 12s ease-in-out in
     if (!context) return;
     if (!playing) {
       audioEngine.pause();
-      store.set({ playing: false, directoryCollapsed: false });
+      store.set({ playing: false });
       document.body.dataset.playbackSource = context.track.previewUrl ? "audio" : "simulated";
       syncJourneyVisibility();
       updatePlayerUI();
@@ -2851,6 +2964,7 @@ body.is-playing .workspace::before { animation: ambient-drift 12s ease-in-out in
     }
     const duration = playbackDuration(context.track);
     const nextPosition = state().position >= duration - 0.1 ? 0 : state().position;
+    activeArtistSessionId = state().artistId;
     store.set({ playing: true, directoryCollapsed: true, position: nextPosition });
     elements.directory.classList.remove("open");
     persistPlayedTrack();
@@ -2941,6 +3055,10 @@ body.is-playing .workspace::before { animation: ambient-drift 12s ease-in-out in
     const queue = currentQueue();
     if (!queue.length) return;
     const index = queue.findIndex((track2) => track2.id === state().selectedTrackId);
+    if (direction < 0 && state().position > 3) {
+      seekTo(0);
+      return;
+    }
     const nextIndex = index + direction;
     if (nextIndex >= queue.length) {
       openCompletion();
@@ -3357,13 +3475,17 @@ body.is-playing .workspace::before { animation: ambient-drift 12s ease-in-out in
     elements.artistFilter.addEventListener("input", renderDirectory);
     elements.matchingMode.addEventListener("click", () => setCatalogMode("matching"));
     elements.allMode.addEventListener("click", () => setCatalogMode("all"));
-    $("playArtist").addEventListener("click", () => {
+    elements.playArtist.addEventListener("click", () => {
+      if (activeArtistSessionId === state().artistId) {
+        togglePlaying();
+        return;
+      }
       const first = currentQueue()[0];
       if (first) selectTrack(first.id, true);
     });
     elements.saveArtist.addEventListener("click", toggleArtistSave);
     $("skipArtist").addEventListener("click", () => selectArtist(nextArtistFor(state().artistId, state().genreId, 1).id, state().playing));
-    $("previewCompletion").addEventListener("click", openCompletion);
+    $("previewCompletion")?.addEventListener("click", openCompletion);
     elements.saveTrack.addEventListener("click", () => toggleTrackSave());
     document.querySelectorAll(".inspector-tabs [data-tab]").forEach((button) => button.addEventListener("click", () => {
       store.set({ inspectorTab: button.dataset.tab });
@@ -3433,8 +3555,10 @@ body.is-playing .workspace::before { animation: ambient-drift 12s ease-in-out in
     $("replayArtist").addEventListener("click", replayArtist);
     $("stopJourney").addEventListener("click", () => {
       closeCompletion();
+      activeArtistSessionId = null;
       setPlaying(false);
-      showToast("Journey paused");
+      syncArtistPlaybackAction();
+      showToast("Journey stopped");
     });
     document.querySelectorAll(".rail-button[data-view], .mobile-nav-button[data-mobile-view]").forEach((button) => button.addEventListener("click", () => showView(button.dataset.view || button.dataset.mobileView)));
     document.querySelectorAll(".rail-logo, .wordmark").forEach((link) => link.addEventListener("click", (event) => {
@@ -3451,15 +3575,18 @@ body.is-playing .workspace::before { animation: ambient-drift 12s ease-in-out in
         openSearch();
       }
       if (event.key === "Escape") {
-        const modal = topModal();
-        if (modal === elements.queueDrawer) closeQueue();
-        else if (modal === elements.completionOverlay) closeCompletion();
-        else if (modal === elements.onboardingOverlay) closeOnboarding();
-        else if (modal === elements.searchOverlay) closeSearch();
-        else if (modal === elements.fullPlayer) closeFullPlayer();
+        const modal2 = topModal();
+        if (modal2 === elements.queueDrawer) closeQueue();
+        else if (modal2 === elements.completionOverlay) closeCompletion();
+        else if (modal2 === elements.onboardingOverlay) closeOnboarding();
+        else if (modal2 === elements.searchOverlay) closeSearch();
+        else if (modal2 === elements.fullPlayer) closeFullPlayer();
         else if (elements.directory.classList.contains("open")) closeMobileDirectory();
       }
-      if (event.code === "Space" && document.activeElement === document.body) {
+      const activeElement = document.activeElement;
+      const interactive = activeElement?.isContentEditable || ["INPUT", "TEXTAREA", "SELECT", "BUTTON", "A"].includes(activeElement?.tagName);
+      const modal = topModal();
+      if (event.code === "Space" && !interactive && (!modal || modal === elements.fullPlayer)) {
         event.preventDefault();
         togglePlaying();
       }
@@ -3467,6 +3594,7 @@ body.is-playing .workspace::before { animation: ambient-drift 12s ease-in-out in
     window.addEventListener("resize", syncJourneyVisibility);
   }
   bindEvents();
+  bindMediaSession();
   showView("discover");
   $("profileTrigger").textContent = (state().profile?.displayName || "M").charAt(0).toUpperCase();
   var params = new URLSearchParams(window.location.search);

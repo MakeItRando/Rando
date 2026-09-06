@@ -57,7 +57,7 @@ for (const genre of genres) {
 }
 
 const emptyLibrary = renderLibraryView({ savedArtists: [], savedReleaseContexts: [], savedTrackContexts: [] });
-assert(emptyLibrary.includes('Keep the music that stays with you.'));
+assert(emptyLibrary.includes('Keep what stays.'));
 assert(emptyLibrary.includes('00 releases'));
 
 const sampleArtist = artists[0];

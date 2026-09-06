@@ -8,7 +8,7 @@ Rondo is not a Spotify client or wrapper. It owns its account, library, journeys
 
 ## Current release — v0.3.1 user-test candidate
 
-This polish release adds persistent mobile navigation, safely coordinated modal layers, semantic catalog controls, keyboard-complete timelines, and a dismissible, focus-contained Genre Journey drawer. It also strengthens Light/Night contrast, supporting-text readability, compact control targets, empty-library composition, and mobile Song Room reachability.
+This polish release adds persistent mobile navigation, safely coordinated modal layers, semantic catalog controls, keyboard-complete timelines, and a dismissible, focus-contained Genre Journey drawer. The final listening pass makes artist and active-track controls truthful, preserves layout when paused, restarts the current song before skipping back, and connects native media controls. It also strengthens Light/Night contrast, supporting-text readability, compact control targets, empty-library composition, and mobile Song Room reachability.
 
 This release makes the song the emotional center of Rondo:
 
