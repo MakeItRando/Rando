@@ -56,6 +56,10 @@ jobs:
         run: |
           set -euo pipefail
           git add -f .pages-debug
+          if git diff --cached --quiet; then
+            echo "Pages diagnostic is unchanged"
+            exit 0
+          fi
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git commit -m "chore: record Pages diagnostic"
