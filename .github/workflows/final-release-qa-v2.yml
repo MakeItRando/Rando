@@ -1,0 +1,75 @@
+name: Final release QA v2
+
+on:
+  push:
+    branches: [rondo-v031-user-ready]
+    paths:
+      - .github/workflows/final-release-qa-v2.yml
+
+permissions:
+  contents: write
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: rondo-v031-user-ready
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - name: Locate Chromium
+        shell: bash
+        run: |
+          browser="$(command -v chromium || command -v chromium-browser || command -v google-chrome || command -v google-chrome-stable || true)"
+          if [ -z "$browser" ]; then
+            sudo apt-get update
+            sudo apt-get install -y chromium-browser || sudo apt-get install -y chromium
+            browser="$(command -v chromium || command -v chromium-browser)"
+          fi
+          test -n "$browser"
+          echo "CHROMIUM_PATH=$browser" >> "$GITHUB_ENV"
+      - name: Run complete release gate
+        shell: bash
+        env:
+          PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: "1"
+        run: |
+          mkdir -p .qa
+          set +e
+          (
+            set -e
+            python3 scripts/apply-final-release-fixes.py
+            npm install --save-dev playwright@1.55.1 --ignore-scripts
+            npm audit --json > .qa/npm-audit.json
+            node -e "const a=JSON.parse(require('node:fs').readFileSync('.qa/npm-audit.json')); if(a.metadata.vulnerabilities.total) throw new Error('Audit findings remain')"
+            npm run build:preview
+            python3 -m http.server 4173 > /tmp/rondo-preview.log 2>&1 &
+            server_pid=$!
+            trap 'kill "$server_pid" 2>/dev/null || true' EXIT
+            for attempt in {1..30}; do
+              if curl --fail --silent http://127.0.0.1:4173/index.html > /dev/null; then break; fi
+              sleep 1
+            done
+            curl --fail --silent http://127.0.0.1:4173/index.html > /dev/null
+            npm test
+            node tests/capture-final.mjs
+            test "$(find .qa -maxdepth 1 -name '*.png' | wc -l)" -eq 8
+            git diff --check
+          ) > .qa/final-release.log 2>&1
+          status=$?
+          cat .qa/final-release.log
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          if [ "$status" -ne 0 ]; then
+            git add .qa/final-release.log
+            git commit -m "chore: capture final release QA failure" || true
+            git push origin HEAD:rondo-v031-user-ready || true
+            exit "$status"
+          fi
+          rm -f .github/workflows/final-release-qa.yml .github/workflows/final-release-qa-v2.yml scripts/apply-final-release-fixes.py .qa/final-release.log
+          git add -A
+          git diff --cached --quiet || git commit -m "chore: verify responsive release candidate"
+          git push origin HEAD:rondo-v031-user-ready
