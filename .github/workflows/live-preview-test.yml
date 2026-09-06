@@ -1,4 +1,4 @@
-name: Probe public v0.3.1 preview
+name: Build self-contained v0.3.1 preview
 
 on:
   push:
@@ -11,7 +11,7 @@ permissions:
   contents: write
 
 jobs:
-  probe:
+  build:
     if: github.actor != 'github-actions[bot]'
     runs-on: ubuntu-latest
     steps:
@@ -24,59 +24,24 @@ jobs:
           cache: npm
       - name: Install exact dependencies
         run: npm ci
-      - name: Probe public renderers
+      - name: Build portable preview
         shell: bash
         run: |
           set -euo pipefail
-          mkdir -p .live-preview
-          CHROMIUM_PATH="$(command -v google-chrome || command -v chromium || command -v chromium-browser)" node --input-type=module <<'NODE'
-          import { chromium } from 'playwright';
-          import { writeFileSync } from 'node:fs';
-          const commit = '472b251e85ef4782367b914e3f552c71d5fdf336';
-          const urls = [
-            `https://cdn.jsdelivr.net/gh/MakeItRando/Rando@${commit}/index.html`,
-            `https://raw.githack.com/MakeItRando/Rando/${commit}/index.html`,
-            `https://rawcdn.githack.com/MakeItRando/Rando/${commit}/index.html`,
-            `https://raw.githubusercontent.com/MakeItRando/Rando/${commit}/index.html`
-          ];
-          const browser = await chromium.launch({ headless: true, executablePath: process.env.CHROMIUM_PATH, args: ['--no-sandbox'] });
-          const results = [];
-          for (const source of urls) {
-            const page = await browser.newPage();
-            const consoleMessages = [];
-            page.on('console', (message) => consoleMessages.push(`${message.type()}: ${message.text()}`));
-            const target = new URL(source);
-            target.searchParams.set('skip-onboarding', '1');
-            try {
-              const response = await page.goto(target.href, { waitUntil: 'domcontentloaded', timeout: 45000 });
-              await page.waitForTimeout(2500);
-              results.push({
-                source,
-                requestedUrl: target.href,
-                finalUrl: page.url(),
-                status: response?.status() ?? null,
-                contentTypeHeader: response?.headers()['content-type'] ?? null,
-                documentContentType: await page.evaluate(() => document.contentType),
-                title: await page.title(),
-                artistNameCount: await page.locator('#artistName').count(),
-                bodyText: (await page.locator('body').innerText()).slice(0, 800),
-                consoleMessages
-              });
-            } catch (error) {
-              results.push({ source, requestedUrl: target.href, error: error.message, finalUrl: page.url(), consoleMessages });
-            } finally {
-              await page.close();
-            }
-          }
-          await browser.close();
-          writeFileSync('.live-preview/probe.json', `${JSON.stringify(results, null, 2)}\n`);
+          npm run build:preview
+          node --input-type=module <<'NODE'
+          import { readFileSync, writeFileSync } from 'node:fs';
+          const baseHref = 'https://cdn.jsdelivr.net/gh/MakeItRando/Rando@472b251e85ef4782367b914e3f552c71d5fdf336/';
+          const source = readFileSync('preview.html', 'utf8');
+          const preview = source.replace('<head>', `<head>\n  <base href="${baseHref}" />`);
+          writeFileSync('rondo-v031-preview.html', preview);
           NODE
-      - name: Preserve renderer probe
+      - name: Preserve portable preview
         shell: bash
         run: |
           set -euo pipefail
-          git add -f .live-preview/probe.json
+          git add -f rondo-v031-preview.html
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git commit -m "chore: record public renderer probe"
+          git commit -m "chore: build v0.3.1 user preview"
           git push
