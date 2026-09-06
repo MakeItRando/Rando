@@ -37,6 +37,9 @@ jobs:
           echo "stage: apply patch"
           git apply --check /tmp/rondo-final.patch
           git apply /tmp/rondo-final.patch
+          echo "d1865c8660193a36a3ceefb2ab3a217995c6d35bd94f1250d76a938787934b64  .finalize-v031/focus.patch" | sha256sum --check
+          git apply --check .finalize-v031/focus.patch
+          git apply .finalize-v031/focus.patch
           echo "stage: install dependencies"
           npm ci
           echo "stage: locate browser"
