@@ -1,0 +1,50 @@
+name: Export v0.3.1 text source
+
+on:
+  push:
+    branches:
+      - rondo-v031-preview
+    paths:
+      - .source-export-trigger
+
+permissions:
+  contents: write
+
+jobs:
+  export:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out preview branch
+        uses: actions/checkout@v4
+      - name: Package tracked text source
+        shell: bash
+        run: |
+          set -euo pipefail
+          rm -rf .source-export
+          mkdir -p .source-export
+          git archive --format=tar HEAD \
+            README.md .gitignore .nojekyll app.js index.html \
+            styles.css listening.css song-room.css package.json package-lock.json \
+            docs scripts src tests \
+            assets/rondo-mark.svg assets/artists assets/covers assets/audio/README.md \
+            .github/workflows/pages.yml \
+            > /tmp/rondo-source.tar
+          xz -9e -c /tmp/rondo-source.tar > /tmp/rondo-source.tar.xz
+          base64 -w 0 /tmp/rondo-source.tar.xz > /tmp/rondo-source.tar.xz.b64
+          split -b 30000 -d -a 2 /tmp/rondo-source.tar.xz.b64 .source-export/part-
+          {
+            printf 'tar_sha256='; sha256sum /tmp/rondo-source.tar | cut -d' ' -f1
+            printf 'xz_sha256='; sha256sum /tmp/rondo-source.tar.xz | cut -d' ' -f1
+            printf 'base64_size='; wc -c < /tmp/rondo-source.tar.xz.b64
+            printf 'parts='; find .source-export -name 'part-*' -type f | wc -l
+          } > .source-export/manifest.txt
+      - name: Preserve export
+        shell: bash
+        run: |
+          set -euo pipefail
+          git add -f .source-export
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -m "chore: record final-polish source export"
+          git push
