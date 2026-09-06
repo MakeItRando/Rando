@@ -2,7 +2,7 @@ name: Deploy Rondo prototype to Pages
 
 on:
   push:
-    branches: [main, rondo-v031-user-ready]
+    branches: [main]
   workflow_dispatch:
 
 permissions:
