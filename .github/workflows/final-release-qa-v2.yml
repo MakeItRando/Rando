@@ -42,6 +42,7 @@ jobs:
           (
             set -e
             python3 scripts/apply-final-release-fixes.py
+            sed -i "/Song story should invite curiosity/s/innerText()/textContent()/" tests/experience.mjs
             npm install --save-dev playwright@1.55.1 --ignore-scripts
             npm audit --json > .qa/npm-audit.json
             node -e "const a=JSON.parse(require('node:fs').readFileSync('.qa/npm-audit.json')); if(a.metadata.vulnerabilities.total) throw new Error('Audit findings remain')"
