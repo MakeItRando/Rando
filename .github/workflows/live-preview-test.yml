@@ -33,7 +33,8 @@ jobs:
             set -euo pipefail
             URL="https://raw.githack.com/MakeItRando/Rando/rondo-v031-user-ready/index.html"
             echo "Preview URL: $URL"
-            curl --fail --location --retry 3 --silent --show-error "$URL" | grep -q '<title>Rondo'
+            curl --fail --location --retry 3 --silent --show-error --output /tmp/rondo-public-preview.html "$URL"
+            grep -q '<title>Rondo' /tmp/rondo-public-preview.html
             CHROME="$(command -v google-chrome || command -v chromium || command -v chromium-browser)"
             npm run build:preview
             CHROMIUM_PATH="$CHROME" RONDO_URL="$URL" npm test
