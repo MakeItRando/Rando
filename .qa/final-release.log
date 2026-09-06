@@ -1,11 +1,7 @@
-== APPLY RELEASE FIXES ==
-== UPDATE PLAYWRIGHT ==
 
 added 4 packages, and audited 5 packages in 2s
 
 found 0 vulnerabilities
-== AUDIT ==
-== BUILD ==
 
 > rondo-design-prototype@0.3.1 build:preview
 > node scripts/build-preview.mjs
@@ -13,10 +9,8 @@ found 0 vulnerabilities
 
   .preview/app.bundle.js  117.2kb
 
-⚡ Done in 7ms
+⚡ Done in 6ms
 /home/runner/work/Rando/Rando/preview.html
-== START PREVIEW SERVER ==
-== TEST ==
 
 > rondo-design-prototype@0.3.1 test
 > npm run check && npm run test:unit && npm run test:browser
@@ -36,7 +30,7 @@ Rondo unit tests passed: 8 artists, 15 releases, 39 tracks.
 
 Rondo interaction smoke test passed
 {
-  "checkedAt": "2026-09-06T16:08:47.354Z",
+  "checkedAt": "2026-09-06T16:11:12.550Z",
   "findings": [],
   "metadata": {
     "genreCount": 4,
@@ -46,12 +40,8 @@ Rondo interaction smoke test passed
 Immersive listening test passed.
 Song Room test passed.
 Authorized audio test passed.
-file:///home/runner/work/Rando/Rando/tests/personal.mjs:8
-const assert = (condition, message) => { if (!condition) throw new Error(message); };
-                                                               ^
-
-Error: Saved moment should restore its timestamp.
-    at assert (file:///home/runner/work/Rando/Rando/tests/personal.mjs:8:64)
-    at file:///home/runner/work/Rando/Rando/tests/personal.mjs:32:3
-
-Node.js v20.20.2
+Personal listening regression passed.
+Rondo user-ready interaction test passed.
+Error: Song story should invite curiosity.
+    at assert (file:///home/runner/work/Rando/Rando/tests/experience.mjs:6:64)
+    at file:///home/runner/work/Rando/Rando/tests/experience.mjs:71:3
