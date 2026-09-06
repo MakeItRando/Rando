@@ -38,6 +38,7 @@ jobs:
           TEST_STATUS=$?
           CHROMIUM_PATH="$CHROME" RONDO_URL="file://$PWD/preview-test.html" node .qa-temp/visual-audit.mjs > .qa-output/visual.log 2>&1
           VISUAL_STATUS=$?
+          zip -q .qa-output/screens.zip .qa-output/screens/*.png
           printf '{"build":%s,"tests":%s,"visual":%s}\n' "$BUILD_STATUS" "$TEST_STATUS" "$VISUAL_STATUS" > .qa-output/status.json
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
