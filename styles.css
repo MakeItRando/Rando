@@ -701,3 +701,13 @@ html[data-theme="light"] .empty-library { background-color: #fbf9f4; }
 @keyframes rondo-track-level { from { height: 4px; } to { height: 14px; } }
 @media (max-width: 760px) { .artist-chapter-note { display: none; } #playArtist { min-width: 142px; } }
 @media (prefers-reduced-motion: reduce) { .track-equalizer i { animation: none; height: 9px; } .track-equalizer i:nth-child(2) { height: 14px; } .track-equalizer i:nth-child(3) { height: 6px; } }
+
+
+/* Final compact artist-action fit */
+@media (max-width: 760px) {
+  .artist-actions { width: 100%; display: grid; grid-template-columns: minmax(0, 1fr) 44px; align-items: center; gap: 6px; }
+  #playArtist { grid-column: 1; grid-row: 1; min-width: 0; width: 100%; }
+  .artist-actions .secondary-action { grid-column: 2; grid-row: 1; width: 44px; }
+  .artist-actions .text-action { grid-column: 1 / -1; grid-row: 2; justify-self: start; width: max-content; min-width: 44px; min-height: 32px; }
+  .artist-stats .artist-chapter-note { display: none; }
+}

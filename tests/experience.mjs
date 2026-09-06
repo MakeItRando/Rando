@@ -67,11 +67,21 @@ try {
   assert(!(await page.locator('.empty-library-copy').innerText()).includes('never interrupts'), 'Empty Library should not overexplain the save model.');
   await page.click('.rail-button[data-view="discover"]');
   await page.click('#openFullPlayer');
+  assert(await page.locator('#fullPlayer').isVisible(), 'Expand should open Song Room.');
   assert((await page.locator('#songRoomPanel .song-room-eyebrow').innerText()).trim() === 'Inside the track', 'Song story should invite curiosity.');
   await page.keyboard.press('Escape');
 
   await page.setViewportSize({ width: 390, height: 844 });
-  assert(!(await page.evaluate(() => document.documentElement.scrollWidth > innerWidth + 1)), 'Final mobile surface should not overflow horizontally.');
+  const mobileWidth = await page.evaluate(() => innerWidth);
+  const skipBounds = await page.locator('#skipArtist').boundingBox();
+  assert(skipBounds && skipBounds.x >= 0 && skipBounds.x + skipBounds.width <= mobileWidth + 1, 'Skip artist should remain fully visible on mobile.');
+  assert(await page.locator('.artist-chapter-note').isHidden(), 'Desktop chapter note should stay out of the compact mobile header.');
+  assert(!(await page.evaluate(() => document.documentElement.scrollWidth > innerWidth + 1)), 'Final mobile Discover surface should not overflow horizontally.');
+  await page.locator('.mobile-nav-button[data-mobile-view="library"]').click();
+  await page.waitForFunction(() => document.body.dataset.view === 'library');
+  assert(await page.locator('.empty-library').isVisible(), 'Mobile Library navigation should reveal the Library surface.');
+  assert(await page.locator('.mobile-nav-button[data-mobile-view="library"]').getAttribute('aria-current') === 'page', 'Mobile Library navigation should expose current state.');
+  assert(!(await page.evaluate(() => document.documentElement.scrollWidth > innerWidth + 1)), 'Final mobile Library surface should not overflow horizontally.');
   assert(errors.length === 0, `Browser errors: ${errors.join(' | ')}`);
   console.log('Rondo final experience regression passed.');
 } catch (error) {
