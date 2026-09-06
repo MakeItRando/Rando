@@ -21,7 +21,7 @@ const getTasteGenreLabel = (id) => genres.find((genre) => genre.id === id)?.shor
 
 const store = createStore({
   genreId: 'hiphop', artistId: 'kairo-vale', catalogMode: 'matching', selectedTrackId: 'k101',
-  inspectorTab: 'details', playing: false, position: 7, repeatMode: 'continue', view: 'discover',
+  inspectorTab: 'details', playing: false, position: 0, repeatMode: 'continue', view: 'discover',
   theme: 'dark', directoryCollapsed: false, songRoomMode: 'story'
 });
 
@@ -30,6 +30,8 @@ let onboardingStep = 0;
 let onboardingDraft = null;
 let toastTimer = null;
 let modalReturnFocus = null;
+let activeArtistSessionId = null;
+let mediaSessionTrackId = null;
 
 const audioEngine = createAudioEngine({
   onTime(position) {
@@ -47,7 +49,7 @@ const elements = {
   genreSelect: $('genreSelect'), artistFilter: $('artistFilter'), alphabet: $('alphabet'), artistList: $('artistList'), artistCount: $('artistCount'),
   topbar: document.querySelector('.topbar'), locationSection: $('locationSection'), locationGenre: $('locationGenre'), locationArtist: $('locationArtist'), artistPortrait: $('artistPortrait'), artistProgressRing: $('artistProgressRing'),
   artistProgressPercent: $('artistProgressPercent'), artistPosition: $('artistPosition'), artistLetter: $('artistLetter'), artistName: $('artistName'),
-  artistOrigin: $('artistOrigin'), artistYears: $('artistYears'), artistTags: $('artistTags'), artistBio: $('artistBio'), saveArtist: $('saveArtist'),
+  artistOrigin: $('artistOrigin'), artistYears: $('artistYears'), artistTags: $('artistTags'), artistBio: $('artistBio'), saveArtist: $('saveArtist'), playArtist: $('playArtist'),
   statPosition: $('statPosition'), statReleases: $('statReleases'), statTracks: $('statTracks'), catalogSummary: $('catalogSummary'),
   matchingMode: $('matchingMode'), allMode: $('allMode'), matchingCount: $('matchingCount'), allCount: $('allCount'), releases: $('releases'),
   nowIndex: $('nowIndex'), nowCover: $('nowCover'), nowReleaseTop: $('nowReleaseTop'), nowTitle: $('nowTitle'), nowArtist: $('nowArtist'),
@@ -266,6 +268,84 @@ function renderDirectory() {
   }));
 }
 
+// Final listening controls
+function syncArtistPlaybackAction() {
+  const artist = currentArtist();
+  const currentSession = activeArtistSessionId === artist.id;
+  const playing = Boolean(state().playing && currentSession);
+  const playbackState = playing ? 'pause' : currentSession ? 'resume' : 'play';
+  const label = playbackState === 'pause' ? 'Pause artist' : playbackState === 'resume' ? 'Resume artist' : 'Play artist';
+  if (elements.playArtist.dataset.playbackState !== playbackState || elements.playArtist.dataset.artistId !== artist.id) {
+    elements.playArtist.dataset.playbackState = playbackState;
+    elements.playArtist.dataset.artistId = artist.id;
+    elements.playArtist.innerHTML = `<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">${playing ? pausePath : playPath}</svg><span>${label}</span>`;
+  }
+  elements.playArtist.classList.toggle('playing', playing);
+  elements.playArtist.setAttribute('aria-pressed', String(playing));
+  elements.playArtist.setAttribute('aria-label', `${label} · ${artist.name}`);
+}
+
+function syncCatalogPlaybackControls() {
+  document.querySelectorAll('.track-row').forEach((row) => {
+    const button = row.querySelector('[data-play-track]');
+    const number = row.querySelector('.track-number');
+    if (!button || !number) return;
+    if (!number.dataset.index) number.dataset.index = number.textContent.trim();
+    const selected = row.dataset.track === state().selectedTrackId;
+    const playing = selected && state().playing;
+    const label = playing ? 'Pause' : selected && activeArtistSessionId === state().artistId ? 'Resume' : 'Play';
+    const title = row.querySelector('.track-name strong')?.textContent.trim() || 'track';
+    row.dataset.playbackState = playing ? 'playing' : selected ? 'selected' : 'idle';
+    button.setAttribute('aria-label', `${label} ${title}`);
+    button.setAttribute('aria-pressed', String(playing));
+    number.innerHTML = playing
+      ? '<span class="track-equalizer" aria-hidden="true"><i></i><i></i><i></i></span>'
+      : selected
+        ? `<svg class="track-state-icon" viewBox="0 0 24 24" aria-hidden="true">${playPath}</svg>`
+        : escapeHtml(number.dataset.index);
+  });
+}
+
+function syncMediaSession(context = currentContext()) {
+  if (!context || !('mediaSession' in navigator)) return;
+  const { artist, release, track } = context;
+  try {
+    if (mediaSessionTrackId !== track.id && 'MediaMetadata' in window) {
+      mediaSessionTrackId = track.id;
+      navigator.mediaSession.metadata = new MediaMetadata({
+        title: track.title,
+        artist: trackArtistLine(track, artist),
+        album: release.title,
+        artwork: [{ src: new URL(release.cover, window.location.href).href, type: 'image/svg+xml' }]
+      });
+    }
+    navigator.mediaSession.playbackState = state().playing ? 'playing' : 'paused';
+    if (navigator.mediaSession.setPositionState) {
+      const duration = Math.max(1, playbackDuration(track));
+      navigator.mediaSession.setPositionState({ duration, position: Math.min(duration, Math.max(0, state().position)), playbackRate: 1 });
+    }
+  } catch {
+    // Media Session support varies; core playback remains unaffected.
+  }
+}
+
+function bindMediaSession() {
+  if (!('mediaSession' in navigator)) return;
+  const handlers = {
+    play: () => setPlaying(true),
+    pause: () => setPlaying(false),
+    previoustrack: () => changeTrack(-1),
+    nexttrack: () => changeTrack(1),
+    seekbackward: (details = {}) => seekTo(state().position - (details.seekOffset || 10)),
+    seekforward: (details = {}) => seekTo(state().position + (details.seekOffset || 10)),
+    seekto: (details = {}) => { if (Number.isFinite(details.seekTime)) seekTo(details.seekTime); },
+    stop: () => setPlaying(false)
+  };
+  Object.entries(handlers).forEach(([action, handler]) => {
+    try { navigator.mediaSession.setActionHandler(action, handler); } catch { /* Unsupported action. */ }
+  });
+}
+
 function renderArtistFocus() {
   const genre = currentGenre();
   const artist = currentArtist();
@@ -303,6 +383,7 @@ function renderArtistFocus() {
   elements.saveArtist.classList.toggle('saved', saved);
   elements.saveArtist.innerHTML = `<span class="save-artist-symbol" aria-hidden="true"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8">${saved ? checkPath : plusPath}</svg></span><span class="save-artist-label">${saved ? 'Artist saved' : 'Save artist'}</span>`;
   elements.saveArtist.setAttribute('aria-label', saved ? 'Remove artist from Library' : 'Save artist to Library');
+  syncArtistPlaybackAction();
   syncLocation();
 }
 
@@ -330,10 +411,12 @@ function renderCatalog() {
     row.addEventListener('click', (event) => {
       const saveButton = event.target.closest('[data-save-track]');
       if (saveButton) { event.stopPropagation(); toggleTrackSave(saveButton.dataset.saveTrack); return; }
+      if (row.dataset.track === state().selectedTrackId) { togglePlaying(); return; }
       selectTrack(row.dataset.track, true);
     });
   });
   elements.releases.querySelectorAll('[data-save-release]').forEach((button) => button.addEventListener('click', () => toggleReleaseSave(button.dataset.saveRelease)));
+  syncCatalogPlaybackControls();
 }
 
 function activeLyricIndex(track, position = state().position) {
@@ -532,6 +615,9 @@ function updatePlayerUI() {
   elements.fullPlay.textContent = state().playing ? 'Ⅱ' : '▶';
   elements.fullPlay.setAttribute('aria-label', state().playing ? 'Pause' : 'Play');
   document.body.classList.toggle('is-playing', state().playing);
+  syncArtistPlaybackAction();
+  syncCatalogPlaybackControls();
+  syncMediaSession(context);
   syncJourneyVisibility();
   const repeat = state().repeatMode;
   elements.repeatMode.dataset.repeat = repeat;
@@ -553,6 +639,7 @@ function renderAll() {
 
 function selectGenre(genreId) {
   const continuePlaying = state().playing;
+  if (!continuePlaying) activeArtistSessionId = null;
   audioEngine.pause();
   const eligible = listArtistsForGenre(genreId);
   const artist = eligible[0] || artists[0];
@@ -565,6 +652,7 @@ function selectGenre(genreId) {
 
 function selectArtist(artistId, shouldPlay = false) {
   const continuePlaying = shouldPlay || state().playing;
+  if (!continuePlaying) activeArtistSessionId = null;
   audioEngine.pause();
   const artist = getArtist(artistId);
   const queue = flattenCatalog(artist, state().genreId, state().catalogMode);
@@ -618,7 +706,7 @@ function setPlaying(playing) {
   if (!context) return;
   if (!playing) {
     audioEngine.pause();
-    store.set({ playing: false, directoryCollapsed: false });
+    store.set({ playing: false });
     document.body.dataset.playbackSource = context.track.previewUrl ? 'audio' : 'simulated';
     syncJourneyVisibility();
     updatePlayerUI();
@@ -626,6 +714,7 @@ function setPlaying(playing) {
   }
   const duration = playbackDuration(context.track);
   const nextPosition = state().position >= duration - .1 ? 0 : state().position;
+  activeArtistSessionId = state().artistId;
   store.set({ playing: true, directoryCollapsed: true, position: nextPosition });
   elements.directory.classList.remove('open');
   persistPlayedTrack();
@@ -728,6 +817,7 @@ function changeTrack(direction) {
   const queue = currentQueue();
   if (!queue.length) return;
   const index = queue.findIndex((track) => track.id === state().selectedTrackId);
+  if (direction < 0 && state().position > 3) { seekTo(0); return; }
   const nextIndex = index + direction;
   if (nextIndex >= queue.length) { openCompletion(); return; }
   if (nextIndex < 0) { selectTrack(queue[0].id, state().playing); return; }
@@ -1035,7 +1125,11 @@ function bindEvents() {
   elements.artistFilter.addEventListener('input', renderDirectory);
   elements.matchingMode.addEventListener('click', () => setCatalogMode('matching'));
   elements.allMode.addEventListener('click', () => setCatalogMode('all'));
-  $('playArtist').addEventListener('click', () => { const first = currentQueue()[0]; if (first) selectTrack(first.id, true); });
+  elements.playArtist.addEventListener('click', () => {
+    if (activeArtistSessionId === state().artistId) { togglePlaying(); return; }
+    const first = currentQueue()[0];
+    if (first) selectTrack(first.id, true);
+  });
   elements.saveArtist.addEventListener('click', toggleArtistSave);
   $('skipArtist').addEventListener('click', () => selectArtist(nextArtistFor(state().artistId, state().genreId, 1).id, state().playing));
   $('previewCompletion').addEventListener('click', openCompletion);
@@ -1091,7 +1185,7 @@ function bindEvents() {
   $('closeCompletion').addEventListener('click', closeCompletion);
   $('continueArtist').addEventListener('click', continueToNextArtist);
   $('replayArtist').addEventListener('click', replayArtist);
-  $('stopJourney').addEventListener('click', () => { closeCompletion(); setPlaying(false); showToast('Journey paused'); });
+  $('stopJourney').addEventListener('click', () => { closeCompletion(); activeArtistSessionId = null; setPlaying(false); syncArtistPlaybackAction(); showToast('Journey stopped'); });
   document.querySelectorAll('.rail-button[data-view], .mobile-nav-button[data-mobile-view]').forEach((button) => button.addEventListener('click', () => showView(button.dataset.view || button.dataset.mobileView)));
   document.querySelectorAll('.rail-logo, .wordmark').forEach((link) => link.addEventListener('click', (event) => { event.preventDefault(); showView('discover'); }));
   document.addEventListener('keydown', (event) => {
@@ -1109,12 +1203,16 @@ function bindEvents() {
       else if (modal === elements.fullPlayer) closeFullPlayer();
       else if (elements.directory.classList.contains('open')) closeMobileDirectory();
     }
-    if (event.code === 'Space' && document.activeElement === document.body) { event.preventDefault(); togglePlaying(); }
+    const activeElement = document.activeElement;
+    const interactive = activeElement?.isContentEditable || ['INPUT', 'TEXTAREA', 'SELECT', 'BUTTON', 'A'].includes(activeElement?.tagName);
+    const modal = topModal();
+    if (event.code === 'Space' && !interactive && (!modal || modal === elements.fullPlayer)) { event.preventDefault(); togglePlaying(); }
   });
   window.addEventListener('resize', syncJourneyVisibility);
 }
 
 bindEvents();
+bindMediaSession();
 showView('discover');
 $('profileTrigger').textContent = (state().profile?.displayName || 'M').charAt(0).toUpperCase();
 const params = new URLSearchParams(window.location.search);
