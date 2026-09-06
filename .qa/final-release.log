@@ -1,4 +1,4 @@
-== STABILIZE STARTUP ASSERTION ==
+== FIX OPTIONAL CONTROL AND STABILIZE STARTUP ASSERTION ==
 == UPDATE PLAYWRIGHT ==
 
 added 4 packages, and audited 5 packages in 2s
@@ -34,11 +34,17 @@ Rondo unit tests passed: 8 artists, 15 releases, 39 tracks.
 > rondo-design-prototype@0.3.1 test:browser
 > node tests/smoke.mjs && node tests/quality.mjs && node tests/listening.mjs && node tests/song-room.mjs && node tests/audio.mjs && node tests/personal.mjs && node tests/user-ready.mjs && node tests/experience.mjs && node tests/release-ready.mjs
 
-file:///home/runner/work/Rando/Rando/tests/smoke.mjs:27
-  if (initialTrackCount !== 7) throw new Error('Matching catalog should contain seven Kairo tracks; got ' + initialTrackCount + '; browser errors: ' + errors.join(' | '));
-                                     ^
+node:internal/modules/run_main:123
+    triggerUncaughtException(
+    ^
 
-Error: Matching catalog should contain seven Kairo tracks; got 0; browser errors: Cannot read properties of null (reading 'addEventListener')
-    at file:///home/runner/work/Rando/Rando/tests/smoke.mjs:27:38
+page.click: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator('#previewCompletion')
+
+    at /home/runner/work/Rando/Rando/tests/smoke.mjs:72:14 {
+  log: [ "  - waiting for locator('#previewCompletion')" ],
+  name: 'TimeoutError'
+}
 
 Node.js v20.20.2
