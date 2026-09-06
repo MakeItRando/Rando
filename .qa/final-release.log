@@ -13,7 +13,7 @@ found 0 vulnerabilities
 
   .preview/app.bundle.js  117.2kb
 
-⚡ Done in 8ms
+⚡ Done in 7ms
 /home/runner/work/Rando/Rando/preview.html
 == START PREVIEW SERVER ==
 == TEST ==
@@ -36,7 +36,7 @@ Rondo unit tests passed: 8 artists, 15 releases, 39 tracks.
 
 Rondo interaction smoke test passed
 {
-  "checkedAt": "2026-09-06T16:05:03.649Z",
+  "checkedAt": "2026-09-06T16:08:47.354Z",
   "findings": [],
   "metadata": {
     "genreCount": 4,
@@ -44,12 +44,14 @@ Rondo interaction smoke test passed
   }
 }
 Immersive listening test passed.
-file:///home/runner/work/Rando/Rando/tests/song-room.mjs:9
+Song Room test passed.
+Authorized audio test passed.
+file:///home/runner/work/Rando/Rando/tests/personal.mjs:8
 const assert = (condition, message) => { if (!condition) throw new Error(message); };
                                                                ^
 
-Error: Story mode should explain why the song is present.
-    at assert (file:///home/runner/work/Rando/Rando/tests/song-room.mjs:9:64)
-    at file:///home/runner/work/Rando/Rando/tests/song-room.mjs:24:3
+Error: Saved moment should restore its timestamp.
+    at assert (file:///home/runner/work/Rando/Rando/tests/personal.mjs:8:64)
+    at file:///home/runner/work/Rando/Rando/tests/personal.mjs:32:3
 
 Node.js v20.20.2
