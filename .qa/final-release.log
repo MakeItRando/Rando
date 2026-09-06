@@ -1,4 +1,4 @@
-== FIX OPTIONAL CONTROL AND STABILIZE STARTUP ASSERTION ==
+== ALIGN REMOVED PREVIEW CONTROL AND STARTUP ASSERTION ==
 == UPDATE PLAYWRIGHT ==
 
 added 4 packages, and audited 5 packages in 2s
@@ -34,17 +34,28 @@ Rondo unit tests passed: 8 artists, 15 releases, 39 tracks.
 > rondo-design-prototype@0.3.1 test:browser
 > node tests/smoke.mjs && node tests/quality.mjs && node tests/listening.mjs && node tests/song-room.mjs && node tests/audio.mjs && node tests/personal.mjs && node tests/user-ready.mjs && node tests/experience.mjs && node tests/release-ready.mjs
 
-node:internal/modules/run_main:123
-    triggerUncaughtException(
-    ^
-
-page.click: Timeout 30000ms exceeded.
-Call log:
-  - waiting for locator('#previewCompletion')
-
-    at /home/runner/work/Rando/Rando/tests/smoke.mjs:72:14 {
-  log: [ "  - waiting for locator('#previewCompletion')" ],
-  name: 'TimeoutError'
+Rondo interaction smoke test passed
+{
+  "checkedAt": "2026-09-06T15:55:22.636Z",
+  "findings": [
+    {
+      "severity": "medium",
+      "area": "targets",
+      "message": "320px Discover has undersized key controls: #skipArtist 63×32"
+    },
+    {
+      "severity": "medium",
+      "area": "targets",
+      "message": "375px Discover has undersized key controls: #skipArtist 63×32"
+    },
+    {
+      "severity": "medium",
+      "area": "targets",
+      "message": "390px Discover has undersized key controls: #skipArtist 63×32"
+    }
+  ],
+  "metadata": {
+    "genreCount": 4,
+    "browserErrors": []
+  }
 }
-
-Node.js v20.20.2
