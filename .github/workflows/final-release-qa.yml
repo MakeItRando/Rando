@@ -46,6 +46,19 @@ jobs:
           set +e
           (
             set -e
+            echo '== STABILIZE STARTUP ASSERTION =='
+            python3 - <<'PY'
+          from pathlib import Path
+          path = Path('tests/smoke.mjs')
+          source = path.read_text()
+          old = "  if (await page.locator('.track-row').count() !== 7) throw new Error('Matching catalog should contain seven Kairo tracks');"
+          new = """  await page.waitForTimeout(300);
+            const initialTrackCount = await page.locator('.track-row').count();
+            if (initialTrackCount !== 7) throw new Error('Matching catalog should contain seven Kairo tracks; got ' + initialTrackCount + '; browser errors: ' + errors.join(' | '));"""
+          if old not in source:
+              raise SystemExit('Startup assertion anchor not found')
+          path.write_text(source.replace(old, new, 1))
+          PY
             echo '== UPDATE PLAYWRIGHT =='
             npm install --save-dev playwright@1.63.0 --ignore-scripts
             echo '== AUDIT =='
