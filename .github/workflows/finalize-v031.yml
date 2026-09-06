@@ -1,0 +1,71 @@
+name: Finalize Rondo v0.3.1 candidate
+
+on:
+  push:
+    branches:
+      - rondo-v031-user-ready
+    paths:
+      - .finalize-v031-trigger
+
+permissions:
+  contents: write
+
+jobs:
+  finalize:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out candidate
+        uses: actions/checkout@v4
+
+      - name: Apply verified product patch
+        shell: bash
+        run: |
+          set -euo pipefail
+          cat .finalize-v031/patch.part-* | base64 --decode | xz --decompress --stdout > /tmp/rondo-final.patch
+          echo "425c1836a5c237a568a23c8a879d90b087c8508d64a5531e3ced38e52510809d  /tmp/rondo-final.patch" | sha256sum --check
+          git apply --check /tmp/rondo-final.patch
+          git apply /tmp/rondo-final.patch
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install exact dependencies
+        run: npm ci
+
+      - name: Run complete release gate
+        shell: bash
+        run: |
+          set -euo pipefail
+          CHROME="$(command -v google-chrome || command -v chromium || command -v chromium-browser)"
+          if [ -z "$CHROME" ]; then
+            echo "No Chromium-compatible browser found" >&2
+            exit 1
+          fi
+          npm run build:preview
+          CHROMIUM_PATH="$CHROME" RONDO_URL="file://$PWD/preview-test.html" npm test
+
+      - name: Commit product candidate and remove temporary transport artifacts
+        shell: bash
+        run: |
+          set -euo pipefail
+          git rm -r --ignore-unmatch \
+            .finalize-v031 \
+            .finalize-v031-trigger \
+            .github/workflows/finalize-v031.yml \
+            .repo-export \
+            .repo-export-trigger \
+            .github/workflows/repo-export.yml \
+            .qa-temp \
+            .qa-trigger \
+            .qa-output \
+            .github/workflows/qa-audit.yml \
+            .release-v031
+          git add -A
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -m "feat: finalize v0.3.1 user-test candidate"
+          git push
