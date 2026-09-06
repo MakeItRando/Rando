@@ -73,14 +73,11 @@ jobs:
           git rm -r --ignore-unmatch \
             .finalize-v031 \
             .finalize-v031-trigger \
-            .github/workflows/finalize-v031.yml \
             .repo-export \
             .repo-export-trigger \
-            .github/workflows/repo-export.yml \
             .qa-temp \
             .qa-trigger \
             .qa-output \
-            .github/workflows/qa-audit.yml \
             .release-v031
           git add -A
           git config user.name "github-actions[bot]"
