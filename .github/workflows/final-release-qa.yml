@@ -64,7 +64,12 @@ jobs:
           new_binding = "  $('previewCompletion')?.addEventListener('click', openCompletion);"
           if old_binding not in app:
               raise SystemExit('Preview control binding anchor not found')
-          app_path.write_text(app.replace(old_binding, new_binding, 1))
+          app = app.replace(old_binding, new_binding, 1)
+          old_artist_count = "  elements.artistCount.textContent = `${pad(allEligible.length)} sample artists`;"
+          new_artist_count = "  elements.artistCount.textContent = `${pad(allEligible.length)} artists`;"
+          if old_artist_count not in app:
+              raise SystemExit('Artist count copy anchor not found')
+          app_path.write_text(app.replace(old_artist_count, new_artist_count, 1))
 
           smoke_path = Path('tests/smoke.mjs')
           smoke = smoke_path.read_text()
@@ -119,6 +124,12 @@ jobs:
           if old_palette not in listening:
               raise SystemExit('Palette loop anchor not found')
           listening_path.write_text(listening.replace(old_palette, new_palette, 1))
+
+          song_room_path = Path('tests/song-room.mjs')
+          song_room = song_room_path.read_text()
+          if song_room.count("'Why this song is here'") != 2:
+              raise SystemExit('Song Room story copy anchors not found')
+          song_room_path.write_text(song_room.replace("'Why this song is here'", "'Inside the track'"))
           PY
             echo '== UPDATE PLAYWRIGHT =='
             npm install --save-dev playwright@1.55.1 --ignore-scripts
