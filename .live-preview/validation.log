@@ -1,4 +1,4 @@
-Preview URL: https://raw.githack.com/MakeItRando/Rando/rondo-v031-user-ready/index.html
+Preview URL: https://cdn.jsdelivr.net/gh/MakeItRando/Rando@472b251e85ef4782367b914e3f552c71d5fdf336/index.html
 
 > rondo-design-prototype@0.3.1 build:preview
 > node scripts/build-preview.mjs
