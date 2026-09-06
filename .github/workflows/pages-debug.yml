@@ -26,7 +26,7 @@ jobs:
         run: |
           set +e
           mkdir -p .pages-debug
-          API="https://api.github.com/repos/${GITHUB_REPOSITORY}/pages"
+          API="https://api.github.com/repos/MakeItRando/Rando/pages"
           request() {
             local method="$1"
             local output="$2"
