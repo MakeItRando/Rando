@@ -1,5 +1,4 @@
 ./
-./.repo-export-trigger
 ./listening.css
 ./tests/
 ./tests/unit.mjs
@@ -11,10 +10,6 @@
 ./tests/listening.mjs
 ./tests/quality.mjs
 ./song-room.css
-./.release-v031/
-./.release-v031/diagnostic.txt
-./.release-v031/patch.part-01
-./.release-v031/patch.part-00
 ./package.json
 ./index.html
 ./package-lock.json
@@ -61,14 +56,7 @@
 ./assets/covers/blue-hour.svg
 ./assets/rondo-mark.svg
 ./assets/audio/
-./assets/audio/blue-hour.mp3
-./assets/audio/continuum.mp3
-./assets/audio/first-light-again.mp3
-./assets/audio/afterimage.mp3
 ./assets/audio/README.md
-./assets/audio/open-circuit.mp3
-./assets/audio/night-transit.mp3
 ./.github/
 ./.github/workflows/
-./.github/workflows/repo-export.yml
 ./.github/workflows/pages.yml
