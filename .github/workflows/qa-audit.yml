@@ -1,0 +1,49 @@
+name: Temporary Rondo UX audit
+
+on:
+  push:
+    branches:
+      - rondo-v031-user-ready
+    paths:
+      - .qa-trigger
+
+permissions:
+  contents: write
+
+jobs:
+  audit:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out candidate
+        uses: actions/checkout@v4
+
+      - name: Install exact dependencies
+        run: npm ci
+
+      - name: Run tests and visual audit
+        shell: bash
+        run: |
+          set +e
+          CHROME="$(command -v google-chrome || command -v chromium || command -v chromium-browser)"
+          if [ -z "$CHROME" ]; then
+            echo "No Chromium-compatible browser found" >&2
+            exit 1
+          fi
+          rm -rf .qa-output
+          mkdir -p .qa-output/screens
+          npm run build:preview > .qa-output/build.log 2>&1
+          BUILD_STATUS=$?
+          CHROMIUM_PATH="$CHROME" RONDO_URL="file://$PWD/preview-test.html" npm test > .qa-output/tests.log 2>&1
+          TEST_STATUS=$?
+          CHROMIUM_PATH="$CHROME" RONDO_URL="file://$PWD/preview-test.html" node .qa-temp/visual-audit.mjs > .qa-output/visual.log 2>&1
+          VISUAL_STATUS=$?
+          printf '{"build":%s,"tests":%s,"visual":%s}\n' "$BUILD_STATUS" "$TEST_STATUS" "$VISUAL_STATUS" > .qa-output/status.json
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -f .qa-output
+          git commit -m "chore: record Rondo UX audit"
+          git push
+          if [ "$BUILD_STATUS" -ne 0 ] || [ "$TEST_STATUS" -ne 0 ] || [ "$VISUAL_STATUS" -ne 0 ]; then
+            exit 1
+          fi
