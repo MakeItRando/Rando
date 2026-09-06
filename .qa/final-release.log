@@ -14,6 +14,7 @@ found 0 vulnerabilities
 
 ⚡ Done in 8ms
 /home/runner/work/Rando/Rando/preview.html
+== START PREVIEW SERVER ==
 == TEST ==
 
 > rondo-design-prototype@0.3.1 test
@@ -32,19 +33,11 @@ Rondo unit tests passed: 8 artists, 15 releases, 39 tracks.
 > rondo-design-prototype@0.3.1 test:browser
 > node tests/smoke.mjs && node tests/quality.mjs && node tests/listening.mjs && node tests/song-room.mjs && node tests/audio.mjs && node tests/personal.mjs && node tests/user-ready.mjs && node tests/experience.mjs && node tests/release-ready.mjs
 
-node:internal/modules/run_main:123
-    triggerUncaughtException(
-    ^
+file:///home/runner/work/Rando/Rando/tests/smoke.mjs:25
+  if (await page.locator('.track-row').count() !== 7) throw new Error('Matching catalog should contain seven Kairo tracks');
+                                                            ^
 
-page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:4173/index.html?skip-onboarding=1
-Call log:
-  - navigating to "http://127.0.0.1:4173/index.html?skip-onboarding=1", waiting until "networkidle"
-
-    at /home/runner/work/Rando/Rando/tests/smoke.mjs:23:14 {
-  log: [
-    '  - navigating to "http://127.0.0.1:4173/index.html?skip-onboarding=1", waiting until "networkidle"'
-  ],
-  name: 'Error'
-}
+Error: Matching catalog should contain seven Kairo tracks
+    at file:///home/runner/work/Rando/Rando/tests/smoke.mjs:25:61
 
 Node.js v20.20.2
