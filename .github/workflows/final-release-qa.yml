@@ -46,9 +46,17 @@ jobs:
           set +e
           (
             set -e
-            echo '== ALIGN REMOVED PREVIEW CONTROL AND STARTUP ASSERTION =='
+            echo '== APPLY RELEASE FIXES =='
             python3 - <<'PY'
           from pathlib import Path
+
+          css_path = Path('styles.css')
+          css = css_path.read_text()
+          old_target = "  .artist-actions .text-action { grid-column: 1 / -1; grid-row: 2; justify-self: start; width: max-content; min-width: 44px; min-height: 32px; }"
+          new_target = "  .artist-actions .text-action { grid-column: 1 / -1; grid-row: 2; justify-self: start; width: max-content; min-width: 44px; min-height: 44px; }"
+          if old_target not in css:
+              raise SystemExit('Mobile skip target anchor not found')
+          css_path.write_text(css.replace(old_target, new_target, 1))
 
           app_path = Path('src/app.js')
           app = app_path.read_text()
