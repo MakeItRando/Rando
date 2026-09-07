@@ -1,52 +1,66 @@
 # Rondo
 
-**Find your next repeat.**
+**Find a door, not a feed. Find your next repeat.**
 
-Rondo is an independent artist-by-artist music journey: choose a genre, move through artists alphabetically, explore albums and EPs, and keep the music worth returning to.
+Rondo is an editorial music-discovery and listening prototype. It gives listeners two complementary ways into a catalog: a curated **Discover** destination for serendipity and an intentional **Journey** through a genre, artist, release, and track. Releases become memorable chapters, and the Song Room turns listening into context, revelation, and personal memory.
 
-Rondo is not a Spotify client or wrapper. It owns its account, library, journeys, genre system, queue, player, recommendation rules, and brand. Catalog, audio, metadata, artwork, and lyrics enter through replaceable authorized connectors.
+Rondo is not a Spotify client or wrapper. It owns its account, library, discovery logic, journeys, queue, player, recommendation rules, and brand. Catalog, audio, metadata, artwork, and lyrics enter through replaceable authorized connectors.
 
-## Current release — v0.3.1 user-test candidate
+## Current release — v0.3.1 full-concept user-test candidate
 
-This polish release adds persistent mobile navigation, safely coordinated modal layers, semantic catalog controls, keyboard-complete timelines, and a dismissible, focus-contained Genre Journey drawer. The final listening pass makes artist and active-track controls truthful, preserves layout when paused, restarts the current song before skipping back, and connects native media controls. It also strengthens Light/Night contrast, supporting-text readability, compact control targets, empty-library composition, and mobile Song Room reachability.
+This candidate expands the prototype around one experience loop:
 
-This release makes the song the emotional center of Rondo:
+`anticipation → entrance → listening → revelation → memory`
 
-- cinematic, artwork-adaptive **Song Room** with Room, Lyrics, Story, Credits, and Up Next modes;
-- exact style, album/EP, featured roles, tempo/key, version, credits, and source provenance;
-- synchronized demo lyrics and timestamp seeking;
-- saved moments and private song notes surfaced in Library;
-- persistent, accessible volume control and focus-contained overlays;
-- six original Rondo demo recordings with real play, pause, seek, repeat, and queue continuity;
-- honest simulated fallback for catalog tracks without an authorized recording;
-- responsive desktop/mobile composition and Reduced Motion support.
-- release-readiness coverage for modal exclusivity, final-track completion, mobile navigation, drawer focus and dismissal, unavailable-audio fallback, semantic track controls, contrast, and 320px layout boundaries.
+- a dedicated **Discover** front door with Tonight's Door, new chapters, controlled serendipity, scenes, cross-song signals, and a record of what listening reveals;
+- a separate **Journeys** route for genre selection and deliberate artist-by-artist exploration;
+- fifteen fictional albums and EPs with distinct artwork, chapter numbers, hooks, liner-style notes, motifs, and optional artifacts;
+- release chapter pages that preserve album sequence and invite listening without overexplaining it;
+- an artwork-adaptive **Song Room** with Room, Lyrics, Story, Credits, Reveals, and Queue modes;
+- a truthful active waveform driven by authorized audio analysis when available, clearly labeled playback motion otherwise, a paused state, and a static Reduced Motion state;
+- richer synchronized volume fields with level feedback, percentage readout, mute/unmute, and remembered audible-level restore;
+- optional lore and artifacts revealed by listening—core songs are never locked behind engagement;
+- saved tracks, releases, artists, moments, private notes, reveal progress, and unlocked artifacts that persist locally;
+- six original Rondo demo recordings with real play, pause, seek, repeat, volume, and queue continuity;
+- responsive desktop/mobile composition, focus-contained overlays, keyboard-complete controls, 44px touch targets, and Reduced Motion support;
+- release-readiness coverage across onboarding, search, Discover, Journeys, release chapters, Song Room, real/fallback audio, persistence, compact layouts, and accessibility.
 
-The included recordings are original 32-second prototype instrumentals by **Rondo Originals**. They are not copies or reconstructions of commercial music.
+The included recordings are original 32-second prototype instrumentals by **Rondo Originals**. The artists, releases, stories, and artifacts in this repository are fictional prototype material—not claims about real artists or commercial recordings.
 
 ## Preview locally
 
+Requirements: Node 20+ and Chromium.
+
 ```bash
-python3 -m http.server 4173
+npm ci
+npm run build:preview
+npm run serve
 ```
 
 Open `http://localhost:4173`.
 
-To build the deterministic QA preview and run the complete gate:
+Run the complete release gate from another terminal while the server is running:
 
 ```bash
-npm install
-npm run build:preview
-RONDO_URL=file:///absolute/path/to/Rando/preview-test.html npm test
+RONDO_URL=http://127.0.0.1:4173/index.html npm test
+npm audit
 ```
+
+The generated `preview-test.html` is a deterministic self-contained QA artifact. HTTP is preferred for full audio testing because browsers restrict media analysis from `file://` origins.
 
 ## Product hierarchy
 
-`Rondo account → taste profile → genre → alphabetical artist → Artist Focus → matching/all catalog → album or EP → track → Song Room → Room/Lyrics/Story/Credits/Up Next → completion confirmation`
+```text
+Rondo account → taste profile
+  → Discover → door / chapter / scene / signal
+  → Journeys → genre → alphabetical artist → matching or all catalog
+  → release chapter → track → Song Room
+  → optional revelation → Library memory
+```
 
 ## Architecture
 
-The prototype separates catalog data, journey rules, persisted state, views, artwork ambience, Song Room rendering, and provider-neutral audio. UI code consumes normalized Rondo objects; future providers stay behind connector interfaces. See [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md).
+The prototype separates catalog data, discovery and journey rules, persisted state, views, artwork ambience, Song Room rendering, and provider-neutral audio. UI code consumes normalized Rondo objects; future providers stay behind connector interfaces. See [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md).
 
 ## Documentation
 
@@ -59,4 +73,4 @@ The prototype separates catalog data, journey rules, persisted state, views, art
 
 ## Rights boundary
 
-Production recordings, artwork, metadata, and lyrics require authorization through licensed providers, official embeds where permitted, direct artist uploads, Creative Commons/public-domain material, or direct rights agreements. GitHub Pages can host this static prototype; secure accounts, provider credentials, and licensed commercial playback require a server-capable production deployment.
+Production recordings, artwork, metadata, lyrics, biographies, and liner material require authorization through licensed providers, official embeds where permitted, direct artist uploads, Creative Commons/public-domain material, or direct rights agreements. GitHub Pages can host this static prototype; secure accounts, provider credentials, licensed commercial playback, and rights enforcement require a server-capable production deployment.

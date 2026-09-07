@@ -3,7 +3,7 @@ import { pathToFileURL } from 'node:url';
 import { resolve } from 'node:path';
 
 const baseTarget = process.env.RONDO_URL || pathToFileURL(resolve('preview-test.html')).href;
-const target = `${baseTarget}${baseTarget.includes('?') ? '&' : '?'}skip-onboarding=1`;
+const target = `${baseTarget}${baseTarget.includes('?') ? '&' : '?'}skip-onboarding=1&screen=journey`;
 const browser = await chromium.launch({ headless: true, executablePath: process.env.CHROMIUM_PATH || '/usr/local/bin/chromium' });
 const assert = (condition, message) => { if (!condition) throw new Error(message); };
 try {

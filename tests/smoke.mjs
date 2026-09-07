@@ -13,6 +13,7 @@ page.on('pageerror', (error) => errors.push(error.message));
 const configuredUrl = process.env.RONDO_URL || 'http://127.0.0.1:4173/index.html';
 const url = new URL(configuredUrl);
 url.searchParams.set('skip-onboarding', '1');
+url.searchParams.set('screen', 'journey');
 
 const expectText = async (selector, value) => {
   const text = (await page.locator(selector).first().innerText()).trim();
@@ -81,7 +82,9 @@ try {
   await expectText('#viewSurface', '01 artists · 01 releases · 01 tracks');
   if (await page.locator('[data-open-release="blacktop-studies"]').count() !== 1) throw new Error('Saved release is missing from Library');
   await page.click('[data-open-release="blacktop-studies"]');
-  await expectText('#artistName', 'Kairo Vale');
+  await expectText('.release-page h1', 'Blacktop Studies');
+  if (await page.locator('body').getAttribute('data-view') !== 'release') throw new Error('Saved release should open its chapter.');
+  await page.click('[data-play-release="blacktop-studies"]');
   await expectText('#barTitle', 'Night Transit');
 
   await page.click('[data-view="library"]');

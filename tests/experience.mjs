@@ -4,7 +4,8 @@ import { pathToFileURL } from 'node:url';
 import { resolve } from 'node:path';
 
 const assert = (condition, message) => { if (!condition) throw new Error(message); };
-const target = process.env.RONDO_URL || `${pathToFileURL(resolve('preview-test.html')).href}?skip-onboarding=1`;
+const baseTarget = process.env.RONDO_URL || pathToFileURL(resolve('preview-test.html')).href;
+const target = `${baseTarget}${baseTarget.includes('?') ? '&' : '?'}skip-onboarding=1&screen=journey`;
 const executablePath = process.env.CHROMIUM_PATH || '/usr/local/bin/chromium';
 const launchOptions = { headless: true, args: ['--no-sandbox'] };
 if (existsSync(executablePath)) launchOptions.executablePath = executablePath;
@@ -66,17 +67,19 @@ try {
   assert((await page.locator('.empty-library-copy h2').innerText()).trim() === 'Keep what stays.', 'Empty Library should use concise, memorable copy.');
   assert(!(await page.locator('.empty-library-copy').innerText()).includes('never interrupts'), 'Empty Library should not overexplain the save model.');
   await page.click('.rail-button[data-view="discover"]');
-  await page.click('#openFullPlayer');
+  await page.click('#mobileTrack');
   assert(await page.locator('#fullPlayer').isVisible(), 'Expand should open Song Room.');
+  await page.locator('.song-room-tabs [data-song-room-mode="story"]').click();
   assert((await page.locator('#songRoomPanel .song-room-eyebrow').textContent()).trim() === 'Inside the track', 'Song story should invite curiosity.');
   await page.keyboard.press('Escape');
 
   await page.setViewportSize({ width: 390, height: 844 });
   const mobileWidth = await page.evaluate(() => innerWidth);
+  assert(!(await page.evaluate(() => document.documentElement.scrollWidth > innerWidth + 1)), 'Final mobile Discover surface should not overflow horizontally.');
+  await page.locator('.mobile-nav-button[data-mobile-view="journeys"]').click();
   const skipBounds = await page.locator('#skipArtist').boundingBox();
   assert(skipBounds && skipBounds.x >= 0 && skipBounds.x + skipBounds.width <= mobileWidth + 1, 'Skip artist should remain fully visible on mobile.');
   assert(await page.locator('.artist-chapter-note').isHidden(), 'Desktop chapter note should stay out of the compact mobile header.');
-  assert(!(await page.evaluate(() => document.documentElement.scrollWidth > innerWidth + 1)), 'Final mobile Discover surface should not overflow horizontally.');
   await page.locator('.mobile-nav-button[data-mobile-view="library"]').click();
   await page.waitForFunction(() => document.body.dataset.view === 'library');
   assert(await page.locator('.empty-library').isVisible(), 'Mobile Library navigation should reveal the Library surface.');
