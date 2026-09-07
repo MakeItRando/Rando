@@ -1,4 +1,5 @@
 name: Apply Rondo full concept
+# Retry 2: verified transfer chunks.
 
 on:
   push:
