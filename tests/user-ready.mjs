@@ -3,7 +3,7 @@ import { pathToFileURL } from 'node:url';
 import { resolve } from 'node:path';
 
 const assert = (condition, message) => { if (!condition) throw new Error(message); };
-const target = process.env.RONDO_URL || `${pathToFileURL(resolve('preview-test.html')).href}?skip-onboarding=1`;
+const target = process.env.RONDO_URL || `${pathToFileURL(resolve('preview-test.html')).href}?skip-onboarding=1&screen=journey`;
 const browser = await chromium.launch({ headless: true, executablePath: process.env.CHROMIUM_PATH || '/usr/local/bin/chromium' });
 const page = await browser.newPage({ viewport: { width: 390, height: 844 } });
 const browserErrors = [];
@@ -11,7 +11,7 @@ page.on('pageerror', (error) => browserErrors.push(error.message));
 page.on('console', (message) => { if (message.type() === 'error') browserErrors.push(message.text()); });
 
 try {
-  const url = `${target}${target.includes('?') ? '&' : '?'}skip-onboarding=1`;
+  const url = `${target}${target.includes('?') ? '&' : '?'}skip-onboarding=1&screen=journey`;
   await page.goto(url);
   await page.evaluate(() => localStorage.clear());
   await page.reload();

@@ -9,7 +9,7 @@ const persistedDefaults = {
   onboardingComplete: false,
   profile: defaultProfile,
   savedTracks: [], savedReleases: [], savedArtists: [], playedTracks: [], savedMoments: [],
-  songNotes: {}, volume: 0.82, theme: 'dark'
+  songNotes: {}, releaseProgress: {}, unlockedArtifacts: [], volume: 0.82, theme: 'dark'
 };
 
 function readPersisted() {
@@ -20,6 +20,8 @@ function readPersisted() {
       ...raw,
       profile: { ...defaultProfile, ...(raw.profile || {}) },
       songNotes: raw.songNotes && typeof raw.songNotes === 'object' ? raw.songNotes : {},
+      releaseProgress: raw.releaseProgress && typeof raw.releaseProgress === 'object' ? raw.releaseProgress : {},
+      unlockedArtifacts: Array.isArray(raw.unlockedArtifacts) ? raw.unlockedArtifacts : [],
       volume: Number.isFinite(raw.volume) ? Math.min(1, Math.max(0, raw.volume)) : 0.82,
       theme: raw.theme === 'light' ? 'light' : 'dark'
     };
@@ -42,6 +44,8 @@ export function createStore(initialState) {
       playedTracks: [...state.playedTracks],
       savedMoments: [...(state.savedMoments || [])],
       songNotes: { ...(state.songNotes || {}) },
+      releaseProgress: { ...(state.releaseProgress || {}) },
+      unlockedArtifacts: [...(state.unlockedArtifacts || [])],
       volume: Math.min(1, Math.max(0, Number(state.volume) || 0)),
       theme: state.theme === 'light' ? 'light' : 'dark'
     };

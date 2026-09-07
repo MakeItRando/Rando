@@ -4,7 +4,7 @@ import { resolve } from 'node:path';
 
 const assert = (condition, message) => { if (!condition) throw new Error(message); };
 const baseTarget = process.env.RONDO_URL || pathToFileURL(resolve('preview-test.html')).href;
-const target = `${baseTarget}${baseTarget.includes('?') ? '&' : '?'}skip-onboarding=1`;
+const target = `${baseTarget}${baseTarget.includes('?') ? '&' : '?'}skip-onboarding=1&screen=journey`;
 const browser = await chromium.launch({ headless: true, executablePath: process.env.CHROMIUM_PATH || '/usr/local/bin/chromium' });
 const browserErrors = [];
 const watchErrors = (page) => {
@@ -67,9 +67,9 @@ try {
   await desktop.click('#searchTrigger');
   await desktop.fill('#globalSearch', 'Asha North');
   await desktop.locator('[data-result-type="artist"]').first().click();
-  assert(await desktop.locator('body').getAttribute('data-view') === 'discover', 'Opening a search result from Library should return to Discover.');
+  assert(await desktop.locator('body').getAttribute('data-view') === 'journeys', 'Opening an artist search result should enter Journeys.');
   assert((await desktop.locator('#artistName').textContent()).trim() === 'Asha North', 'Search should open the selected artist.');
-  assert((await desktop.locator('#locationSection').textContent()).trim() === 'DISCOVER', 'Search navigation should restore the Discover location trail.');
+  assert((await desktop.locator('#locationSection').textContent()).trim() === 'JOURNEYS', 'Search navigation should restore the Journeys location trail.');
 
   await desktop.click('#openFullPlayer');
   assert(await desktop.locator('#appShell').evaluate((element) => element.inert), 'Opening Song Room should make the app background inert.');
@@ -95,7 +95,7 @@ try {
   assert(await desktop.locator(`[data-genre-choice="${focusedChoice}"]`).getAttribute('aria-pressed') !== beforePressed, 'Genre choices should expose their pressed state.');
   await desktop.keyboard.press('Escape');
 
-  await desktop.click('.rail-button[data-view="discover"]');
+  await desktop.click('.rail-button[data-view="journeys"]');
   await desktop.click('#allMode');
   await desktop.locator('.track-play').last().click();
   await desktop.click('#openFullPlayer');
@@ -126,7 +126,7 @@ try {
   }));
   assert(mobileTargets.every(({ width, height }) => width >= 44 && height >= 44), 'Every mobile navigation destination should meet a 44px target.');
 
-  for (const view of ['library', 'journeys', 'profile']) {
+  for (const view of ['library', 'discover', 'profile']) {
     await mobile.click(`[data-mobile-view="${view}"]`);
     assert(await mobile.locator('body').getAttribute('data-view') === view, `Mobile ${view} navigation should open its destination.`);
     assert(await mobileNav.isVisible(), `Mobile navigation should remain reachable in ${view}.`);
@@ -140,8 +140,8 @@ try {
       assert(discoveryTarget && discoveryTarget.width >= 44 && discoveryTarget.height >= 44, 'Empty Library discovery action should meet a 44px mobile target.');
     }
   }
-  await mobile.click('[data-mobile-view="discover"]');
-  assert(await mobile.locator('#mobileDirectoryButton').isVisible(), 'Artist directory trigger should return in Discover.');
+  await mobile.click('[data-mobile-view="journeys"]');
+  assert(await mobile.locator('#mobileDirectoryButton').isVisible(), 'Artist directory trigger should appear in Journeys.');
 
   await mobile.click('#mobileDirectoryButton');
   assert(await mobile.locator('#directoryScrim').isVisible(), 'Opening the mobile directory should show a dismissible scrim.');

@@ -1,8 +1,8 @@
-import { artists, genres, onboardingArtists, onboardingGenres } from './data/catalog.js';
+import { artists, discoveryConnections, discoveryDoors, genres, onboardingArtists, onboardingGenres, releaseLore } from './data/catalog.js';
 import { artistProgress, findReleaseContext, findTrackContext, flattenCatalog, getArtist, getGenre, listArtistsForGenre, listReleases, nextArtistFor } from './services/journey.js';
 import { createAudioEngine } from './services/audio.js';
 import { createStore } from './state/store.js';
-import { renderJourneysView, renderLibraryView, renderProfileView } from './ui/views.js';
+import { renderDiscoverView, renderLibraryView, renderProfileView, renderReleaseView } from './ui/views.js';
 import { applyGenreAmbience } from './ui/ambience.js';
 import { applyArtworkPalette, renderSongRoomPanel, songRoomModes } from './ui/songRoom.js';
 
@@ -22,7 +22,7 @@ const getTasteGenreLabel = (id) => genres.find((genre) => genre.id === id)?.shor
 const store = createStore({
   genreId: 'hiphop', artistId: 'kairo-vale', catalogMode: 'matching', selectedTrackId: 'k101',
   inspectorTab: 'details', playing: false, position: 0, repeatMode: 'continue', view: 'discover',
-  theme: 'dark', directoryCollapsed: false, songRoomMode: 'story'
+  theme: 'dark', directoryCollapsed: false, songRoomMode: 'story', activeReleaseId: 'blacktop-studies'
 });
 
 let playbackTimer = null;
@@ -32,12 +32,17 @@ let toastTimer = null;
 let modalReturnFocus = null;
 let activeArtistSessionId = null;
 let mediaSessionTrackId = null;
+let waveformFrame = null;
+let activeReleaseSessionId = null;
+let lastAudibleVolume = store.get().volume > 0 ? store.get().volume : 0.82;
+const reducedMotionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
 
 const audioEngine = createAudioEngine({
   onTime(position) {
     const context = currentContext();
     if (!context?.track.previewUrl || !state().playing) return;
     store.set({ position });
+    recordReleaseProgress(context, position);
     updatePlayerUI();
   },
   onEnded() { if (state().playing) handleTrackEnd(); },
@@ -76,7 +81,9 @@ Object.assign(elements, {
   songRoomModeLabel: $('songRoomModeLabel'), songRoomMoment: $('songRoomMoment'), songRoomTimelineKnob: $('songRoomTimelineKnob'), songRoomMiniCover: $('songRoomMiniCover'), songRoomMiniTitle: $('songRoomMiniTitle'), songRoomMiniArtist: $('songRoomMiniArtist'),
   queueScrim: $('queueScrim'), queueDrawer: $('queueDrawer'), queueTitle: $('queueTitle'), queueArtist: $('queueArtist'), queueGenre: $('queueGenre'),
   queueList: $('queueList'), queueProgress: $('queueProgress'), queueCurrent: $('queueCurrent'), closeQueue: $('closeQueue'), volumeControl: $('volumeControl'),
-  mobileDirectoryButton: $('mobileDirectoryButton')
+  mobileDirectoryButton: $('mobileDirectoryButton'), volumeMute: $('volumeMute'), volumeValue: $('volumeValue'), mainSoundMeter: $('mainSoundMeter'),
+  fullVolumeControl: $('fullVolumeControl'), fullVolumeMute: $('fullVolumeMute'), fullVolumeValue: $('fullVolumeValue'), fullSoundMeter: $('fullSoundMeter'),
+  songRoomWave: document.querySelector('.song-room-wave'), revealStatusDot: $('revealStatusDot')
 });
 
 const state = () => store.get();
@@ -118,8 +125,15 @@ function syncLocation() {
   const view = state().view;
   if (view === 'discover') {
     elements.locationSection.textContent = 'DISCOVER';
-    elements.locationGenre.textContent = currentGenre().name.toUpperCase();
-    elements.locationArtist.textContent = currentArtist().name.toUpperCase();
+    elements.locationGenre.textContent = 'RONDO EDITION / 01';
+    elements.locationArtist.textContent = 'LISTENING DOORS';
+    return;
+  }
+  if (view === 'release') {
+    const context = findReleaseContext(state().activeReleaseId);
+    elements.locationSection.textContent = 'DISCOVER';
+    elements.locationGenre.textContent = 'RELEASE CHAPTER';
+    elements.locationArtist.textContent = (context?.release.title || 'CHAPTER').toUpperCase();
     return;
   }
   if (view === 'library') {
@@ -143,21 +157,21 @@ function syncLocation() {
 function syncJourneyVisibility() {
   const isMobile = window.matchMedia('(max-width: 760px)').matches;
   if (!isMobile) elements.directory.classList.remove('open');
-  const discover = state().view === 'discover';
-  const collapsed = Boolean(state().directoryCollapsed && discover);
-  const mobileOpen = discover && isMobile && elements.directory.classList.contains('open');
-  const directoryVisible = discover && (isMobile ? mobileOpen : !collapsed);
+  const journeys = state().view === 'journeys';
+  const collapsed = Boolean(state().directoryCollapsed && journeys);
+  const mobileOpen = journeys && isMobile && elements.directory.classList.contains('open');
+  const directoryVisible = journeys && (isMobile ? mobileOpen : !collapsed);
   document.body.classList.toggle('journey-collapsed', collapsed);
   document.body.classList.toggle('mobile-directory-open', mobileOpen);
-  elements.directory.hidden = !discover;
-  elements.mobileDirectoryButton.hidden = !discover;
-  elements.journeyToggle.hidden = !discover;
+  elements.directory.hidden = !journeys;
+  elements.mobileDirectoryButton.hidden = !journeys;
+  elements.journeyToggle.hidden = !journeys;
   elements.journeyToggle.setAttribute('aria-expanded', String(!collapsed));
   elements.journeyToggle.setAttribute('aria-label', collapsed ? 'Show Genre Journey' : 'Hide Genre Journey');
   elements.journeyToggleLabel.textContent = collapsed ? 'Show journey' : 'Hide journey';
   elements.directory.inert = !directoryVisible;
   elements.directory.setAttribute('aria-hidden', String(!directoryVisible));
-  elements.mobileDirectoryButton.setAttribute('aria-expanded', String(discover && (isMobile ? mobileOpen : !collapsed)));
+  elements.mobileDirectoryButton.setAttribute('aria-expanded', String(journeys && (isMobile ? mobileOpen : !collapsed)));
   elements.directoryScrim.hidden = !mobileOpen;
   [elements.topbar, elements.journey, elements.inspector, elements.transport, elements.mobilePrimaryNav, $('viewSurface')]
     .filter(Boolean)
@@ -165,7 +179,7 @@ function syncJourneyVisibility() {
 }
 
 function openMobileDirectory() {
-  if (state().view !== 'discover' || topModal()) return;
+  if (state().view !== 'journeys' || topModal()) return;
   store.set({ directoryCollapsed: false });
   elements.directory.classList.add('open');
   syncJourneyVisibility();
@@ -203,6 +217,122 @@ function showToast(message) {
   elements.toast.classList.add('show');
   clearTimeout(toastTimer);
   toastTimer = setTimeout(() => elements.toast.classList.remove('show'), 1700);
+}
+
+function syncMeter(meter, value) {
+  if (!meter) return;
+  const activeCount = Math.ceil(value * meter.querySelectorAll('i').length);
+  meter.querySelectorAll('i').forEach((bar, index) => bar.classList.toggle('active', index < activeCount));
+}
+
+function syncVolumeUI() {
+  const volume = Math.max(0, Math.min(1, Number(state().volume) || 0));
+  const value = Math.round(volume * 100);
+  [elements.volumeControl, elements.fullVolumeControl, ...document.querySelectorAll('[data-room-volume]')].filter(Boolean).forEach((input) => {
+    input.value = String(value);
+    input.style.setProperty('--volume', `${value}%`);
+  });
+  [elements.volumeValue, elements.fullVolumeValue, ...document.querySelectorAll('.song-room-room-volume output')].filter(Boolean).forEach((output) => { output.textContent = String(value); });
+  [elements.volumeMute, elements.fullVolumeMute, ...document.querySelectorAll('[data-room-mute]')].filter(Boolean).forEach((button) => {
+    button.classList.toggle('muted', value === 0);
+    button.setAttribute('aria-label', value === 0 ? `Unmute, previous volume ${Math.round(lastAudibleVolume * 100)}%` : `Mute, volume ${value}%`);
+  });
+  syncMeter(elements.mainSoundMeter, volume);
+  syncMeter(elements.fullSoundMeter, volume);
+  document.querySelectorAll('.song-room-room-volume .sound-meter').forEach((meter) => syncMeter(meter, volume));
+  document.documentElement.style.setProperty('--volume-level', String(volume));
+}
+
+function setVolume(value, { persist = true } = {}) {
+  const volume = Math.max(0, Math.min(1, Number(value) || 0));
+  if (volume > 0.005) lastAudibleVolume = volume;
+  audioEngine.setVolume(volume);
+  store.set({ volume }, { persist });
+  syncVolumeUI();
+}
+
+function toggleMute() {
+  const next = state().volume > 0.005 ? 0 : Math.max(0.08, lastAudibleVolume || 0.82);
+  setVolume(next);
+  showToast(next ? `Sound restored · ${Math.round(next * 100)}%` : 'Sound muted');
+}
+
+function motionLevels(count, timestamp) {
+  const position = state().position;
+  return Array.from({ length: count }, (_, index) => {
+    const a = Math.sin(timestamp / 188 + index * 1.47 + position * .37);
+    const b = Math.sin(timestamp / 413 + index * .63 - position * .21);
+    return Math.max(.07, Math.min(1, .36 + a * .23 + b * .16 + ((index * 7) % 5) * .035));
+  });
+}
+
+function paintWaveform(levels, mode, ratio = 0) {
+  const bars = [...document.querySelectorAll('.song-room-wave i')];
+  bars.forEach((bar, index) => {
+    const level = levels[index] ?? .12;
+    bar.style.setProperty('--level', `${Math.round(7 + level * 31)}px`);
+    bar.classList.toggle('passed', bars.length > 1 && index / (bars.length - 1) <= ratio);
+  });
+  const micro = [...document.querySelectorAll('.micro-spectrum i')];
+  micro.forEach((bar, index) => { bar.style.height = `${Math.round(5 + (levels[(index * 2) % levels.length] || .1) * 16)}px`; });
+  const compact = [...document.querySelectorAll('.level-bars i')];
+  compact.forEach((bar, index) => { bar.style.height = `${Math.round(4 + (levels[(index * 5) % levels.length] || .1) * 13)}px`; });
+  if (elements.songRoomWave) {
+    elements.songRoomWave.dataset.signalMode = mode;
+    const labels = { audio: 'Live waveform from authorized audio', motion: 'Playback-driven motion; audio spectrum unavailable', paused: 'Waveform paused', reduced: 'Static waveform; reduced motion enabled' };
+    elements.songRoomWave.setAttribute('aria-label', labels[mode] || labels.motion);
+  }
+  document.body.dataset.signalMode = mode;
+}
+
+function updateWaveformFrame(timestamp) {
+  waveformFrame = null;
+  if (!state().playing || reducedMotionQuery.matches) return;
+  const context = currentContext();
+  const bars = document.querySelectorAll('.song-room-wave i');
+  const duration = playbackDuration(context?.track);
+  const ratio = duration ? Math.max(0, Math.min(1, state().position / duration)) : 0;
+  const liveLevels = audioEngine.getLevels(bars.length);
+  paintWaveform(liveLevels || motionLevels(bars.length, timestamp), liveLevels ? 'audio' : 'motion', ratio);
+  waveformFrame = requestAnimationFrame(updateWaveformFrame);
+}
+
+function syncWaveformPlayback(ratio = 0) {
+  const bars = [...document.querySelectorAll('.song-room-wave i')];
+  bars.forEach((bar, index) => bar.classList.toggle('passed', bars.length > 1 && index / (bars.length - 1) <= ratio));
+  if (reducedMotionQuery.matches) {
+    if (waveformFrame) cancelAnimationFrame(waveformFrame);
+    waveformFrame = null;
+    const levels = bars.map((bar, index) => .15 + ((index * 7) % 9) / 15);
+    paintWaveform(levels, 'reduced', ratio);
+    return;
+  }
+  if (state().playing) {
+    if (!waveformFrame) waveformFrame = requestAnimationFrame(updateWaveformFrame);
+    return;
+  }
+  if (waveformFrame) cancelAnimationFrame(waveformFrame);
+  waveformFrame = null;
+  const levels = bars.map((bar, index) => .08 + ((index * 5) % 7) / 18);
+  paintWaveform(levels, 'paused', ratio);
+}
+
+function recordReleaseProgress(context, position) {
+  const lore = releaseLore[context?.release.id];
+  if (!lore || !state().playing) return;
+  const second = Math.max(0, Math.floor(position));
+  const previous = Math.floor(Number(state().releaseProgress?.[context.release.id]) || 0);
+  if (second <= previous) return;
+  const releaseProgress = { ...(state().releaseProgress || {}), [context.release.id]: second };
+  const unlocked = new Set(state().unlockedArtifacts || []);
+  const justOpened = second >= lore.artifact.unlockSeconds && !unlocked.has(context.release.id);
+  if (justOpened) unlocked.add(context.release.id);
+  store.set({ releaseProgress, unlockedArtifacts: [...unlocked] }, { persist: true });
+  if (!elements.fullPlayer.hidden && state().songRoomMode === 'reveals') renderFullPlayer(context);
+  if (justOpened) {
+    renderActiveSurface();
+    showToast(`Reveal opened · ${lore.artifact.title}`);
+  }
 }
 
 function rememberModalFocus(preferredFocus = null) {
@@ -394,10 +524,14 @@ function trackArtistLine(track, artist) {
 function renderCatalog() {
   const artist = currentArtist();
   const releases = listReleases(artist, state().genreId, state().catalogMode);
-  elements.releases.innerHTML = releases.length ? releases.map((release) => {
+  elements.releases.innerHTML = releases.length ? releases.map((release, releaseIndex) => {
     const releaseSaved = includes(state().savedReleases, release.id);
+    const lore = releaseLore[release.id];
+    const releaseActive = release.tracks.some((track) => track.id === state().selectedTrackId);
+    const heard = release.tracks.some((track) => includes(state().playedTracks, track.id));
+    const playbackLabel = releaseActive && state().playing ? 'Pause chapter' : releaseActive && heard ? 'Resume chapter' : 'Play chapter';
     return `<section class="release-group" data-release="${release.id}">
-      <header class="release-head"><img src="${release.cover}" alt="${escapeHtml(release.title)} artwork"/><div class="release-head-copy"><span>${release.type.toUpperCase()} · ${release.year}</span><strong>${escapeHtml(release.title)}</strong><small>${escapeHtml(release.label)} · ${pad(release.tracks.length)} tracks</small></div><button class="release-save ${releaseSaved ? 'saved' : ''}" type="button" data-save-release="${release.id}" aria-label="${releaseSaved ? 'Remove' : 'Save'} ${escapeHtml(release.title)}"><svg viewBox="0 0 24 24" fill="${releaseSaved ? 'currentColor' : 'none'}" stroke="currentColor" stroke-width="1.8">${heartPath}</svg></button></header>
+      <header class="release-head release-chapter-head"><button class="release-cover-button" type="button" data-open-release-chapter="${release.id}" aria-label="Open ${escapeHtml(release.title)} chapter"><img src="${release.cover}" alt="${escapeHtml(release.title)} artwork"/><i>${pad(releaseIndex + 1)}</i></button><div class="release-head-copy"><span>${escapeHtml(lore?.index || `${release.type.toUpperCase()} / ${pad(releaseIndex + 1)}`)}</span><strong>${escapeHtml(release.title)}</strong><small>${escapeHtml(lore?.hook || `${release.label} · ${pad(release.tracks.length)} tracks`)}</small><em>${escapeHtml(lore?.motif || `${release.type} · ${release.year}`)}</em></div><div class="release-head-actions"><button type="button" data-play-release-inline="${release.id}">${playbackLabel}</button><button type="button" data-open-release-chapter="${release.id}">Open chapter ↗</button><button class="release-save ${releaseSaved ? 'saved' : ''}" type="button" data-save-release="${release.id}" aria-label="${releaseSaved ? 'Remove' : 'Save'} ${escapeHtml(release.title)}"><svg viewBox="0 0 24 24" fill="${releaseSaved ? 'currentColor' : 'none'}" stroke="currentColor" stroke-width="1.8">${heartPath}</svg></button></div></header>
       <div class="track-head"><span>#</span><span>TRACK / ALBUM</span><span>STYLE</span><span>TIME</span><span></span></div>
       <div class="release-tracks">${release.tracks.map((track, trackIndex) => {
         const selected = track.id === state().selectedTrackId;
@@ -412,10 +546,13 @@ function renderCatalog() {
       const saveButton = event.target.closest('[data-save-track]');
       if (saveButton) { event.stopPropagation(); toggleTrackSave(saveButton.dataset.saveTrack); return; }
       if (row.dataset.track === state().selectedTrackId) { togglePlaying(); return; }
+      activeReleaseSessionId = findTrackContext(row.dataset.track)?.release.id || null;
       selectTrack(row.dataset.track, true);
     });
   });
   elements.releases.querySelectorAll('[data-save-release]').forEach((button) => button.addEventListener('click', () => toggleReleaseSave(button.dataset.saveRelease)));
+  elements.releases.querySelectorAll('[data-open-release-chapter]').forEach((button) => button.addEventListener('click', () => openReleaseChapter(button.dataset.openReleaseChapter)));
+  elements.releases.querySelectorAll('[data-play-release-inline]').forEach((button) => button.addEventListener('click', () => playRelease(button.dataset.playReleaseInline)));
   syncCatalogPlaybackControls();
 }
 
@@ -475,7 +612,7 @@ function renderNowPlaying() {
 }
 
 function songRoomLabel(mode) {
-  return ({ room: 'Song Room', lyrics: 'Lyrics', story: 'Song story', credits: 'Credits', queue: 'Up next' })[mode] || 'Song Room';
+  return ({ room: 'Song Room', lyrics: 'Lyrics', story: 'Song story', credits: 'Credits', reveals: 'Listening reveal', queue: 'Up next' })[mode] || 'Song Room';
 }
 
 function setSongRoomMode(mode) {
@@ -521,10 +658,19 @@ function saveSongNote() {
 function bindSongRoomPanel() {
   elements.songRoomPanel.querySelectorAll('[data-time]').forEach((line) => line.addEventListener('click', () => seekTo(Number(line.dataset.time))));
   elements.songRoomPanel.querySelectorAll('[data-song-room-track]').forEach((button) => button.addEventListener('click', () => {
+    activeReleaseSessionId = findTrackContext(button.dataset.songRoomTrack)?.release.id || null;
     selectTrack(button.dataset.songRoomTrack, state().playing);
     setSongRoomMode('queue');
   }));
   elements.songRoomPanel.querySelector('[data-save-song-note]')?.addEventListener('click', saveSongNote);
+  elements.songRoomPanel.querySelector('[data-open-release-from-room]')?.addEventListener('click', (event) => {
+    const releaseId = event.currentTarget.dataset.openReleaseFromRoom;
+    closeFullPlayer({ restoreFocus: false });
+    openReleaseChapter(releaseId);
+  });
+  elements.songRoomPanel.querySelector('[data-room-volume]')?.addEventListener('input', (event) => setVolume(Number(event.currentTarget.value) / 100));
+  elements.songRoomPanel.querySelector('[data-room-mute]')?.addEventListener('click', toggleMute);
+  syncVolumeUI();
 }
 
 function renderFullPlayer(context = currentContext()) {
@@ -556,9 +702,13 @@ function renderFullPlayer(context = currentContext()) {
   elements.songRoomModeLabel.textContent = songRoomLabel(mode);
   elements.fullAudioMeta.textContent = `${audioMeta(track).toUpperCase()} · ${palette.signal} · ${playbackSource(track)}`;
   elements.fullPlayer.dataset.playbackSource = track.previewUrl ? 'audio' : 'simulated';
+  const lore = releaseLore[release.id] || null;
+  const revealProgress = Number(state().releaseProgress?.[release.id]) || 0;
+  const revealUnlocked = includes(state().unlockedArtifacts, release.id);
+  elements.revealStatusDot?.classList.toggle('open', revealUnlocked);
   elements.fullLyricsLines.innerHTML = track.lyrics.map((line) => `<p data-time="${line.time}">${escapeHtml(line.text)}</p>`).join('');
   const queueEntries = queue.map((item) => ({ track: item, release: findTrackContext(item.id).release, active: item.id === track.id }));
-  elements.songRoomPanel.innerHTML = renderSongRoomPanel({ mode, context, queueEntries, genreName: currentGenre().name, note: state().songNotes?.[track.id] || '' });
+  elements.songRoomPanel.innerHTML = renderSongRoomPanel({ mode, context, queueEntries, genreName: currentGenre().name, note: state().songNotes?.[track.id] || '', lore, revealUnlocked, revealProgress, volume: state().volume });
   document.querySelectorAll('[data-song-room-mode]').forEach((button) => {
     const active = button.dataset.songRoomMode === mode;
     button.classList.toggle('active', active);
@@ -571,6 +721,7 @@ function renderFullPlayer(context = currentContext()) {
   bindSongRoomPanel();
   updateLyricHighlights();
   updateMomentUI(context);
+  syncVolumeUI();
 }
 
 function updateLyricHighlights() {
@@ -619,6 +770,9 @@ function updatePlayerUI() {
   syncCatalogPlaybackControls();
   syncMediaSession(context);
   syncJourneyVisibility();
+  syncWaveformPlayback(ratio);
+  syncSurfacePlaybackControls();
+  syncVolumeUI();
   const repeat = state().repeatMode;
   elements.repeatMode.dataset.repeat = repeat;
   elements.repeatBadge.textContent = repeat === 'track' ? '1' : repeat === 'artist' ? 'A' : '';
@@ -696,7 +850,7 @@ function startSimulatedPlayback() {
     if (!context || !state().playing) return;
     const nextPosition = state().position + 1;
     if (nextPosition >= playbackDuration(context.track)) handleTrackEnd();
-    else { store.set({ position: nextPosition }); updatePlayerUI(); }
+    else { store.set({ position: nextPosition }); recordReleaseProgress(context, nextPosition); updatePlayerUI(); }
   }, 1000);
 }
 
@@ -776,12 +930,12 @@ function closeQueue({ restoreFocus = true } = {}) {
 
 function openJourneyFromPlayer() {
   closeFullPlayer();
+  showView('journeys');
   store.set({ directoryCollapsed: false });
   if (window.matchMedia('(max-width: 760px)').matches) elements.directory.classList.add('open');
   syncJourneyVisibility();
   requestAnimationFrame(() => (window.matchMedia('(max-width: 760px)').matches ? $('closeDirectory') : elements.genreSelect).focus());
 }
-
 
 function seekTo(position) {
   const context = currentContext();
@@ -853,6 +1007,7 @@ function toggleReleaseSave(releaseId) {
   const next = toggleList(state().savedReleases, releaseId);
   store.set({ savedReleases: next }, { persist: true });
   renderCatalog();
+  if (state().view !== 'journeys') renderActiveSurface();
   showToast(next.includes(releaseId) ? 'Release saved to Rondo' : 'Release removed from Rondo');
 }
 
@@ -942,28 +1097,20 @@ function renderSearchResults(query) {
   elements.searchResults.querySelectorAll('[data-result-type]').forEach((button) => button.addEventListener('click', () => {
     const type = button.dataset.resultType;
     closeSearch();
-    if (type === 'genre') { showView('discover'); selectGenre(button.dataset.resultId); }
+    if (type === 'genre') { showView('journeys'); selectGenre(button.dataset.resultId); }
     else if (type === 'artist') {
       const artist = getArtist(button.dataset.resultId);
       const genreId = artist.genreIds.includes(state().genreId) ? state().genreId : artist.genreIds[0];
       if (genreId !== state().genreId) store.set({ genreId });
-      showView('discover');
+      showView('journeys');
       selectArtist(artist.id);
     } else if (type === 'release') {
-      const artist = getArtist(button.dataset.artistId);
-      const release = artist.releases.find((item) => item.id === button.dataset.resultId);
-      const track = release?.tracks[0];
-      if (track) {
-        const genreId = track.genres.includes(state().genreId) ? state().genreId : track.genres[0];
-        store.set({ genreId, artistId: artist.id, catalogMode: 'all', selectedTrackId: track.id, position: 0 });
-        showView('discover');
-      }
+      openReleaseChapter(button.dataset.resultId);
     } else {
       const context = findTrackContext(button.dataset.resultId);
       if (context) {
-        const genreId = context.track.genres.includes(state().genreId) ? state().genreId : context.track.genres[0];
-        store.set({ genreId, artistId: context.artist.id, catalogMode: 'all', selectedTrackId: context.track.id, position: 0 });
-        showView('discover');
+        switchListeningContext(context, { play: false });
+        showView('journeys');
       }
     }
   }));
@@ -990,57 +1137,180 @@ function createViewSurface() {
 }
 const viewSurface = createViewSurface();
 
-function showView(view) {
-  if (!['discover', 'library', 'journeys', 'profile'].includes(view)) return;
-  if (view !== 'discover' && elements.directory.classList.contains('open')) closeMobileDirectory({ restoreFocus: false });
-  store.set({ view });
-  document.body.dataset.view = view;
-  elements.appShell.dataset.view = view;
-  document.querySelectorAll('.rail-button[data-view], .mobile-nav-button[data-mobile-view]').forEach((button) => {
-    const active = (button.dataset.view || button.dataset.mobileView) === view;
-    button.classList.toggle('active', active);
-    active ? button.setAttribute('aria-current', 'page') : button.removeAttribute('aria-current');
-  });
-  const discover = view === 'discover';
-  elements.directory.hidden = !discover;
-  elements.journey.hidden = !discover;
-  document.querySelector('.inspector').hidden = !discover;
-  viewSurface.hidden = discover;
-  syncLocation();
-  syncJourneyVisibility();
-  if (discover) { renderAll(); return; }
+function featuredReleaseContexts() {
+  return ['blacktop-studies', 'silver-weather', 'margins', 'no-fixed-address', 'rooms-i-remember']
+    .map(findReleaseContext).filter(Boolean).map((context) => ({ ...context, lore: releaseLore[context.release.id] }));
+}
+
+function discoverHeroContext() {
+  const activeDoor = state().playing ? discoveryDoors.find((door) => door.trackId === state().selectedTrackId) : null;
+  const unheardDoor = discoveryDoors.find((door) => !includes(state().playedTracks, door.trackId));
+  const door = activeDoor || unheardDoor || discoveryDoors[0];
+  const context = findTrackContext(door.trackId) || findTrackContext('k101');
+  return { ...context, door, lore: releaseLore[context.release.id] };
+}
+
+function renderActiveSurface() {
+  if (!viewSurface || state().view === 'journeys') return;
   const profile = state().profile || {};
-  if (view === 'library') {
+  viewSurface.className = `view-surface view-surface-${state().view}`;
+  if (state().view === 'discover') {
+    const hero = discoverHeroContext();
+    const chapters = featuredReleaseContexts();
+    const sceneGenres = genres.map((genre, index) => ({ ...genre, index: `0${index + 1}`, artistCount: listArtistsForGenre(genre.id).length }));
+    const connections = discoveryConnections.map((connection) => ({ connection, left: findTrackContext(connection.trackIds[0]), right: findTrackContext(connection.trackIds[1]) })).filter((item) => item.left && item.right);
+    viewSurface.innerHTML = renderDiscoverView({ hero, chapters, genres: sceneGenres, connections, unlockedArtifacts: state().unlockedArtifacts, playedTracks: state().playedTracks, activeTrackId: state().selectedTrackId, playing: state().playing });
+  } else if (state().view === 'release') {
+    const context = findReleaseContext(state().activeReleaseId) || currentContext();
+    const lore = releaseLore[context.release.id];
+    viewSurface.innerHTML = renderReleaseView({ ...context, lore, isSaved: includes(state().savedReleases, context.release.id), unlocked: includes(state().unlockedArtifacts, context.release.id), progress: Number(state().releaseProgress?.[context.release.id]) || 0, selectedTrackId: state().selectedTrackId, playing: state().playing, playedTracks: state().playedTracks });
+  } else if (state().view === 'library') {
     const savedArtists = artists.filter((artist) => includes(state().savedArtists, artist.id));
     const savedReleaseContexts = (state().savedReleases || []).map(findReleaseContext).filter(Boolean);
     const savedTrackContexts = (state().savedTracks || []).map(findTrackContext).filter(Boolean);
     const savedMomentContexts = (state().savedMoments || []).map((moment) => { const context = findTrackContext(moment.trackId); return context ? { ...context, moment } : null; }).filter(Boolean);
     const songNoteContexts = Object.entries(state().songNotes || {}).map(([trackId, note]) => { const context = findTrackContext(trackId); return context && note ? { ...context, note } : null; }).filter(Boolean);
     viewSurface.innerHTML = renderLibraryView({ savedArtists, savedReleaseContexts, savedTrackContexts, savedMomentContexts, songNoteContexts });
-  } else if (view === 'journeys') {
-    const genre = currentGenre();
-    const artist = currentArtist();
-    const progress = artistProgress(artist, new Set(state().playedTracks || []), genre.id, state().catalogMode);
-    viewSurface.innerHTML = renderJourneysView({ genre, artist, progress });
   } else {
     const tasteGenres = (profile.genres || []).map(getTasteGenreLabel);
     const seedArtists = artists.filter((artist) => includes(profile.seedArtists || [], artist.id));
     viewSurface.innerHTML = renderProfileView({ profile, tasteGenres, seedArtists });
   }
-  viewSurface.querySelectorAll('[data-open-artist]').forEach((button) => button.addEventListener('click', () => { showView('discover'); selectArtist(button.dataset.openArtist); }));
-  viewSurface.querySelectorAll('[data-open-release]').forEach((button) => button.addEventListener('click', () => {
-    const context = findReleaseContext(button.dataset.openRelease);
-    const track = context?.release.tracks[0];
-    if (!track) return;
-    const genreId = track.genres.includes(state().genreId) ? state().genreId : track.genres[0];
-    store.set({ genreId, artistId: context.artist.id, catalogMode: 'all', selectedTrackId: track.id, position: 0 });
-    showView('discover');
+  bindViewSurfaceEvents();
+  syncSurfacePlaybackControls();
+  syncLocation();
+}
+
+function switchListeningContext(context, { play = false, position = 0 } = {}) {
+  if (!context) return;
+  audioEngine.pause();
+  clearInterval(playbackTimer);
+  const genreId = context.track.genres.includes(state().genreId) ? state().genreId : context.track.genres[0];
+  store.set({ genreId, artistId: context.artist.id, catalogMode: 'all', selectedTrackId: context.track.id, position, playing: false, inspectorTab: 'details' });
+  renderAll();
+  if (play) setPlaying(true);
+}
+
+function playSurfaceTrack(trackId) {
+  const context = findTrackContext(trackId);
+  if (!context) return;
+  if (state().selectedTrackId === trackId) { activeReleaseSessionId = context.release.id; togglePlaying(); return; }
+  activeReleaseSessionId = context.release.id;
+  switchListeningContext(context, { play: true });
+  showToast(`Now entering · ${context.track.title}`);
+}
+
+function playRelease(releaseId) {
+  const context = findReleaseContext(releaseId);
+  if (!context) return;
+  const selectedInRelease = context.release.tracks.some((track) => track.id === state().selectedTrackId);
+  if (selectedInRelease && activeReleaseSessionId === releaseId) { togglePlaying(); return; }
+  const track = context.release.tracks.find((item) => item.previewUrl) || context.release.tracks[0];
+  activeReleaseSessionId = releaseId;
+  switchListeningContext({ ...context, track }, { play: true });
+  showToast(`${context.release.title} chapter started`);
+}
+
+function openReleaseChapter(releaseId) {
+  if (!findReleaseContext(releaseId)) return;
+  store.set({ activeReleaseId: releaseId });
+  showView('release');
+  requestAnimationFrame(() => viewSurface.querySelector('.release-page-back')?.focus({ preventScroll: true }));
+}
+
+function surpriseMe() {
+  const pool = artists.flatMap((artist) => artist.releases.flatMap((release) => release.tracks.map((track) => ({ artist, release, track })))).filter(({ track }) => track.previewUrl);
+  if (!pool.length) return;
+  const unheard = pool.filter(({ track }) => !includes(state().playedTracks, track.id) && track.id !== state().selectedTrackId);
+  const candidates = unheard.length ? unheard : pool.filter(({ track }) => track.id !== state().selectedTrackId);
+  const currentIndex = Math.max(0, pool.findIndex(({ track }) => track.id === state().selectedTrackId));
+  const context = candidates[(currentIndex + (state().playedTracks?.length || 0)) % candidates.length] || pool[0];
+  activeReleaseSessionId = context.release.id;
+  switchListeningContext(context, { play: true });
+  openFullPlayer(undefined, 'room');
+  showToast(`Somewhere else · ${context.track.title}`);
+}
+
+function syncSurfacePlaybackControls() {
+  const context = currentContext();
+  if (!context) return;
+  const heard = includes(state().playedTracks, context.track.id);
+  viewSurface?.querySelectorAll('[data-discover-play]').forEach((button) => {
+    const active = button.dataset.discoverPlay === context.track.id;
+    const label = active && state().playing ? 'Pause this door' : active && heard ? 'Resume this door' : 'Play this door';
+    button.innerHTML = `${label} <span>${active && state().playing ? 'Ⅱ' : '▶'}</span>`;
+    button.setAttribute('aria-pressed', String(active && state().playing));
+  });
+  document.querySelectorAll('[data-play-release], [data-play-release-inline]').forEach((button) => {
+    const releaseId = button.dataset.playRelease || button.dataset.playReleaseInline;
+    const releaseContext = findReleaseContext(releaseId);
+    const active = releaseContext?.release.tracks.some((track) => track.id === context.track.id);
+    const releaseHeard = releaseContext?.release.tracks.some((track) => includes(state().playedTracks, track.id));
+    const label = active && state().playing ? 'Pause chapter' : active && releaseHeard ? 'Resume chapter' : 'Play chapter';
+    if (button.dataset.playRelease) button.innerHTML = `${label} <span>${active && state().playing ? 'Ⅱ' : '▶'}</span>`;
+    else button.textContent = label;
+    button.setAttribute('aria-pressed', String(Boolean(active && state().playing)));
+  });
+  viewSurface?.querySelectorAll('[data-release-page-track]').forEach((row) => {
+    const trackId = row.dataset.releasePageTrack;
+    const active = trackId === context.track.id;
+    row.classList.toggle('active', active);
+    const playButton = row.querySelector('[data-release-track]');
+    const icon = playButton?.querySelector('b');
+    if (playButton) playButton.setAttribute('aria-pressed', String(active && state().playing));
+    if (icon) icon.textContent = active && state().playing ? 'Ⅱ' : '▶';
+  });
+}
+
+function bindViewSurfaceEvents() {
+  viewSurface.querySelectorAll('[data-open-artist]').forEach((button) => button.addEventListener('click', () => { showView('journeys'); selectArtist(button.dataset.openArtist); }));
+  viewSurface.querySelectorAll('[data-open-release]').forEach((button) => button.addEventListener('click', () => openReleaseChapter(button.dataset.openRelease)));
+  viewSurface.querySelectorAll('[data-open-track]').forEach((button) => button.addEventListener('click', () => playSurfaceTrack(button.dataset.openTrack)));
+  viewSurface.querySelectorAll('[data-open-moment], [data-open-note]').forEach((button) => button.addEventListener('click', () => {
+    const trackId = button.dataset.openMoment || button.dataset.openNote;
+    const context = findTrackContext(trackId);
+    if (!context) return;
+    switchListeningContext(context, { play: false, position: Number(button.dataset.position || 0) });
+    openFullPlayer(undefined, button.dataset.openNote ? 'story' : 'room');
   }));
-  viewSurface.querySelectorAll('[data-open-track]').forEach((button) => button.addEventListener('click', () => { const context = findTrackContext(button.dataset.openTrack); store.set({ genreId: context.track.genres[0], artistId: context.artist.id, catalogMode: 'all', selectedTrackId: context.track.id }); showView('discover'); selectTrack(context.track.id, true); }));
-  viewSurface.querySelectorAll('[data-open-moment], [data-open-note]').forEach((button) => button.addEventListener('click', () => { const trackId = button.dataset.openMoment || button.dataset.openNote; const context = findTrackContext(trackId); if (!context) return; audioEngine.pause(); store.set({ genreId: context.track.genres[0], artistId: context.artist.id, catalogMode: 'all', selectedTrackId: trackId, position: Number(button.dataset.position || 0) }); showView('discover'); openFullPlayer(undefined, button.dataset.openNote ? 'story' : 'room'); seekTo(Number(button.dataset.position || 0)); }));
   viewSurface.querySelectorAll('[data-return-discover]').forEach((button) => button.addEventListener('click', () => showView('discover')));
-  viewSurface.querySelectorAll('[data-genre]').forEach((button) => button.addEventListener('click', () => { showView('discover'); selectGenre(button.dataset.genre); }));
+  viewSurface.querySelectorAll('[data-genre]').forEach((button) => button.addEventListener('click', () => { showView('journeys'); selectGenre(button.dataset.genre); }));
+  viewSurface.querySelectorAll('[data-discover-play], [data-discover-track]').forEach((button) => button.addEventListener('click', () => playSurfaceTrack(button.dataset.discoverPlay || button.dataset.discoverTrack)));
+  viewSurface.querySelector('[data-surprise-me]')?.addEventListener('click', surpriseMe);
+  viewSurface.querySelectorAll('[data-play-release]').forEach((button) => button.addEventListener('click', () => playRelease(button.dataset.playRelease)));
+  viewSurface.querySelectorAll('[data-release-track]').forEach((button) => button.addEventListener('click', () => playSurfaceTrack(button.dataset.releaseTrack)));
+  viewSurface.querySelectorAll('[data-release-song-room]').forEach((button) => button.addEventListener('click', (event) => {
+    const context = findTrackContext(button.dataset.releaseSongRoom);
+    if (!context) return;
+    switchListeningContext(context, { play: false });
+    openFullPlayer(event, 'story');
+  }));
+  viewSurface.querySelectorAll('[data-save-release]').forEach((button) => button.addEventListener('click', () => toggleReleaseSave(button.dataset.saveRelease)));
   viewSurface.querySelectorAll('[data-edit-profile]').forEach((button) => button.addEventListener('click', openOnboarding));
+}
+
+function showView(view) {
+  if (!['discover', 'library', 'journeys', 'profile', 'release'].includes(view)) return;
+  if (view !== 'journeys' && elements.directory.classList.contains('open')) closeMobileDirectory({ restoreFocus: false });
+  store.set({ view });
+  document.body.dataset.view = view;
+  elements.appShell.dataset.view = view;
+  const navigationView = view === 'release' ? 'discover' : view;
+  document.querySelectorAll('.rail-button[data-view], .mobile-nav-button[data-mobile-view]').forEach((button) => {
+    const active = (button.dataset.view || button.dataset.mobileView) === navigationView;
+    button.classList.toggle('active', active);
+    active ? button.setAttribute('aria-current', 'page') : button.removeAttribute('aria-current');
+  });
+  const journeys = view === 'journeys';
+  elements.journey.hidden = !journeys;
+  elements.inspector.hidden = !journeys;
+  viewSurface.hidden = journeys;
+  renderAll();
+  syncJourneyVisibility();
+  if (!journeys) {
+    renderActiveSurface();
+    viewSurface.scrollTo({ top: 0, behavior: 'instant' });
+  }
   syncLocation();
 }
 
@@ -1141,8 +1411,11 @@ function bindEvents() {
   $('closeFullPlayer').addEventListener('click', closeFullPlayer);
   elements.fullSave.addEventListener('click', () => toggleTrackSave());
   elements.transportPlay.addEventListener('click', togglePlaying);
-  elements.volumeControl.value = String(Math.round(state().volume * 100));
-  elements.volumeControl.addEventListener('input', () => { const volume = Number(elements.volumeControl.value) / 100; audioEngine.setVolume(volume); store.set({ volume }, { persist: true }); });
+  syncVolumeUI();
+  elements.volumeControl.addEventListener('input', () => setVolume(Number(elements.volumeControl.value) / 100));
+  elements.fullVolumeControl.addEventListener('input', () => setVolume(Number(elements.fullVolumeControl.value) / 100));
+  elements.volumeMute.addEventListener('click', toggleMute);
+  elements.fullVolumeMute.addEventListener('click', toggleMute);
   elements.fullPlay.addEventListener('click', togglePlaying);
   $('previousTrack').addEventListener('click', () => changeTrack(-1));
   $('nextTrack').addEventListener('click', () => changeTrack(1));
@@ -1209,6 +1482,7 @@ function bindEvents() {
     if (event.code === 'Space' && !interactive && (!modal || modal === elements.fullPlayer)) { event.preventDefault(); togglePlaying(); }
   });
   window.addEventListener('resize', syncJourneyVisibility);
+  reducedMotionQuery.addEventListener?.('change', () => syncWaveformPlayback());
 }
 
 bindEvents();
@@ -1224,11 +1498,16 @@ else if (previewMode === 'library') showView('library');
 else if (previewMode === 'profile') showView('profile');
 else if (previewMode === 'queue') { setPlaying(true); openQueue(); }
 else if (previewMode === 'playing') setPlaying(true);
+else if (previewMode === 'journey') showView('journeys');
+else if (previewMode === 'release') openReleaseChapter('blacktop-studies');
+else if (previewMode === 'reveal') { store.set({ releaseProgress: { ...(state().releaseProgress || {}), 'blacktop-studies': 12 }, unlockedArtifacts: [...new Set([...(state().unlockedArtifacts || []), 'blacktop-studies'])] }); openReleaseChapter('blacktop-studies'); }
 else if (previewMode === 'reopened') { setPlaying(true); toggleJourney(); }
 else if (previewMode === 'player') { setPlaying(true); openFullPlayer(undefined, 'room'); }
 else if (previewMode === 'light') { store.set({ theme: 'light' }); syncAppearance(); }
-else if (previewMode?.startsWith('genre-')) selectGenre(previewMode.replace('genre-', ''));
+else if (previewMode?.startsWith('genre-')) { showView('journeys'); selectGenre(previewMode.replace('genre-', '')); }
 else if (!previewMode && !state().onboardingComplete && !params.has('skip-onboarding')) openOnboarding();
 syncAppearance();
+syncVolumeUI();
+syncWaveformPlayback();
 syncJourneyVisibility();
 syncModalState();

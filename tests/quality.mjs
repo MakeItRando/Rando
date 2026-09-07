@@ -16,6 +16,7 @@ page.on('pageerror', (error) => browserErrors.push(error.message));
 const base = new URL(process.env.RONDO_URL || 'http://127.0.0.1:4173/index.html');
 const skipUrl = new URL(base);
 skipUrl.searchParams.set('skip-onboarding', '1');
+skipUrl.searchParams.set('screen', 'journey');
 const targetSelectors = [
   '#searchTrigger', '#profileTrigger', '#genreSelect', '#mobileDirectoryButton',
   '#playArtist', '#saveArtist', '#skipArtist', '#matchingMode', '#allMode',
@@ -103,18 +104,20 @@ try {
   await page.click('#searchTrigger');
   await page.fill('#globalSearch', 'Signal Memory');
   await page.locator('[data-result-type="release"]').first().click();
-  const releaseTrack = (await page.locator('#barTitle').innerText()).trim();
-  if (releaseTrack !== 'Afterimage') add('high', 'search', `Opening Signal Memory starts “${releaseTrack}” instead of that release.`);
+  if (await page.locator('body').getAttribute('data-view') !== 'release') add('high', 'search', 'Opening Signal Memory should enter its release chapter.');
+  if (!((await page.locator('.release-page h1').innerText()).includes('Signal Memory'))) add('high', 'search', 'Signal Memory chapter title is missing.');
 
-  await page.click('#openFullPlayer');
+  await page.locator('[data-release-song-room]').first().click();
   await page.waitForTimeout(30);
   if ((await page.evaluate(() => document.activeElement?.id)) !== 'closeFullPlayer') add('medium', 'keyboard', 'Immersive player does not focus its close control.');
   await page.keyboard.press('Escape');
   await page.waitForTimeout(40);
-  if ((await page.evaluate(() => document.activeElement?.id)) !== 'openFullPlayer') add('medium', 'keyboard', 'Immersive player does not return focus to its opener.');
+  if (!(await page.evaluate(() => document.activeElement?.hasAttribute('data-release-song-room')))) add('medium', 'keyboard', 'Immersive player does not return focus to its release opener.');
 
-  await page.click('#saveTrack');
-  const savedTrackId = await page.locator('.track-row.active').getAttribute('data-track');
+  await page.locator('[data-release-song-room]').first().click();
+  await page.click('#fullSave');
+  const savedTrackId = await page.locator('#barTitle').evaluate(() => JSON.parse(localStorage.getItem('rondo-prototype-v2') || '{}').savedTracks?.at(-1));
+  await page.keyboard.press('Escape');
   await page.reload({ waitUntil: 'networkidle' });
   const savedIds = await page.evaluate(() => JSON.parse(localStorage.getItem('rondo-prototype-v2') || '{}').savedTracks || []);
   if (!savedIds.includes(savedTrackId)) add('high', 'persistence', 'Saved track did not survive reload.');
@@ -151,7 +154,7 @@ try {
   await page.click('#searchTrigger');
   await page.keyboard.press('Escape');
   if ((await page.evaluate(() => document.activeElement?.id)) !== 'searchTrigger') add('medium', 'keyboard', 'Search does not return focus to its opener.');
-  await page.locator('.artist-focus').click({ position: { x: 4, y: 4 } });
+  await page.locator('.discover-heading').click({ position: { x: 4, y: 4 } });
   await page.keyboard.press('/');
   await page.waitForTimeout(40);
   if ((await page.evaluate(() => document.activeElement?.id)) !== 'globalSearch') add('medium', 'keyboard', 'Search does not receive focus when opened from the keyboard.');
