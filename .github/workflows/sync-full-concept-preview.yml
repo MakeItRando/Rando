@@ -1,4 +1,5 @@
 name: Sync Rondo full-concept preview
+# Retry with self-reporting validation.
 
 on:
   push:
@@ -8,6 +9,10 @@ on:
 
 permissions:
   contents: write
+
+concurrency:
+  group: rondo-full-concept-preview-sync
+  cancel-in-progress: true
 
 jobs:
   sync-and-validate:
@@ -20,44 +25,60 @@ jobs:
           ref: rondo-v031-preview
           fetch-depth: 0
 
-      - name: Mirror validated source candidate
+      - name: Mirror, build, test, and publish
         run: |
-          set -euxo pipefail
-          git fetch --no-tags origin rondo-v031-user-ready
-          find . -mindepth 1 -maxdepth 1 ! -name .git -exec rm -rf {} +
-          git archive FETCH_HEAD | tar -x
-          test ! -e .concept-transfer
-          test ! -e .github/workflows/apply-full-concept.yml
-          git diff --check
+          set -o pipefail
+          {
+            set -eux
+            git fetch --no-tags origin rondo-v031-user-ready
+            find . -mindepth 1 -maxdepth 1 ! -name .git -exec rm -rf {} +
+            git archive FETCH_HEAD | tar -x
+            test ! -e .concept-transfer
+            test ! -e .github/workflows/apply-full-concept.yml
+            npm ci
+            npm audit --audit-level=high
+            npx playwright install --with-deps chromium
+            export CHROMIUM_PATH="$(node -e "console.log(require('playwright').chromium.executablePath())")"
+            npm run check
+            npm run test:unit
+            npm run build:preview
+            cp preview.html rondo-v031-preview.html
+            python3 -m http.server 4173 > /tmp/rondo-preview-server.log 2>&1 &
+            echo $! > /tmp/rondo-preview-server.pid
+            for attempt in {1..20}; do curl -fsS http://127.0.0.1:4173/rondo-v031-preview.html >/dev/null && break; sleep 1; done
+            curl -fsS http://127.0.0.1:4173/rondo-v031-preview.html >/dev/null
+            RONDO_URL=http://127.0.0.1:4173/rondo-v031-preview.html npm run test:browser
+            rm -rf .preview .qa
+            rm -f preview.html preview-test.html preview-*.html
+            test -s rondo-v031-preview.html
+            test ! -e .github/workflows/sync-full-concept-preview.yml
+            git config user.name github-actions[bot]
+            git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+            git add -A
+            git diff --cached --check
+            git commit -m 'chore: publish full-concept preview'
+            git push origin HEAD:rondo-v031-preview
+          } 2>&1 | tee /tmp/preview-sync.log
 
-      - name: Build and validate portable preview
+      - name: Record failure for inspection
+        if: failure()
         run: |
-          set -euxo pipefail
-          npm ci
-          npm audit --audit-level=high
-          npx playwright install --with-deps chromium
-          export CHROMIUM_PATH="$(node -e "console.log(require('playwright').chromium.executablePath())")"
-          npm run check
-          npm run test:unit
-          npm run build:preview
-          cp preview.html rondo-v031-preview.html
-          python3 -m http.server 4173 > /tmp/rondo-preview-server.log 2>&1 &
-          echo $! > /tmp/rondo-preview-server.pid
-          for attempt in {1..20}; do curl -fsS http://127.0.0.1:4173/rondo-v031-preview.html >/dev/null && break; sleep 1; done
-          curl -fsS http://127.0.0.1:4173/rondo-v031-preview.html >/dev/null
-          RONDO_URL=http://127.0.0.1:4173/rondo-v031-preview.html npm run test:browser
-          git diff --check
-
-      - name: Commit clean preview branch
-        run: |
-          set -euxo pipefail
-          rm -rf .preview .qa
-          rm -f preview.html preview-test.html preview-*.html
-          test -s rondo-v031-preview.html
-          test ! -e .github/workflows/sync-full-concept-preview.yml
+          set +e
+          git fetch origin rondo-v031-preview
+          git reset --hard origin/rondo-v031-preview
+          git clean -fd
+          {
+            echo '# Preview sync failure'
+            echo
+            echo "Run: $GITHUB_RUN_ID"
+            echo
+            echo '```text'
+            tail -n 240 /tmp/preview-sync.log 2>/dev/null || true
+            tail -n 80 /tmp/rondo-preview-server.log 2>/dev/null || true
+            echo '```'
+          } > PREVIEW_SYNC_FAILURE.md
           git config user.name github-actions[bot]
           git config user.email 41898282+github-actions[bot]@users.noreply.github.com
-          git add -A
-          git diff --cached --check
-          git commit -m 'chore: publish full-concept preview'
-          git push origin HEAD:rondo-v031-preview
+          git add PREVIEW_SYNC_FAILURE.md
+          git commit -m 'chore: record preview sync failure' || true
+          git push origin HEAD:rondo-v031-preview || true
