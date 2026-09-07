@@ -1,5 +1,5 @@
 name: Apply Rondo full concept
-# Retry 3: every transfer chunk identity verified.
+# Retry 4: include hidden visual evidence in artifact upload.
 
 on:
   push:
@@ -63,6 +63,7 @@ jobs:
           name: rondo-full-concept-qa
           path: .qa/
           if-no-files-found: error
+          include-hidden-files: true
           retention-days: 7
 
       - name: Commit validated candidate and self-clean
