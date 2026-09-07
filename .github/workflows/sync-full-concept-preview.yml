@@ -1,5 +1,5 @@
 name: Sync Rondo full-concept preview
-# Retry with self-reporting validation.
+# Retry with mode-neutral portable regression coverage.
 
 on:
   push:
@@ -43,11 +43,30 @@ jobs:
             npm run test:unit
             npm run build:preview
             cp preview.html rondo-v031-preview.html
+            cmp preview.html rondo-v031-preview.html
             python3 -m http.server 4173 > /tmp/rondo-preview-server.log 2>&1 &
             echo $! > /tmp/rondo-preview-server.pid
             for attempt in {1..20}; do curl -fsS http://127.0.0.1:4173/rondo-v031-preview.html >/dev/null && break; sleep 1; done
             curl -fsS http://127.0.0.1:4173/rondo-v031-preview.html >/dev/null
-            RONDO_URL=http://127.0.0.1:4173/rondo-v031-preview.html npm run test:browser
+            RONDO_URL=http://127.0.0.1:4173/preview-test.html npm run test:browser
+            node --input-type=module <<'NODE'
+          import { chromium } from 'playwright';
+          const browser = await chromium.launch({ headless: true, executablePath: process.env.CHROMIUM_PATH });
+          const page = await browser.newPage({ viewport: { width: 1440, height: 960 } });
+          const errors = [];
+          page.on('pageerror', (error) => errors.push(error.message));
+          page.on('console', (message) => { if (message.type() === 'error') errors.push(message.text()); });
+          await page.goto('http://127.0.0.1:4173/rondo-v031-preview.html');
+          await page.locator('.discover-page').waitFor({ state: 'visible' });
+          if (await page.locator('body').getAttribute('data-view') !== 'discover') throw new Error('Portable preview should open Discover.');
+          await page.locator('[data-discover-play]').first().click();
+          await page.waitForFunction(() => document.body.classList.contains('is-playing'));
+          await page.locator('[data-open-release]').first().click();
+          await page.waitForFunction(() => document.body.dataset.view === 'release');
+          if (errors.length) throw new Error(errors.join(' | '));
+          await browser.close();
+          console.log('Portable preview smoke test passed.');
+          NODE
             rm -rf .preview .qa
             rm -f preview.html preview-test.html preview-*.html
             test -s rondo-v031-preview.html
