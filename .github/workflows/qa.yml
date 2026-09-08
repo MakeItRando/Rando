@@ -1,43 +1,63 @@
-name: Prepare Rondo release candidate
+name: Rondo user-ready QA
 
 on:
   push:
     branches: [rondo-v031-user-ready]
-    paths-ignore:
-      - '.qa/**'
   workflow_dispatch:
 
 permissions:
-  contents: write
+  contents: read
 
 concurrency:
-  group: rondo-release-cleanup
+  group: rondo-user-ready-qa-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
-  cleanup:
+  test:
     runs-on: ubuntu-latest
-    timeout-minutes: 5
+    timeout-minutes: 30
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      - name: Sync release metadata and remove generated QA files
+      - name: Use Node 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - name: Install dependencies
+        run: npm ci
+      - name: Audit dependencies
+        run: npm audit --audit-level=high
+      - name: Install Chromium
         run: |
-          node <<'NODE'
-          const fs = require('fs');
-          const path = 'package-lock.json';
-          const lock = JSON.parse(fs.readFileSync(path, 'utf8'));
-          lock.version = '0.3.2';
-          lock.packages[''].version = '0.3.2';
-          fs.writeFileSync(path, `${JSON.stringify(lock, null, 2)}\n`);
-          NODE
-          git add package-lock.json
-          git rm -r --ignore-unmatch .qa
-          if git diff --cached --quiet; then
-            echo 'Release metadata and generated files are already clean.'
-            exit 0
-          fi
-          git config user.name 'github-actions[bot]'
-          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git commit -m 'chore: prepare v0.3.2 release candidate [skip ci]'
-          git push
+          npx playwright install --with-deps chromium
+          node --input-type=module -e "import { chromium } from 'playwright'; console.log('CHROMIUM_PATH=' + chromium.executablePath())" >> "$GITHUB_ENV"
+      - name: Build portable preview
+        run: npm run build:preview
+      - name: Start preview server
+        run: |
+          python3 -m http.server 4173 > /tmp/rondo-server.log 2>&1 &
+          for attempt in {1..20}; do
+            if curl -fsS http://127.0.0.1:4173/preview-test.html >/dev/null; then
+              exit 0
+            fi
+            sleep 1
+          done
+          cat /tmp/rondo-server.log
+          exit 1
+      - name: Run full regression suite
+        env:
+          RONDO_URL: http://127.0.0.1:4173/preview-test.html
+        run: npm test
+      - name: Capture visual QA
+        env:
+          RONDO_URL: http://127.0.0.1:4173/preview-test.html
+        run: node scripts/capture-visuals.mjs
+      - name: Upload visual report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: rondo-visual-qa-${{ github.run_number }}
+          path: .qa/
+          if-no-files-found: ignore
+          retention-days: 14
