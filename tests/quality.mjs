@@ -202,7 +202,9 @@ try {
     add("high", "navigation", "Discover opened the Journey picker.");
 
   await page.evaluate(() => localStorage.removeItem("rondo-route-state-v1"));
-  const pickerUrl = new URL(discover);
+  const pickerUrl = new URL(base);
+  pickerUrl.searchParams.set("skip-onboarding", "1");
+  pickerUrl.searchParams.delete("screen");
   pickerUrl.hash = "#/journeys";
   await page.goto(pickerUrl.href, { waitUntil: "networkidle" });
   await page.locator("#journeyGenrePicker").waitFor();
