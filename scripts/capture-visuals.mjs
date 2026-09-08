@@ -107,7 +107,12 @@ try {
   const light = await browser.newPage({ viewport: { width: 1440, height: 900 }, colorScheme: 'light' });
   watch(light, 'light');
   await light.goto(target('light'), { waitUntil: 'networkidle' });
-  if (!(await light.locator('#fullPlayer').isVisible())) await light.locator('#openFullPlayer').click();
+  if (await light.locator('#discoveryChoice').isVisible()) {
+    await light.keyboard.press('Escape');
+    await light.locator('#discoveryChoice').waitFor({ state: 'hidden' });
+  }
+  await light.locator('.rail-button[data-view="journeys"]').click();
+  await light.locator('#openFullPlayer').click();
   await light.locator('#fullPlayer').waitFor({ state: 'visible' });
   await capture(light, '11-desktop-song-room-light');
   await light.close();
