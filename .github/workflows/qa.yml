@@ -50,40 +50,27 @@ jobs:
       - name: Run static and unit checks
         run: npm run check && npm run test:unit
       - name: Test app smoke paths
-        run: node tests/smoke.mjs
+        run: node scripts/run-test-with-annotations.mjs "App smoke paths" tests/smoke.mjs
       - name: Test interface quality
-        run: |
-          set +e
-          output=$(node tests/quality.mjs 2>&1)
-          status=$?
-          set -e
-          printf '%s\n' "$output"
-          if [ "$status" -ne 0 ]; then
-            while IFS= read -r line; do
-              if [ -n "$line" ]; then
-                printf '::error title=Interface quality::%s\n' "$line"
-              fi
-            done <<< "$output"
-            exit "$status"
-          fi
+        run: node scripts/run-test-with-annotations.mjs "Interface quality" tests/quality.mjs
       - name: Test Discover and Journey routes
-        run: node tests/discovery-hub.mjs
+        run: node scripts/run-test-with-annotations.mjs "Discover and Journey routes" tests/discovery-hub.mjs
       - name: Test listening flow
-        run: node tests/listening.mjs
+        run: node scripts/run-test-with-annotations.mjs "Listening flow" tests/listening.mjs
       - name: Test Song Room
-        run: node tests/song-room.mjs
+        run: node scripts/run-test-with-annotations.mjs "Song Room" tests/song-room.mjs
       - name: Test audio behavior
-        run: node tests/audio.mjs
+        run: node scripts/run-test-with-annotations.mjs "Audio behavior" tests/audio.mjs
       - name: Test personal surfaces
-        run: node tests/personal.mjs
+        run: node scripts/run-test-with-annotations.mjs "Personal surfaces" tests/personal.mjs
       - name: Test user-ready flow
-        run: node tests/user-ready.mjs
+        run: node scripts/run-test-with-annotations.mjs "User-ready flow" tests/user-ready.mjs
       - name: Test experience details
-        run: node tests/experience.mjs
+        run: node scripts/run-test-with-annotations.mjs "Experience details" tests/experience.mjs
       - name: Test full concept flow
-        run: node tests/full-concept.mjs
+        run: node scripts/run-test-with-annotations.mjs "Full concept flow" tests/full-concept.mjs
       - name: Test release readiness
-        run: node tests/release-ready.mjs
+        run: node scripts/run-test-with-annotations.mjs "Release readiness" tests/release-ready.mjs
       - name: Capture visual QA
         run: node scripts/capture-visuals.mjs
       - name: Publish portable preview
