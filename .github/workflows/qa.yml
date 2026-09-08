@@ -44,7 +44,7 @@ jobs:
           set -o pipefail
           echo '## playwright install' | tee -a .qa/latest.log
           npx playwright install --with-deps chromium 2>&1 | tee -a .qa/latest.log
-          echo "CHROMIUM_PATH=$(node --input-type=module -e \"import { chromium } from 'playwright'; console.log(chromium.executablePath())\")" >> "$GITHUB_ENV"
+          node --input-type=module -e "import { chromium } from 'playwright'; console.log('CHROMIUM_PATH=' + chromium.executablePath())" >> "$GITHUB_ENV"
       - name: Build portable preview
         id: build
         if: steps.chromium.outcome == 'success'
