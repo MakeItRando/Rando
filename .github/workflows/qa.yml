@@ -16,6 +16,8 @@ jobs:
   test:
     runs-on: ubuntu-latest
     timeout-minutes: 30
+    env:
+      RONDO_URL: http://127.0.0.1:4173/preview-test.html
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -45,13 +47,31 @@ jobs:
           done
           cat /tmp/rondo-server.log
           exit 1
-      - name: Run full regression suite
-        env:
-          RONDO_URL: http://127.0.0.1:4173/preview-test.html
-        run: npm test
+      - name: Run static and unit checks
+        run: npm run check && npm run test:unit
+      - name: Test app smoke paths
+        run: node tests/smoke.mjs
+      - name: Test interface quality
+        run: node tests/quality.mjs
+      - name: Test Discover and Journey routes
+        run: node tests/discovery-hub.mjs
+      - name: Test listening flow
+        run: node tests/listening.mjs
+      - name: Test Song Room
+        run: node tests/song-room.mjs
+      - name: Test audio behavior
+        run: node tests/audio.mjs
+      - name: Test personal surfaces
+        run: node tests/personal.mjs
+      - name: Test user-ready flow
+        run: node tests/user-ready.mjs
+      - name: Test experience details
+        run: node tests/experience.mjs
+      - name: Test full concept flow
+        run: node tests/full-concept.mjs
+      - name: Test release readiness
+        run: node tests/release-ready.mjs
       - name: Capture visual QA
-        env:
-          RONDO_URL: http://127.0.0.1:4173/preview-test.html
         run: node scripts/capture-visuals.mjs
       - name: Publish portable preview
         run: |
