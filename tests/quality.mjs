@@ -2,9 +2,9 @@ import { existsSync } from 'node:fs';
 import { chromium } from 'playwright';
 
 const executablePath = process.env.CHROMIUM_PATH || '/usr/local/bin/chromium';
-const launchOptions = { headless: true, args: ['--no-sandbox'] };
-if (existsSync(executablePath)) launchOptions.executablePath = executablePath;
-const browser = await chromium.launch(launchOptions);
+const options = { headless: true, args: ['--no-sandbox'] };
+if (existsSync(executablePath)) options.executablePath = executablePath;
+const browser = await chromium.launch(options);
 const page = await browser.newPage({ viewport: { width: 1440, height: 900 } });
 const findings = [];
 const browserErrors = [];
@@ -12,22 +12,18 @@ const add = (severity, area, message) => findings.push({ severity, area, message
 page.on('console', (message) => { if (message.type() === 'error') browserErrors.push(message.text()); });
 page.on('pageerror', (error) => browserErrors.push(error.message));
 const base = new URL(process.env.RONDO_URL || 'http://127.0.0.1:4173/index.html');
-const firstVisit = new URL(base); firstVisit.search = '';
+const firstVisit = new URL(base); firstVisit.search = ''; firstVisit.hash = '';
+const discover = new URL(base); discover.searchParams.set('skip-onboarding', '1'); discover.searchParams.set('screen', 'discover');
 const journey = new URL(base); journey.searchParams.set('skip-onboarding', '1'); journey.searchParams.set('screen', 'journey');
 
 async function noOverflow(label) {
   const overflow = await page.evaluate(() => document.documentElement.scrollWidth - innerWidth);
   if (overflow > 1) add('high', 'responsive', `${label} has ${overflow}px horizontal overflow.`);
 }
-
 async function openPrimary(view) {
-  const selector = (await page.locator(`[data-mobile-view="${view}"]`).isVisible().catch(() => false)) ? `[data-mobile-view="${view}"]` : `[data-view="${view}"]`;
-  await page.locator(selector).evaluate((button) => button.click());
+  const mobile = await page.locator(`[data-mobile-view="${view}"]`).isVisible().catch(() => false);
+  await page.locator(mobile ? `[data-mobile-view="${view}"]` : `[data-view="${view}"]`).evaluate((button) => button.click());
   await page.waitForFunction((name) => document.body.dataset.view === name, view);
-  if (view === 'discover') {
-    await page.locator('#discoveryChoice').waitFor({ state: 'visible' });
-    await page.click('[data-choose-explore]');
-  }
 }
 
 try {
@@ -55,11 +51,11 @@ try {
 
   for (const viewport of [{ width: 320, height: 700 }, { width: 390, height: 844 }, { width: 768, height: 900 }, { width: 1024, height: 768 }, { width: 1440, height: 900 }]) {
     await page.setViewportSize(viewport);
-    await page.goto(journey.href, { waitUntil: 'networkidle' });
-    await openPrimary('discover');
-    await noOverflow(`${viewport.width}px Explore`);
-    const headingSize = parseFloat(await page.locator('.music-explore h1').evaluate((element) => getComputedStyle(element).fontSize));
-    if (headingSize > 78) add('medium', 'typography', `Explore heading is too large at ${viewport.width}px (${headingSize}px).`);
+    await page.goto(discover.href, { waitUntil: 'networkidle' });
+    await page.locator('main[data-rondo-page="discover"]').waitFor();
+    await noOverflow(`${viewport.width}px Discover`);
+    const headingSize = parseFloat(await page.locator('#discoverTitle').evaluate((element) => getComputedStyle(element).fontSize));
+    if (headingSize > 84) add('medium', 'typography', `Discover heading is too large at ${viewport.width}px (${headingSize}px).`);
     for (const view of ['library', 'profile']) {
       await openPrimary(view);
       await noOverflow(`${viewport.width}px ${view}`);
@@ -68,7 +64,7 @@ try {
 
   await page.setViewportSize({ width: 1440, height: 900 });
   await page.goto(journey.href, { waitUntil: 'networkidle' });
-  const genreIds = await page.locator('#genreSelect option').evaluateAll((options) => options.map((option) => option.value));
+  const genreIds = await page.locator('#genreSelect option').evaluateAll((items) => items.map((item) => item.value));
   for (const genreId of genreIds) {
     await page.selectOption('#genreSelect', genreId);
     const artistCount = await page.locator('.artist-list-item').count();
@@ -79,30 +75,35 @@ try {
   await page.click('#searchTrigger');
   await page.fill('#globalSearch', 'Signal Memory');
   await page.locator('[data-result-type="release"]').first().click();
-  if (await page.locator('body').getAttribute('data-view') !== 'release') add('high', 'search', 'Opening Signal Memory should enter its release page.');
+  if (await page.locator('body').getAttribute('data-view') !== 'release') add('high', 'search', 'Signal Memory should open its release page.');
   await page.locator('[data-release-song-room]').first().click();
   if ((await page.evaluate(() => document.activeElement?.id)) !== 'closeFullPlayer') add('medium', 'keyboard', 'Song Room does not focus its close control.');
-  const songRoom = await page.evaluate(() => ({
+  const room = await page.evaluate(() => ({
     titleSize: parseFloat(getComputedStyle(document.querySelector('.song-room-title h2')).fontSize),
     orbit: getComputedStyle(document.querySelector('.song-room-art'), '::before').display,
     text: document.querySelector('#songRoomPanel')?.textContent || ''
   }));
-  if (songRoom.titleSize > 82) add('medium', 'song-room', `Song Room title is oversized at ${songRoom.titleSize}px.`);
-  if (songRoom.orbit !== 'none') add('medium', 'song-room', 'Song Room still displays decorative orbital artwork.');
-  if (!songRoom.text.includes('About this song')) add('medium', 'copy', 'Song Room does not use plain About copy.');
+  if (room.titleSize > 82) add('medium', 'song-room', `Song Room title is oversized at ${room.titleSize}px.`);
+  if (room.orbit !== 'none') add('medium', 'song-room', 'Song Room still displays decorative orbital artwork.');
+  if (!room.text.includes('About this song')) add('medium', 'copy', 'Song Room does not use plain About copy.');
   await page.keyboard.press('Escape');
-  if (!(await page.evaluate(() => document.activeElement?.hasAttribute('data-release-song-room')))) add('medium', 'keyboard', 'Song Room does not return focus to its opener.');
 
-  await openPrimary('discover');
+  await page.goto(discover.href, { waitUntil: 'networkidle' });
+  await page.locator('main[data-rondo-page="discover"]').waitFor();
   const discoverText = await page.locator('#viewSurface').innerText();
   for (const rejected of ['Find a door, not a feed', 'CONTROLLED SERENDIPITY', 'SIGNALS BETWEEN SONGS']) {
     if (discoverText.includes(rejected)) add('medium', 'copy', `Rejected Discover copy remains: ${rejected}.`);
   }
-  await page.click('.rail-button[data-view="discover"]');
-  await page.locator('#discoveryChoice').waitFor({ state: 'visible' });
-  await page.locator('.discovery-choice-close').focus();
+  if (await page.locator('#journeyGenrePicker').count()) add('high', 'navigation', 'Discover opened the Journey picker.');
+
+  await page.evaluate(() => localStorage.removeItem('rondo-route-state-v1'));
+  const pickerUrl = new URL(discover); pickerUrl.hash = '#/journeys';
+  await page.goto(pickerUrl.href, { waitUntil: 'networkidle' });
+  await page.locator('#journeyGenrePicker').waitFor();
+  await page.locator('[data-picker-genre]').first().focus();
   await page.keyboard.press('Shift+Tab');
-  if (!(await page.evaluate(() => document.querySelector('#discoveryChoice')?.contains(document.activeElement)))) add('high', 'keyboard', 'Discover chooser does not trap focus.');
+  if (!(await page.evaluate(() => document.querySelector('#journeyGenrePicker')?.contains(document.activeElement)))) add('high', 'keyboard', 'Journey picker does not trap focus.');
+  if (!(await page.locator('#appShell').evaluate((element) => element.inert))) add('high', 'keyboard', 'Journey picker background is not inert.');
   await page.keyboard.press('Escape');
 
   if (browserErrors.length) add('high', 'runtime', browserErrors.join(' | '));
