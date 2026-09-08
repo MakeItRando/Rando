@@ -17,7 +17,7 @@ concurrency:
 jobs:
   test:
     runs-on: ubuntu-latest
-    timeout-minutes: 25
+    timeout-minutes: 30
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -77,16 +77,26 @@ jobs:
           set -o pipefail
           echo '## npm test' | tee -a .qa/latest.log
           npm test 2>&1 | tee -a .qa/latest.log
+      - name: Capture visual QA
+        id: visuals
+        if: steps.regression.outcome == 'success'
+        continue-on-error: true
+        env:
+          RONDO_URL: http://127.0.0.1:4173/preview-test.html
+        run: |
+          set -o pipefail
+          echo '## visual QA' | tee -a .qa/latest.log
+          node scripts/capture-visuals.mjs 2>&1 | tee -a .qa/latest.log
       - name: Publish QA diagnostics
         if: always()
         run: |
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add .qa/latest.log
+          git add .qa
           if ! git diff --cached --quiet; then
             git commit -m 'chore: record QA diagnostics [skip ci]'
             git push
           fi
       - name: Report QA failure
-        if: always() && steps.regression.outcome != 'success'
+        if: always() && (steps.regression.outcome != 'success' || steps.visuals.outcome != 'success')
         run: exit 1
