@@ -1,41 +1,41 @@
 ## npm ci
 
-added 4 packages, and audited 5 packages in 871ms
+added 4 packages, and audited 5 packages in 784ms
 
 found 0 vulnerabilities
 ## playwright install
 Installing dependencies...
 Switching to root user to install dependencies...
 Get:1 file:/etc/apt/apt-mirrors.txt Mirrorlist [144 B]
+Get:6 https://packages.microsoft.com/ubuntu/24.04/prod noble InRelease [3600 B]
 Hit:2 http://azure.archive.ubuntu.com/ubuntu noble InRelease
 Get:3 http://azure.archive.ubuntu.com/ubuntu noble-updates InRelease [126 kB]
 Get:4 http://azure.archive.ubuntu.com/ubuntu noble-backports InRelease [126 kB]
 Get:5 http://azure.archive.ubuntu.com/ubuntu noble-security InRelease [126 kB]
-Get:6 https://dl.google.com/linux/chrome-stable/deb stable InRelease [2548 B]
-Get:7 https://packages.microsoft.com/ubuntu/24.04/prod noble InRelease [3600 B]
-Get:8 http://azure.archive.ubuntu.com/ubuntu noble-updates/main amd64 Packages [1260 kB]
-Get:9 http://azure.archive.ubuntu.com/ubuntu noble-updates/main Translation-en [292 kB]
-Get:10 http://azure.archive.ubuntu.com/ubuntu noble-updates/main amd64 Components [180 kB]
-Get:11 http://azure.archive.ubuntu.com/ubuntu noble-updates/universe amd64 Packages [1691 kB]
-Get:12 http://azure.archive.ubuntu.com/ubuntu noble-updates/universe Translation-en [339 kB]
-Get:13 http://azure.archive.ubuntu.com/ubuntu noble-updates/universe amd64 Components [388 kB]
-Get:14 http://azure.archive.ubuntu.com/ubuntu noble-updates/restricted amd64 Packages [1536 kB]
-Get:15 http://azure.archive.ubuntu.com/ubuntu noble-updates/restricted Translation-en [352 kB]
-Get:16 http://azure.archive.ubuntu.com/ubuntu noble-updates/multiverse amd64 Components [940 B]
-Get:17 http://azure.archive.ubuntu.com/ubuntu noble-backports/main amd64 Components [5760 B]
-Get:18 http://azure.archive.ubuntu.com/ubuntu noble-backports/universe amd64 Components [12.6 kB]
-Get:19 http://azure.archive.ubuntu.com/ubuntu noble-security/main amd64 Packages [1002 kB]
-Get:20 http://azure.archive.ubuntu.com/ubuntu noble-security/main Translation-en [212 kB]
-Get:21 http://azure.archive.ubuntu.com/ubuntu noble-security/main amd64 Components [46.3 kB]
-Get:22 http://azure.archive.ubuntu.com/ubuntu noble-security/universe amd64 Packages [1206 kB]
-Get:23 http://azure.archive.ubuntu.com/ubuntu noble-security/universe Translation-en [241 kB]
-Get:24 http://azure.archive.ubuntu.com/ubuntu noble-security/universe amd64 Components [76.2 kB]
-Get:25 http://azure.archive.ubuntu.com/ubuntu noble-security/restricted amd64 Packages [1437 kB]
-Get:27 https://packages.microsoft.com/ubuntu/24.04/prod noble/main arm64 Packages [394 kB]
-Get:26 http://azure.archive.ubuntu.com/ubuntu noble-security/restricted Translation-en [334 kB]
-Get:28 https://packages.microsoft.com/ubuntu/24.04/prod noble/main amd64 Packages [441 kB]
+Get:7 https://dl.google.com/linux/chrome-stable/deb stable InRelease [2548 B]
+Get:8 https://packages.microsoft.com/ubuntu/24.04/prod noble/main amd64 Packages [441 kB]
+Get:9 https://packages.microsoft.com/ubuntu/24.04/prod noble/main arm64 Packages [394 kB]
+Get:10 http://azure.archive.ubuntu.com/ubuntu noble-updates/main amd64 Packages [1260 kB]
+Get:11 http://azure.archive.ubuntu.com/ubuntu noble-updates/main Translation-en [292 kB]
+Get:12 http://azure.archive.ubuntu.com/ubuntu noble-updates/main amd64 Components [180 kB]
+Get:13 http://azure.archive.ubuntu.com/ubuntu noble-updates/universe amd64 Packages [1691 kB]
+Get:14 http://azure.archive.ubuntu.com/ubuntu noble-updates/universe Translation-en [339 kB]
+Get:15 http://azure.archive.ubuntu.com/ubuntu noble-updates/universe amd64 Components [388 kB]
+Get:16 http://azure.archive.ubuntu.com/ubuntu noble-updates/restricted amd64 Packages [1536 kB]
+Get:17 http://azure.archive.ubuntu.com/ubuntu noble-updates/restricted Translation-en [352 kB]
+Get:18 http://azure.archive.ubuntu.com/ubuntu noble-updates/multiverse amd64 Components [940 B]
+Get:19 http://azure.archive.ubuntu.com/ubuntu noble-backports/main amd64 Components [5760 B]
+Get:20 http://azure.archive.ubuntu.com/ubuntu noble-backports/universe amd64 Components [12.6 kB]
+Get:21 http://azure.archive.ubuntu.com/ubuntu noble-security/main amd64 Packages [1002 kB]
+Get:22 http://azure.archive.ubuntu.com/ubuntu noble-security/main Translation-en [212 kB]
+Get:23 http://azure.archive.ubuntu.com/ubuntu noble-security/main amd64 Components [46.3 kB]
+Get:24 http://azure.archive.ubuntu.com/ubuntu noble-security/universe amd64 Packages [1206 kB]
+Get:25 http://azure.archive.ubuntu.com/ubuntu noble-security/universe Translation-en [241 kB]
+Get:26 http://azure.archive.ubuntu.com/ubuntu noble-security/universe amd64 Components [76.2 kB]
+Get:27 http://azure.archive.ubuntu.com/ubuntu noble-security/restricted amd64 Packages [1437 kB]
+Get:28 http://azure.archive.ubuntu.com/ubuntu noble-security/restricted Translation-en [334 kB]
 Get:29 https://dl.google.com/linux/chrome-stable/deb stable/main amd64 Packages [1401 B]
-Fetched 11.8 MB in 1s (9854 kB/s)
+Fetched 11.8 MB in 1s (8899 kB/s)
 Reading package lists...
 Reading package lists...
 Building dependency tree...
@@ -111,7 +111,7 @@ Get:7 http://azure.archive.ubuntu.com/ubuntu noble/main amd64 xfonts-encodings a
 Get:8 http://azure.archive.ubuntu.com/ubuntu noble/main amd64 xfonts-utils amd64 1:7.7+6build3 [94.4 kB]
 Get:9 http://azure.archive.ubuntu.com/ubuntu noble/universe amd64 xfonts-cyrillic all 1:1.0.5+nmu1 [384 kB]
 Get:10 http://azure.archive.ubuntu.com/ubuntu noble/main amd64 xfonts-scalable all 1:1.0.3-1.3 [304 kB]
-Fetched 21.1 MB in 1s (33.8 MB/s)
+Fetched 21.1 MB in 1s (21.4 MB/s)
 Selecting previously unselected package fonts-ipafont-gothic.
 (Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 201676 files and directories currently installed.)
 Preparing to unpack .../0-fonts-ipafont-gothic_00303-21ubuntu1_all.deb ...
@@ -210,7 +210,7 @@ Chromium Headless Shell 140.0.7339.186 (playwright build v1193) downloaded to /h
 
   .preview/app.bundle.js  174.8kb
 
-⚡ Done in 7ms
+⚡ Done in 10ms
 /home/runner/work/Rando/Rando/preview.html
 ## local server
 ## npm test
@@ -233,7 +233,7 @@ Rondo unit tests passed: 8 artists, 15 releases, 39 tracks.
 
 Rondo interaction smoke test passed
 {
-  "checkedAt": "2026-09-08T11:13:48.676Z",
+  "checkedAt": "2026-09-08T11:20:03.484Z",
   "findings": [],
   "metadata": {
     "genreCount": 4,
@@ -249,3 +249,17 @@ Rondo user-ready interaction test passed.
 Rondo final experience regression passed.
 Rondo full-concept regression passed.
 Rondo release-readiness regression passed.
+## visual QA
+node:internal/modules/run_main:123
+    triggerUncaughtException(
+    ^
+
+locator.click: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator('[data-song-room-mode="reveal"]').first()
+
+    at /home/runner/work/Rando/Rando/scripts/capture-visuals.mjs:102:70 {
+  name: 'TimeoutError'
+}
+
+Node.js v20.20.2
