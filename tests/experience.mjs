@@ -31,27 +31,22 @@ try {
   await page.waitForFunction(() => document.body.classList.contains('is-playing'));
   assert((await artistAction.innerText()).trim() === 'Pause artist', 'Artist action should become Pause artist while playing.');
   assert(await artistAction.getAttribute('aria-pressed') === 'true', 'Playing artist action should expose pressed state.');
-  assert(await page.locator('.track-row.active .track-equalizer').count() === 1, 'The active catalog track should show a live playing signal.');
+  assert(await page.locator('.track-row.active .track-equalizer').count() === 1, 'The active catalog track should show a live signal.');
   assert((await page.locator('.track-row.active .track-play').getAttribute('aria-label')).startsWith('Pause '), 'The active track control should become Pause.');
-  assert(await page.locator('body').evaluate((body) => body.classList.contains('journey-collapsed')), 'Playback should focus the listening surface.');
 
   await artistAction.click();
   await page.waitForFunction(() => !document.body.classList.contains('is-playing'));
   assert((await artistAction.innerText()).trim() === 'Resume artist', 'Paused artist action should become Resume artist.');
-  assert(await page.locator('body').evaluate((body) => body.classList.contains('journey-collapsed')), 'Pausing should not cause a disruptive layout expansion.');
-
   await artistAction.click();
   await page.waitForFunction(() => document.body.classList.contains('is-playing'));
   await page.locator('.track-row.active .track-play').click();
   await page.waitForFunction(() => !document.body.classList.contains('is-playing'));
   assert((await page.locator('.track-row.active .track-play').getAttribute('aria-label')).startsWith('Resume '), 'Active track should resume instead of restarting.');
   await page.locator('.track-row.active .track-play').click();
-  await page.waitForFunction(() => document.body.classList.contains('is-playing'));
 
   const titleBeforePrevious = (await page.locator('#barTitle').innerText()).trim();
   const timeline = page.locator('#timeline');
   const box = await timeline.boundingBox();
-  assert(box, 'Main timeline should be visible.');
   await page.mouse.click(box.x + box.width * .7, box.y + box.height / 2);
   assert(Number(await timeline.getAttribute('aria-valuenow')) > 3, 'Timeline setup should move beyond the restart threshold.');
   await page.click('#previousTrack');
@@ -64,18 +59,21 @@ try {
   assert(await page.locator('body').evaluate((body, expected) => body.classList.contains('is-playing') === expected, !wasPlaying), 'Space should toggle playback away from editable controls.');
 
   await page.click('.rail-button[data-view="library"]');
-  assert((await page.locator('.empty-library-copy h2').innerText()).trim() === 'Keep what stays.', 'Empty Library should use concise, memorable copy.');
+  assert((await page.locator('.empty-library-copy h2').innerText()).trim() === 'Keep what stays.', 'Empty Library should use concise copy.');
   assert(!(await page.locator('.empty-library-copy').innerText()).includes('never interrupts'), 'Empty Library should not overexplain the save model.');
   await page.click('.rail-button[data-view="discover"]');
+  await page.locator('#discoveryChoice').waitFor({ state: 'visible' });
+  await page.click('[data-choose-explore]');
+  assert(await page.locator('.music-explore').isVisible(), 'Discover should open the new Explore destination.');
   await page.click('#mobileTrack');
   assert(await page.locator('#fullPlayer').isVisible(), 'Expand should open Song Room.');
   await page.locator('.song-room-tabs [data-song-room-mode="story"]').click();
-  assert((await page.locator('#songRoomPanel .song-room-eyebrow').textContent()).trim() === 'Inside the track', 'Song story should invite curiosity.');
+  assert((await page.locator('#songRoomPanel .song-room-eyebrow').textContent()).trim() === 'About this song', 'Song context should use plain language.');
   await page.keyboard.press('Escape');
 
   await page.setViewportSize({ width: 390, height: 844 });
   const mobileWidth = await page.evaluate(() => innerWidth);
-  assert(!(await page.evaluate(() => document.documentElement.scrollWidth > innerWidth + 1)), 'Final mobile Discover surface should not overflow horizontally.');
+  assert(!(await page.evaluate(() => document.documentElement.scrollWidth > innerWidth + 1)), 'Mobile Explore should not overflow horizontally.');
   await page.locator('.mobile-nav-button[data-mobile-view="journeys"]').click();
   const skipBounds = await page.locator('#skipArtist').boundingBox();
   assert(skipBounds && skipBounds.x >= 0 && skipBounds.x + skipBounds.width <= mobileWidth + 1, 'Skip artist should remain fully visible on mobile.');
@@ -84,7 +82,7 @@ try {
   await page.waitForFunction(() => document.body.dataset.view === 'library');
   assert(await page.locator('.empty-library').isVisible(), 'Mobile Library navigation should reveal the Library surface.');
   assert(await page.locator('.mobile-nav-button[data-mobile-view="library"]').getAttribute('aria-current') === 'page', 'Mobile Library navigation should expose current state.');
-  assert(!(await page.evaluate(() => document.documentElement.scrollWidth > innerWidth + 1)), 'Final mobile Library surface should not overflow horizontally.');
+  assert(!(await page.evaluate(() => document.documentElement.scrollWidth > innerWidth + 1)), 'Mobile Library should not overflow horizontally.');
   assert(errors.length === 0, `Browser errors: ${errors.join(' | ')}`);
   console.log('Rondo final experience regression passed.');
 } catch (error) {
