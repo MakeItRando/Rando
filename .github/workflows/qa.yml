@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write
 
 concurrency:
   group: rondo-user-ready-qa-${{ github.ref }}
@@ -53,6 +53,24 @@ jobs:
         env:
           RONDO_URL: http://127.0.0.1:4173/preview-test.html
         run: node scripts/capture-visuals.mjs
+      - name: Publish portable preview
+        run: |
+          test -s preview.html
+          git fetch origin rondo-v031-preview
+          rm -rf /tmp/rondo-preview
+          git worktree add /tmp/rondo-preview origin/rondo-v031-preview
+          cd /tmp/rondo-preview
+          git switch -C rondo-v031-preview
+          cp "$GITHUB_WORKSPACE/preview.html" rondo-v031-preview.html
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add rondo-v031-preview.html
+          if git diff --cached --quiet; then
+            echo 'Portable preview is already current.'
+            exit 0
+          fi
+          git commit -m 'preview: publish v0.3.2 candidate'
+          git push origin HEAD:rondo-v031-preview
       - name: Upload visual report
         if: always()
         uses: actions/upload-artifact@v4
