@@ -98,7 +98,7 @@ try {
   await desktop.locator('.genre-song').first().click();
   await desktop.locator('#fullPlayer').waitFor({ state: 'visible' });
   await capture(desktop, '06-desktop-song-room-about');
-  for (const [mode, name] of [['lyrics', '07-desktop-song-room-lyrics'], ['credits', '08-desktop-song-room-credits'], ['queue', '09-desktop-song-room-queue'], ['reveal', '10-desktop-song-room-extra']]) {
+  for (const [mode, name] of [['lyrics', '07-desktop-song-room-lyrics'], ['credits', '08-desktop-song-room-credits'], ['queue', '09-desktop-song-room-queue'], ['reveals', '10-desktop-song-room-extra']]) {
     await desktop.locator(`[data-song-room-mode="${mode}"]`).first().click();
     await capture(desktop, name);
   }
