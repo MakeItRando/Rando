@@ -103,7 +103,7 @@ try {
   await mobile.click('[data-mobile-view="library"]');
   assert(await mobile.locator('.empty-library').isVisible(), 'Mobile Library should be reachable.');
   await mobile.click('[data-mobile-view="profile"]');
-  assert(await mobile.locator('.profile-page').isVisible(), 'Mobile Profile should be reachable.');
+  assert(await mobile.locator('.profile-summary').isVisible(), 'Mobile Profile should be reachable.');
   await mobile.click('[data-mobile-view="journeys"]');
   assert(await mobile.locator('#mobileDirectoryButton').isVisible(), 'Artist directory trigger should appear in Journeys.');
 
