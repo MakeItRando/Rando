@@ -25,38 +25,61 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: npm
-      - name: Run and capture full QA
-        id: qa
+      - name: Initialize diagnostics
+        run: |
+          mkdir -p .qa
+          : > .qa/latest.log
+      - name: Install dependencies
+        id: dependencies
         continue-on-error: true
         run: |
-          set +e
-          {
-            npm ci || exit $?
-            npx playwright install --with-deps chromium || exit $?
-            export CHROMIUM_PATH="$(node --input-type=module -e \"import { chromium } from 'playwright'; console.log(chromium.executablePath())\")"
-            npm run build:preview || exit $?
-            python3 -m http.server 4173 > /tmp/rondo-server.log 2>&1 &
-            server_pid=$!
-            ready=0
-            for attempt in {1..20}; do
-              if curl -fsS http://127.0.0.1:4173/preview-test.html >/dev/null; then ready=1; break; fi
-              sleep 1
-            done
-            if [ "$ready" != 1 ]; then cat /tmp/rondo-server.log; exit 1; fi
-            RONDO_URL=http://127.0.0.1:4173/preview-test.html npm test
-            status=$?
-            kill "$server_pid" 2>/dev/null || true
-            exit "$status"
-          } 2>&1 | tee /tmp/rondo-qa.log
-          status=${PIPESTATUS[0]}
-          echo "status=$status" >> "$GITHUB_OUTPUT"
-          exit "$status"
+          set -o pipefail
+          echo '## npm ci' | tee -a .qa/latest.log
+          npm ci 2>&1 | tee -a .qa/latest.log
+      - name: Install Chromium
+        id: chromium
+        if: steps.dependencies.outcome == 'success'
+        continue-on-error: true
+        run: |
+          set -o pipefail
+          echo '## playwright install' | tee -a .qa/latest.log
+          npx playwright install --with-deps chromium 2>&1 | tee -a .qa/latest.log
+          echo "CHROMIUM_PATH=$(node --input-type=module -e \"import { chromium } from 'playwright'; console.log(chromium.executablePath())\")" >> "$GITHUB_ENV"
+      - name: Build portable preview
+        id: build
+        if: steps.chromium.outcome == 'success'
+        continue-on-error: true
+        run: |
+          set -o pipefail
+          echo '## npm run build:preview' | tee -a .qa/latest.log
+          npm run build:preview 2>&1 | tee -a .qa/latest.log
+      - name: Start local site
+        id: server
+        if: steps.build.outcome == 'success'
+        continue-on-error: true
+        run: |
+          set -o pipefail
+          echo '## local server' | tee -a .qa/latest.log
+          python3 -m http.server 4173 > /tmp/rondo-server.log 2>&1 &
+          for attempt in {1..20}; do
+            if curl -fsS http://127.0.0.1:4173/preview-test.html >/dev/null; then exit 0; fi
+            sleep 1
+          done
+          cat /tmp/rondo-server.log | tee -a .qa/latest.log
+          exit 1
+      - name: Run full regression suite
+        id: regression
+        if: steps.server.outcome == 'success'
+        continue-on-error: true
+        env:
+          RONDO_URL: http://127.0.0.1:4173/preview-test.html
+        run: |
+          set -o pipefail
+          echo '## npm test' | tee -a .qa/latest.log
+          npm test 2>&1 | tee -a .qa/latest.log
       - name: Publish QA diagnostics
         if: always()
         run: |
-          mkdir -p .qa
-          if [ -f /tmp/rondo-qa.log ]; then cp /tmp/rondo-qa.log .qa/latest.log; else echo 'QA did not produce a log.' > .qa/latest.log; fi
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           git add .qa/latest.log
@@ -65,5 +88,5 @@ jobs:
             git push
           fi
       - name: Report QA failure
-        if: steps.qa.outcome == 'failure'
+        if: always() && steps.regression.outcome != 'success'
         run: exit 1
