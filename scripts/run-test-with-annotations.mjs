@@ -20,6 +20,9 @@ if (status !== 0) {
   const details = [result.stdout, result.stderr, result.error?.stack]
     .filter(Boolean)
     .join("\n")
+    .split("\n")
+    .filter((line) => line.length < 1200)
+    .join("\n")
     .slice(-20000);
   const escapeWorkflowCommand = (value) =>
     String(value)
