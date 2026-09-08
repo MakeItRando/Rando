@@ -26,39 +26,37 @@ jobs:
         with:
           node-version: 20
           cache: npm
-      - name: Install dependencies
-        run: npm ci
-      - name: Install Chromium
-        run: npx playwright install --with-deps chromium
-      - name: Resolve Chromium path
-        run: echo "CHROMIUM_PATH=$(node --input-type=module -e \"import { chromium } from 'playwright'; console.log(chromium.executablePath())\")" >> "$GITHUB_ENV"
-      - name: Build portable preview
-        run: npm run build:preview
-      - name: Start local site
-        run: |
-          python3 -m http.server 4173 > /tmp/rondo-server.log 2>&1 &
-          for attempt in {1..20}; do
-            curl -fsS http://127.0.0.1:4173/preview-test.html >/dev/null && exit 0
-            sleep 1
-          done
-          cat /tmp/rondo-server.log
-          exit 1
-      - name: Run full regression suite
-        id: regression
+      - name: Run and capture full QA
+        id: qa
         continue-on-error: true
-        env:
-          RONDO_URL: http://127.0.0.1:4173/preview-test.html
         run: |
           set +e
-          npm test 2>&1 | tee /tmp/rondo-qa.log
+          {
+            npm ci &&
+            npx playwright install --with-deps chromium &&
+            export CHROMIUM_PATH="$(node --input-type=module -e \"import { chromium } from 'playwright'; console.log(chromium.executablePath())\")" &&
+            npm run build:preview &&
+            python3 -m http.server 4173 > /tmp/rondo-server.log 2>&1 &
+            server_pid=$!
+            ready=0
+            for attempt in {1..20}; do
+              if curl -fsS http://127.0.0.1:4173/preview-test.html >/dev/null; then ready=1; break; fi
+              sleep 1
+            done
+            if [ "$ready" != 1 ]; then cat /tmp/rondo-server.log; exit 1; fi
+            RONDO_URL=http://127.0.0.1:4173/preview-test.html npm test
+            status=$?
+            kill "$server_pid" 2>/dev/null || true
+            exit "$status"
+          } 2>&1 | tee /tmp/rondo-qa.log
           status=${PIPESTATUS[0]}
           echo "status=$status" >> "$GITHUB_OUTPUT"
           exit "$status"
       - name: Publish QA diagnostics
-        if: always() && hashFiles('/tmp/rondo-qa.log') != ''
+        if: always()
         run: |
           mkdir -p .qa
-          cp /tmp/rondo-qa.log .qa/latest.log
+          if [ -f /tmp/rondo-qa.log ]; then cp /tmp/rondo-qa.log .qa/latest.log; else echo 'QA did not produce a log.' > .qa/latest.log; fi
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           git add .qa/latest.log
@@ -66,6 +64,6 @@ jobs:
             git commit -m 'chore: record QA diagnostics [skip ci]'
             git push
           fi
-      - name: Report regression failure
-        if: steps.regression.outcome == 'failure'
+      - name: Report QA failure
+        if: steps.qa.outcome == 'failure'
         run: exit 1
