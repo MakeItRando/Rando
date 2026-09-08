@@ -2,26 +2,27 @@
 
 **Find your next repeat.**
 
-Rondo is a music-discovery and listening prototype. Discover helps someone choose a sound or browse across genres. Journeys offers a slower artist-by-artist path. Any song can open in the Song Room for focused listening.
+Rondo is a music-discovery and listening prototype. Discover is the fast, song-first home. Journeys is the slower path through a genre, its artists, releases, and tracks. Any song can open in the Song Room for focused listening.
 
-Rondo is not a Spotify client or wrapper. It owns its library, discovery flow, journeys, queue, player, and brand. Future catalog providers stay behind replaceable connectors.
+Rondo is not a Spotify client or wrapper. It owns its discovery flow, journeys, queue, player, and brand. Future catalog providers stay behind replaceable connectors.
 
 ## Current release — v0.3.2 user-test candidate
 
 This candidate focuses on a clear, human music experience:
 
-- **Discover opens a chooser** instead of another feed;
-- choosing a genre leads to a dedicated playlist with search, a mix action, album art, style, duration, and direct playback;
-- **Browse everything** opens Explore with search, Popular now, Hidden gems, and songs grouped by genre;
-- Discover and Journeys remain separate so quick listening does not replace artist exploration;
-- albums and EPs have distinct artwork rather than generic repeated cards;
+- **Discover opens directly** with search, Continue listening, Hits today, Made for you, Bangers, Sounds, Hidden gems, New & rising, and compact links into Genre Journeys;
+- Discover never interrupts someone with a genre chooser;
+- **Journeys owns genre choice**: a first-time listener sees a focused picker, while a returning listener resumes the last active genre;
+- each genre is a distinct, deep-linkable Journey subpage with progress, scoped search, songs, releases, artists, Play mix, Start/Resume, and Change genre;
+- meaningful progress is saved independently for Hip-Hop, R&B, Electronic, and Jazz;
+- route-backed page states support browser Back/Forward, page titles, heading focus, one visible main landmark, and stable global playback;
+- changing Journey genres does not erase earlier progress, and playing from Discover does not replace the active Journey;
 - the Song Room uses the active cover, restrained motion, a truthful waveform, clear transport controls, and expressive volume feedback;
-- visible Song Room labels use familiar words: About, Lyrics, Credits, Extra, and Up next;
-- artist playback says Play, Pause, or Resume truthfully and preserves position;
-- desktop, mobile, 320px layouts, keyboard access, focus handling, Light appearance, and Reduced Motion are covered by regression tests;
+- artist playback says Play, Pause, or Resume truthfully and preserves listening context;
+- desktop, mobile, 320px layouts, keyboard access, Light appearance, and Reduced Motion are covered by regression and visual tests;
 - the portable preview contains six original Rondo demo recordings and a fictional catalog for prototype testing.
 
-The prototype does not include real artists, licensed songs, production accounts, provider credentials, or backend services yet. Those come after this experience is approved.
+The prototype does not include real artists, licensed songs, production accounts, provider credentials, live charts, or backend services yet. Those come after this experience is approved.
 
 ## Preview locally
 
@@ -42,23 +43,31 @@ RONDO_URL=http://127.0.0.1:4173/preview-test.html npm test
 npm audit
 ```
 
-The build also produces `preview.html`, a self-contained file for user testing.
+The build also produces `preview.html`, a portable file for user testing.
 
 ## Product hierarchy
 
 ```text
 Discover
-  → choose a genre → genre playlist → song
-  → Browse everything → Explore → song
+  → search / recommendations / sounds → song → Song Room
+  → Genre Journeys → Journey genre page
 Journeys
-  → genre → alphabetical artist → release → song
+  → first visit: genre picker
+  → /journeys/<genre> → songs / releases / artists
+  → /journeys/<genre>/artist/<artist> → guided artist Journey
 Any song
   → Song Room → About / Lyrics / Credits / Extra / Up next
 ```
 
+## Page architecture
+
+Rondo uses route-backed SPA pages such as `#/discover`, `#/journeys/rnb`, and `#/journeys/rnb/artist/mira-son`. This gives each destination a distinct URL and accessible page state while keeping the active song, queue, position, and Song Room uninterrupted.
+
+Routes do not make the JavaScript bundle smaller by themselves. The current performance gains come from rendering only the active page, removing duplicate hidden content, and lazy-loading artwork. Later code splitting can reduce initial download size when the catalog and feature set grow.
+
 ## Architecture
 
-The prototype separates catalog data, journey rules, persisted state, views, artwork ambience, Song Room rendering, and provider-neutral audio. UI code consumes normalized Rondo objects; future providers stay behind connector interfaces. See [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md).
+The prototype separates catalog data, journey rules, persisted state, page routing, artwork ambience, Song Room rendering, and provider-neutral audio. UI code consumes normalized Rondo objects; future providers stay behind connector interfaces. See [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md).
 
 ## Documentation
 
