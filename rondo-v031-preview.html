@@ -2343,6 +2343,564 @@ body.is-playing .song-room-art img { animation: songCover var(--vibe-duration) e
   .song-room-backdrop::before,
   .song-room-art img { animation: none !important; transition: none !important; }
 }
+
+:root { --rondo-routes: 1; }
+
+/* Route-backed Discover and Journey genre pages */
+.genre-picker[hidden],
+.journey-genre-page[hidden],
+.journey-picker-overlay[hidden],
+.music-search-results[hidden],
+.sound-results[hidden],
+.journey-genre-results[hidden] { display: none !important; }
+
+.route-page { min-width: 0; }
+.discovery-surface {
+  overflow-x: hidden;
+  overflow-y: auto;
+  scrollbar-gutter: stable;
+}
+.discover-home {
+  min-height: 100%;
+  color: #f4f5f7;
+  background:
+    radial-gradient(circle at 78% 5%, rgba(var(--genre-rgb), .11), transparent 29%),
+    linear-gradient(180deg, #0c0e13 0, #090a0e 420px);
+}
+.discover-home-head {
+  min-height: 310px;
+  padding: clamp(42px, 6vw, 82px) clamp(24px, 5vw, 76px) 46px;
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 32px;
+  border-bottom: 1px solid rgba(255, 255, 255, .09);
+}
+.discover-home-head > div > span,
+.journey-genre-copy > span,
+.journey-progress-card small,
+.journey-page-section > header span,
+.sound-results > header span {
+  color: var(--genre-accent);
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: .11em;
+  text-transform: uppercase;
+}
+.discover-home-head h1 {
+  max-width: 720px;
+  margin: 9px 0 0;
+  font-size: clamp(46px, 6.2vw, 82px);
+  line-height: .92;
+  letter-spacing: -.064em;
+}
+.discover-home-head p {
+  margin: 15px 0 0;
+  color: rgba(244, 245, 247, .57);
+  font-size: clamp(14px, 1.25vw, 18px);
+}
+.discover-home-head > button {
+  min-width: 146px;
+  min-height: 48px;
+  padding: 0 18px;
+  border: 1px solid rgba(255, 255, 255, .18);
+  border-radius: 999px;
+  color: #f4f5f7;
+  background: rgba(255, 255, 255, .035);
+  cursor: pointer;
+  font-weight: 750;
+}
+.discover-home-head > button span { margin-left: 16px; color: var(--genre-accent); }
+
+.discover-continue {
+  min-height: 96px;
+  margin: 22px clamp(24px, 5vw, 76px) 0;
+  padding: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  border: 1px solid rgba(255, 255, 255, .11);
+  border-radius: 10px;
+  background: linear-gradient(100deg, rgba(var(--genre-rgb), .1), rgba(255, 255, 255, .018));
+}
+.discover-continue > div {
+  min-width: 0;
+  display: grid;
+  grid-template-columns: 66px minmax(0, 1fr);
+  align-items: center;
+  gap: 14px;
+}
+.discover-continue img { width: 66px; height: 66px; border-radius: 6px; object-fit: cover; }
+.discover-continue span { min-width: 0; }
+.discover-continue small,
+.discover-continue strong,
+.discover-continue b { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.discover-continue small { color: var(--genre-accent); font-size: 9px; font-weight: 800; letter-spacing: .08em; }
+.discover-continue strong { margin-top: 4px; font-size: 17px; }
+.discover-continue b { margin-top: 3px; color: rgba(244, 245, 247, .5); font-size: 11px; font-weight: 500; }
+.discover-continue > button {
+  flex: 0 0 auto;
+  min-height: 44px;
+  padding: 0 16px;
+  border: 0;
+  border-radius: 6px;
+  color: #0a0b0e;
+  background: var(--genre-accent);
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 800;
+}
+.discover-continue > button span { margin-left: 14px; }
+.discover-search { margin-top: 22px; }
+.music-section > header > p {
+  max-width: 280px;
+  margin: 0;
+  color: rgba(244, 245, 247, .45);
+  font-size: 12px;
+  line-height: 1.45;
+  text-align: right;
+}
+.music-card { min-height: 0; }
+.music-card-art { overflow: hidden; background: rgba(255, 255, 255, .04); }
+.music-card-art img { aspect-ratio: 1; }
+.music-card-copy small { color: rgba(244, 245, 247, .36); }
+
+.sound-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
+}
+.sound-grid > button {
+  position: relative;
+  min-height: 128px;
+  padding: 20px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, .11);
+  border-radius: 9px;
+  color: #f4f5f7;
+  background: rgba(255, 255, 255, .025);
+  cursor: pointer;
+  text-align: left;
+}
+.sound-grid > button > span {
+  position: absolute;
+  width: 74px;
+  height: 74px;
+  right: -18px;
+  top: -17px;
+  border: 1px solid rgba(var(--genre-rgb), .45);
+  border-radius: 50%;
+  box-shadow: 0 0 0 16px rgba(var(--genre-rgb), .025), 0 0 0 34px rgba(var(--genre-rgb), .018);
+}
+.sound-grid strong,
+.sound-grid small { position: relative; display: block; }
+.sound-grid strong { margin-top: 41px; font-size: 17px; letter-spacing: -.02em; }
+.sound-grid small { margin-top: 5px; color: rgba(244, 245, 247, .48); font-size: 10px; }
+.sound-grid > button.active,
+.sound-grid > button:hover { border-color: rgba(var(--genre-rgb), .75); background: rgba(var(--genre-rgb), .09); }
+.sound-results {
+  margin-top: 14px;
+  padding: 18px;
+  border: 1px solid rgba(255, 255, 255, .11);
+  border-radius: 10px;
+  background: #101218;
+}
+.sound-results > header { margin-bottom: 17px; display: flex; align-items: start; justify-content: space-between; }
+.sound-results h3 { margin: 5px 0 0; font-size: 23px; letter-spacing: -.03em; }
+.sound-results > header button {
+  width: 44px;
+  height: 44px;
+  border: 1px solid rgba(255, 255, 255, .12);
+  border-radius: 50%;
+  color: #f4f5f7;
+  background: transparent;
+  cursor: pointer;
+  font-size: 20px;
+}
+
+.discover-genre-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 11px; }
+.discover-genre-card {
+  min-width: 0;
+  min-height: 116px;
+  padding: 12px;
+  display: grid;
+  grid-template-columns: 90px minmax(0, 1fr);
+  align-items: center;
+  gap: 16px;
+  border: 1px solid rgba(255, 255, 255, .11);
+  border-radius: 9px;
+  color: #f4f5f7;
+  background: rgba(255, 255, 255, .02);
+  cursor: pointer;
+  text-align: left;
+}
+.discover-genre-cover { position: relative; display: block; width: 90px; height: 90px; overflow: hidden; border-radius: 6px; }
+.discover-genre-cover img { width: 100%; height: 100%; object-fit: cover; filter: saturate(.82); transition: transform 220ms ease; }
+.discover-genre-cover i { position: absolute; inset: 0; background: linear-gradient(135deg, transparent, rgba(var(--genre-rgb), .25)); }
+.discover-genre-card > span:last-child { min-width: 0; }
+.discover-genre-card small,
+.discover-genre-card strong,
+.discover-genre-card b { display: block; }
+.discover-genre-card small { color: rgba(244, 245, 247, .42); font-size: 9px; letter-spacing: .05em; }
+.discover-genre-card strong { margin-top: 7px; font-size: 23px; letter-spacing: -.035em; }
+.discover-genre-card b { margin-top: 9px; color: var(--genre-accent); font-size: 10px; }
+.discover-genre-card:hover { border-color: rgba(var(--genre-rgb), .55); background: rgba(var(--genre-rgb), .055); }
+.discover-genre-card:hover img { transform: scale(1.035); }
+
+/* Journey subpages */
+.workspace.journey-genre-open { grid-template-columns: minmax(0, 1fr); }
+.journey-genre-page {
+  grid-column: 1 / -1;
+  grid-row: 1;
+  min-width: 0;
+  height: 100%;
+  overflow-x: hidden;
+  overflow-y: auto;
+  color: #f4f5f7;
+  background:
+    radial-gradient(circle at 83% 0, rgba(var(--genre-rgb), .16), transparent 29%),
+    #090a0e;
+  scrollbar-gutter: stable;
+}
+.journey-genre-page[data-genre="hiphop"] { --journey-page-rgb: 235, 77, 48; }
+.journey-genre-page[data-genre="rnb"] { --journey-page-rgb: 205, 99, 164; }
+.journey-genre-page[data-genre="electronic"] { --journey-page-rgb: 55, 200, 192; }
+.journey-genre-page[data-genre="jazz"] { --journey-page-rgb: 222, 168, 74; }
+.journey-genre-hero {
+  min-height: 390px;
+  padding: clamp(36px, 5vw, 68px) clamp(24px, 5vw, 76px) 48px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(280px, 40%);
+  align-items: center;
+  gap: 38px;
+  border-bottom: 1px solid rgba(255, 255, 255, .1);
+  background: linear-gradient(115deg, rgba(var(--journey-page-rgb), .12), transparent 58%);
+}
+.journey-genre-copy > button {
+  min-height: 44px;
+  margin-bottom: 38px;
+  padding: 0;
+  border: 0;
+  color: rgba(244, 245, 247, .58);
+  background: transparent;
+  cursor: pointer;
+  font-size: 11px;
+}
+.journey-genre-copy > button:hover { color: #f4f5f7; }
+.journey-genre-copy > span { color: rgb(var(--journey-page-rgb)); }
+.journey-genre-copy h1 {
+  margin: 8px 0 0;
+  font-size: clamp(55px, 8vw, 110px);
+  line-height: .86;
+  letter-spacing: -.075em;
+}
+.journey-genre-copy p { margin: 16px 0 0; color: rgba(244, 245, 247, .49); font-size: 13px; }
+.journey-genre-actions { margin-top: 28px; display: flex; align-items: center; flex-wrap: wrap; gap: 9px; }
+.journey-genre-actions button {
+  min-height: 46px;
+  padding: 0 17px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 11px;
+  font-weight: 800;
+}
+.journey-genre-actions .primary-action { border: 1px solid rgb(var(--journey-page-rgb)); color: #090a0d; background: rgb(var(--journey-page-rgb)); }
+.journey-genre-actions .secondary-action { border: 1px solid rgba(255, 255, 255, .16); color: #f4f5f7; background: rgba(255, 255, 255, .035); }
+.journey-genre-actions .text-action { border: 0; color: rgba(244, 245, 247, .55); background: transparent; }
+.journey-genre-art { position: relative; min-height: 280px; }
+.journey-genre-art > span {
+  position: absolute;
+  width: min(230px, 68%);
+  aspect-ratio: 1;
+  left: calc(50% - 115px + (var(--stack) * 28px));
+  top: calc(var(--stack) * 12px);
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, .13);
+  border-radius: 8px;
+  box-shadow: 0 22px 50px rgba(0, 0, 0, .34);
+  transform: rotate(calc((var(--stack) - 1) * 4deg));
+}
+.journey-genre-art > span:first-child { z-index: 3; }
+.journey-genre-art > span:nth-child(2) { z-index: 2; }
+.journey-genre-art img { width: 100%; height: 100%; object-fit: cover; }
+
+.journey-progress-card {
+  min-height: 120px;
+  margin: 22px clamp(24px, 5vw, 76px) 0;
+  padding: 20px;
+  display: grid;
+  grid-template-columns: 92px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 22px;
+  border: 1px solid rgba(255, 255, 255, .11);
+  border-radius: 10px;
+  background: rgba(255, 255, 255, .025);
+}
+.journey-progress-card > div:first-child { position: relative; width: 78px; height: 78px; display: grid; place-items: center; }
+.journey-progress-card > div:first-child > span { position: relative; z-index: 1; font-size: 16px; font-weight: 800; }
+.journey-progress-card i { position: absolute; inset: 0; overflow: hidden; border: 1px solid rgba(255, 255, 255, .12); border-radius: 50%; }
+.journey-progress-card i b { position: absolute; inset: auto 0 0; min-height: 2px; background: rgba(var(--journey-page-rgb), .38); }
+.journey-progress-card h2 { margin: 5px 0 0; font-size: 25px; line-height: 1; letter-spacing: -.035em; }
+.journey-progress-card p { margin: 7px 0 0; color: rgba(244, 245, 247, .46); font-size: 11px; }
+.journey-progress-card > button {
+  min-height: 44px;
+  padding: 0 16px;
+  border: 1px solid rgba(255, 255, 255, .14);
+  border-radius: 6px;
+  color: #f4f5f7;
+  background: transparent;
+  cursor: pointer;
+  font-size: 11px;
+  font-weight: 800;
+}
+.journey-genre-search { margin-top: 22px; }
+.journey-genre-results {
+  margin: 12px clamp(24px, 5vw, 76px) 0;
+  border: 1px solid rgba(255, 255, 255, .1);
+  border-radius: 8px;
+  background: #101218;
+}
+.journey-genre-results > header { height: 43px; padding: 0 16px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid rgba(255, 255, 255, .09); color: rgba(244, 245, 247, .5); font-size: 11px; }
+.journey-genre-results > p { padding: 20px; color: rgba(244, 245, 247, .5); }
+.journey-page-section { padding: 54px clamp(24px, 5vw, 76px); border-bottom: 1px solid rgba(255, 255, 255, .09); }
+.journey-page-section > header { margin-bottom: 22px; }
+.journey-page-section > header h2 { margin: 5px 0 0; font-size: clamp(27px, 3vw, 40px); line-height: 1; letter-spacing: -.045em; }
+.journey-artists > div { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 11px; }
+.journey-artist-card {
+  min-width: 0;
+  padding: 10px 10px 16px;
+  border: 1px solid rgba(255, 255, 255, .1);
+  border-radius: 8px;
+  color: #f4f5f7;
+  background: rgba(255, 255, 255, .018);
+  cursor: pointer;
+  text-align: left;
+}
+.journey-artist-card > span { position: relative; display: block; aspect-ratio: 4 / 3; overflow: hidden; border-radius: 5px; background: rgba(255, 255, 255, .04); }
+.journey-artist-card img { width: 100%; height: 100%; object-fit: cover; filter: saturate(.8); transition: transform 220ms ease; }
+.journey-artist-card i { position: absolute; left: 9px; bottom: 8px; color: white; font-size: 9px; font-style: normal; font-weight: 800; text-shadow: 0 1px 7px #000; }
+.journey-artist-card > strong,
+.journey-artist-card > small,
+.journey-artist-card > b { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.journey-artist-card > strong { margin-top: 13px; font-size: 16px; }
+.journey-artist-card > small { margin-top: 4px; color: rgba(244, 245, 247, .43); font-size: 10px; }
+.journey-artist-card > b { margin-top: 10px; color: rgb(var(--journey-page-rgb)); font-size: 10px; }
+.journey-artist-card:hover,
+.journey-artist-card.active { border-color: rgba(var(--journey-page-rgb), .55); background: rgba(var(--journey-page-rgb), .055); }
+.journey-artist-card:hover img { transform: scale(1.035); }
+.journey-top-songs .genre-song-list { margin: 0; }
+.journey-releases .music-card-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.journey-hidden { padding-left: clamp(24px, 5vw, 76px); padding-right: clamp(24px, 5vw, 76px); }
+
+.journey-directory-switch { margin: 4px 0 15px; padding-bottom: 14px; border-bottom: 1px solid var(--line); }
+.journey-directory-switch > span { display: block; margin-bottom: 7px; color: var(--muted); font-size: 9px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; }
+.journey-directory-switch button {
+  width: 100%;
+  min-height: 44px;
+  padding: 0 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  border: 1px solid var(--line);
+  border-radius: 5px;
+  color: var(--ink);
+  background: transparent;
+  cursor: pointer;
+  text-align: left;
+}
+.journey-directory-switch strong { overflow: hidden; text-overflow: ellipsis; font-size: 11px; }
+.journey-directory-switch b { color: var(--genre-accent); font-size: 9px; }
+.journey-genre-switch {
+  min-height: 36px;
+  padding: 0 11px;
+  align-items: center;
+  gap: 10px;
+  border: 1px solid var(--line);
+  border-radius: 5px;
+  color: var(--ink);
+  background: transparent;
+  cursor: pointer;
+  font-size: 10px;
+}
+.journey-genre-switch:not([hidden]) { display: inline-flex; }
+.journey-genre-switch b { color: var(--genre-accent); font-size: 9px; }
+
+/* Journey picker */
+.journey-picker-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 140;
+  padding: 26px;
+  display: grid;
+  place-items: center;
+  color: #f4f5f7;
+  background: rgba(3, 4, 7, .82);
+  backdrop-filter: blur(14px);
+}
+.journey-picker {
+  width: min(850px, 100%);
+  max-height: calc(100dvh - 52px);
+  padding: clamp(25px, 4vw, 42px);
+  overflow-y: auto;
+  border: 1px solid rgba(255, 255, 255, .13);
+  border-radius: 15px;
+  background: #101217;
+  box-shadow: 0 34px 90px rgba(0, 0, 0, .48);
+}
+.journey-picker > header { position: relative; margin-bottom: 25px; }
+.journey-picker > header > div > span { color: var(--genre-accent); font-size: 10px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; }
+.journey-picker h2 { margin: 7px 50px 0 0; font-size: clamp(35px, 4.5vw, 55px); line-height: .95; letter-spacing: -.055em; }
+.journey-picker > header p { margin: 10px 0 0; color: rgba(244, 245, 247, .5); font-size: 13px; }
+.journey-picker > header > button {
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 44px;
+  height: 44px;
+  border: 1px solid rgba(255, 255, 255, .13);
+  border-radius: 50%;
+  color: #f4f5f7;
+  background: transparent;
+  cursor: pointer;
+  font-size: 23px;
+}
+.journey-picker-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+.journey-picker-choice {
+  min-width: 0;
+  min-height: 112px;
+  padding: 10px;
+  display: grid;
+  grid-template-columns: 88px minmax(0, 1fr) 17px;
+  align-items: center;
+  gap: 13px;
+  border: 1px solid rgba(255, 255, 255, .11);
+  border-radius: 8px;
+  color: #f4f5f7;
+  background: rgba(255, 255, 255, .018);
+  cursor: pointer;
+  text-align: left;
+}
+.journey-picker-choice > span:first-child { width: 88px; height: 88px; overflow: hidden; border-radius: 5px; }
+.journey-picker-choice img { width: 100%; height: 100%; object-fit: cover; filter: saturate(.78); }
+.journey-picker-choice strong,
+.journey-picker-choice small,
+.journey-picker-choice b { display: block; }
+.journey-picker-choice strong { font-size: 19px; letter-spacing: -.025em; }
+.journey-picker-choice small { margin-top: 5px; color: rgba(244, 245, 247, .43); font-size: 9px; }
+.journey-picker-choice b { margin-top: 8px; color: var(--genre-accent); font-size: 9px; }
+.journey-picker-choice > i { width: 15px; height: 15px; border: 1px solid rgba(255, 255, 255, .28); border-radius: 50%; }
+.journey-picker-choice.active { border-color: rgba(var(--genre-rgb), .72); background: rgba(var(--genre-rgb), .08); }
+.journey-picker-choice.active > i { border: 4px solid #101217; background: var(--genre-accent); box-shadow: 0 0 0 1px var(--genre-accent); }
+.journey-picker > footer { margin-top: 18px; display: flex; justify-content: space-between; gap: 10px; }
+.journey-picker > footer button { min-height: 46px; padding: 0 17px; border-radius: 6px; cursor: pointer; font-size: 11px; font-weight: 800; }
+.journey-picker > footer button:first-child { border: 1px solid rgba(255, 255, 255, .13); color: rgba(244, 245, 247, .65); background: transparent; }
+.journey-picker > footer button:last-child { border: 0; color: #090a0d; background: var(--genre-accent); }
+.journey-picker > footer button span { margin-left: 18px; }
+
+html[data-theme="light"] .discover-home,
+html[data-theme="light"] .journey-genre-page { color: #191817; background-color: #fbf9f4; background-image: radial-gradient(circle at 80% 0, rgba(var(--genre-rgb), .09), transparent 30%); }
+html[data-theme="light"] .discover-home-head,
+html[data-theme="light"] .music-section,
+html[data-theme="light"] .journey-genre-hero,
+html[data-theme="light"] .journey-page-section { border-color: rgba(20, 18, 16, .11); }
+html[data-theme="light"] .discover-home-head p,
+html[data-theme="light"] .music-section > header > p,
+html[data-theme="light"] .journey-genre-copy p,
+html[data-theme="light"] .journey-progress-card p,
+html[data-theme="light"] .music-card-copy span,
+html[data-theme="light"] .music-card-copy small,
+html[data-theme="light"] .journey-artist-card > small { color: rgba(25, 24, 23, .54); }
+html[data-theme="light"] .discover-home-head > button,
+html[data-theme="light"] .sound-grid > button,
+html[data-theme="light"] .discover-genre-card,
+html[data-theme="light"] .journey-progress-card,
+html[data-theme="light"] .journey-artist-card,
+html[data-theme="light"] .journey-genre-actions .secondary-action,
+html[data-theme="light"] .journey-progress-card > button { color: #191817; border-color: rgba(20, 18, 16, .14); background-color: rgba(255, 255, 255, .45); }
+html[data-theme="light"] .discover-continue { border-color: rgba(20, 18, 16, .14); background: rgba(255, 255, 255, .5); }
+html[data-theme="light"] .discover-continue b,
+html[data-theme="light"] .sound-grid small,
+html[data-theme="light"] .discover-genre-card small { color: rgba(25, 24, 23, .5); }
+html[data-theme="light"] .music-search-results,
+html[data-theme="light"] .journey-genre-results,
+html[data-theme="light"] .sound-results { color: #191817; border-color: rgba(20, 18, 16, .13); background: #fffefb; }
+
+@media (max-width: 1080px) {
+  .sound-grid,
+  .journey-artists > div { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .journey-genre-hero { grid-template-columns: minmax(0, 1fr) minmax(230px, 34%); }
+  .journey-releases .music-card-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+
+@media (max-width: 760px) {
+  .discover-home-head { min-height: 235px; padding: 34px 18px 30px; display: grid; align-content: end; gap: 22px; }
+  .discover-home-head h1 { font-size: clamp(42px, 13.5vw, 57px); }
+  .discover-home-head > button { width: 100%; min-height: 48px; }
+  .discover-continue { margin: 16px 18px 0; padding: 10px; }
+  .discover-continue > div { grid-template-columns: 54px minmax(0, 1fr); gap: 10px; }
+  .discover-continue img { width: 54px; height: 54px; }
+  .discover-continue > button { width: 44px; padding: 0; overflow: hidden; font-size: 0; }
+  .discover-continue > button span { margin: 0; font-size: 17px; }
+  .music-section > header > p { display: none; }
+  .sound-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .sound-grid > button { min-height: 116px; padding: 15px; }
+  .sound-grid strong { margin-top: 38px; font-size: 15px; }
+  .sound-results { padding: 12px; }
+  .discover-genre-grid { grid-template-columns: 1fr; }
+  .discover-genre-card { min-height: 101px; grid-template-columns: 76px minmax(0, 1fr); }
+  .discover-genre-cover { width: 76px; height: 76px; }
+  .journey-genre-page { padding-bottom: 64px; }
+  .journey-genre-hero { min-height: 0; padding: 29px 18px 32px; grid-template-columns: 1fr; gap: 28px; }
+  .journey-genre-copy > button { margin-bottom: 23px; }
+  .journey-genre-copy h1 { font-size: clamp(55px, 19vw, 78px); }
+  .journey-genre-actions { display: grid; grid-template-columns: 1fr 1fr; }
+  .journey-genre-actions button { min-height: 48px; }
+  .journey-genre-actions .text-action { grid-column: 1 / -1; }
+  .journey-genre-art { display: none; }
+  .journey-progress-card { margin: 16px 18px 0; padding: 15px; grid-template-columns: 58px minmax(0, 1fr); gap: 13px; }
+  .journey-progress-card > div:first-child { width: 58px; height: 58px; }
+  .journey-progress-card > button { grid-column: 1 / -1; width: 100%; }
+  .journey-progress-card h2 { font-size: 20px; }
+  .journey-genre-results { margin-left: 18px; margin-right: 18px; }
+  .journey-page-section { padding: 38px 18px; }
+  .journey-artists > div { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 9px; }
+  .journey-artist-card { padding: 8px 8px 13px; }
+  .journey-artist-card > strong { font-size: 14px; }
+  .journey-releases .music-card-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .journey-hidden { padding-left: 18px; padding-right: 18px; }
+  .journey-genre-switch { display: none !important; }
+  .journey-picker-overlay { padding: 0; align-items: end; }
+  .journey-picker { width: 100%; max-height: 93dvh; padding: 26px 18px 18px; border-radius: 18px 18px 0 0; }
+  .journey-picker h2 { font-size: 39px; }
+  .journey-picker-grid { grid-template-columns: 1fr; }
+  .journey-picker-choice { min-height: 92px; grid-template-columns: 70px minmax(0, 1fr) 17px; }
+  .journey-picker-choice > span:first-child { width: 70px; height: 70px; }
+  .journey-picker > footer { position: sticky; bottom: -18px; margin-left: -18px; margin-right: -18px; padding: 14px 18px 18px; background: #101217; }
+  .journey-picker > footer button { min-height: 48px; }
+}
+
+@media (max-width: 390px) {
+  .discover-home-head h1 { font-size: 43px; }
+  .sound-grid { grid-template-columns: 1fr; }
+  .sound-grid > button { min-height: 98px; }
+  .sound-grid strong { margin-top: 24px; }
+  .journey-genre-copy h1 { font-size: 58px; }
+  .journey-genre-actions { grid-template-columns: 1fr; }
+  .journey-genre-actions .text-action { grid-column: auto; }
+  .journey-artists > div { grid-template-columns: 1fr 1fr; }
+  .journey-picker-choice { grid-template-columns: 62px minmax(0, 1fr) 15px; padding: 8px; gap: 10px; }
+  .journey-picker-choice > span:first-child { width: 62px; height: 62px; }
+  .journey-picker-choice strong { font-size: 17px; }
+  .journey-picker > footer { display: grid; grid-template-columns: .9fr 1.1fr; }
+  .journey-picker > footer button { padding-left: 10px; padding-right: 10px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .discover-genre-cover img,
+  .journey-artist-card img { transition: none !important; }
+}
 </style>
 </head>
 <body data-preview="discover">
@@ -3027,6 +3585,26 @@ body.is-playing .song-room-art img { animation: songCover var(--vibe-duration) e
     volume: 0.82,
     theme: "dark"
   };
+  function readSession(raw) {
+    const source = raw.session && typeof raw.session === "object" ? raw.session : {};
+    const session = {};
+    for (const key of [
+      "genreId",
+      "artistId",
+      "selectedTrackId",
+      "activeReleaseId"
+    ]) {
+      if (typeof source[key] === "string" && source[key])
+        session[key] = source[key];
+    }
+    if (source.catalogMode === "matching" || source.catalogMode === "all")
+      session.catalogMode = source.catalogMode;
+    if (["continue", "artist", "off"].includes(source.repeatMode))
+      session.repeatMode = source.repeatMode;
+    if (Number.isFinite(source.position) && source.position >= 0)
+      session.position = source.position;
+    return session;
+  }
   function readPersisted() {
     try {
       const raw = JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}");
@@ -3038,14 +3616,20 @@ body.is-playing .song-room-art img { animation: songCover var(--vibe-duration) e
         releaseProgress: raw.releaseProgress && typeof raw.releaseProgress === "object" ? raw.releaseProgress : {},
         unlockedArtifacts: Array.isArray(raw.unlockedArtifacts) ? raw.unlockedArtifacts : [],
         volume: Number.isFinite(raw.volume) ? Math.min(1, Math.max(0, raw.volume)) : 0.82,
-        theme: raw.theme === "light" ? "light" : "dark"
+        theme: raw.theme === "light" ? "light" : "dark",
+        session: readSession(raw)
       };
     } catch {
-      return { ...persistedDefaults, profile: { ...defaultProfile } };
+      return {
+        ...persistedDefaults,
+        profile: { ...defaultProfile },
+        session: {}
+      };
     }
   }
   function createStore(initialState) {
-    let state2 = { ...initialState, ...readPersisted() };
+    const persisted = readPersisted();
+    let state2 = { ...initialState, ...persisted, ...persisted.session };
     const listeners = /* @__PURE__ */ new Set();
     const persist = () => {
       const data = {
@@ -3060,14 +3644,26 @@ body.is-playing .song-room-art img { animation: songCover var(--vibe-duration) e
         releaseProgress: { ...state2.releaseProgress || {} },
         unlockedArtifacts: [...state2.unlockedArtifacts || []],
         volume: Math.min(1, Math.max(0, Number(state2.volume) || 0)),
-        theme: state2.theme === "light" ? "light" : "dark"
+        theme: state2.theme === "light" ? "light" : "dark",
+        session: {
+          genreId: state2.genreId,
+          artistId: state2.artistId,
+          selectedTrackId: state2.selectedTrackId,
+          activeReleaseId: state2.activeReleaseId,
+          catalogMode: state2.catalogMode,
+          repeatMode: state2.repeatMode,
+          position: Math.max(0, Number(state2.position) || 0)
+        }
       };
       localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
     };
     return {
       get: () => state2,
       set(patch, options = {}) {
-        state2 = { ...state2, ...typeof patch === "function" ? patch(state2) : patch };
+        state2 = {
+          ...state2,
+          ...typeof patch === "function" ? patch(state2) : patch
+        };
         if (options.persist) persist();
         listeners.forEach((listener) => listener(state2));
       },
@@ -3077,7 +3673,11 @@ body.is-playing .song-room-art img { animation: songCover var(--vibe-duration) e
       },
       reset() {
         localStorage.removeItem(STORAGE_KEY);
-        state2 = { ...initialState, ...persistedDefaults, profile: { ...defaultProfile } };
+        state2 = {
+          ...initialState,
+          ...persistedDefaults,
+          profile: { ...defaultProfile }
+        };
         listeners.forEach((listener) => listener(state2));
       }
     };
