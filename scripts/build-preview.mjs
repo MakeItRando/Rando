@@ -9,9 +9,15 @@ mkdirSync(dirname(bundle), { recursive: true });
 const esbuild = [process.env.ESBUILD_BIN, resolve(root, 'node_modules/.bin/esbuild'), resolve(root, '../../node_modules/.bin/esbuild')]
   .find((candidate) => candidate && existsSync(candidate));
 if (!esbuild) throw new Error('esbuild is required. Run npm install before building previews.');
-execFileSync(esbuild, [resolve(root, 'src/app.js'), '--bundle', '--format=iife', '--target=es2020', `--outfile=${bundle}`], { stdio: 'inherit' });
+execFileSync(esbuild, [resolve(root, 'app.js'), '--bundle', '--format=iife', '--target=es2020', `--outfile=${bundle}`], { stdio: 'inherit' });
 
-const css = [readFileSync(resolve(root, 'styles.css'), 'utf8'), readFileSync(resolve(root, 'listening.css'), 'utf8'), readFileSync(resolve(root, 'song-room.css'), 'utf8'), readFileSync(resolve(root, 'concept.css'), 'utf8')].join('\n');
+const css = [
+  'styles.css',
+  'listening.css',
+  'song-room.css',
+  'concept.css',
+  'experience.css'
+].map((file) => readFileSync(resolve(root, file), 'utf8')).join('\n');
 let js = readFileSync(bundle, 'utf8');
 let html = readFileSync(resolve(root, 'index.html'), 'utf8');
 const assets = new Set(`${html}\n${js}`.match(/assets\/[A-Za-z0-9_./-]+\.svg/g) || []);
