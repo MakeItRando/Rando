@@ -1882,6 +1882,467 @@ body.is-playing .workspace::before { animation: ambient-drift 12s ease-in-out in
   .song-room-wave i,
   .sound-meter i { transition: none !important; }
 }
+
+:root { --rondo-human-pass: 1; }
+
+/* Discovery chooser */
+.discovery-choice-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 120;
+  padding: 28px;
+  display: grid;
+  place-items: center;
+  color: #f4f5f7;
+  background: rgba(3, 4, 7, .78);
+  backdrop-filter: blur(14px);
+}
+.discovery-choice-overlay[hidden] { display: none; }
+.discovery-choice {
+  position: relative;
+  width: min(900px, 100%);
+  max-height: calc(100dvh - 56px);
+  padding: clamp(28px, 4vw, 48px);
+  overflow-y: auto;
+  border: 1px solid rgba(255,255,255,.13);
+  border-radius: 16px;
+  background: #101217;
+  box-shadow: 0 36px 100px rgba(0,0,0,.48);
+}
+.discovery-choice > p,
+.music-explore-head > div > span,
+.genre-playlist-head > div > span,
+.music-section > header span {
+  margin: 0;
+  color: var(--genre-accent);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+.discovery-choice h2 {
+  max-width: 650px;
+  margin: 8px 0 28px;
+  font-size: clamp(36px, 4.4vw, 58px);
+  line-height: 1;
+  letter-spacing: -.055em;
+}
+.discovery-choice-close {
+  position: absolute;
+  top: 18px;
+  right: 18px;
+  width: 44px;
+  height: 44px;
+  border: 1px solid rgba(255,255,255,.14);
+  border-radius: 50%;
+  color: #f4f5f7;
+  background: transparent;
+  cursor: pointer;
+  font-size: 24px;
+}
+.discovery-choice-grid { display: grid; grid-template-columns: 1.12fr .88fr; gap: 14px; }
+.discovery-option {
+  min-width: 0;
+  min-height: 330px;
+  padding: clamp(22px, 3vw, 34px);
+  border: 1px solid rgba(255,255,255,.13);
+  border-radius: 12px;
+  color: #f4f5f7;
+  background: rgba(255,255,255,.025);
+  text-align: left;
+}
+.discovery-option > span { color: rgba(244,245,247,.52); font-size: 12px; font-weight: 700; }
+.discovery-option h3 { margin: 10px 0 0; font-size: clamp(25px, 2.7vw, 38px); line-height: 1.05; letter-spacing: -.04em; }
+.discovery-option p { max-width: 390px; margin: 12px 0 0; color: rgba(244,245,247,.58); font-size: 14px; line-height: 1.45; }
+.discovery-option-explore {
+  display: flex;
+  flex-direction: column;
+  cursor: pointer;
+  background: linear-gradient(150deg, rgba(var(--genre-rgb),.14), transparent 58%), rgba(255,255,255,.025);
+  transition: border-color 160ms ease, transform 160ms ease;
+}
+.discovery-option-explore:hover { border-color: rgba(var(--genre-rgb),.7); transform: translateY(-2px); }
+.discovery-option-explore b { margin-top: auto; color: var(--genre-accent); font-size: 13px; }
+.discovery-genre-chips { margin-top: 26px; display: flex; flex-wrap: wrap; gap: 8px; }
+.discovery-genre-chips button {
+  min-height: 40px;
+  padding: 0 14px;
+  border: 1px solid rgba(255,255,255,.15);
+  border-radius: 999px;
+  color: rgba(244,245,247,.7);
+  background: transparent;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 700;
+}
+.discovery-genre-chips button.active { color: #0a0b0e; border-color: var(--genre-accent); background: var(--genre-accent); }
+.discovery-listen {
+  width: 100%;
+  min-height: 48px;
+  margin-top: 22px;
+  border: 0;
+  border-radius: 7px;
+  color: #090a0d;
+  background: var(--genre-accent);
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 800;
+}
+
+/* Explore */
+.discovery-surface { padding: 0; color: #f4f5f7; background: #090a0e; scroll-behavior: smooth; }
+.music-explore,
+.genre-playlist { min-height: 100%; background: #090a0e; }
+.music-explore-head,
+.genre-playlist-head {
+  padding: clamp(36px, 5vw, 70px) clamp(24px, 5vw, 76px);
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 32px;
+  border-bottom: 1px solid rgba(255,255,255,.1);
+  background: linear-gradient(130deg, rgba(var(--genre-rgb),.12), transparent 48%);
+}
+.music-explore-head h1,
+.genre-playlist-head h1 {
+  margin: 8px 0 0;
+  font-size: clamp(44px, 6vw, 76px);
+  line-height: .98;
+  letter-spacing: -.065em;
+}
+.music-explore-head p,
+.genre-playlist-head p { margin: 13px 0 0; color: rgba(244,245,247,.58); font-size: 14px; }
+.music-picker-button,
+.genre-play {
+  min-height: 48px;
+  padding: 0 18px;
+  border: 1px solid rgba(255,255,255,.17);
+  border-radius: 7px;
+  color: #f4f5f7;
+  background: rgba(255,255,255,.035);
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 800;
+}
+.music-picker-button:hover { border-color: var(--genre-accent); }
+.music-search {
+  height: 56px;
+  margin: 28px clamp(24px, 5vw, 76px) 0;
+  padding: 0 17px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  border: 1px solid rgba(255,255,255,.12);
+  border-radius: 8px;
+  background: rgba(255,255,255,.03);
+}
+.music-search svg { width: 20px; color: rgba(244,245,247,.48); }
+.music-search input { width: 100%; border: 0; outline: 0; color: #f4f5f7; background: transparent; font-size: 14px; }
+.music-search input::placeholder { color: rgba(244,245,247,.38); }
+.music-search-results { margin: 12px clamp(24px, 5vw, 76px) 0; border: 1px solid rgba(255,255,255,.1); border-radius: 8px; background: #101218; }
+.music-search-results > header { height: 43px; padding: 0 16px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid rgba(255,255,255,.09); color: rgba(244,245,247,.5); font-size: 11px; }
+.music-search-results > p { padding: 20px; color: rgba(244,245,247,.5); }
+.music-section { padding: 54px clamp(24px, 5vw, 76px); border-bottom: 1px solid rgba(255,255,255,.09); }
+.music-section > header { margin-bottom: 22px; display: flex; align-items: end; justify-content: space-between; gap: 20px; }
+.music-section > header h2 { margin: 5px 0 0; font-size: clamp(27px, 3vw, 40px); line-height: 1; letter-spacing: -.045em; }
+.music-section > header button { min-height: 40px; padding: 0 12px; border: 1px solid rgba(255,255,255,.13); border-radius: 6px; color: #f4f5f7; background: transparent; cursor: pointer; font-size: 11px; }
+.music-card-grid { display: grid; grid-template-columns: repeat(4, minmax(0,1fr)); gap: 22px 14px; }
+.music-card-strip { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(150px, 1fr); gap: 13px; overflow-x: auto; scroll-snap-type: x proximity; scrollbar-width: thin; }
+.music-card {
+  min-width: 0;
+  padding: 0 0 15px;
+  border: 0;
+  color: #f4f5f7;
+  background: transparent;
+  cursor: pointer;
+  text-align: left;
+  scroll-snap-align: start;
+}
+.music-card-art { position: relative; aspect-ratio: 1; display: block; overflow: hidden; border-radius: 8px; background: #15171d; }
+.music-card-art::after { content: ""; position: absolute; inset: 0; border: 1px solid rgba(255,255,255,.09); border-radius: inherit; }
+.music-card-art img { width: 100%; height: 100%; display: block; object-fit: cover; transition: transform 240ms ease, filter 240ms ease; }
+.music-card-art i {
+  position: absolute;
+  right: 11px;
+  bottom: 11px;
+  z-index: 2;
+  width: 40px;
+  height: 40px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  color: #090a0e;
+  background: var(--genre-accent);
+  font-size: 12px;
+  font-style: normal;
+  opacity: 0;
+  transform: translateY(5px);
+  transition: opacity 160ms ease, transform 160ms ease;
+}
+.music-card:hover .music-card-art img { transform: scale(1.025); filter: saturate(1.08); }
+.music-card:hover .music-card-art i,
+.music-card:focus-visible .music-card-art i { opacity: 1; transform: translateY(0); }
+.music-card-copy { display: block; padding-top: 11px; }
+.music-card-copy strong,
+.music-card-copy > span,
+.music-card-copy small { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.music-card-copy strong { font-size: 14px; }
+.music-card-copy > span { margin-top: 4px; color: rgba(244,245,247,.58); font-size: 12px; }
+.music-card-copy small { margin-top: 5px; color: var(--genre-accent); font-size: 10px; }
+.music-hidden { background: #0e1015; }
+.music-genre-row { padding-top: 42px; padding-bottom: 42px; }
+
+/* Genre playlist */
+.genre-playlist-head { display: grid; grid-template-columns: auto minmax(0,1fr) auto; align-items: end; }
+.genre-playlist-head > button:first-child { align-self: start; min-height: 44px; padding: 0; border: 0; color: rgba(244,245,247,.62); background: transparent; cursor: pointer; font-size: 12px; }
+.genre-play { color: #090a0e; border-color: var(--genre-accent); background: var(--genre-accent); }
+.genre-play span { margin-left: 12px; }
+.genre-search { margin-bottom: 20px; }
+.genre-song-list { margin: 0 clamp(24px, 5vw, 76px); border-top: 1px solid rgba(255,255,255,.12); }
+.genre-song {
+  width: 100%;
+  min-height: 66px;
+  padding: 8px 10px;
+  display: grid;
+  grid-template-columns: 28px 48px minmax(180px,1fr) minmax(120px,.55fr) 48px 38px;
+  align-items: center;
+  gap: 12px;
+  border: 0;
+  border-bottom: 1px solid rgba(255,255,255,.08);
+  color: #f4f5f7;
+  background: transparent;
+  cursor: pointer;
+  text-align: left;
+  transition: background 140ms ease;
+}
+.genre-song:hover { background: rgba(var(--genre-rgb),.08); }
+.genre-song-number,
+.genre-song-style,
+.genre-song time { color: rgba(244,245,247,.43); font-size: 11px; }
+.genre-song img { width: 48px; height: 48px; border-radius: 4px; object-fit: cover; }
+.genre-song-name { min-width: 0; }
+.genre-song-name strong,
+.genre-song-name small { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.genre-song-name strong { font-size: 13px; }
+.genre-song-name small { margin-top: 4px; color: rgba(244,245,247,.5); font-size: 11px; }
+.genre-song b { color: var(--genre-accent); text-align: center; }
+.genre-empty { padding: 24px; color: rgba(244,245,247,.5); }
+.genre-releases { margin-top: 42px; }
+
+/* Song Room: smaller, calmer, tied to the track */
+.full-player.song-room {
+  --song-panel: clamp(320px, 24vw, 390px);
+  --vibe-duration: 8s;
+  font-family: Arial, Helvetica, sans-serif;
+  background: var(--song-base);
+}
+.song-room[data-vibe="soft"] { --vibe-duration: 11s; }
+.song-room[data-vibe="warm"] { --vibe-duration: 9s; }
+.song-room[data-vibe="electric"] { --vibe-duration: 6.5s; }
+.song-room[data-vibe="drive"] { --vibe-duration: 5.5s; }
+.song-room-backdrop { inset: 0; overflow: hidden; background: var(--song-base); }
+.song-room-backdrop::before {
+  inset: -14%;
+  opacity: .28;
+  background-image: linear-gradient(90deg, rgba(5,7,11,.76), rgba(5,7,11,.42) 58%, rgba(5,7,11,.9)), var(--song-cover);
+  background-size: cover;
+  background-position: center;
+  filter: blur(70px) saturate(1.15);
+  mask-image: none;
+  transform: scale(1.12);
+}
+.song-room-backdrop::after { display: none; }
+.song-room-grain { opacity: .025; }
+body.is-playing .song-room-backdrop::before { animation: songBackdrop var(--vibe-duration) ease-in-out infinite alternate; }
+.song-room > .song-room-header {
+  inset: 0 0 auto;
+  height: 68px;
+  padding: 0 24px;
+  gap: 13px;
+  border-bottom: 1px solid rgba(238,242,248,.1);
+  background: rgba(5,7,11,.62);
+  backdrop-filter: blur(24px);
+}
+.song-room-brand { font-size: 18px; }
+.song-room-brand svg { width: 29px; height: 29px; }
+.song-room-journey-progress { width: 28px; height: 28px; }
+.song-room-journey strong { font-size: 11px; }
+.song-room-journey small { font-size: 9px; }
+.song-room-shell { inset: 68px 0 104px; grid-template-columns: minmax(0,1fr) var(--song-panel); }
+.song-room-stage { padding: 30px 42px; }
+.song-room-release-line { font-size: 9px; letter-spacing: .08em; text-transform: none; }
+.song-room-title { left: 42px; top: 52px; max-width: min(42vw, 560px); }
+.song-room-title h2 { font-size: clamp(46px, 5.3vw, 80px); line-height: .91; letter-spacing: -.065em; }
+.song-room-title > span { margin-top: 14px; font-size: 15px; }
+.full-tags { margin-top: 14px; gap: 6px; }
+.full-tags span { padding: 5px 7px; border-radius: 999px; font-size: 9px; letter-spacing: 0; text-transform: none; }
+.song-room-art { width: min(28vw, 420px); right: 5.5%; top: 50%; transform: translateY(-50%); }
+.song-room-art::before { display: none; }
+.song-room-art img { border-radius: 10px; box-shadow: 0 32px 90px rgba(0,0,0,.48), 0 0 50px rgba(var(--song-rgb),.13); transition: transform 600ms ease, box-shadow 600ms ease; }
+body.is-playing .song-room-art img { animation: songCover var(--vibe-duration) ease-in-out infinite alternate; }
+.song-room-lyric-peek { left: 42px; right: min(40vw, 500px); bottom: 28px; }
+.song-room-lyric-peek p:not(.active) { display: none; }
+.song-room-lyric-peek p.active { margin: 0; font-size: clamp(23px, 2.2vw, 34px); line-height: 1.08; }
+.song-room-lyric-caption { margin-top: 11px; font-size: 10px; }
+.song-room-moment { right: 32px; bottom: 24px; border-radius: 6px; font-size: 10px; letter-spacing: 0; text-transform: none; }
+.song-room-panel { padding: 22px 24px 24px; background: rgba(14,17,24,.92); backdrop-filter: blur(28px); }
+.song-room-panel-top > span { font-size: 11px; letter-spacing: .04em; text-transform: none; }
+.song-room-panel-top small { display: none; }
+.song-room-tabs { margin-top: 18px; gap: 18px; }
+.song-room-tabs button { height: 36px; font-size: 10px; letter-spacing: 0; text-transform: none; }
+.song-room-panel-content { padding-top: 22px; }
+.song-room-eyebrow { font-size: 10px; letter-spacing: .04em; text-transform: none; }
+.song-room-copy h3,
+.song-room-empty h3 { margin: 9px 0 12px; font-family: Arial, Helvetica, sans-serif; font-size: clamp(27px, 2.15vw, 34px); font-weight: 800; line-height: 1.05; letter-spacing: -.035em; }
+.song-room-lead,
+.song-room-empty p { font-family: Arial, Helvetica, sans-serif; font-size: 13px; line-height: 1.55; }
+.song-room-facts { margin-top: 20px; }
+.song-room-facts div { padding: 10px 0; grid-template-columns: 82px minmax(0,1fr); }
+.song-room-facts dt { font-size: 9px; letter-spacing: .03em; text-transform: none; }
+.song-room-facts dd { font-size: 11px; }
+.song-room-sounds { margin-top: 15px; }
+.song-room-sounds span,
+.song-room-room-actions span { padding: 6px 8px; border-radius: 999px; font-size: 9px; letter-spacing: 0; text-transform: none; }
+.song-room-provenance { display: none; }
+.song-room-credit-list { margin-top: 18px; }
+.song-room-credit-list > div { padding: 11px 0; }
+.song-room-credit-list span { font-size: 9px; letter-spacing: .03em; text-transform: none; }
+.song-room-credit-list strong { margin-top: 4px; font-size: 12px; }
+.song-room-lyric-list { margin-top: 18px; gap: 11px; }
+.song-room-lyric-list button { font-size: clamp(20px, 1.8vw, 28px); line-height: 1.12; }
+.song-room-chapter-link {
+  width: 100%;
+  min-height: 66px;
+  margin-top: 19px;
+  padding: 11px 12px;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 4px 12px;
+  border: 1px solid rgba(238,242,248,.12);
+  border-radius: 7px;
+  color: #eef2f8;
+  background: rgba(255,255,255,.025);
+  cursor: pointer;
+  text-align: left;
+}
+.song-room-chapter-link span { color: var(--song-accent); font-size: 9px; }
+.song-room-chapter-link strong { font-size: 12px; }
+.song-room-chapter-link b { grid-column: 2; grid-row: 1 / 3; align-self: center; color: rgba(238,242,248,.55); font-size: 10px; }
+.song-room-private-note { margin-top: 17px; padding-top: 15px; }
+.song-room-private-note label { font-size: 10px; letter-spacing: 0; text-transform: none; }
+.song-room-private-note textarea { min-height: 70px; border-radius: 6px; font: 12px/1.45 Arial, sans-serif; }
+.song-room-private-note button { border-radius: 5px; font-size: 10px; letter-spacing: 0; text-transform: none; }
+.song-room-reveal-mark,
+.song-room-reveal-lock { margin-top: 22px; }
+.song-room-reveal-policy { font-size: 12px; color: rgba(238,242,248,.52); }
+.song-room-player { right: var(--song-panel); height: 104px; padding: 13px 24px; }
+.song-room-player-grid { grid-template-columns: 190px minmax(260px,1fr) 250px; gap: 20px; }
+.song-room-mini { grid-template-columns: 48px minmax(0,1fr); gap: 10px; }
+.song-room-mini img { width: 48px; height: 48px; border-radius: 5px; }
+.song-room-mini strong { font-size: 12px; }
+.song-room-wave { height: 26px; gap: 3px; }
+.song-room-wave i { transition: height 110ms linear, background 140ms ease; }
+.song-room-player .full-times { font-size: 9px; }
+.song-room-volume { min-width: 112px; }
+.song-room-controls { gap: 7px; }
+.song-room-controls button { width: 38px; height: 38px; }
+.song-room-controls #fullPlay { width: 52px; height: 52px; box-shadow: 0 0 24px rgba(var(--song-rgb),.25); }
+
+@keyframes songBackdrop { from { transform: scale(1.1) translate3d(-.6%,0,0); } to { transform: scale(1.14) translate3d(.8%,-.6%,0); } }
+@keyframes songCover { from { transform: translateY(0) scale(1); box-shadow: 0 32px 90px rgba(0,0,0,.48), 0 0 38px rgba(var(--song-rgb),.1); } to { transform: translateY(-3px) scale(1.006); box-shadow: 0 38px 100px rgba(0,0,0,.54), 0 0 62px rgba(var(--song-rgb),.2); } }
+
+@media (max-width: 1180px) and (min-width: 761px) {
+  .full-player.song-room { --song-panel: 330px; }
+  .song-room-stage { padding-left: 30px; padding-right: 30px; }
+  .song-room-title { left: 30px; max-width: 44vw; }
+  .song-room-title h2 { font-size: clamp(44px, 5.7vw, 68px); }
+  .song-room-art { width: min(29vw, 340px); right: 4%; }
+  .song-room-lyric-peek { left: 30px; right: 39vw; }
+  .song-room-player-grid { grid-template-columns: minmax(260px,1fr) 220px; }
+  .song-room-mini { display: none; }
+}
+
+@media (max-width: 760px) {
+  .discovery-choice-overlay { padding: 0; align-items: end; }
+  .discovery-choice { width: 100%; max-height: 92dvh; padding: 27px 18px 22px; border-radius: 18px 18px 0 0; }
+  .discovery-choice h2 { padding-right: 42px; font-size: 36px; }
+  .discovery-choice-grid { grid-template-columns: 1fr; }
+  .discovery-option { min-height: 0; padding: 20px; }
+  .discovery-option h3 { font-size: 27px; }
+  .discovery-option-explore { min-height: 190px; }
+  .discovery-genre-chips { margin-top: 18px; }
+  .discovery-genre-chips button { min-height: 44px; }
+  .music-explore-head,
+  .genre-playlist-head { padding: 30px 18px; display: grid; gap: 20px; }
+  .music-explore-head h1,
+  .genre-playlist-head h1 { font-size: 44px; }
+  .music-picker-button,
+  .genre-play { width: 100%; }
+  .music-search { margin: 18px 18px 0; }
+  .music-search-results { margin-left: 18px; margin-right: 18px; }
+  .music-section { padding: 38px 18px; }
+  .music-card-grid { grid-template-columns: repeat(2, minmax(0,1fr)); gap: 18px 10px; }
+  .music-card-strip { grid-auto-columns: 150px; }
+  .music-card-art i { width: 36px; height: 36px; opacity: 1; transform: none; }
+  .genre-playlist-head { grid-template-columns: 1fr; }
+  .genre-playlist-head > button:first-child { justify-self: start; }
+  .genre-song-list { margin: 0 18px; }
+  .genre-song { min-height: 66px; padding: 8px 0; grid-template-columns: 24px 46px minmax(0,1fr) 32px; gap: 9px; }
+  .genre-song img { width: 46px; height: 46px; }
+  .genre-song-style,
+  .genre-song time { display: none; }
+  .genre-song-name strong { font-size: 12px; }
+  .genre-song-name small { font-size: 10px; }
+
+  .full-player.song-room { --song-panel: 100vw; --vibe-duration: 9s; }
+  .song-room > .song-room-header { inset: 0 0 auto; height: 64px; padding: 0 14px; }
+  .song-room-brand { font-size: 18px; }
+  .song-room-shell { inset: 64px 0 152px; }
+  .song-room-stage { padding: 16px 18px; }
+  .song-room-art { width: min(68vw, 280px); left: 50%; right: auto; top: 14px; transform: translateX(-50%); }
+  body.is-playing .song-room-art img { animation: none; }
+  .song-room-title { left: 18px; right: 18px; top: calc(min(68vw, 280px) + 30px); max-width: none; }
+  .song-room-title h2 { font-size: clamp(35px, 10.5vw, 44px); line-height: .94; }
+  .song-room-title > span { margin-top: 8px; font-size: 12px; }
+  .song-room-lyric-peek { left: 18px; right: 18px; bottom: 16px; }
+  .song-room-lyric-peek p.active { font-size: clamp(19px, 5.7vw, 24px); }
+  .song-room-lyric-caption { margin-top: 8px; font-size: 9px; }
+  .song-room-panel { padding: 72px 18px 0; }
+  .song-room-panel-content { padding-top: 0; padding-bottom: 170px; }
+  .song-room-copy h3,
+  .song-room-empty h3 { font-size: 31px; }
+  .song-room-lead,
+  .song-room-empty p { font-size: 14px; }
+  .song-room-player { right: 0; bottom: 52px; height: 100px; padding: 10px 14px; }
+  .song-room-player-grid { grid-template-columns: minmax(0,1fr) auto; gap: 9px; }
+  .song-room-wave { height: 23px; }
+  .song-room-controls #fullPrevious,
+  .song-room-controls #fullNext { width: 38px; height: 38px; }
+  .song-room-controls #fullPlay { width: 50px; height: 50px; }
+  .song-room-mobile-nav { height: 52px; }
+  .song-room-mobile-nav button { height: 52px; font-size: 9px; letter-spacing: 0; text-transform: none; }
+}
+
+@media (max-width: 390px) {
+  .music-explore-head h1,
+  .genre-playlist-head h1 { font-size: 39px; }
+  .music-card-copy strong { font-size: 13px; }
+  .song-room-art { width: min(64vw, 240px); }
+  .song-room-title { top: calc(min(64vw, 240px) + 27px); }
+  .song-room-title h2 { font-size: 35px; }
+  .song-room-lyric-peek p.active { font-size: 19px; }
+  .song-room-controls #fullPrevious,
+  .song-room-controls #fullNext { width: 34px; height: 34px; }
+  .song-room-controls #fullPlay { width: 46px; height: 46px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .discovery-option-explore,
+  .music-card-art img,
+  .music-card-art i,
+  .song-room-backdrop::before,
+  .song-room-art img { animation: none !important; transition: none !important; }
+}
 </style>
 </head>
 <body data-preview="discover">
@@ -2779,11 +3240,11 @@ body.is-playing .workspace::before { animation: ambient-drift 12s ease-in-out in
 
   // src/ui/songRoom.js
   var artworkPalettes = Object.freeze({
-    night: { accent: "#6f9dff", rgb: "111, 157, 255", accentSoft: "#b6c9ff", base: "#070910", surface: "#10141d", elevated: "#151b27", signal: "COBALT / ARTWORK" },
-    continuum: { accent: "#e3a35f", rgb: "227, 163, 95", accentSoft: "#f0c18f", base: "#0d0b09", surface: "#1a1510", elevated: "#211a13", signal: "AMBER / ARTWORK" },
-    blue: { accent: "#51c8d8", rgb: "81, 200, 216", accentSoft: "#9ee5ee", base: "#061013", surface: "#0d1a1e", elevated: "#122329", signal: "CYAN / ARTWORK" },
-    afterimage: { accent: "#e66d9a", rgb: "230, 109, 154", accentSoft: "#f2a4c0", base: "#10080d", surface: "#1d1017", elevated: "#27151f", signal: "ROSE / ARTWORK" },
-    fallback: { accent: "#ff4b2e", rgb: "255, 75, 46", accentSoft: "#ff9b86", base: "#0b0b0c", surface: "#151516", elevated: "#1d1d1f", signal: "RONDO / FALLBACK" }
+    night: { accent: "#6f9dff", rgb: "111, 157, 255", accentSoft: "#b6c9ff", base: "#070910", surface: "#10141d", elevated: "#151b27" },
+    continuum: { accent: "#e3a35f", rgb: "227, 163, 95", accentSoft: "#f0c18f", base: "#0d0b09", surface: "#1a1510", elevated: "#211a13" },
+    blue: { accent: "#51c8d8", rgb: "81, 200, 216", accentSoft: "#9ee5ee", base: "#061013", surface: "#0d1a1e", elevated: "#122329" },
+    afterimage: { accent: "#e66d9a", rgb: "230, 109, 154", accentSoft: "#f2a4c0", base: "#10080d", surface: "#1d1017", elevated: "#27151f" },
+    fallback: { accent: "#ff4b2e", rgb: "255, 75, 46", accentSoft: "#ff9b86", base: "#0b0b0c", surface: "#151516", elevated: "#1d1d1f" }
   });
   var songRoomModes = Object.freeze(["room", "lyrics", "story", "credits", "reveals", "queue"]);
   var escapeHtml2 = (value = "") => String(value).replace(/[&<>"']/g, (character) => ({
@@ -2814,10 +3275,10 @@ body.is-playing .workspace::before { animation: ambient-drift 12s ease-in-out in
   function paletteKey(release) {
     if (releasePaletteKeys[release?.id]) return releasePaletteKeys[release.id];
     const cover2 = String(release?.cover || "").toLowerCase();
-    if (cover2.includes("night") || cover2.includes("blacktop") || cover2.includes("small-hours")) return "night";
-    if (cover2.includes("continuum") || cover2.includes("silver") || cover2.includes("margins") || cover2.includes("first-light") || cover2.includes("soft-machines")) return "continuum";
-    if (cover2.includes("blue") || cover2.includes("window") || cover2.includes("southbound") || cover2.includes("elsewhere") || cover2.includes("fixed-address")) return "blue";
-    if (cover2.includes("afterimage") || cover2.includes("signal") || cover2.includes("rooms") || cover2.includes("close-reading") || cover2.includes("collision")) return "afterimage";
+    if (/night|blacktop|small-hours/.test(cover2)) return "night";
+    if (/continuum|silver|margins|first-light|soft-machines/.test(cover2)) return "continuum";
+    if (/blue|window|southbound|elsewhere|fixed-address/.test(cover2)) return "blue";
+    if (/afterimage|signal|rooms|close-reading|collision/.test(cover2)) return "afterimage";
     return "fallback";
   }
   function getArtworkPalette(release) {
@@ -2838,37 +3299,39 @@ body.is-playing .workspace::before { animation: ambient-drift 12s ease-in-out in
   function renderLyrics(track2) {
     const lyrics = Array.isArray(track2.lyrics) ? track2.lyrics : [];
     const hasWords = lyrics.some((line) => !/instrumental|no synchronized/i.test(line.text));
-    if (!hasWords) return `<div class="song-room-empty"><span>LYRICS</span><h3>No synchronized words.</h3><p>This track may be instrumental, or lyrics have not been supplied by an authorized source.</p></div>`;
-    return `<div class="song-room-copy song-room-lyrics"><p class="song-room-eyebrow">Rondo demo words</p><h3>Follow the song.</h3><div class="song-room-lyric-list">${lyrics.map((line) => `<button type="button" data-time="${line.time}">${escapeHtml2(line.text)}</button>`).join("")}</div><small>Tap a line to seek.</small></div>`;
+    if (!hasWords) return '<div class="song-room-empty"><p class="song-room-eyebrow">Lyrics</p><h3>No lyrics yet.</h3><p>This track may be instrumental.</p></div>';
+    return `<div class="song-room-copy song-room-lyrics"><p class="song-room-eyebrow">Lyrics</p><h3>Sing along.</h3><div class="song-room-lyric-list">${lyrics.map((line) => `<button type="button" data-time="${line.time}">${escapeHtml2(line.text)}</button>`).join("")}</div><small>Tap a line to jump there.</small></div>`;
   }
   function renderStory({ artist, release, track: track2 }, lore, note = "") {
-    const story = track2.story || {
-      headline: `${track2.style} inside ${artist.name}'s ${release.title} chapter.`,
-      body: `${artist.name}'s ${track2.title} is presented as a ${track2.style.toLowerCase()} entry in Rondo's fictional design catalog. Production context will only appear when an authorized source supplies it.`
-    };
-    const sounds = track2.soundPalette?.length ? track2.soundPalette : [track2.style, ...track2.bpm ? [`${track2.bpm} BPM`] : [], track2.key || "Key unavailable"];
-    return `<div class="song-room-copy"><p class="song-room-eyebrow">Inside the track</p><h3>${escapeHtml2(story.headline)}</h3><p class="song-room-lead">${escapeHtml2(story.body)}</p>${lore ? `<button class="song-room-chapter-link" type="button" data-open-release-from-room="${escapeHtml2(release.id)}"><span>${escapeHtml2(lore.index)}</span><strong>${escapeHtml2(lore.hook)}</strong><b>Open release chapter \u2197</b></button>` : ""}<dl class="song-room-facts"><div><dt>Release</dt><dd>${escapeHtml2(release.title)} \xB7 ${escapeHtml2(release.type)} \xB7 ${release.year}</dd></div><div><dt>Exact style</dt><dd>${escapeHtml2(track2.style)}</dd></div><div><dt>Signal</dt><dd>${track2.bpm ? `${track2.bpm} BPM` : "Tempo unavailable"} \xB7 ${escapeHtml2(track2.key || "Key unavailable")}</dd></div><div><dt>Featured</dt><dd>${escapeHtml2(track2.features.length ? track2.features.join(", ") : "None")}</dd></div></dl><div class="song-room-sounds">${sounds.map((item, index) => `<span class="${index === 0 ? "active" : ""}">${escapeHtml2(item)}</span>`).join("")}</div><div class="song-room-provenance"><span><b>${escapeHtml2(track2.source?.label || "Prototype context")}</b><small>${escapeHtml2(track2.source?.detail || "Fictional demo metadata \xB7 not a commercial catalog claim")}</small></span><strong>${escapeHtml2((track2.source?.status || "demo").toUpperCase())}</strong></div><section class="song-room-private-note"><label for="songRoomPrivateNote"><span>Private song note</span><small>Only you</small></label><textarea id="songRoomPrivateNote" maxlength="280" placeholder="What made this song stay with you?">${escapeHtml2(note)}</textarea><div><small>Only on this device.</small><button type="button" data-save-song-note>Save note</button></div></section></div>`;
+    const body = track2.story?.body || `${track2.title} is a ${track2.style.toLowerCase()} track by ${artist.name}, from ${release.title}.`;
+    const sounds = track2.soundPalette?.length ? track2.soundPalette : [track2.style, ...track2.bpm ? [`${track2.bpm} BPM`] : [], track2.key || "Key not listed"];
+    return `<div class="song-room-copy"><p class="song-room-eyebrow">About this song</p><h3>${escapeHtml2(track2.title)}</h3><p class="song-room-lead">${escapeHtml2(body)}</p>${lore ? `<button class="song-room-chapter-link" type="button" data-open-release-from-room="${escapeHtml2(release.id)}"><span>${escapeHtml2(release.type)}</span><strong>${escapeHtml2(release.title)}</strong><b>View album \u2192</b></button>` : ""}<dl class="song-room-facts"><div><dt>Artist</dt><dd>${escapeHtml2(artist.name)}</dd></div><div><dt>Album</dt><dd>${escapeHtml2(release.title)} \xB7 ${release.year}</dd></div><div><dt>Sound</dt><dd>${escapeHtml2(track2.style)}${track2.bpm ? ` \xB7 ${track2.bpm} BPM` : ""}</dd></div></dl><div class="song-room-sounds">${sounds.slice(0, 4).map((item, index) => `<span class="${index === 0 ? "active" : ""}">${escapeHtml2(item)}</span>`).join("")}</div><section class="song-room-private-note"><label for="songRoomPrivateNote"><span>Your note</span><small>Private</small></label><textarea id="songRoomPrivateNote" maxlength="280" placeholder="What did you like about this song?">${escapeHtml2(note)}</textarea><div><small>Saved on this device.</small><button type="button" data-save-song-note>Save</button></div></section></div>`;
   }
   function renderCredits({ artist, track: track2 }) {
-    const credits = [["Primary artist", artist.name], ["Featured artists", track2.features.length ? track2.features.join(", ") : "None"], ["Written by", track2.writers.length ? track2.writers.join(", ") : "Not supplied"], ["Produced by", track2.producers.length ? track2.producers.join(", ") : "Not supplied"], ["Recording ID", track2.isrc || "Not supplied"], ["Version", track2.version || "Original album version"]];
-    return `<div class="song-room-copy"><p class="song-room-eyebrow">Credits and roles</p><h3>Everyone behind the recording.</h3><div class="song-room-credit-list">${credits.map(([label, value]) => `<div><span>${escapeHtml2(label)}</span><strong>${escapeHtml2(value)}</strong></div>`).join("")}</div><div class="song-room-provenance"><span><b>Credits policy</b><small>Roles remain unavailable rather than being inferred.</small></span><strong>HONEST</strong></div></div>`;
+    const credits = [
+      ["Artist", artist.name],
+      ["Featured", track2.features.length ? track2.features.join(", ") : "\u2014"],
+      ["Written by", track2.writers.length ? track2.writers.join(", ") : "Not listed"],
+      ["Produced by", track2.producers.length ? track2.producers.join(", ") : "Not listed"]
+    ];
+    return `<div class="song-room-copy"><p class="song-room-eyebrow">Credits</p><h3>Made by</h3><div class="song-room-credit-list">${credits.map(([label, value]) => `<div><span>${escapeHtml2(label)}</span><strong>${escapeHtml2(value)}</strong></div>`).join("")}</div></div>`;
   }
   function renderReveal({ release, lore, unlocked, progress }) {
-    if (!lore) return `<div class="song-room-empty"><span>REVEAL</span><h3>Nothing hidden here yet.</h3><p>The song remains complete without an extra layer.</p></div>`;
+    if (!lore) return '<div class="song-room-empty"><p class="song-room-eyebrow">Extra</p><h3>Nothing extra here.</h3></div>';
     const threshold = lore.artifact.unlockSeconds;
     const percent = Math.min(100, Math.round(Math.min(progress, threshold) / threshold * 100));
-    if (unlocked) return `<div class="song-room-copy song-room-reveal open"><p class="song-room-eyebrow">Listening reveal \xB7 opened</p><h3>${escapeHtml2(lore.artifact.title)}</h3><p class="song-room-lead">${escapeHtml2(lore.artifact.body)}</p><div class="song-room-reveal-mark" aria-hidden="true"><span></span><i></i><b>OPEN</b></div><button class="song-room-chapter-link" type="button" data-open-release-from-room="${escapeHtml2(release.id)}"><span>${escapeHtml2(lore.index)}</span><strong>Return to ${escapeHtml2(release.title)}</strong><b>Open chapter \u2197</b></button><small>Optional context opened by listening. The recording was never locked.</small></div>`;
-    return `<div class="song-room-copy song-room-reveal locked"><p class="song-room-eyebrow">Listening reveal \xB7 ${String(percent).padStart(2, "0")}%</p><h3>${escapeHtml2(lore.artifact.title)}</h3><p class="song-room-lead">${escapeHtml2(lore.artifact.prompt)}</p><div class="song-room-reveal-lock" aria-label="${percent}% toward reveal"><span style="--reveal-progress:${percent}%"><i></i></span><b>${Math.max(0, threshold - Math.floor(progress))}</b><small>listening seconds remain</small></div><p class="song-room-reveal-policy">The song is complete now. Only this optional artifact waits.</p></div>`;
+    if (unlocked) return `<div class="song-room-copy song-room-reveal open"><p class="song-room-eyebrow">Extra unlocked</p><h3>${escapeHtml2(lore.artifact.title)}</h3><p class="song-room-lead">${escapeHtml2(lore.artifact.body)}</p><div class="song-room-reveal-mark" aria-hidden="true"><span></span><i></i><b>OPEN</b></div><button class="song-room-chapter-link" type="button" data-open-release-from-room="${escapeHtml2(release.id)}"><span>${escapeHtml2(release.type)}</span><strong>${escapeHtml2(release.title)}</strong><b>View album \u2192</b></button></div>`;
+    return `<div class="song-room-copy song-room-reveal locked"><p class="song-room-eyebrow">Extra \xB7 ${String(percent).padStart(2, "0")}%</p><h3>${escapeHtml2(lore.artifact.title)}</h3><p class="song-room-lead">${escapeHtml2(lore.artifact.prompt)}</p><div class="song-room-reveal-lock" aria-label="${percent}% unlocked"><span style="--reveal-progress:${percent}%"><i></i></span><b>${Math.max(0, threshold - Math.floor(progress))}</b><small>seconds left</small></div><p class="song-room-reveal-policy">Keep listening to unlock this extra.</p></div>`;
   }
   function renderQueue({ queueEntries, artist, genreName }) {
-    return `<div class="song-room-copy song-room-queue"><p class="song-room-eyebrow">Up next \xB7 artist chapter</p><h3>${escapeHtml2(artist.name)}</h3><p class="song-room-lead">${escapeHtml2(genreName)} journey \xB7 albums and EPs \xB7 newest to oldest</p><div class="song-room-queue-progress"><i style="width:${queueEntries.length ? (queueEntries.findIndex((entry) => entry.active) + 1) / queueEntries.length * 100 : 0}%"></i></div><div class="song-room-queue-list">${queueEntries.map((entry, index) => `<button type="button" data-song-room-track="${escapeHtml2(entry.track.id)}" class="${entry.active ? "active" : ""}" ${entry.active ? 'aria-current="true"' : ""}><span>${String(index + 1).padStart(2, "0")}</span><img src="${escapeHtml2(entry.release.cover)}" alt=""/><span><b>${escapeHtml2(entry.track.title)}</b><small>${escapeHtml2(entry.release.title)} \xB7 ${escapeHtml2(entry.track.style)}</small></span><time>${formatTime2(entry.track.durationSeconds)}</time></button>`).join("")}</div></div>`;
+    return `<div class="song-room-copy song-room-queue"><p class="song-room-eyebrow">Up next</p><h3>${escapeHtml2(artist.name)}</h3><p class="song-room-lead">${escapeHtml2(genreName)} \xB7 ${queueEntries.length} songs</p><div class="song-room-queue-progress"><i style="width:${queueEntries.length ? (queueEntries.findIndex((entry) => entry.active) + 1) / queueEntries.length * 100 : 0}%"></i></div><div class="song-room-queue-list">${queueEntries.map((entry, index) => `<button type="button" data-song-room-track="${escapeHtml2(entry.track.id)}" class="${entry.active ? "active" : ""}" ${entry.active ? 'aria-current="true"' : ""}><span>${String(index + 1).padStart(2, "0")}</span><img src="${escapeHtml2(entry.release.cover)}" alt=""/><span><b>${escapeHtml2(entry.track.title)}</b><small>${escapeHtml2(entry.artist?.name || artist.name)}</small></span><time>${formatTime2(entry.track.durationSeconds)}</time></button>`).join("")}</div></div>`;
   }
   function volumeMarkup(volume) {
     const value = Math.round(Math.max(0, Math.min(1, Number(volume) || 0)) * 100);
-    return `<div class="song-room-room-volume"><button type="button" data-room-mute aria-label="${value ? "Mute" : "Unmute"}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M4 10v4h4l5 4V6L8 10H4Z"/><path class="volume-wave" d="M16 9a4 4 0 0 1 0 6M18.5 6.5a8 8 0 0 1 0 11"/><path class="volume-slash" d="m16 9 5 6"/></svg></button><label><span>SOUND FIELD <output>${value}</output></span><input data-room-volume type="range" min="0" max="100" value="${value}" style="--volume:${value}%" aria-label="Song Room volume"/></label><div class="sound-meter" aria-hidden="true">${Array.from({ length: 10 }, (_, index) => `<i class="${index < Math.ceil(value / 10) ? "active" : ""}"></i>`).join("")}</div></div>`;
+    return `<div class="song-room-room-volume"><button type="button" data-room-mute aria-label="${value ? "Mute" : "Unmute"}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M4 10v4h4l5 4V6L8 10H4Z"/><path class="volume-wave" d="M16 9a4 4 0 0 1 0 6M18.5 6.5a8 8 0 0 1 0 11"/><path class="volume-slash" d="m16 9 5 6"/></svg></button><label><span>Volume <output>${value}</output></span><input data-room-volume type="range" min="0" max="100" value="${value}" style="--volume:${value}%" aria-label="Song Room volume"/></label><div class="sound-meter" aria-hidden="true">${Array.from({ length: 10 }, (_, index) => `<i class="${index < Math.ceil(value / 10) ? "active" : ""}"></i>`).join("")}</div></div>`;
   }
   function renderRoom({ artist, release, track: track2 }, volume) {
-    return `<div class="song-room-copy song-room-mobile-summary"><p class="song-room-eyebrow">Song Room</p><h3>${escapeHtml2(track2.title)}</h3><p class="song-room-lead">${escapeHtml2(artist.name)} \xB7 ${escapeHtml2(release.title)} \xB7 ${release.year}</p><div class="song-room-room-actions"><span>${escapeHtml2(track2.style)}</span><span>${track2.bpm ? `${track2.bpm} BPM` : "Tempo unavailable"}</span><span>${escapeHtml2(track2.key || "Key unavailable")}</span></div>${volumeMarkup(volume)}<p class="song-room-room-note">Stay with the song, or go deeper.</p></div>`;
+    return `<div class="song-room-copy song-room-mobile-summary"><p class="song-room-eyebrow">Now playing</p><h3>${escapeHtml2(track2.title)}</h3><p class="song-room-lead">${escapeHtml2(artist.name)} \xB7 ${escapeHtml2(release.title)}</p><div class="song-room-room-actions"><span>${escapeHtml2(track2.style)}</span>${track2.bpm ? `<span>${track2.bpm} BPM</span>` : ""}</div>${volumeMarkup(volume)}</div>`;
   }
   function renderSongRoomPanel({ mode, context, queueEntries, genreName, note = "", lore = null, revealUnlocked = false, revealProgress = 0, volume = 0.82 }) {
     if (mode === "lyrics") return renderLyrics(context.track);
@@ -4586,6 +5049,306 @@ body.is-playing .workspace::before { animation: ambient-drift 12s ease-in-out in
   syncWaveformPlayback();
   syncJourneyVisibility();
   syncModalState();
+
+  // src/ui/discoveryHub.js
+  var entries = artists.flatMap((artist) => artist.releases.flatMap((release) => release.tracks.map((track2) => ({ artist, release, track: track2 }))));
+  var byId = new Map(entries.map((entry) => [entry.track.id, entry]));
+  var popularIds = ["k101", "a101", "g101", "s101", "m102", "n101", "t101", "k105"];
+  var hiddenIds = ["g104", "n104", "a105", "s105", "m104", "k107", "v102", "t102"];
+  var currentScreen = "explore";
+  var selectedGenre = "hiphop";
+  var chooserReturnFocus = null;
+  var initialPromptShown = false;
+  var renderQueued = false;
+  function ensureStyles() {
+    const active = getComputedStyle(document.documentElement).getPropertyValue("--rondo-human-pass").trim();
+    if (active === "1" || document.querySelector("link[data-rondo-human-pass]")) return;
+    const link = document.createElement("link");
+    link.rel = "stylesheet";
+    link.href = "experience.css";
+    link.dataset.rondoHumanPass = "";
+    document.head.append(link);
+  }
+  function escapeHtml4(value = "") {
+    return String(value).replace(/[&<>"']/g, (character) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[character]);
+  }
+  function genreFor(id) {
+    return genres.find((genre) => genre.id === id) || genres[0];
+  }
+  function entriesForGenre(id) {
+    return entries.filter(({ track: track2 }) => track2.genres.includes(id));
+  }
+  function artwork(entry) {
+    return `<span class="music-card-art"><img src="${escapeHtml4(entry.release.cover)}" alt=""/><i aria-hidden="true">\u25B6</i></span>`;
+  }
+  function songCard(entry) {
+    return `<button class="music-card" type="button" data-explore-track="${escapeHtml4(entry.track.id)}" aria-label="Play ${escapeHtml4(entry.track.title)} by ${escapeHtml4(entry.artist.name)}">${artwork(entry)}<span class="music-card-copy"><strong>${escapeHtml4(entry.track.title)}</strong><span>${escapeHtml4(entry.artist.name)}</span><small>${escapeHtml4(entry.track.style)}</small></span></button>`;
+  }
+  function songRow(entry, index) {
+    return `<button class="genre-song" type="button" data-explore-track="${escapeHtml4(entry.track.id)}"><span class="genre-song-number">${String(index + 1).padStart(2, "0")}</span><img src="${escapeHtml4(entry.release.cover)}" alt=""/><span class="genre-song-name"><strong>${escapeHtml4(entry.track.title)}</strong><small>${escapeHtml4(entry.artist.name)} \xB7 ${escapeHtml4(entry.release.title)}</small></span><span class="genre-song-style">${escapeHtml4(entry.track.style)}</span><time>${escapeHtml4(entry.track.duration)}</time><b aria-hidden="true">\u25B6</b></button>`;
+  }
+  function renderExplore() {
+    currentScreen = "explore";
+    const surface = document.getElementById("viewSurface");
+    if (!surface || document.body.dataset.view !== "discover") return;
+    const popular = popularIds.map((id) => byId.get(id)).filter(Boolean);
+    const hidden = hiddenIds.map((id) => byId.get(id)).filter(Boolean);
+    const genreSections = genres.map((genre) => {
+      const songs = entriesForGenre(genre.id).slice(0, 5);
+      return `<section class="music-section music-genre-row"><header><div><span>${escapeHtml4(genre.short)}</span><h2>${escapeHtml4(genre.name)}</h2></div><button type="button" data-explore-genre="${escapeHtml4(genre.id)}">See playlist</button></header><div class="music-card-strip">${songs.map(songCard).join("")}</div></section>`;
+    }).join("");
+    surface.className = "view-surface view-surface-discover discovery-surface";
+    surface.innerHTML = `<main class="music-explore" data-rondo-discovery data-discovery-screen="explore">
+    <header class="music-explore-head"><div><span>Discover</span><h1 class="discover-heading">Find your next song.</h1><p>Popular picks, hidden gems, and every genre in one place.</p></div><button class="music-picker-button" type="button" data-open-discovery-picker>Choose how to listen</button></header>
+    <label class="music-search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="10.8" cy="10.8" r="6.8"/><path d="m16 16 4 4"/></svg><span class="sr-only">Search music</span><input type="search" data-music-search placeholder="Search songs, artists, or albums" autocomplete="off"/></label>
+    <section class="music-search-results" data-music-results hidden></section>
+    <section class="music-section music-featured"><header><div><span>Start here</span><h2>Popular now</h2></div></header><div class="music-card-grid">${popular.map(songCard).join("")}</div></section>
+    <section class="music-section music-hidden"><header><div><span>Worth finding</span><h2>Hidden gems</h2></div></header><div class="music-card-grid">${hidden.map(songCard).join("")}</div></section>
+    <div class="music-genre-sections">${genreSections}</div>
+  </main>`;
+    document.body.dataset.discoveryScreen = "explore";
+  }
+  function renderGenre(id) {
+    const genre = genreFor(id);
+    selectedGenre = genre.id;
+    currentScreen = "genre";
+    const surface = document.getElementById("viewSurface");
+    if (!surface || document.body.dataset.view !== "discover") return;
+    const songs = entriesForGenre(genre.id);
+    const lead = songs.find(({ track: track2 }) => track2.previewUrl) || songs[0];
+    const releases = [...new Map(songs.map((entry) => [entry.release.id, entry])).values()].slice(0, 6);
+    surface.className = "view-surface view-surface-discover discovery-surface";
+    surface.innerHTML = `<main class="genre-playlist" data-rondo-discovery data-discovery-screen="genre" data-genre="${escapeHtml4(genre.id)}">
+    <header class="genre-playlist-head"><button type="button" data-open-discovery-picker>\u2190 Discover</button><div><span>${escapeHtml4(genre.short)}</span><h1>${escapeHtml4(genre.short)} mix</h1><p>${songs.length} songs from across Rondo.</p></div><button class="genre-play" type="button" data-explore-track="${escapeHtml4(lead?.track.id || "")}">Play mix <span>\u25B6</span></button></header>
+    <label class="music-search genre-search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="10.8" cy="10.8" r="6.8"/><path d="m16 16 4 4"/></svg><span class="sr-only">Search this playlist</span><input type="search" data-genre-search placeholder="Search this playlist" autocomplete="off"/></label>
+    <section class="genre-song-list" data-genre-song-list>${songs.map(songRow).join("")}</section>
+    <section class="music-section genre-releases"><header><div><span>Albums and EPs</span><h2>More ${escapeHtml4(genre.short)}</h2></div></header><div class="music-card-grid">${releases.map(songCard).join("")}</div></section>
+  </main>`;
+    document.body.dataset.discoveryScreen = "genre";
+  }
+  function renderSearchResults2(query, scope = entries) {
+    const value = query.trim().toLowerCase();
+    const target = document.querySelector("[data-music-results]");
+    if (!target) return;
+    if (!value) {
+      target.hidden = true;
+      target.innerHTML = "";
+      return;
+    }
+    const matches = scope.filter(({ artist, release, track: track2 }) => [track2.title, artist.name, release.title, track2.style, ...track2.genres].join(" ").toLowerCase().includes(value)).slice(0, 12);
+    target.hidden = false;
+    target.innerHTML = `<header><span>Search results</span><b>${matches.length}</b></header>${matches.length ? `<div>${matches.map(songRow).join("")}</div>` : "<p>No songs found.</p>"}`;
+  }
+  function renderChooser() {
+    const existing = document.getElementById("discoveryChoice");
+    if (existing) return existing;
+    const overlay = document.createElement("div");
+    overlay.id = "discoveryChoice";
+    overlay.className = "discovery-choice-overlay";
+    overlay.hidden = true;
+    overlay.innerHTML = `<section class="discovery-choice" role="dialog" aria-modal="true" aria-labelledby="discoveryChoiceTitle"><button class="discovery-choice-close" type="button" data-close-discovery aria-label="Close">\xD7</button><p>Discover</p><h2 id="discoveryChoiceTitle">What do you want to hear?</h2><div class="discovery-choice-grid"><div class="discovery-option discovery-option-genre"><span>Pick a genre</span><h3>Start with a playlist</h3><p>Choose a sound and press play.</p><div class="discovery-genre-chips" role="radiogroup" aria-label="Choose a genre">${genres.map((genre) => `<button type="button" role="radio" aria-checked="${genre.id === selectedGenre}" class="${genre.id === selectedGenre ? "active" : ""}" data-choice-genre="${escapeHtml4(genre.id)}">${escapeHtml4(genre.short)}</button>`).join("")}</div><button class="discovery-listen" type="button" data-listen-genre>Listen to ${escapeHtml4(genreFor(selectedGenre).short)}</button></div><button class="discovery-option discovery-option-explore" type="button" data-choose-explore><span>Explore</span><h3>Browse everything</h3><p>Popular songs, underrated picks, and music from every genre.</p><b>Open Explore \u2192</b></button></div></section>`;
+    document.body.append(overlay);
+    return overlay;
+  }
+  function appModalVisible() {
+    return ["searchOverlay", "fullPlayer", "queueDrawer", "onboardingOverlay", "completionOverlay"].some((id) => {
+      const element = document.getElementById(id);
+      return element && !element.hidden;
+    });
+  }
+  function syncChoice() {
+    const overlay = renderChooser();
+    overlay.querySelectorAll("[data-choice-genre]").forEach((button) => {
+      const active = button.dataset.choiceGenre === selectedGenre;
+      button.classList.toggle("active", active);
+      button.setAttribute("aria-checked", String(active));
+    });
+    overlay.querySelector("[data-listen-genre]").textContent = `Listen to ${genreFor(selectedGenre).short}`;
+  }
+  function openChooser(returnFocus = document.activeElement) {
+    if (appModalVisible()) return;
+    const overlay = renderChooser();
+    chooserReturnFocus = returnFocus instanceof HTMLElement ? returnFocus : null;
+    syncChoice();
+    overlay.hidden = false;
+    document.getElementById("appShell")?.setAttribute("inert", "");
+    document.body.classList.add("modal-open", "discovery-choice-open");
+    requestAnimationFrame(() => overlay.querySelector("[data-choice-genre].active")?.focus());
+  }
+  function closeChooser({ restoreFocus = true } = {}) {
+    const overlay = renderChooser();
+    if (overlay.hidden) return;
+    overlay.hidden = true;
+    document.getElementById("appShell")?.removeAttribute("inert");
+    document.body.classList.remove("modal-open", "discovery-choice-open");
+    if (restoreFocus && chooserReturnFocus?.isConnected) chooserReturnFocus.focus();
+    chooserReturnFocus = null;
+  }
+  var wait = (duration = 70) => new Promise((resolve) => setTimeout(resolve, duration));
+  async function playEntry(entry) {
+    if (!entry) return;
+    closeChooser({ restoreFocus: false });
+    const journeyButton = document.querySelector('.rail-button[data-view="journeys"]') || document.querySelector('.mobile-nav-button[data-mobile-view="journeys"]');
+    journeyButton?.click();
+    await wait();
+    const select = document.getElementById("genreSelect");
+    const genreId = entry.track.genres.find((id) => genres.some((genre) => genre.id === id)) || entry.artist.genreIds[0];
+    if (select && genreId) {
+      select.value = genreId;
+      select.dispatchEvent(new Event("change", { bubbles: true }));
+      await wait();
+    }
+    document.querySelector(`[data-artist="${CSS.escape(entry.artist.id)}"]`)?.click();
+    await wait();
+    document.getElementById("allMode")?.click();
+    await wait();
+    const row = [...document.querySelectorAll(".track-row")].find((item) => item.textContent.includes(entry.track.title));
+    const playButton = row?.querySelector(".track-play") || row?.querySelector("button");
+    playButton?.click();
+    await wait(120);
+    document.getElementById("mobileTrack")?.click();
+  }
+  function simpleVibe(entry) {
+    const text = `${entry?.track.style || ""} ${entry?.track.genres?.join(" ") || ""}`.toLowerCase();
+    const bpm = Number(entry?.track.bpm) || 100;
+    if (/ambient|quiet|soul|neo-soul/.test(text)) return "soft";
+    if (/jazz|boom bap/.test(text)) return "warm";
+    if (/electronic|techno|industrial|microhouse/.test(text)) return "electric";
+    if (bpm >= 132 || /trap|rap|hip-hop/.test(text)) return "drive";
+    return "steady";
+  }
+  function syncSongRoomVibe() {
+    const room = document.getElementById("fullPlayer");
+    const cover2 = document.getElementById("fullCover");
+    if (!room || !cover2) return;
+    const title = document.getElementById("fullTitle")?.textContent?.trim();
+    const artist = document.getElementById("fullArtist")?.textContent?.trim();
+    const entry = entries.find((item) => item.track.title === title && (!artist || artist.includes(item.artist.name))) || entries.find((item) => item.track.title === title);
+    room.dataset.vibe = simpleVibe(entry);
+    room.style.setProperty("--song-cover", `url("${cover2.getAttribute("src") || ""}")`);
+    room.style.setProperty("--song-tempo", String(Math.max(0.7, Math.min(1.35, (Number(entry?.track.bpm) || 100) / 100))));
+    const storyTab = room.querySelector('[role="tab"][data-song-room-mode="story"]');
+    if (storyTab && storyTab.textContent !== "About") storyTab.textContent = "About";
+    const revealTab = room.querySelector('[role="tab"][data-song-room-mode="reveals"]');
+    if (revealTab?.firstChild && revealTab.firstChild.nodeValue !== "Extra ") revealTab.firstChild.nodeValue = "Extra ";
+    room.querySelectorAll('.song-room-mobile-nav [data-song-room-mode="story"]').forEach((button) => {
+      if (button.textContent !== "About") button.textContent = "About";
+    });
+    room.querySelectorAll('.song-room-mobile-nav [data-song-room-mode="reveals"]').forEach((button) => {
+      if (button.textContent !== "Extra") button.textContent = "Extra";
+    });
+    const modeLabel = document.getElementById("songRoomModeLabel");
+    const nextLabel = { story: "About", lyrics: "Lyrics", credits: "Credits", reveals: "Extra", queue: "Up next", room: "Now playing" }[room.dataset.mode] || "About";
+    if (modeLabel && modeLabel.textContent !== nextLabel) modeLabel.textContent = nextLabel;
+  }
+  function ensureDiscoverySurface() {
+    if (document.body.dataset.view !== "discover") return;
+    const surface = document.getElementById("viewSurface");
+    if (!surface || surface.querySelector("[data-rondo-discovery]")) return;
+    currentScreen === "genre" ? renderGenre(selectedGenre) : renderExplore();
+  }
+  function scheduleSync() {
+    const choice = document.getElementById("discoveryChoice");
+    if (document.body.dataset.view !== "discover" && choice && !choice.hidden) closeChooser({ restoreFocus: false });
+    if (renderQueued) return;
+    renderQueued = true;
+    requestAnimationFrame(() => {
+      renderQueued = false;
+      ensureDiscoverySurface();
+      syncSongRoomVibe();
+      const onboarding = document.getElementById("onboardingOverlay");
+      if (!initialPromptShown && document.body.dataset.view === "discover" && (!onboarding || onboarding.hidden) && !appModalVisible()) {
+        initialPromptShown = true;
+        openChooser(document.querySelector('.rail-button[data-view="discover"]'));
+      }
+    });
+  }
+  ensureStyles();
+  renderChooser();
+  var observer = new MutationObserver(scheduleSync);
+  observer.observe(document.body, { subtree: true, childList: true, attributes: true, attributeFilter: ["data-view", "data-mode", "src", "hidden"] });
+  document.addEventListener("click", (event) => {
+    const leavingNav = event.target.closest('.rail-button[data-view]:not([data-view="discover"]), .mobile-nav-button[data-mobile-view]:not([data-mobile-view="discover"])');
+    if (leavingNav) closeChooser({ restoreFocus: false });
+    const discoverNav = event.target.closest('.rail-button[data-view="discover"], .mobile-nav-button[data-mobile-view="discover"], .rail-logo, .wordmark, [data-return-discover]');
+    if (discoverNav) {
+      setTimeout(() => {
+        ensureDiscoverySurface();
+        openChooser(discoverNav);
+      }, 0);
+    }
+  }, true);
+  document.addEventListener("click", (event) => {
+    const target = event.target;
+    if (target.id === "discoveryChoice") {
+      closeChooser();
+      return;
+    }
+    const genreChoice = target.closest("[data-choice-genre]");
+    if (genreChoice) {
+      selectedGenre = genreChoice.dataset.choiceGenre;
+      syncChoice();
+      return;
+    }
+    if (target.closest("[data-listen-genre]")) {
+      closeChooser({ restoreFocus: false });
+      renderGenre(selectedGenre);
+      return;
+    }
+    if (target.closest("[data-choose-explore]")) {
+      closeChooser({ restoreFocus: false });
+      renderExplore();
+      document.getElementById("viewSurface")?.scrollTo({ top: 0 });
+      return;
+    }
+    if (target.closest("[data-close-discovery]")) {
+      closeChooser();
+      return;
+    }
+    if (target.closest("[data-open-discovery-picker]")) {
+      openChooser(target.closest("button"));
+      return;
+    }
+    const genre = target.closest("[data-explore-genre]");
+    if (genre) {
+      renderGenre(genre.dataset.exploreGenre);
+      document.getElementById("viewSurface")?.scrollTo({ top: 0, behavior: "smooth" });
+      return;
+    }
+    const track2 = target.closest("[data-explore-track]");
+    if (track2) playEntry(byId.get(track2.dataset.exploreTrack));
+  });
+  document.addEventListener("input", (event) => {
+    if (event.target.matches("[data-music-search]")) renderSearchResults2(event.target.value);
+    if (event.target.matches("[data-genre-search]")) {
+      const query = event.target.value.trim().toLowerCase();
+      const list = document.querySelector("[data-genre-song-list]");
+      const songs = entriesForGenre(selectedGenre).filter(({ artist, release, track: track2 }) => [track2.title, artist.name, release.title, track2.style].join(" ").toLowerCase().includes(query));
+      if (list) list.innerHTML = songs.length ? songs.map(songRow).join("") : '<p class="genre-empty">No songs found.</p>';
+    }
+  });
+  document.addEventListener("keydown", (event) => {
+    const overlay = document.getElementById("discoveryChoice");
+    if (!overlay || overlay.hidden) return;
+    if (event.key === "Escape") {
+      event.preventDefault();
+      closeChooser();
+      return;
+    }
+    if (event.key !== "Tab") return;
+    const focusable = [...overlay.querySelectorAll("button:not(:disabled), input:not(:disabled)")].filter((element) => element.offsetParent !== null);
+    if (!focusable.length) return;
+    const first = focusable[0];
+    const last = focusable.at(-1);
+    if (event.shiftKey && document.activeElement === first) {
+      event.preventDefault();
+      last.focus();
+    } else if (!event.shiftKey && document.activeElement === last) {
+      event.preventDefault();
+      first.focus();
+    }
+  });
+  scheduleSync();
 })();
 </script>
 </body>
