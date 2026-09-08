@@ -50,27 +50,70 @@ jobs:
       - name: Run static and unit checks
         run: npm run check && npm run test:unit
       - name: Test app smoke paths
+        id: smoke
+        continue-on-error: true
         run: node scripts/run-test-with-annotations.mjs "App smoke paths" tests/smoke.mjs
       - name: Test interface quality
+        id: quality
+        continue-on-error: true
         run: node scripts/run-test-with-annotations.mjs "Interface quality" tests/quality.mjs
       - name: Test Discover and Journey routes
+        id: routes
+        continue-on-error: true
         run: node scripts/run-test-with-annotations.mjs "Discover and Journey routes" tests/discovery-hub.mjs
       - name: Test listening flow
+        id: listening
+        continue-on-error: true
         run: node scripts/run-test-with-annotations.mjs "Listening flow" tests/listening.mjs
       - name: Test Song Room
+        id: song_room
+        continue-on-error: true
         run: node scripts/run-test-with-annotations.mjs "Song Room" tests/song-room.mjs
       - name: Test audio behavior
+        id: audio
+        continue-on-error: true
         run: node scripts/run-test-with-annotations.mjs "Audio behavior" tests/audio.mjs
       - name: Test personal surfaces
+        id: personal
+        continue-on-error: true
         run: node scripts/run-test-with-annotations.mjs "Personal surfaces" tests/personal.mjs
       - name: Test user-ready flow
+        id: user_ready
+        continue-on-error: true
         run: node scripts/run-test-with-annotations.mjs "User-ready flow" tests/user-ready.mjs
       - name: Test experience details
+        id: experience
+        continue-on-error: true
         run: node scripts/run-test-with-annotations.mjs "Experience details" tests/experience.mjs
       - name: Test full concept flow
+        id: full_concept
+        continue-on-error: true
         run: node scripts/run-test-with-annotations.mjs "Full concept flow" tests/full-concept.mjs
       - name: Test release readiness
+        id: release_ready
+        continue-on-error: true
         run: node scripts/run-test-with-annotations.mjs "Release readiness" tests/release-ready.mjs
+      - name: Enforce browser regression suite
+        if: always()
+        run: |
+          failed=0
+          for outcome in \
+            "${{ steps.smoke.outcome }}" \
+            "${{ steps.quality.outcome }}" \
+            "${{ steps.routes.outcome }}" \
+            "${{ steps.listening.outcome }}" \
+            "${{ steps.song_room.outcome }}" \
+            "${{ steps.audio.outcome }}" \
+            "${{ steps.personal.outcome }}" \
+            "${{ steps.user_ready.outcome }}" \
+            "${{ steps.experience.outcome }}" \
+            "${{ steps.full_concept.outcome }}" \
+            "${{ steps.release_ready.outcome }}"; do
+            if [ "$outcome" != "success" ]; then
+              failed=1
+            fi
+          done
+          exit "$failed"
       - name: Capture visual QA
         run: node scripts/capture-visuals.mjs
       - name: Publish portable preview
