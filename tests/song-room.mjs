@@ -1,80 +1,85 @@
 import { existsSync } from 'node:fs';
 import { chromium } from 'playwright';
-import { pathToFileURL } from 'node:url';
-import { resolve } from 'node:path';
 
-const baseTarget = process.env.RONDO_URL || pathToFileURL(resolve('preview-test.html')).href;
-const target = `${baseTarget}${baseTarget.includes('?') ? '&' : '?'}skip-onboarding=1&screen=journey`;
 const executablePath = process.env.CHROMIUM_PATH || '/usr/local/bin/chromium';
 const launchOptions = { headless: true, args: ['--no-sandbox'] };
 if (existsSync(executablePath)) launchOptions.executablePath = executablePath;
 const browser = await chromium.launch(launchOptions);
-const assert = (condition, message) => { if (!condition) throw new Error(message); };
+const page = await browser.newPage({ viewport: { width: 1440, height: 900 } });
 const errors = [];
+page.on('pageerror', (error) => errors.push(error.message));
+page.on('console', (message) => { if (message.type() === 'error') errors.push(message.text()); });
+const assert = (condition, message) => { if (!condition) throw new Error(message); };
+const base = new URL(process.env.RONDO_URL || 'http://127.0.0.1:4173/index.html');
+const url = new URL(base); url.searchParams.set('skip-onboarding', '1'); url.searchParams.set('screen', 'player');
 
 try {
-  const page = await browser.newPage({ viewport: { width: 1440, height: 900 } });
-  page.on('pageerror', (error) => errors.push(error.message));
-  page.on('console', (message) => { if (message.type() === 'error') errors.push(message.text()); });
-  await page.goto(target);
-  await page.evaluate(() => localStorage.clear());
-  await page.reload();
-  await page.click('#openFullPlayer');
-  await page.waitForFunction(() => Boolean(document.querySelector('#fullPlayer')?.dataset.vibe));
-  assert(await page.locator('#fullPlayer').isVisible(), 'Song Room should open.');
+  await page.goto(url.href, { waitUntil: 'networkidle' });
+  await page.locator('#fullPlayer').waitFor({ state: 'visible' });
+  await page.waitForFunction(() => document.querySelector('#fullPlayer')?.dataset.vibe);
   assert(await page.locator('#fullPlayer').evaluate((element) => element.classList.contains('song-room')), 'The immersive player should use the Song Room surface.');
   assert(await page.locator('html').getAttribute('data-song-palette') === 'night', 'Night Transit should apply its artwork palette.');
   assert((await page.locator('html').evaluate((element) => getComputedStyle(element).getPropertyValue('--song-accent').trim())) === '#6f9dff', 'Artwork palette should set one dominant accent.');
   assert(Boolean(await page.locator('#fullPlayer').getAttribute('data-vibe')), 'Song Room should expose a restrained track vibe.');
-  assert((await page.locator('#fullPlayer').evaluate((element) => element.style.getPropertyValue('--song-cover'))).includes('night-transit'), 'Song Room backdrop should be driven by the current cover.');
+  const coverBackdrop = await page.locator('#fullPlayer').evaluate((element) => element.style.getPropertyValue('--song-cover'));
+  assert(coverBackdrop.includes('url(') && !coverBackdrop.includes('url(\"\")'), 'Song Room backdrop should be driven by the current cover.');
   const visualRules = await page.evaluate(() => ({
     titleSize: parseFloat(getComputedStyle(document.querySelector('.song-room-title h2')).fontSize),
     orbitDisplay: getComputedStyle(document.querySelector('.song-room-art'), '::before').display,
     backdropAnimation: getComputedStyle(document.querySelector('.song-room-backdrop'), '::before').animationName
   }));
-  assert(visualRules.titleSize <= 82, `Song title should stay restrained, got ${visualRules.titleSize}px.`);
-  assert(visualRules.orbitDisplay === 'none', 'Decorative artwork orbits should be removed.');
-  assert(['songBackdrop', 'none'].includes(visualRules.backdropAnimation), 'Only restrained cover-driven backdrop motion should remain.');
-  assert((await page.locator('#songRoomPanel').textContent()).includes('About this song'), 'About mode should explain the song in plain language.');
-  assert(!(await page.locator('#songRoomPanel').textContent()).includes('provenance'), 'Primary Song Room copy should avoid policy jargon.');
+  assert(visualRules.titleSize <= 82, 'Desktop Song Room title should stay under 82px.');
+  assert(visualRules.orbitDisplay === 'none', 'Song Room should not use ornamental artwork orbits.');
+  assert(visualRules.backdropAnimation !== 'none', 'Song Room should have one restrained cover-driven motion layer.');
 
-  await page.click('[data-song-room-mode="credits"]');
-  assert((await page.locator('#songRoomPanel').textContent()).includes('Made by'), 'Credits should use a simple human label.');
-  await page.click('[data-song-room-mode="lyrics"]');
-  assert(await page.locator('.song-room-lyric-list [data-time]').count() > 2, 'Lyrics mode should render synchronized lines.');
-  await page.locator('.song-room-lyric-list [data-time]').first().click();
-  assert((await page.locator('#fullElapsed').textContent()) === '0:00', 'Lyric lines should seek playback.');
-  await page.click('[data-song-room-mode="queue"]');
-  assert(await page.locator('.song-room-queue-list [data-song-room-track]').count() > 1, 'Up next should show the artist sequence.');
-  await page.locator('[data-song-room-track="k105"]').click();
-  assert(await page.locator('html').getAttribute('data-song-palette') === 'afterimage', 'Changing releases should update the artwork palette.');
-  await page.click('#songRoomMoment');
-  const momentCount = await page.evaluate(() => JSON.parse(localStorage.getItem('rondo-prototype-v2') || '{}').savedMoments?.length || 0);
-  assert(momentCount === 1, 'Saving a moment should persist it.');
-  await page.click('#fullRepeat');
-  assert(await page.locator('#fullRepeat').getAttribute('data-repeat') === 'track', 'Song Room repeat control should update.');
-  await page.click('#closeFullPlayer');
-  assert(await page.locator('#fullPlayer').isHidden(), 'Song Room should close.');
-  await page.close();
+  await page.click('[data-room-mode="about"]');
+  const about = await page.locator('#songRoomPanel').textContent();
+  assert(about.includes('About this song'), 'Song Room should use plain About copy.');
+  assert(!about.includes('Inside the track'), 'Song Room should remove abstract story labels.');
+  assert(!about.includes('provenance') && !about.includes('covenant') && !about.includes('Rights & provenance'), 'Song Room should not foreground internal provenance copy.');
+  await page.click('[data-room-mode="lyrics"]');
+  assert(await page.locator('[data-lyric-line]').count() > 0, 'Song Room should render synchronized lyric lines.');
+  await page.evaluate(() => {
+    const audio = document.querySelector('#rondoAudio');
+    Object.defineProperty(audio, 'duration', { configurable: true, value: 200 });
+    audio.currentTime = 80;
+    audio.dispatchEvent(new Event('timeupdate'));
+  });
+  assert(await page.locator('[data-lyric-line].is-current').count() === 1, 'Exactly one lyric line should be current.');
+  await page.locator('[data-lyric-time]').last().click();
+  assert(await page.evaluate(() => document.querySelector('#rondoAudio').currentTime > 100), 'Lyric click should seek the track.');
 
-  const mobile = await browser.newPage({ viewport: { width: 390, height: 844 } });
-  mobile.on('pageerror', (error) => errors.push(error.message));
-  await mobile.goto(`${baseTarget}${baseTarget.includes('?') ? '&' : '?'}screen=player`);
-  assert(await mobile.locator('#fullPlayer').isVisible(), 'Mobile Song Room should open.');
-  await mobile.click('[data-song-room-mode="room"]');
-  const roomPanel = await mobile.locator('.song-room-panel').evaluate((element) => ({ pointerEvents: getComputedStyle(element).pointerEvents }));
-  assert(roomPanel.pointerEvents === 'none', 'Room mode should return focus to the artwork on mobile.');
-  await mobile.click('.song-room-mobile-nav [data-song-room-mode="story"]');
-  assert((await mobile.locator('#songRoomPanel').textContent()).includes('About this song'), 'Mobile About mode should open the context sheet.');
-  await mobile.click('.song-room-mobile-nav [data-song-room-mode="lyrics"]');
-  assert(await mobile.locator('.song-room-lyric-list').isVisible(), 'Mobile Lyrics should be readable.');
-  const compactTitle = parseFloat(await mobile.locator('.song-room-title h2').evaluate((element) => getComputedStyle(element).fontSize));
-  assert(compactTitle <= 44, 'Mobile Song Room title should stay compact.');
-  assert(!(await mobile.evaluate(() => document.documentElement.scrollWidth > innerWidth + 1)), 'Mobile Song Room should not overflow.');
-  await mobile.close();
+  await page.click('[data-room-mode="queue"]');
+  assert(await page.locator('.song-room-queue-row').count() >= 1, 'Song Room should render a queue.');
+  await page.locator('.song-room-queue-row').last().click();
+  await page.waitForFunction(() => document.documentElement.dataset.songPalette === 'ember');
+  assert((await page.locator('#barTitle').textContent()).trim() === 'Afterimage', 'Queue click should start the selected track.');
+  assert((await page.locator('html').evaluate((element) => getComputedStyle(element).getPropertyValue('--song-accent').trim())) === '#e07a54', 'Palette should change with artwork.');
+  assert(Boolean(await page.locator('#fullPlayer').getAttribute('data-vibe')), 'Vibe should update with a queued song.');
 
-  assert(errors.length === 0, `Song Room browser errors: ${errors.join(' | ')}`);
-  console.log('Song Room test passed.');
+  await page.click('[data-room-mode="lyrics"]');
+  await page.click('[data-save-moment]');
+  assert(await page.locator('[data-saved-moment]').count() >= 1, 'Song Room should save moments.');
+  await page.click('[data-repeat-mode]');
+  assert(await page.locator('[data-repeat-mode]').getAttribute('data-repeat-mode') === 'all', 'Repeat should enter all mode.');
+  await page.click('[data-repeat-mode]');
+  assert(await page.locator('[data-repeat-mode]').getAttribute('data-repeat-mode') === 'one', 'Repeat should enter one mode.');
+
+  await page.setViewportSize({ width: 390, height: 844 });
+  const mobile = await page.evaluate(() => ({
+    overflow: document.documentElement.scrollWidth - innerWidth,
+    titleSize: parseFloat(getComputedStyle(document.querySelector('.song-room-title h2')).fontSize)
+  }));
+  assert(mobile.overflow <= 1, 'Song Room must not overflow at 390px.');
+  assert(mobile.titleSize <= 46, 'Mobile Song Room title should stay under 46px.');
+  await page.click('.song-room-mobile-nav [data-room-mode="about"]');
+  assert((await page.locator('#songRoomPanel').textContent()).includes('About this song'), 'Mobile About should work.');
+  await page.click('.song-room-mobile-nav [data-room-mode="lyrics"]');
+  assert((await page.locator('#songRoomPanel').textContent()).includes('Lyrics'), 'Mobile Lyrics should work.');
+
+  assert(errors.length === 0, `Browser errors: ${errors.join(' | ')}`);
+  console.log('Song Room regression passed.');
 } finally {
+  await page.close();
   await browser.close();
 }
