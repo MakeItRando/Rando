@@ -99,6 +99,7 @@ try {
     if (discoverText.includes(rejected)) add('medium', 'copy', `Rejected Discover copy remains: ${rejected}.`);
   }
   await page.click('.rail-button[data-view="discover"]');
+  await page.locator('#discoveryChoice').waitFor({ state: 'visible' });
   await page.locator('.discovery-choice-close').focus();
   await page.keyboard.press('Shift+Tab');
   if (!(await page.evaluate(() => document.querySelector('#discoveryChoice')?.contains(document.activeElement)))) add('high', 'keyboard', 'Discover chooser does not trap focus.');
