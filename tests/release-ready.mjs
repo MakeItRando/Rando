@@ -53,6 +53,7 @@ try {
   assert(!(await desktop.locator('#appShell').evaluate((element) => element.inert)), 'Closing Song Room should restore the app.');
 
   await desktop.click('.rail-button[data-view="discover"]');
+  await desktop.locator('#discoveryChoice').waitFor({ state: 'visible' });
   assert(await desktop.locator('#discoveryChoice').isVisible(), 'Entering Discover should open its chooser.');
   assert(await desktop.locator('#appShell').evaluate((element) => element.inert), 'Discover chooser should make the background inert.');
   await desktop.keyboard.press('Escape');
@@ -95,6 +96,7 @@ try {
   assert(targets.every(({ width, height }) => width >= 44 && height >= 44), 'Mobile destinations should meet 44px targets.');
 
   await mobile.click('[data-mobile-view="discover"]');
+  await mobile.locator('#discoveryChoice').waitFor({ state: 'visible' });
   assert(await mobile.locator('#discoveryChoice').isVisible(), 'Mobile Discover should open the chooser.');
   await mobile.click('[data-choose-explore]');
   assert(await mobile.locator('.music-explore').isVisible(), 'Mobile Explore should be reachable.');
