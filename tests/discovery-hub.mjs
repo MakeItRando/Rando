@@ -50,7 +50,7 @@ try {
   await page.keyboard.press('Shift+Tab');
   assert(await page.evaluate(() => document.activeElement?.matches('[data-choose-explore]')), 'Chooser focus should wrap from first to last control.');
   await page.click('[data-choose-explore]');
-  assert(await page.locator('[data-discovery-screen="explore"]').isVisible(), 'Explore should open a broad music page.');
+  assert(await page.locator('main[data-discovery-screen="explore"]').isVisible(), 'Explore should open a broad music page.');
   assert((await page.locator('.music-featured h2').textContent()).trim() === 'Popular now', 'Explore should include popular music.');
   assert((await page.locator('.music-hidden h2').textContent()).trim() === 'Hidden gems', 'Explore should include underrated picks.');
   assert(await page.locator('.music-genre-row').count() === 4, 'Explore should organize music across every genre.');
