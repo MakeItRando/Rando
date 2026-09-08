@@ -32,7 +32,7 @@ try {
   assert(visualRules.orbitDisplay === 'none', 'Song Room should not use ornamental artwork orbits.');
   assert(visualRules.backdropAnimation !== 'none', 'Song Room should have one restrained cover-driven motion layer.');
 
-  await page.click('[data-room-mode="about"]');
+  await page.click('[data-room-mode="story"]');
   const about = await page.locator('#songRoomPanel').textContent();
   assert(about.includes('About this song'), 'Song Room should use plain About copy.');
   assert(!about.includes('Inside the track'), 'Song Room should remove abstract story labels.');
@@ -72,7 +72,7 @@ try {
   }));
   assert(mobile.overflow <= 1, 'Song Room must not overflow at 390px.');
   assert(mobile.titleSize <= 46, 'Mobile Song Room title should stay under 46px.');
-  await page.click('.song-room-mobile-nav [data-room-mode="about"]');
+  await page.click('.song-room-mobile-nav [data-room-mode="story"]');
   assert((await page.locator('#songRoomPanel').textContent()).includes('About this song'), 'Mobile About should work.');
   await page.click('.song-room-mobile-nav [data-room-mode="lyrics"]');
   assert((await page.locator('#songRoomPanel').textContent()).includes('Lyrics'), 'Mobile Lyrics should work.');
