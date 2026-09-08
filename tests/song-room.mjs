@@ -1,3 +1,4 @@
+import { existsSync } from 'node:fs';
 import { chromium } from 'playwright';
 import { pathToFileURL } from 'node:url';
 import { resolve } from 'node:path';
@@ -5,7 +6,9 @@ import { resolve } from 'node:path';
 const baseTarget = process.env.RONDO_URL || pathToFileURL(resolve('preview-test.html')).href;
 const target = `${baseTarget}${baseTarget.includes('?') ? '&' : '?'}skip-onboarding=1&screen=journey`;
 const executablePath = process.env.CHROMIUM_PATH || '/usr/local/bin/chromium';
-const browser = await chromium.launch({ headless: true, executablePath });
+const launchOptions = { headless: true, args: ['--no-sandbox'] };
+if (existsSync(executablePath)) launchOptions.executablePath = executablePath;
+const browser = await chromium.launch(launchOptions);
 const assert = (condition, message) => { if (!condition) throw new Error(message); };
 const errors = [];
 
@@ -17,19 +20,32 @@ try {
   await page.evaluate(() => localStorage.clear());
   await page.reload();
   await page.click('#openFullPlayer');
+  await page.waitForFunction(() => Boolean(document.querySelector('#fullPlayer')?.dataset.vibe));
   assert(await page.locator('#fullPlayer').isVisible(), 'Song Room should open.');
-  assert(await page.locator('#fullPlayer').evaluate((el) => el.classList.contains('song-room')), 'The immersive player should use the Song Room surface.');
+  assert(await page.locator('#fullPlayer').evaluate((element) => element.classList.contains('song-room')), 'The immersive player should use the Song Room surface.');
   assert(await page.locator('html').getAttribute('data-song-palette') === 'night', 'Night Transit should apply its artwork palette.');
-  assert((await page.locator('html').evaluate((el) => getComputedStyle(el).getPropertyValue('--song-accent').trim())) === '#6f9dff', 'Artwork palette should set one dominant accent.');
-  assert((await page.locator('#songRoomPanel').textContent()).includes('Inside the track'), 'Story mode should explain why the song is present.');
+  assert((await page.locator('html').evaluate((element) => getComputedStyle(element).getPropertyValue('--song-accent').trim())) === '#6f9dff', 'Artwork palette should set one dominant accent.');
+  assert(Boolean(await page.locator('#fullPlayer').getAttribute('data-vibe')), 'Song Room should expose a restrained track vibe.');
+  assert((await page.locator('#fullPlayer').evaluate((element) => element.style.getPropertyValue('--song-cover'))).includes('night-transit'), 'Song Room backdrop should be driven by the current cover.');
+  const visualRules = await page.evaluate(() => ({
+    titleSize: parseFloat(getComputedStyle(document.querySelector('.song-room-title h2')).fontSize),
+    orbitDisplay: getComputedStyle(document.querySelector('.song-room-art'), '::before').display,
+    backdropAnimation: getComputedStyle(document.querySelector('.song-room-backdrop'), '::before').animationName
+  }));
+  assert(visualRules.titleSize <= 82, `Song title should stay restrained, got ${visualRules.titleSize}px.`);
+  assert(visualRules.orbitDisplay === 'none', 'Decorative artwork orbits should be removed.');
+  assert(['songBackdrop', 'none'].includes(visualRules.backdropAnimation), 'Only restrained cover-driven backdrop motion should remain.');
+  assert((await page.locator('#songRoomPanel').textContent()).includes('About this song'), 'About mode should explain the song in plain language.');
+  assert(!(await page.locator('#songRoomPanel').textContent()).includes('provenance'), 'Primary Song Room copy should avoid policy jargon.');
+
   await page.click('[data-song-room-mode="credits"]');
-  assert((await page.locator('#songRoomPanel').textContent()).includes('Everyone behind the recording'), 'Credits mode should render roles.');
+  assert((await page.locator('#songRoomPanel').textContent()).includes('Made by'), 'Credits should use a simple human label.');
   await page.click('[data-song-room-mode="lyrics"]');
   assert(await page.locator('.song-room-lyric-list [data-time]').count() > 2, 'Lyrics mode should render synchronized lines.');
   await page.locator('.song-room-lyric-list [data-time]').first().click();
   assert((await page.locator('#fullElapsed').textContent()) === '0:00', 'Lyric lines should seek playback.');
   await page.click('[data-song-room-mode="queue"]');
-  assert(await page.locator('.song-room-queue-list [data-song-room-track]').count() > 1, 'Queue mode should show the artist chapter.');
+  assert(await page.locator('.song-room-queue-list [data-song-room-track]').count() > 1, 'Up next should show the artist sequence.');
   await page.locator('[data-song-room-track="k105"]').click();
   assert(await page.locator('html').getAttribute('data-song-palette') === 'afterimage', 'Changing releases should update the artwork palette.');
   await page.click('#songRoomMoment');
@@ -46,13 +62,17 @@ try {
   await mobile.goto(`${baseTarget}${baseTarget.includes('?') ? '&' : '?'}screen=player`);
   assert(await mobile.locator('#fullPlayer').isVisible(), 'Mobile Song Room should open.');
   await mobile.click('[data-song-room-mode="room"]');
-  const roomPanel = await mobile.locator('.song-room-panel').evaluate((el) => ({ opacity: getComputedStyle(el).opacity, pointerEvents: getComputedStyle(el).pointerEvents }));
+  const roomPanel = await mobile.locator('.song-room-panel').evaluate((element) => ({ pointerEvents: getComputedStyle(element).pointerEvents }));
   assert(roomPanel.pointerEvents === 'none', 'Room mode should return focus to the artwork on mobile.');
   await mobile.click('.song-room-mobile-nav [data-song-room-mode="story"]');
-  assert((await mobile.locator('#songRoomPanel').textContent()).includes('Inside the track'), 'Mobile Story mode should open the context sheet.');
+  assert((await mobile.locator('#songRoomPanel').textContent()).includes('About this song'), 'Mobile About mode should open the context sheet.');
   await mobile.click('.song-room-mobile-nav [data-song-room-mode="lyrics"]');
-  assert(await mobile.locator('.song-room-lyric-list').isVisible(), 'Mobile Lyrics mode should be readable.');
+  assert(await mobile.locator('.song-room-lyric-list').isVisible(), 'Mobile Lyrics should be readable.');
+  const compactTitle = parseFloat(await mobile.locator('.song-room-title h2').evaluate((element) => getComputedStyle(element).fontSize));
+  assert(compactTitle <= 44, 'Mobile Song Room title should stay compact.');
+  assert(!(await mobile.evaluate(() => document.documentElement.scrollWidth > innerWidth + 1)), 'Mobile Song Room should not overflow.');
   await mobile.close();
+
   assert(errors.length === 0, `Song Room browser errors: ${errors.join(' | ')}`);
   console.log('Song Room test passed.');
 } finally {
