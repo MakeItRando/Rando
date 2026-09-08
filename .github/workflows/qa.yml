@@ -52,7 +52,20 @@ jobs:
       - name: Test app smoke paths
         run: node tests/smoke.mjs
       - name: Test interface quality
-        run: node tests/quality.mjs
+        run: |
+          set +e
+          output=$(node tests/quality.mjs 2>&1)
+          status=$?
+          set -e
+          printf '%s\n' "$output"
+          if [ "$status" -ne 0 ]; then
+            while IFS= read -r line; do
+              if [ -n "$line" ]; then
+                printf '::error title=Interface quality::%s\n' "$line"
+              fi
+            done <<< "$output"
+            exit "$status"
+          fi
       - name: Test Discover and Journey routes
         run: node tests/discovery-hub.mjs
       - name: Test listening flow
