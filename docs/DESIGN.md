@@ -2,106 +2,117 @@
 
 ## Intent
 
-Rondo is cinematic, editorial, artwork-led, dark by default, and precise about artists, releases, featured roles, credits, provenance, and state. The music—not the application chrome—is the emotional center.
+Rondo is music-first, artwork-led, and easy to understand. It should feel designed by a careful product team, not generated from a pile of effects or marketing phrases.
 
-The interface follows one emotional rhythm:
+The interface follows a simple rhythm:
 
-`anticipation → entrance → listening → revelation → memory`
+`choose → play → explore → keep`
 
-Curiosity comes from strong framing, not vagueness. Context arrives in layers instead of being delivered all at once.
+Curiosity comes from music, artwork, and a few strong choices. Copy explains what an action does and then gets out of the way.
 
 ## Primary hierarchy
 
 ```text
-Account → taste profile
-  → Discover → door / chapter / scene / signal
-  → Journeys → genre / artist / release
-  → track → Song Room → revelation → memory
+Discover
+  → chooser → genre playlist
+  → chooser → Explore
+Journeys
+  → genre → artist → release
+Any song
+  → Song Room
 ```
 
-Discover and Journeys must never feel like duplicate pages. Discover is finite, editorial, and release-forward. Journeys is systematic, navigable, and artist-forward.
+Discover and Journeys must never feel like duplicate pages. Discover is quick and song-forward. Journeys is systematic and artist-forward.
 
-## Discover composition
+## Discover chooser
 
-- A light editorial entrance establishes contrast with the dark listening world.
-- Tonight's Door provides one decisive primary action and one quieter chapter action.
-- New Chapters gives each release a visual identity rather than repeating a generic album card.
-- Controlled serendipity discloses where it leads after selection; it does not become a random-play trap.
-- Scenes and cross-song signals explain relationships in plain language.
-- Listening history appears as a trace, not a gamified score.
+Opening Discover presents a focused modal with two routes:
 
-The page remains finite. Empty space, chapter numbering, and restrained copy create anticipation better than an endless wall of options.
+- pick one of four genres and continue with a dynamically named Listen action;
+- choose Browse everything to open Explore.
+
+The decision fits on one screen. Supporting text is short, focus is contained, Escape and outside click dismiss it, and the opener regains focus.
+
+## Genre playlist
+
+A genre playlist should be readable at a glance:
+
+- genre name and one short line;
+- search and Play mix;
+- cover art, song, artist, release, style, and duration;
+- obvious direct-play controls;
+- selected and playing states that do not rely on color alone.
+
+## Explore
+
+Explore is a separate page, not a genre selector stretched into a feed. Its first view contains search, Popular now, and Hidden gems. Scrolling reveals recognizable genre sections with direct playback and links into the matching playlist.
+
+Cards should vary through real release artwork and content hierarchy, not random decoration. Underrated music can feel special through placement and art rather than long descriptions.
 
 ## Release identity
 
-Each release carries a cover, chapter number, hook, liner-style note, motif, signal color, and optional artifact. Those elements may recur across Discover, release chapter, Song Room, and Library so the release becomes recognizable as a world rather than a thumbnail.
+Each release carries a distinct cover, accessible accent, official sequence, and concise context. Those elements can recur across Explore, genre playlists, release pages, Song Room, and Library so an album feels recognizable rather than generic.
 
-The release page uses the browsed release's own local palette. The fixed transport and Song Room continue using the active recording's palette when listening to another chapter.
+## Artwork-adaptive Song Room
 
-## Artwork-adaptive system
-
-Neutral near-black chrome prevents competing colors. Each release supplies an accessible signal used for focus, progress, selected states, waveform activity, volume, and ambience. Artwork carries emotion; genre remains visible text. Selected states never rely on color alone.
-
-Representative palette signals include:
-
-| Release family | Accent | Use |
-| --- | --- | --- |
-| Blacktop Studies | cobalt | nocturnal motion and active signal |
-| Silver Weather | amber | warmth, distance, and chapter detail |
-| Blue Room | cyan | spacious electronic signal |
-| Afterimage | rose | memory and residue |
-| Fallback | Rondo red | missing or inaccessible artwork only |
-
-## Song Room composition
+The Song Room remains an immersive listening surface. It uses the active cover to set its accent and blurred atmosphere while keeping controls readable.
 
 ### Desktop
 
-- asymmetrical title and artwork stage;
-- active, progress-aware waveform plus explicit signal-state label;
-- live lyric line and saved-moment action anchored to the stage;
-- dedicated context panel for Room, Lyrics, Story, Credits, Reveals, and Queue;
-- restrained fixed transport with timeline, repeat, previous/next, and an expressive sound field.
+- artwork and song title share the stage without oversized type;
+- the waveform is active only when playback is active;
+- About, Lyrics, Credits, Extra, and Up next sit in a compact context panel;
+- previous, play/pause, next, repeat, timeline, and volume remain easy to find;
+- a subtle cover/backdrop response adds life without competing with the song.
 
 ### Mobile
 
-- artwork and title remain primary;
-- context becomes a scrollable lower sheet;
-- Room, Lyrics, Story, Credits, Reveals, and Queue use persistent bottom navigation;
-- transport and sheet respect safe areas and 320px layouts;
-- the compact player preserves the active waveform and core controls without horizontal overflow.
+- artwork stays dominant;
+- the song title remains compact;
+- previous, play/pause, and next are always clear;
+- context becomes a usable lower sheet;
+- a bottom mode bar keeps About and Lyrics reachable;
+- 390px and 320px layouts avoid horizontal overflow.
 
-## Waveform and signal language
+## Waveform and playback feedback
 
-The waveform is active only when playback is active. Authorized audio can drive real analyser levels. If browser policy or source permissions prevent analysis, synchronized deterministic motion remains available but is labeled **Playback motion**. Paused and Reduced Motion states are visually and semantically distinct.
+The waveform communicates state, not decoration. Authorized audio can drive analyser levels. If analysis is unavailable, synchronized deterministic motion is labeled Playback motion. Paused and Reduced Motion states are visually distinct.
 
-The Song Room waveform, context micro-spectrum, compact signal, timeline, and volume feedback all derive from one playback state; they must not drift into contradictory animation.
+The waveform, timeline, compact signal, and level meter must all agree about whether music is playing.
 
-## Volume as a sound field
+## Volume
 
-Volume is presented as part of the listening instrument rather than a plain utility slider:
+Volume should feel connected to the listening experience while remaining a familiar slider:
 
-- circular level ring and numeric percentage;
-- responsive segmented meter;
-- artwork-colored slider fill and thumb in Song Room;
-- synchronized controls across main transport and immersive room;
-- mute/unmute that restores the listener's last audible level;
-- native range semantics for keyboard and assistive technology.
+- clear icon and numeric percentage;
+- artwork-colored fill;
+- restrained segmented level feedback;
+- synchronized controls across the main transport and Song Room;
+- mute and unmute that restore the previous audible level;
+- native range behavior for keyboard and assistive technology.
 
-Visual feedback must imply level, not frequency analysis.
+Visual feedback shows level; it must not pretend to be frequency analysis.
 
-## Reveals and curiosity
+## Motion rules
 
-Reveals open optional context after genuine listening time. Locked copy states the threshold and explicitly says that the music remains available. Opened artifacts should feel specific to the release—route cards, field notes, images, or studio fragments—not like interchangeable achievement badges.
+- animate only playback, focus, navigation, or a subtle artwork response;
+- avoid orbiting decoration, floating particles, automatic card motion, or constant page-wide animation;
+- keep transitions short and physically calm;
+- remove nonessential motion when Reduced Motion is enabled;
+- generated imagery is not part of the visual system.
 
-No song, credit, lyric access, or accessibility function is locked. The design rewards attention without punishing interruption or manufacturing scarcity.
+## Copy rules
 
-## Personal memory
-
-Private notes sit below provenance rather than competing with the song story. They use quiet typography, explicit “Only you” language, and a clear save action. Library cards separate moments, notes, saves, and artifacts and reopen the exact listening context.
+- use familiar labels such as About, Lyrics, Credits, Extra, and Up next;
+- prefer one short sentence over a paragraph;
+- describe the action, not the product strategy;
+- avoid policy or provenance language in the primary listening flow;
+- use Play, Pause, Resume, Saved, and Open truthfully;
+- leave unknown metadata unavailable rather than inventing it.
 
 ## Surrounding application
 
-Journeys collapses its directory when playback starts and can reopen without interruption. On mobile, persistent Discover, Library, Journeys, and Profile navigation remains reachable above the compact player; only Journeys exposes the artist-directory drawer. The surrounding app retains genre-reactive ambience while Song Room uses the active release signal. Light and Night remain persistent preferences outside the immersive room.
+Journeys can collapse its directory when playback starts and reopen without interruption. On mobile, Discover, Library, Journeys, and Profile remain reachable above the compact player. Light and Night are persistent workspace preferences; the Song Room may retain its artwork-adaptive immersive treatment.
 
 ## Interaction quality
 
@@ -109,11 +120,10 @@ Journeys collapses its directory when playback starts and can reopen without int
 - focus returns to the actual opener after close;
 - 44×44px important controls;
 - synchronized lyrics and timelines support direct seeking;
-- stateful actions say Play, Pause, Saved, Open, or Revealed truthfully;
-- unknown metadata remains unavailable instead of invented;
-- long names, instrumental tracks, missing artwork, and unavailable sources retain usable states;
-- compact headers stay in one row at 320px and no document-level horizontal overflow is permitted.
+- long names, instrumental tracks, missing artwork, and unavailable sources keep usable states;
+- compact headers stay in one row at 320px;
+- no document-level horizontal overflow.
 
 ## Prototype status
 
-Version 0.3.1 is the full-concept user-test candidate. It includes the dedicated Discover destination, fifteen release identities and chapter pages, optional listening reveals, artwork-adaptive Song Room, analyser-backed authorized audio, labeled playback fallback, synchronized expressive volume, six Rondo Originals demos, personal memory, accessible navigation, and regression coverage across desktop, mobile, compact, unavailable-audio, and Reduced Motion states.
+Version 0.3.2 is the corrected user-test candidate. It includes the Discover chooser, four genre playlists, cross-genre Explore, distinct release art, restrained artwork-adaptive Song Room, truthful waveform states, expressive volume, six Rondo Originals demos, responsive layouts, Reduced Motion, and automated desktop/mobile visual QA.
