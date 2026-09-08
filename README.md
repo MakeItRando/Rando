@@ -2,48 +2,72 @@
 
 **Find your next repeat.**
 
-Rondo is an independent artist-by-artist music journey: choose a genre, move through artists alphabetically, explore albums and EPs, and keep the music worth returning to.
+Rondo is a music-discovery and listening prototype. Discover is the fast, song-first home. Journeys is the slower path through a genre, its artists, releases, and tracks. Any song can open in the Song Room for focused listening.
 
-Rondo is not a Spotify client or wrapper. It owns its account, library, journeys, genre system, queue, player, recommendation rules, and brand. Catalog, audio, metadata, artwork, and lyrics enter through replaceable authorized connectors.
+Rondo is not a Spotify client or wrapper. It owns its discovery flow, journeys, queue, player, and brand. Future catalog providers stay behind replaceable connectors.
 
-## Current release — v0.3.0
+## Current release — v0.3.2 user-test candidate
 
-This release makes the song the emotional center of Rondo:
+This candidate focuses on a clear, human music experience:
 
-- cinematic, artwork-adaptive **Song Room** with Room, Lyrics, Story, Credits, and Up Next modes;
-- exact style, album/EP, featured roles, tempo/key, version, credits, and source provenance;
-- synchronized demo lyrics and timestamp seeking;
-- saved moments and private song notes surfaced in Library;
-- persistent, accessible volume control and focus-contained overlays;
-- six original Rondo demo recordings with real play, pause, seek, repeat, and queue continuity;
-- honest simulated fallback for catalog tracks without an authorized recording;
-- responsive desktop/mobile composition and Reduced Motion support.
+- **Discover opens directly** with search, Continue listening, Hits today, Made for you, Bangers, Sounds, Hidden gems, New & rising, and compact links into Genre Journeys;
+- Discover never interrupts someone with a genre chooser;
+- **Journeys owns genre choice**: a first-time listener sees a focused picker, while a returning listener resumes the last active genre;
+- each genre is a distinct, deep-linkable Journey subpage with progress, scoped search, songs, releases, artists, Play mix, Start/Resume, and Change genre;
+- meaningful progress is saved independently for Hip-Hop, R&B, Electronic, and Jazz;
+- route-backed page states support browser Back/Forward, page titles, heading focus, one visible main landmark, and stable global playback;
+- changing Journey genres does not erase earlier progress, and playing from Discover does not replace the active Journey;
+- the Song Room uses the active cover, restrained motion, a truthful waveform, clear transport controls, and expressive volume feedback;
+- artist playback says Play, Pause, or Resume truthfully and preserves listening context;
+- desktop, mobile, 320px layouts, keyboard access, Light appearance, and Reduced Motion are covered by regression and visual tests;
+- the portable preview contains six original Rondo demo recordings and a fictional catalog for prototype testing.
 
-The included recordings are original 32-second prototype instrumentals by **Rondo Originals**. They are not copies or reconstructions of commercial music.
+The prototype does not include real artists, licensed songs, production accounts, provider credentials, live charts, or backend services yet. Those come after this experience is approved.
 
 ## Preview locally
 
+Requirements: Node 20+ and Chromium.
+
 ```bash
-python3 -m http.server 4173
+npm ci
+npm run build:preview
+npm run serve
 ```
 
 Open `http://localhost:4173`.
 
-To build the deterministic QA preview and run the complete gate:
+Run the full release gate from another terminal:
 
 ```bash
-npm install
-npm run build:preview
-RONDO_URL=file:///absolute/path/to/Rando/preview-test.html npm test
+RONDO_URL=http://127.0.0.1:4173/preview-test.html npm test
+npm audit
 ```
+
+The build also produces `preview.html`, a portable file for user testing.
 
 ## Product hierarchy
 
-`Rondo account → taste profile → genre → alphabetical artist → Artist Focus → matching/all catalog → album or EP → track → Song Room → Room/Lyrics/Story/Credits/Up Next → completion confirmation`
+```text
+Discover
+  → search / recommendations / sounds → song → Song Room
+  → Genre Journeys → Journey genre page
+Journeys
+  → first visit: genre picker
+  → /journeys/<genre> → songs / releases / artists
+  → /journeys/<genre>/artist/<artist> → guided artist Journey
+Any song
+  → Song Room → About / Lyrics / Credits / Extra / Up next
+```
+
+## Page architecture
+
+Rondo uses route-backed SPA pages such as `#/discover`, `#/journeys/rnb`, and `#/journeys/rnb/artist/mira-son`. This gives each destination a distinct URL and accessible page state while keeping the active song, queue, position, and Song Room uninterrupted.
+
+Routes do not make the JavaScript bundle smaller by themselves. The current performance gains come from rendering only the active page, removing duplicate hidden content, and lazy-loading artwork. Later code splitting can reduce initial download size when the catalog and feature set grow.
 
 ## Architecture
 
-The prototype separates catalog data, journey rules, persisted state, views, artwork ambience, Song Room rendering, and provider-neutral audio. UI code consumes normalized Rondo objects; future providers stay behind connector interfaces. See [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md).
+The prototype separates catalog data, journey rules, persisted state, page routing, artwork ambience, Song Room rendering, and provider-neutral audio. UI code consumes normalized Rondo objects; future providers stay behind connector interfaces. See [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md).
 
 ## Documentation
 
@@ -56,4 +80,4 @@ The prototype separates catalog data, journey rules, persisted state, views, art
 
 ## Rights boundary
 
-Production recordings, artwork, metadata, and lyrics require authorization through licensed providers, official embeds where permitted, direct artist uploads, Creative Commons/public-domain material, or direct rights agreements. GitHub Pages can host this static prototype; secure accounts, provider credentials, and licensed commercial playback require a server-capable production deployment.
+Production recordings, artwork, metadata, lyrics, biographies, and liner material require authorization through licensed providers, official embeds where permitted, direct artist uploads, Creative Commons/public-domain material, or direct rights agreements. Secure accounts, provider credentials, licensed playback, and rights enforcement require a server-capable production deployment.

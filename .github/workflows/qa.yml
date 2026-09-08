@@ -1,0 +1,144 @@
+name: Rondo user-ready QA
+
+on:
+  push:
+    branches: [rondo-v031-user-ready]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: rondo-user-ready-qa-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      RONDO_URL: http://127.0.0.1:4173/preview-test.html
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Use Node 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - name: Install dependencies
+        run: npm ci
+      - name: Audit dependencies
+        run: npm audit --audit-level=high
+      - name: Install Chromium
+        run: |
+          npx playwright install --with-deps chromium
+          node --input-type=module -e "import { chromium } from 'playwright'; console.log('CHROMIUM_PATH=' + chromium.executablePath())" >> "$GITHUB_ENV"
+      - name: Build portable preview
+        run: npm run build:preview
+      - name: Start preview server
+        run: |
+          python3 -m http.server 4173 > /tmp/rondo-server.log 2>&1 &
+          for attempt in {1..20}; do
+            if curl -fsS http://127.0.0.1:4173/preview-test.html >/dev/null; then
+              exit 0
+            fi
+            sleep 1
+          done
+          cat /tmp/rondo-server.log
+          exit 1
+      - name: Run static and unit checks
+        run: npm run check && npm run test:unit
+      - name: Test app smoke paths
+        id: smoke
+        continue-on-error: true
+        run: node scripts/run-test-with-annotations.mjs "App smoke paths" tests/smoke.mjs
+      - name: Test interface quality
+        id: quality
+        continue-on-error: true
+        run: node scripts/run-test-with-annotations.mjs "Interface quality" tests/quality.mjs
+      - name: Test Discover and Journey routes
+        id: routes
+        continue-on-error: true
+        run: node scripts/run-test-with-annotations.mjs "Discover and Journey routes" tests/discovery-hub.mjs
+      - name: Test listening flow
+        id: listening
+        continue-on-error: true
+        run: node scripts/run-test-with-annotations.mjs "Listening flow" tests/listening.mjs
+      - name: Test Song Room
+        id: song_room
+        continue-on-error: true
+        run: node scripts/run-test-with-annotations.mjs "Song Room" tests/song-room.mjs
+      - name: Test audio behavior
+        id: audio
+        continue-on-error: true
+        run: node scripts/run-test-with-annotations.mjs "Audio behavior" tests/audio.mjs
+      - name: Test personal surfaces
+        id: personal
+        continue-on-error: true
+        run: node scripts/run-test-with-annotations.mjs "Personal surfaces" tests/personal.mjs
+      - name: Test user-ready flow
+        id: user_ready
+        continue-on-error: true
+        run: node scripts/run-test-with-annotations.mjs "User-ready flow" tests/user-ready.mjs
+      - name: Test experience details
+        id: experience
+        continue-on-error: true
+        run: node scripts/run-test-with-annotations.mjs "Experience details" tests/experience.mjs
+      - name: Test full concept flow
+        id: full_concept
+        continue-on-error: true
+        run: node scripts/run-test-with-annotations.mjs "Full concept flow" tests/full-concept.mjs
+      - name: Test release readiness
+        id: release_ready
+        continue-on-error: true
+        run: node scripts/run-test-with-annotations.mjs "Release readiness" tests/release-ready.mjs
+      - name: Enforce browser regression suite
+        if: always()
+        run: |
+          failed=0
+          for outcome in \
+            "${{ steps.smoke.outcome }}" \
+            "${{ steps.quality.outcome }}" \
+            "${{ steps.routes.outcome }}" \
+            "${{ steps.listening.outcome }}" \
+            "${{ steps.song_room.outcome }}" \
+            "${{ steps.audio.outcome }}" \
+            "${{ steps.personal.outcome }}" \
+            "${{ steps.user_ready.outcome }}" \
+            "${{ steps.experience.outcome }}" \
+            "${{ steps.full_concept.outcome }}" \
+            "${{ steps.release_ready.outcome }}"; do
+            if [ "$outcome" != "success" ]; then
+              failed=1
+            fi
+          done
+          exit "$failed"
+      - name: Capture visual QA
+        run: node scripts/capture-visuals.mjs
+      - name: Publish portable preview
+        run: |
+          test -s preview.html
+          git fetch origin rondo-v031-preview
+          rm -rf /tmp/rondo-preview
+          git worktree add /tmp/rondo-preview origin/rondo-v031-preview
+          cd /tmp/rondo-preview
+          git switch -C rondo-v031-preview
+          cp "$GITHUB_WORKSPACE/preview.html" rondo-v031-preview.html
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add rondo-v031-preview.html
+          if git diff --cached --quiet; then
+            echo 'Portable preview is already current.'
+            exit 0
+          fi
+          git commit -m 'preview: publish v0.3.2 candidate'
+          git push origin HEAD:rondo-v031-preview
+      - name: Upload visual report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: rondo-visual-qa-${{ github.run_number }}
+          path: .qa/
+          if-no-files-found: ignore
+          retention-days: 14

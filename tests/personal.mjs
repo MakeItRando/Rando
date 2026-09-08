@@ -3,7 +3,7 @@ import { pathToFileURL } from 'node:url';
 import { resolve } from 'node:path';
 
 const base = process.env.RONDO_URL || pathToFileURL(resolve('preview-test.html')).href;
-const target = `${base}${base.includes('?') ? '&' : '?'}skip-onboarding=1`;
+const target = `${base}${base.includes('?') ? '&' : '?'}skip-onboarding=1&screen=journey`;
 const browser = await chromium.launch({ headless: true, executablePath: process.env.CHROMIUM_PATH || '/usr/local/bin/chromium' });
 const assert = (condition, message) => { if (!condition) throw new Error(message); };
 try {
@@ -13,6 +13,12 @@ try {
   await page.click('[data-song-room-mode="story"]');
   await page.fill('#songRoomPrivateNote', 'That glass synth at the opening feels like a night drive.');
   await page.click('[data-save-song-note]');
+  const momentTimeline = page.locator('#fullTimeline');
+  await momentTimeline.focus();
+  await page.keyboard.press('ArrowRight');
+  await page.keyboard.press('ArrowRight');
+  const savedMomentPosition = Number(await momentTimeline.getAttribute('aria-valuenow'));
+  assert(savedMomentPosition >= 9, 'Moment test should save an intentional non-zero timestamp.');
   await page.click('#songRoomMoment');
   await page.locator('#volumeControl').evaluate((input) => { input.value = '37'; input.dispatchEvent(new Event('input', { bubbles: true })); });
   assert(await page.locator('#rondoAudio').evaluate((audio) => Math.abs(audio.volume - .37) < .01), 'Volume should control the real audio engine.');
@@ -29,6 +35,7 @@ try {
   assert(await page.locator('#volumeControl').inputValue() === '37', 'Volume preference should persist.');
   await page.click('[data-open-moment="k101"]');
   assert(!(await page.locator('#fullPlayer').getAttribute('hidden')), 'Opening a saved moment should return to Song Room.');
-  assert(Number(await page.locator('#fullTimeline').getAttribute('aria-valuenow')) >= 5, 'Saved moment should restore its timestamp.');
+  const restoredMomentPosition = Number(await page.locator('#fullTimeline').getAttribute('aria-valuenow'));
+  assert(Math.abs(restoredMomentPosition - savedMomentPosition) <= 1, 'Saved moment should restore its exact timestamp.');
   await page.close(); console.log('Personal listening regression passed.');
 } finally { await browser.close(); }
