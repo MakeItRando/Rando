@@ -1,0 +1,47 @@
+name: Rondo user-ready QA
+
+on:
+  push:
+    branches: [rondo-v031-user-ready]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: rondo-user-ready-qa
+  cancel-in-progress: true
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Use Node 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - name: Install dependencies
+        run: npm ci
+      - name: Install Chromium
+        run: npx playwright install --with-deps chromium
+      - name: Resolve Chromium path
+        run: echo "CHROMIUM_PATH=$(node --input-type=module -e \"import { chromium } from 'playwright'; console.log(chromium.executablePath())\")" >> "$GITHUB_ENV"
+      - name: Build portable preview
+        run: npm run build:preview
+      - name: Start local site
+        run: |
+          python3 -m http.server 4173 > /tmp/rondo-server.log 2>&1 &
+          for attempt in {1..20}; do
+            curl -fsS http://127.0.0.1:4173/preview-test.html >/dev/null && exit 0
+            sleep 1
+          done
+          cat /tmp/rondo-server.log
+          exit 1
+      - name: Run full regression suite
+        env:
+          RONDO_URL: http://127.0.0.1:4173/preview-test.html
+        run: npm test
