@@ -45,6 +45,7 @@ try {
   assert(!(await page.locator('#viewSurface').textContent()).includes('Find a door'), 'Rejected editorial door copy should be removed.');
 
   await page.click('[data-open-discovery-picker]');
+  await page.waitForTimeout(30);
   await page.locator('.discovery-choice-close').focus();
   await page.keyboard.press('Shift+Tab');
   assert(await page.evaluate(() => document.activeElement?.matches('[data-choose-explore]')), 'Chooser focus should wrap from first to last control.');
