@@ -1,5 +1,5 @@
 {
-  "checkedAt": "2026-09-09T08:42:42.130Z",
+  "checkedAt": "2026-09-09T08:48:52.886Z",
   "results": [
     {
       "label": "App smoke paths",
@@ -54,18 +54,6 @@
       "script": "tests/experience.mjs",
       "status": 0,
       "log": ".qa/test-logs/experience-details.log"
-    },
-    {
-      "label": "Full concept flow",
-      "script": "tests/full-concept.mjs",
-      "status": 0,
-      "log": ".qa/test-logs/full-concept-flow.log"
-    },
-    {
-      "label": "Release readiness",
-      "script": "tests/release-ready.mjs",
-      "status": 0,
-      "log": ".qa/test-logs/release-readiness.log"
     }
   ]
 }

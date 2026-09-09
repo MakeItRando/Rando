@@ -1,5 +1,5 @@
 {
-  "checkedAt": "2026-09-09T08:43:10.628Z",
+  "checkedAt": "2026-09-09T08:49:21.770Z",
   "baseUrl": "http://127.0.0.1:4173/preview-test.html",
   "captureCount": 18,
   "captures": [
@@ -82,7 +82,7 @@
       "scrollSurfaces": [
         {
           "id": "viewSurface",
-          "top": 2511,
+          "top": 2355,
           "height": 754,
           "contentHeight": 5961
         }
