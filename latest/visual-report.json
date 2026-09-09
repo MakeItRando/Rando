@@ -1,5 +1,5 @@
 {
-  "checkedAt": "2026-09-09T05:35:06.043Z",
+  "checkedAt": "2026-09-09T05:47:26.639Z",
   "baseUrl": "http://127.0.0.1:4173/preview-test.html",
   "captureCount": 18,
   "captures": [
@@ -26,7 +26,7 @@
           "id": "viewSurface",
           "top": 0,
           "height": 754,
-          "contentHeight": 6049
+          "contentHeight": 5078
         }
       ],
       "brokenRenderedImages": [],
@@ -53,9 +53,9 @@
       "scrollSurfaces": [
         {
           "id": "viewSurface",
-          "top": 3667,
+          "top": 2696,
           "height": 754,
-          "contentHeight": 6049
+          "contentHeight": 5078
         }
       ],
       "brokenRenderedImages": [],
@@ -82,9 +82,9 @@
       "scrollSurfaces": [
         {
           "id": "viewSurface",
-          "top": 3482,
+          "top": 2543,
           "height": 754,
-          "contentHeight": 6932
+          "contentHeight": 5961
         }
       ],
       "brokenRenderedImages": [],
@@ -316,7 +316,7 @@
           "id": "viewSurface",
           "top": 0,
           "height": 754,
-          "contentHeight": 6049
+          "contentHeight": 5078
         }
       ],
       "brokenRenderedImages": [],
@@ -345,7 +345,7 @@
           "id": "viewSurface",
           "top": 0,
           "height": 656,
-          "contentHeight": 7523
+          "contentHeight": 6323
         }
       ],
       "brokenRenderedImages": [],
@@ -407,18 +407,7 @@
         }
       ],
       "brokenRenderedImages": [],
-      "undersizedTouchTargets": [
-        {
-          "label": "#searchTrigger",
-          "width": 16,
-          "height": 44
-        },
-        {
-          "label": "#profileTrigger",
-          "width": 8.3,
-          "height": 44
-        }
-      ]
+      "undersizedTouchTargets": []
     },
     {
       "name": "15-mobile-rnb-artist",
@@ -476,23 +465,7 @@
         }
       ],
       "brokenRenderedImages": [],
-      "undersizedTouchTargets": [
-        {
-          "label": "A",
-          "width": 19,
-          "height": 21
-        },
-        {
-          "label": "M",
-          "width": 19,
-          "height": 21
-        },
-        {
-          "label": "N",
-          "width": 19,
-          "height": 21
-        }
-      ]
+      "undersizedTouchTargets": []
     },
     {
       "name": "17-compact-discover",
@@ -517,7 +490,7 @@
           "id": "viewSurface",
           "top": 0,
           "height": 512,
-          "contentHeight": 6863
+          "contentHeight": 5803
         }
       ],
       "brokenRenderedImages": [],
@@ -554,11 +527,5 @@
     }
   ],
   "runtimeErrors": [],
-  "failures": [
-    "14-mobile-rnb-journey: touch target #searchTrigger is 16×44px",
-    "14-mobile-rnb-journey: touch target #profileTrigger is 8.3×44px",
-    "16-mobile-change-genre: touch target A is 19×21px",
-    "16-mobile-change-genre: touch target M is 19×21px",
-    "16-mobile-change-genre: touch target N is 19×21px"
-  ]
+  "failures": []
 }

@@ -10,9 +10,9 @@ file:///home/runner/work/Rando/Rando/tests/discovery-hub.mjs:7
   if (!condition) throw new Error(message);
                         ^
 
-Error: Mobile artist directory should open in the viewport.
+Error: Guided Journey should use an artist subroute.
     at assert (file:///home/runner/work/Rando/Rando/tests/discovery-hub.mjs:7:25)
-    at file:///home/runner/work/Rando/Rando/tests/discovery-hub.mjs:200:3
+    at file:///home/runner/work/Rando/Rando/tests/discovery-hub.mjs:186:3
 
 Node.js v20.20.2
 

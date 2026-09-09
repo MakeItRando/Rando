@@ -1,14 +1,12 @@
 label=Experience details
 script=tests/experience.mjs
-status=1
+status=0
 
 --- stdout ---
+Rondo final experience regression passed.
 
 
 --- stderr ---
-Error: Genre home should hide the artist-directory trigger.
-    at assert (file:///home/runner/work/Rando/Rando/tests/experience.mjs:7:25)
-    at file:///home/runner/work/Rando/Rando/tests/experience.mjs:120:3
 
 
 --- spawn error ---

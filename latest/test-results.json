@@ -1,5 +1,5 @@
 {
-  "checkedAt": "2026-09-09T05:34:37.162Z",
+  "checkedAt": "2026-09-09T05:46:59.188Z",
   "results": [
     {
       "label": "App smoke paths",
@@ -22,7 +22,7 @@
     {
       "label": "Listening flow",
       "script": "tests/listening.mjs",
-      "status": 1,
+      "status": 0,
       "log": ".qa/test-logs/listening-flow.log"
     },
     {
@@ -52,7 +52,7 @@
     {
       "label": "Experience details",
       "script": "tests/experience.mjs",
-      "status": 1,
+      "status": 0,
       "log": ".qa/test-logs/experience-details.log"
     },
     {
