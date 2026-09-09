@@ -89,18 +89,21 @@ function syncRecommendations() {
   const section = document.querySelector(".music-personal");
   if (!section) return;
 
-  const playedTrackIds = [...new Set(readState().playedTracks || [])].filter(
-    (id) => byTrackId.has(id),
-  );
-  const hasListeningHistory = playedTrackIds.length > 0;
-  section.hidden = !hasListeningHistory;
-  section.setAttribute("aria-hidden", String(!hasListeningHistory));
-  if (!hasListeningHistory) {
+  const rawPlayedTrackIds = readState().playedTracks;
+  const playedTrackIds = [
+    ...new Set(Array.isArray(rawPlayedTrackIds) ? rawPlayedTrackIds : []),
+  ].filter((id) => byTrackId.has(id));
+  const recommendations = playedTrackIds.length
+    ? recommendationEntries(playedTrackIds)
+    : [];
+  const hasRecommendations = recommendations.length > 0;
+  section.hidden = !hasRecommendations;
+  section.setAttribute("aria-hidden", String(!hasRecommendations));
+  if (!hasRecommendations) {
     section.removeAttribute("data-recommendation-signature");
     return;
   }
 
-  const recommendations = recommendationEntries(playedTrackIds);
   const signature = `${playedTrackIds.join(",")}|${recommendations
     .map((entry) => entry.track.id)
     .join(",")}`;
@@ -128,11 +131,17 @@ function pickerBackLabel(origin) {
 function syncPicker() {
   const picker = document.getElementById("journeyGenrePicker");
   const isOpen = Boolean(picker && !picker.hidden);
-  if (isOpen && !pickerWasOpen) {
-    pickerOrigin = location.hash || "#/discover";
+  const wasOpen = pickerWasOpen;
+  if (!isOpen) {
+    if (wasOpen) {
+      pickerOrigin = null;
+      pickerReturnFocus = null;
+    }
+    pickerWasOpen = false;
+    return;
   }
-  pickerWasOpen = isOpen;
-  if (!isOpen) return;
+  if (!wasOpen) pickerOrigin = location.hash || "#/discover";
+  pickerWasOpen = true;
 
   const cancel = picker.querySelector("[data-cancel-journey-picker]");
   const close = picker.querySelector("[data-close-journey-picker]");
@@ -187,6 +196,14 @@ function scheduleSync() {
 const qualityStyles = document.createElement("style");
 qualityStyles.dataset.rondoProductPolicy = "";
 qualityStyles.textContent = `
+.journey-genre-copy > button { margin-right: 12px; }
+html[data-theme="dark"] .journey-directory-switch > span {
+  color: rgba(247, 244, 237, .52);
+}
+html[data-theme="dark"] .journey-directory-switch button {
+  color: #f4f5f7;
+  border-color: rgba(255, 255, 255, .13);
+}
 @media (max-width: 760px) {
   .top-actions { min-width: max-content; }
   .top-actions > #themeToggle,
@@ -214,6 +231,19 @@ qualityStyles.textContent = `
     width: 44px;
     height: 44px;
     font-size: 10px;
+  }
+  .song-room-player .full-times {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 8px;
+  }
+  .song-room-player .full-times span { min-width: 0; }
+  .song-room-player .full-times span:nth-child(2) {
+    overflow: hidden;
+    text-align: center;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 }
 `;
