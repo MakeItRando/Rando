@@ -1,0 +1,13 @@
+label=Release readiness
+script=tests/release-ready.mjs
+status=0
+
+--- stdout ---
+Rondo release-readiness regression passed.
+
+
+--- stderr ---
+
+
+--- spawn error ---
+

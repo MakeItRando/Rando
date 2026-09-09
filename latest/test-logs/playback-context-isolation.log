@@ -1,0 +1,13 @@
+label=Playback context isolation
+script=tests/playback-contexts.mjs
+status=0
+
+--- stdout ---
+Journey/global playback-context isolation passed.
+
+
+--- stderr ---
+
+
+--- spawn error ---
+
