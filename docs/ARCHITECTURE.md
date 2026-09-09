@@ -2,13 +2,15 @@
 
 ## Goal and dependency direction
 
-Rondo owns accounts, behavior, library, editorial discovery, personalization, journeys, release chapters, reveal progress, queue, playback UX, and preferences. Catalog, audio, metadata, artwork, and lyrics providers are replaceable infrastructure.
+Rondo owns accounts, behavior, library, editorial discovery, personalization, journeys, release chapters, reveal progress, queue, playback UX, and preferences. Catalog, audio, metadata, artwork, and lyrics sources are replaceable infrastructure.
+
+The production architecture must support a broad artist and genre catalog, starting with thousands of songs and scaling to millions without changing the UI/domain contract.
 
 ```text
-Presentation → feature orchestration → application services → connector ports → provider adapters
+Presentation → feature orchestration → application services → connector ports → authorized source adapters
 ```
 
-UI consumes normalized Rondo domain objects and never raw provider payloads.
+UI consumes normalized Rondo domain objects and never raw source payloads.
 
 ## Current prototype modules
 
@@ -44,17 +46,23 @@ The active-surface renderer owns page selection. Discover and release pages are 
 
 A browsed release receives a locally scoped palette. The shared transport and Song Room palette remains derived from the active recording, preventing unrelated browsing from recoloring playback controls.
 
+Production genre, artist, release, and search routes must use stable Rondo IDs/slugs, not array offsets or hard-coded four-genre switches.
+
 ## State ownership
 
 Persisted state includes onboarding/profile, saves, played tracks, moments, song notes, appearance, volume, playback context, per-genre Journey continuity, per-release listening progress, and unlocked extras. Runtime state includes the active route, browsed release, playback state, open overlays, focus return target, analyser state, and animation state.
 
 Profile, note, volume, session, release-progress, and artifact fields require migration-safe defaults. Open modals, hover, focus, and animation phases remain transient.
 
+Production sync stores references and bounded windows—not complete catalog copies—in listener state.
+
 ## Playback contract
 
 `setPlaying` is the single playback transition. The audio adapter owns the media element, source loading, media clock, seek, pause, stop, ended, errors, and volume. The orchestrator maps that state into one shared Rondo position; it must not create a second queue or player state.
 
 Authorized recordings use real media time. A missing or failed source falls back to a clearly labeled simulated demo timeline in the prototype. Track changes pause the old source before loading the next. Repeat and completion follow the active artist-chapter rules.
+
+Production playback receives short-lived authorization from the backend and never exposes permanent source credentials. Availability changes must not break navigation or saved context.
 
 ## Signal contract
 
@@ -68,17 +76,38 @@ One persisted `volume` value feeds the audio adapter, main transport, and Song R
 
 ## Release progress and extras
 
-Listening progress may unlock optional context, but it never changes track availability, queue membership, credits, or core navigation. Production analytics and entitlement systems must remain separate from optional editorial extras.
+Listening progress may unlock optional context, but it never changes track availability, queue membership, credits, or core navigation. Production analytics and any future entitlement systems remain separate from optional editorial extras.
 
 ## Overlay and focus contract
 
 Queue, Search, Song Room, Journey picker, Onboarding, and Completion are explicit modal surfaces. Opening stores the actual invoker; closing returns focus. Tab and Shift+Tab stay inside the topmost modal. Escape closes the topmost surface first. Modal layers are mutually exclusive.
 
-## Connector boundaries
+## Authorized connector boundary
 
-A production backend-for-frontend owns credentials, rate limits, caching, territory checks, authorization, normalization, payments, and entitlement verification. Catalog, playback, lyrics, metadata, artwork, and editorial content may come from separate authorized providers or Rondo's own CMS. Provider IDs stay in `externalIds`; Rondo IDs remain primary.
+The product owner will provide the legal/source integration package before real-catalog implementation. Rondo adapters then implement those authorized paths. Product code must not assume that public availability on Spotify, YouTube, Suno, or another app permits copying, storage, or playback.
 
-Production Web Audio must respect provider policy and cross-origin headers. If analysis is disallowed, playback remains functional and the honest fallback state is required.
+A production backend-for-frontend owns credentials, rate limits, caching, territory checks, authorization, normalization, and source policy. Catalog, playback, lyrics, metadata, artwork, and editorial content may come from separate authorized sources or Rondo's own CMS. External IDs stay in `externalIds`; Rondo IDs remain primary.
+
+Every adapter requires contract tests for pagination, retries, quotas, provenance, availability, attribution, corrections, deletions, and partial failure. Source-specific policy never leaks into visual components.
+
+Production Web Audio must respect source policy and cross-origin headers. If analysis is disallowed, playback remains functional and the honest fallback state is required.
+
+## Catalog scale contract
+
+- Never ship the full catalog in client JavaScript, HTML, local storage, or a single API response.
+- Use indexed server-side search, cursor pagination, bounded limits, facets, and stable sorting.
+- Lazy-load artwork and deeper artist/release lists; virtualize only when needed and preserve keyboard/screen-reader behavior.
+- Run ingestion in idempotent, resumable background jobs with retries, backpressure, dead-letter queues, and audit records.
+- Separate draft, validated, published, unavailable, and removed catalog states.
+- Support aliasing, deduplication, recording/release editions, merge/split, correction, and source conflict resolution.
+- Update search indexes and caches incrementally; avoid full rebuilds for ordinary changes.
+- Put large media in authorized object/CDN delivery, never the primary relational row or repository.
+- Measure query latency, search relevance, cache hit rate, job lag, catalog conflicts, authorization errors, and unavailable results.
+- Load-test at target catalog and concurrency volumes before launch and before major scale increases.
+
+## V1 payment boundary
+
+V1 has no payments. Do not place payment services, checkout, subscription state, artist billing, or payment entitlements in the V1 critical path. Preserve a clean future service boundary only; add real payment architecture after a separate product decision.
 
 ## Testing
 
@@ -89,20 +118,24 @@ Production Web Audio must respect provider policy and cross-origin headers. If a
 - audio coverage for source loading, media time, duration, analyser/fallback behavior, pause, and volume;
 - personal regression for notes, Library deep links, persistence, and focus containment;
 - route regression for Discover, Journey picker, genre pages, independent progress, Back/Forward, titles, and stable playback;
+- source-adapter contract, ingestion replay/idempotency, search pagination, rights, correction, and takedown tests;
+- load tests for catalog/search/API/playback authorization at realistic data volume;
 - inspected visual states at desktop, 390px, 320px, Light, Night, and Reduced Motion.
 
 ## Anti-spaghetti rules
 
 1. No API calls inside visual components.
-2. No raw provider objects outside adapters.
-3. No vendor secrets in browser JavaScript.
+2. No raw source objects outside adapters.
+3. No source secrets in browser JavaScript.
 4. No duplicated playback, queue, sorting, save, palette, route, progress, or reveal rules.
 5. No invented production metadata, stories, popularity, or rights claims.
-6. No provider without contract tests and explicit provenance.
+6. No source adapter without contract tests and explicit provenance.
 7. No feature ships without loading, empty, error, accessibility, and mobile states.
 8. No progression mechanic may lock core music or required information.
 9. No visualizer may claim live analysis unless the analyser is active.
+10. No unbounded catalog query or full-catalog client state.
+11. No payment implementation in V1.
 
 ## Deployment
 
-GitHub Pages is suitable for the static prototype. Secure accounts, provider credentials, regional rights enforcement, licensed playback/lyrics, payments, moderation, and production editorial workflows require a server-capable host. See `docs/PRODUCTION_PLAN.md`.
+GitHub Pages is suitable for the static prototype. Secure accounts, source credentials, regional rights enforcement, authorized playback/lyrics, moderation, large-catalog ingestion/search, and production editorial workflows require a server-capable host. See `docs/PRODUCTION_PLAN.md`.
