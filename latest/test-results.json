@@ -1,5 +1,5 @@
 {
-  "checkedAt": "2026-09-09T08:48:52.886Z",
+  "checkedAt": "2026-09-09T08:51:50.428Z",
   "results": [
     {
       "label": "App smoke paths",
@@ -18,6 +18,12 @@
       "script": "tests/discovery-hub.mjs",
       "status": 0,
       "log": ".qa/test-logs/discover-and-journey-routes.log"
+    },
+    {
+      "label": "Product policy",
+      "script": "tests/product-policy.mjs",
+      "status": 1,
+      "log": ".qa/test-logs/product-policy.log"
     },
     {
       "label": "Listening flow",
@@ -54,6 +60,18 @@
       "script": "tests/experience.mjs",
       "status": 0,
       "log": ".qa/test-logs/experience-details.log"
+    },
+    {
+      "label": "Full concept flow",
+      "script": "tests/full-concept.mjs",
+      "status": 0,
+      "log": ".qa/test-logs/full-concept-flow.log"
+    },
+    {
+      "label": "Release readiness",
+      "script": "tests/release-ready.mjs",
+      "status": 0,
+      "log": ".qa/test-logs/release-readiness.log"
     }
   ]
 }
