@@ -1,58 +1,51 @@
 # Product-owner decisions and remaining questions
 
-**Last answered:** 2026-09-09
+**Last updated:** 2026-09-09
 
-These records do not trigger application work in the current documentation-only session. Remaining questions should be answered before their dependent production phase.
+v0.3.2 is green and ready for product-owner testing; these remaining questions do not authorize merge or production implementation. Resolve each before its dependent phase.
 
 ## Resolved decisions
 
-### 1. Canonical name — resolved
+### Canonical name
 
-**Rondo everywhere.** Rondo is the canonical product, repository, package, infrastructure, domain, and future app-store name. The existing `MakeItRando/Rando` repository remains in place during the prototype so links and branch evidence are not broken; perform a planned naming migration before production-facing domains, packages, contracts, or store submissions.
+**Rondo everywhere.** Rondo is canonical for product, repository, package, infrastructure, domain, and future app-store name. Existing `MakeItRando/Rando` remains during prototype continuity; perform a planned migration before production-facing domains/packages/contracts/store submissions.
 
-### 2. Real-catalog direction — resolved at product level
+### Real-catalog direction
 
-Rondo should ultimately accept a broad catalog across artists, genres, and legitimate source systems rather than being designed around one provider or a narrow launch genre. The architecture must comfortably handle thousands of songs at initial rollout and scale to millions without rebuilding the product model.
+Rondo supports a broad catalog across artists, genres, and legitimate sources rather than one provider or a narrow launch genre. Architecture must hold thousands of songs initially and millions without rebuilding the product model.
 
-The product owner has a legal acquisition plan and will supply the concrete source, authorization, territory, credential, and playback requirements before production integration begins. Rondo must remain source-neutral: public availability on Spotify, YouTube, Suno, or another app is not itself treated by code as permission to copy, ingest, or stream anything.
+Owner has a legal acquisition plan and will supply concrete source, authorization, territory, asset-delivery, credential, and playback requirements before production integration. Public availability on Spotify, YouTube, Suno, or another app is not permission to copy, ingest, store, or stream.
 
-Engineering implication: use normalized Rondo IDs, replaceable authorized connectors, background ingestion, bounded APIs, indexed search, pagination, lazy media/artwork loading, deduplication, and rights/provenance records. Never load the full catalog into the browser.
+Engineering uses normalized stable Rondo IDs, replaceable authorized connectors, resumable background ingestion, bounded APIs, indexed/debounced search, cursor pagination, lazy assets, deduplication, and rights/provenance records. Never deliver or flatten the full catalog in the browser.
 
-### 3. V1 payments — resolved
+### V1 payments
 
-**No payments in V1.** V1 must not include subscriptions, checkout, tips, merchandise checkout, artist billing, payment entitlements, refunds, disputes, taxes, or payout systems. Keep future payment boundaries documented so they can be added cleanly only after a new explicit decision.
+**No payments in V1.** No subscriptions, checkout, tips, merchandise checkout, artist billing, payment entitlements, refunds, disputes, taxes, or payouts. Reconsider only through a new explicit later decision.
+
+### Canonical renderer
+
+`src/ui/discoveryHub.js` is canonical for the accepted v0.3.2 Discover/Journey contract. Dormant `renderDiscoverView()` in `src/ui/views.js` must not be revived and must be deleted before production catalog integration.
 
 ## Remaining questions
 
 ### 1. Optional listening extras
 
-The candidate includes extras/reveals after genuine listening time while keeping all music and required information open.
+Candidate extras/reveals appear after genuine listening while all music and required information stay open.
 
-Decision needed after testing:
+After testing, choose: keep; simplify to always-available liner context; or remove.
 
-- keep the feature;
-- simplify it to always-available liner context;
-- remove it entirely.
+### 2. Experience acceptance
 
-### 2. Launch territory and platforms
+The engineering pre-test gate is complete. Owner must test desktop and phone and explicitly accept the experience before PR #5 merges or real-system work begins.
 
-Needed before production licensing and infrastructure:
+### 3. Launch territory and platforms
 
-- initial country/region;
-- web-only V1 or simultaneous native mobile;
-- supported languages;
-- explicit-content and age requirements;
-- availability behavior across territories.
+Before production licensing/infrastructure, decide initial countries/regions, web-only versus simultaneous native mobile, languages, explicit-content/age policy, and cross-territory availability behavior.
 
-### 3. Candidate integration strategy
+### 4. Candidate integration strategy
 
-After the candidate is green and accepted:
+Candidate is green but not accepted. After acceptance, choose squash versus normal merge. Recommended default: retain full history until acceptance, then squash noisy diagnostic history into a clear release commit while preserving QA evidence branches and links.
 
-- squash the experience into a clean release commit; or
-- retain detailed history and merge normally.
+### 5. Legal/source integration handoff
 
-Recommended default: preserve full branch history until acceptance, then squash the noisy diagnostic history into a clear release commit with complete QA evidence.
-
-### 4. Legal/source integration handoff
-
-Before real ingestion begins, the product owner will need to provide the implementation-facing form of the legal plan: authorized source types, contracts or permissions represented in the system, territories, asset-delivery method, metadata/credit obligations, takedown rules, and any provider/API restrictions. This is a future input, not a request to disclose sensitive credentials in chat or commit them to the repository.
+Before real ingestion, owner provides implementation-facing authorized source types, represented contracts/permissions, territories, delivery methods, metadata/credit obligations, reporting, corrections/takedowns, storage/playback limits, and provider/API restrictions. Do not paste secrets into chat or commit them.

@@ -4,11 +4,11 @@ This file is the required starting point for any human or AI agent working in th
 
 ## Mission
 
-Build Rondo into a professional, music-first product that helps listeners find a song quickly, explore artists deeply, and keep what matters. The experience must feel deliberate, human, and trustworthy—not like a toy, a generated mockup, or a clone of an existing streaming app.
+Build Rondo into a professional, music-first product that helps listeners find a song quickly, explore artists deeply, and keep what matters. The experience must feel deliberate, human, and trustworthy—not like a toy, generated mockup, or clone.
 
 ## Read before acting
 
-Read these files in order before code, design, branch, release, or product work:
+Read in order:
 
 1. `README.md`
 2. `handoff/STATE.md`
@@ -19,70 +19,93 @@ Read these files in order before code, design, branch, release, or product work:
 7. `docs/DESIGN.md`
 8. `docs/ARCHITECTURE.md`
 9. `docs/DATA_MODEL.md`
-10. `handoff/QUALITY_GATES.md`
-11. The current branch diff, open pull requests, commits, and checks
+10. `docs/PRODUCTION_PLAN.md`
+11. `handoff/QUALITY_GATES.md`
+12. Current branch diff, open PRs, commits, and checks
 
-Do not begin implementation from a single screenshot or an old summary. Reconcile the current source, current candidate, current handoff, and latest user decision first.
+Do not implement from one screenshot or old summary. Reconcile source, candidate, handoff, evidence, and latest owner decision.
 
-## Current branch policy
+## Current checkpoint
 
-- `main` is the stable runtime and canonical documentation branch.
-- Product and runtime candidates use a focused branch and a reviewable pull request.
-- Test-only previews and generated QA artifacts stay off `main`.
-- Do not merge a candidate while user acceptance is pending or a required check is red.
-- Documentation/continuity updates may go directly to `main` when explicitly requested.
-- Never force-push shared branches or hide a failing gate with a test-only workaround.
+- Stable `main` runtime baseline: `eaafc4c`; later `main` changes are canonical documentation.
+- v0.3.2 candidate: `89fc0d5` on `rondo-v031-user-ready`.
+- QA evidence: `dbe315e`; preview: `873fbbe`; successful run: `34332141798`.
+- Candidate passed all 12 suites, visual capture, 18/18 manual review, exact preview audit, and targeted credential review.
+- PR #5 is open, draft, unmerged. Product-owner acceptance is pending.
+- Any candidate source change invalidates that exact-head evidence and requires the complete gate again.
+
+Always verify live refs; this checkpoint may age.
+
+## Branch policy
+
+- `main` carries stable runtime and canonical documentation.
+- Product/runtime candidates use focused branches and reviewable PRs.
+- Test previews/generated QA evidence stay off `main`.
+- Do not merge while acceptance is pending or a required gate is red/incomplete.
+- Documentation/continuity may go directly to `main` when requested.
+- Never force-push shared branches or hide failures with test-only workarounds.
 
 ## Product north star
 
 Rondo follows `find → play → explore → keep`.
 
-- **Discover** answers “What should I play?” It opens directly and remains song-forward.
-- **Journeys** answers “Which genre or artist do I want to explore deeply?” It owns genre selection, genre pages, and the artist-by-artist path.
-- **Song Room** makes the active song feel central without oversized text or decorative noise.
-- **Library** preserves artists, releases, tracks, moments, private notes, and meaningful progress.
-- **Profile** owns a Rondo account and editable taste preferences; no external streaming account is required by the product concept.
+- **Discover:** immediate, song-forward answer to “What should I play?”
+- **Journeys:** genre selection, Genre pages, and deliberate artist-by-artist depth.
+- **Song Room:** active recording made central without oversized type/noise.
+- **Library:** artists, releases, tracks, moments, private notes, progress.
+- **Profile:** Rondo account and editable taste; no external streaming account required by the product concept.
 
-## Confirmed production constraints
+## Owner constraints
 
-- **Rondo everywhere:** Rondo is the canonical product and future technical name. Keep existing `MakeItRando/Rando` URLs only until a deliberate migration avoids breaking prototype history and automation.
-- **Broad catalog:** production should support artists and genres broadly and remain independent of any single source app.
-- **Large scale:** build for thousands of songs initially and millions without changing the product model. Use stable IDs, indexed search, bounded APIs, pagination, lazy loading, and background ingestion; never put the full catalog in the browser.
-- **Owner-supplied legal path:** wait for the product owner's implementation-facing acquisition/source package before connecting real media. Public availability on Spotify, YouTube, Suno, or another app is not itself authorization.
-- **No payments in V1:** do not implement subscriptions, checkout, tips, artist billing, payment entitlements, taxes, refunds, disputes, or payouts in V1.
+- **Rondo everywhere:** safely migrate current `Rando` technical names before production.
+- **Broad catalog:** artists/genres broadly; independent of one source app.
+- **Thousands first, millions ready:** stable IDs, normalized models, bounded APIs, indexed/debounced search, cursor pagination, lazy assets, resumable ingestion; never full catalog in browser.
+- **Owner-supplied legal path:** wait for implementation-facing authorization/source package. Public availability is not authorization.
+- **No payments in V1:** no checkout, subscriptions, tips, artist billing, entitlements, taxes, refunds, disputes, or payouts.
 
 ## UX non-negotiables
 
-1. Use familiar, concise language. Prefer Play, Pause, Resume, About, Lyrics, Credits, Extra, Up next, Change genre, and Resume Journey.
-2. Keep typography at credible app scale. No giant type merely to fill space.
-3. Use artwork, hierarchy, sequencing, and whitespace before extra effects.
-4. Motion must explain playback, navigation, focus, loading, or state. Avoid constant or page-wide animation.
-5. Never use generated imagery as a shortcut for product quality.
-6. Discover must not interrupt with a genre popup.
-7. Genre selection belongs to Journeys; each genre is a distinct page-like route.
-8. Global playback must survive navigation. Browsing must not silently replace the active Journey.
-9. Persist meaningful state, not open modals, hover states, animation phases, or temporary panels.
-10. Do not use fake charts, fake live signals, manipulative streaks, autoplay traps, or unsupported recommendation claims.
-11. Build curiosity through strong curation and context; never lock core music or required information behind engagement mechanics.
-12. Unknown metadata stays unknown. Production claims require provenance.
+1. Familiar concise labels; truthful Play/Pause/Resume.
+2. Credible app-scale type; no giant filler type.
+3. Artwork, hierarchy, sequencing, and whitespace before effects.
+4. Motion only for playback/navigation/focus/loading/state; Reduced Motion honored.
+5. No generated imagery shortcut.
+6. Discover opens directly; never a genre popup.
+7. Made for you/Because you liked only after genuine history.
+8. Journeys owns genre selection and route-backed Genre pages.
+9. Playback survives navigation; browsing never replaces Journey silently.
+10. Persist meaningful state, not dialogs/hover/focus/animation/autoplay intent.
+11. No fake charts/live signals, manipulative streaks, autoplay traps, or locks on core music/information.
+12. Unknown metadata stays unknown; claims require provenance.
+
+## Canonical implementation policy
+
+- `src/ui/discoveryHub.js` is the canonical v0.3.2 Discover/Journey-route renderer.
+- `renderDiscoverView()` in `src/ui/views.js` is dormant legacy code with rejected conceptual framing.
+- Never wire it back in, adapt it, or create a competing Discover implementation.
+- Delete it before production catalog integration after the accepted candidate is integrated and no caller remains.
+- Production uses one shared data-driven Genre renderer over an editable taxonomy—no per-genre code copies or fixed global counts.
 
 ## Engineering rules
 
-- Keep UI code on normalized Rondo domain objects; source payloads stop at authorized adapters.
-- Keep credentials, rights rules, and source tokens off the client.
-- Maintain one playback state, one queue model, and one audio engine.
-- Do not duplicate sorting, save, palette, progress, route, or reveal rules.
-- Add migration-safe defaults for persisted state.
-- Treat playback rights, territory, attribution, correction, and takedown as product requirements, not later cleanup.
-- Keep route transitions accessible and preserve browser Back/Forward behavior.
-- Use data-driven genre/artist/release routes; do not duplicate screens for every genre.
-- Never issue unbounded catalog queries or ship full catalog arrays to the client.
-- Build source ingestion as idempotent, resumable, auditable background work with deduplication and retries.
-- Prefer small, reviewable changes with clear rollback paths.
+- UI consumes normalized Rondo objects; source payloads stop at adapters.
+- Credentials, rights decisions, and source tokens stay server-side.
+- One playback state, queue, audio element/engine, and analyser contract.
+- No duplicate sorting/save/palette/progress/route/recommendation rules.
+- Persisted state has schema validation, safe defaults, write-back repair, and tested migrations.
+- Rights, territory, attribution, correction, and takedown are product requirements.
+- Preserve accessible routes, titles, landmarks, Back/Forward, focus, and uninterrupted playback.
+- Stable Rondo IDs/slugs; never array position identity.
+- Every list/search API has a bounded limit, hard maximum, opaque cursor, and stable order.
+- Search is indexed, debounced, cancellable, alias/typo/rights aware; never global client filtering over catalog JSON.
+- Listener state stores bounded references/progress, not catalog objects/search pages/source payloads.
+- Never issue unbounded queries, recursively fetch all cursors, ship full catalog arrays, or flatten complete artist/release/track trees in the client.
+- Ingestion is idempotent, resumable, auditable, deduplicated, backpressured, and retryable.
+- Prefer small reviewable changes with rollback paths.
 
 ## Required quality pass
 
-Before asking the user to test or merging a product candidate:
+Before test request or merge:
 
 ```bash
 npm ci
@@ -91,52 +114,33 @@ npm run build:preview
 RONDO_URL=http://127.0.0.1:4173/preview-test.html npm test
 ```
 
-Then complete the manual and visual checks in `handoff/QUALITY_GATES.md`. A green command is not visual inspection. Inspect every required desktop, mobile, compact, Light, Night, and Reduced Motion state.
+Then complete `handoff/QUALITY_GATES.md`, including exact portable-preview and manual visual review. Green commands do not replace inspection.
 
-Never say “perfect,” “no errors,” “ready,” or “test now” while:
-
-- a required check is failing or pending;
-- runtime errors, broken visible images, or horizontal overflow exist;
-- keyboard/focus behavior is unverified;
-- a mobile or Reduced Motion state is uninspected;
-- the implementation and documentation disagree;
-- rights or source claims are unsupported.
+Never say “perfect,” “no errors,” “ready,” or “test now” while checks are pending/failing, runtime/resource/layout/focus issues exist, mobile/Reduced Motion is uninspected, candidate/evidence/preview/docs disagree, or rights claims are unsupported.
 
 ## Handoff update protocol
 
-Every meaningful change must update continuity in the same work session:
+Same session:
 
-- status, branch, commit, PR, check, blocker, or next action → `handoff/STATE.md`;
-- product choice or reversed choice → append to `handoff/DECISIONS.md`;
-- page, section, flow, copy, persistence, or navigation → `handoff/PRODUCT_MAP.md` and `docs/PRODUCT.md`;
-- module, route, service, connector, hosting, security, or scale assumption → `docs/ARCHITECTURE.md` and/or `docs/PRODUCTION_PLAN.md`;
-- entity, field, ID, persistence, analytics, or migration → `docs/DATA_MODEL.md`;
-- visual, responsive, motion, or accessibility rule → `docs/DESIGN.md`;
-- test coverage, result, screenshot, or release evidence → `handoff/QUALITY_GATES.md` and `handoff/SNAPSHOTS.md`;
-- future phase, real-system work, or payments → `handoff/ROADMAP.md`.
+- status/branch/commit/PR/check/blocker/next action → `handoff/STATE.md`;
+- decision/reversal → `handoff/DECISIONS.md`;
+- page/flow/copy/persistence/navigation → `handoff/PRODUCT_MAP.md`, `docs/PRODUCT.md`;
+- architecture/service/connector/hosting/security/scale → `docs/ARCHITECTURE.md`, `docs/PRODUCTION_PLAN.md`;
+- entity/ID/state/migration/analytics → `docs/DATA_MODEL.md`;
+- visual/responsive/motion/accessibility → `docs/DESIGN.md`;
+- tests/results/screenshots/video → `handoff/QUALITY_GATES.md`, `handoff/SNAPSHOTS.md`;
+- future phases/real system/payments → `handoff/ROADMAP.md`.
 
-At the end of a work session, `handoff/STATE.md` must answer:
-
-- What changed?
-- Where is it?
-- What passed and failed?
-- What is still unverified?
-- What should the next agent do first?
-- Is the user being asked to test? Why or why not?
+At completion, `STATE.md` must say what changed, where, what passed/failed, what remains, next action, and whether/why the user should test.
 
 ## Definition of done
 
-A section is done only when behavior, edge cases, accessibility, responsive states, automated tests, visual inspection, documentation, and branch status agree. User acceptance is a separate gate. Keep the candidate unmerged until that gate is explicit.
+Behavior, edge cases, accessibility, responsive states, automated tests, visual inspection, preview identity, security review, documentation, and branch status must agree. User acceptance is a separate gate. Keep the candidate unmerged until explicit.
 
-## Security, privacy, and rights
+## Security, privacy, rights
 
-- Never commit secrets, tokens, personal production data, media without authorization, or full copyrighted lyrics without rights.
-- Run targeted secret scanning for changed source and configuration.
-- Keep prototype accounts and personal notes clearly local-only until secure services exist.
-- Record source provenance and territorial availability for every production asset.
-- Do not infer authorization from public availability in another app.
-- Payments are outside V1. If separately approved later, use a compliant provider and server-side verification; never trust client-only entitlements.
+Never commit secrets, production personal data, unauthorized media, or full copyrighted lyrics. Run targeted secret review. Keep prototype accounts/notes local-only until secure services. Record source provenance/territory. Payments stay outside V1; any later approved system requires compliant server-verified flows.
 
 ## Competitive standard
 
-Do not chase feature count. Rondo should win through a clearer mental model, stronger release identity, truthful playback, thoughtful memory, accessible continuity, and calm product craft. If a feature makes the app busier without improving `find → play → explore → keep`, remove or defer it.
+Win through a clearer mental model, strong release identity, truthful playback, thoughtful memory, accessible continuity, and calm craft—not feature count. If a feature makes Rondo busier without improving `find → play → explore → keep`, remove or defer it.
