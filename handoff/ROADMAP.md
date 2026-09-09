@@ -1,6 +1,14 @@
-# Rondo roadmap: prototype, V1, V2, and payments
+# Rondo roadmap: prototype, scalable V1, and V2
 
-Dates are intentionally omitted until the product owner confirms scope, catalog path, team capacity, and launch territory.
+Dates are intentionally omitted until the product owner confirms team capacity, launch territory, platform scope, and the implementation-facing legal/source package.
+
+## Confirmed roadmap inputs
+
+- Rondo is the canonical name everywhere; migrate existing `Rando` technical names deliberately before production-facing release.
+- The eventual catalog should cover artists and genres broadly, independent of a single source app.
+- Build for thousands of songs at initial rollout and millions without changing the product model.
+- The product owner will provide the legal acquisition/source plan before real ingestion work begins.
+- V1 has no payments.
 
 ## Phase 0 — Experience approval
 
@@ -8,7 +16,7 @@ Dates are intentionally omitted until the product owner confirms scope, catalog 
 
 - repair the latest failing QA check;
 - run clean install, audit, build, unit, and browser suites;
-- inspect Discover, picker, four Genre pages, Artist Journey, release, Song Room, Library, Profile, mobile, compact, Light/Night, and Reduced Motion;
+- inspect Discover, picker, four prototype Genre pages, Artist Journey, release, Song Room, Library, Profile, mobile, compact, Light/Night, and Reduced Motion;
 - test with the product owner on desktop and phone;
 - resolve feedback without weakening the confirmed structure;
 - merge the accepted candidate into `main` with a clean release history;
@@ -16,49 +24,54 @@ Dates are intentionally omitted until the product owner confirms scope, catalog 
 
 **Exit:** explicit user approval and green release evidence.
 
-## Phase 1 — Production foundation
+## Phase 1 — Production and scale foundation
 
-**Goal:** create secure infrastructure while preserving the accepted UI contracts.
+**Goal:** create secure infrastructure while preserving the accepted UI contracts and avoiding prototype-scale assumptions.
 
+- complete the planned Rando-to-Rondo technical naming migration;
 - choose web application framework and hosting based on requirements, not fashion;
-- define Rondo API and normalized domain contracts;
-- provision database, migrations, environments, secrets, backups, and observability;
+- define normalized Rondo API and source-adapter contracts;
+- provision relational/domain storage, search index, object storage/CDN, background jobs, migrations, environments, secrets, backups, and observability;
 - implement secure identity, sessions, device management, and account recovery;
 - migrate prototype preferences and Journey state into versioned server data;
+- require bounded APIs, cursor pagination, lazy assets, idempotent jobs, and rate limits;
 - add feature flags and reversible deployments;
-- establish privacy, security, accessibility, and incident-response baselines.
+- establish privacy, security, accessibility, load, and incident-response baselines.
 
-**Exit:** authenticated empty product shell with safe persistence and operational controls.
+**Exit:** authenticated empty product shell with safe persistence, indexed empty catalog, ingestion pipeline skeleton, and operational controls.
 
 ## Phase 2 — Real artists, releases, songs, and rights
 
-**Goal:** replace fictional records with authorized data.
+**Goal:** replace fictional records through the product owner's authorized legal/source path.
 
-- decide first catalog path: direct artist uploads, licensed provider, or hybrid;
-- build ingestion, validation, normalization, deduplication, and correction workflows;
-- represent artists, aliases, releases, editions, tracks, credits, identifiers, genres, styles, artwork, lyrics, and territorial availability;
+- receive and translate the legal/source plan into explicit connector, territory, storage, playback, attribution, reporting, correction, and takedown rules;
+- implement replaceable authorized source adapters rather than hard-coding Spotify, YouTube, Suno, or any other app into product logic;
+- build resumable ingestion, validation, normalization, deduplication, merge/split, correction, and staged-publication workflows;
+- represent artists, aliases, releases, editions, recordings, tracks, credits, identifiers, genres, styles, artwork, lyrics, and territorial availability;
 - add rights windows, provenance, attribution, takedown, and audit records;
 - implement rights-aware playback authorization;
 - build production search and unavailable/preview/full-play states;
-- seed a small, high-quality, legally cleared launch catalog before scaling.
+- prove controlled batches first, then scale ingestion and search from thousands toward millions.
 
-**Exit:** real content can be searched, browsed, played where authorized, corrected, and removed safely.
+**Exit:** authorized real content can be ingested at scale, searched, browsed, played where allowed, corrected, and removed safely.
 
 ## Phase 3 — V1 listener product
 
-**Goal:** launch the complete `find → play → explore → keep` loop.
+**Goal:** launch the complete `find → play → explore → keep` loop without payment complexity.
 
 - real Discover with editorial shelves and source-labeled trends;
-- server-synced Genre Journeys and progress;
+- server-synced Genre Journeys and progress across an editable large taxonomy;
 - real Artist and Release pages;
-- authorized Song Room playback, credits, lyrics/context where licensed;
+- authorized Song Room playback, credits, lyrics/context where permitted;
 - Library sync for songs, releases, artists, moments, and private notes;
 - explainable onboarding and taste controls;
+- indexed, typo-tolerant, paginated search across the broad catalog;
 - accessible responsive web experience;
 - analytics with consent, data minimization, and product-quality dashboards;
-- support, privacy export/deletion, moderation, and takedown operations.
+- support, privacy export/deletion, moderation, correction, and takedown operations;
+- catalog/search/playback load tests and recovery drills.
 
-**V1 exclusions unless re-approved:** social feed, public comments, follower counts, collaborative listening, fake AI DJ, manipulative streaks, and unsupported live-analysis claims.
+**V1 exclusions:** all payments; social feed; public comments; follower counts; collaborative listening; fake AI DJ; manipulative streaks; unsupported live-analysis claims; and content outside the supplied legal path.
 
 ## Phase 4 — Recommendation and editorial depth
 
@@ -74,37 +87,24 @@ Dates are intentionally omitted until the product owner confirms scope, catalog 
 
 **Exit:** recommendations are useful, explainable, diverse, and not fabricated.
 
-## Phase 5 — Payments and entitlements
+## Phase 5 — Catalog and operational maturity
 
-**Goal:** monetize proven value without degrading trust.
+**Goal:** make broad catalog growth routine rather than risky.
 
-No model is confirmed. Evaluate:
+- horizontally scale ingestion workers, search, API, and media delivery;
+- incremental reindexing and cache invalidation;
+- bulk rights-window and territory updates;
+- duplicate/edition resolution tools and full audit history;
+- source health, freshness, conflict, and attribution dashboards;
+- SLOs for search, playback authorization, ingestion, and takedowns;
+- abuse controls, quotas, backpressure, dead-letter recovery, and incident drills;
+- catalog quality sampling across genres, regions, scripts, and accessibility states.
 
-1. listener subscription;
-2. artist/label tools or services;
-3. direct support, memberships, tips, tickets, or merchandise;
-4. transparent hybrid.
+## Deferred beyond V1 — payments
 
-Before building payments, decide:
+Payments are explicitly excluded from V1. Do not prebuild checkout, subscriptions, tips, artist billing, payment entitlements, taxes, refunds, disputes, or payouts.
 
-- what the user pays for;
-- launch countries, currencies, tax responsibility, and age limits;
-- web versus app-store checkout rules;
-- trials, plans, upgrades, cancellation, refunds, and disputes;
-- artist payout and reporting obligations;
-- entitlement behavior when payment or rights status changes.
-
-Implementation requirements:
-
-- PCI-compliant provider;
-- server-created checkout/customer portal;
-- verified and idempotent webhooks;
-- provider customer/payment references, not raw instruments;
-- entitlement ledger and audit history;
-- refund/dispute handling;
-- fraud/rate controls;
-- accessible, transparent prices and cancellation;
-- no dark patterns or client-only trust.
+If the product owner later opens a payment phase, first decide what value is paid for, territories/currencies, platform-store rules, cancellation/refunds, artist obligations, and entitlement behavior. Then use a PCI-compliant provider, verified idempotent webhooks, an auditable entitlement ledger, transparent prices, and no dark patterns.
 
 ## V2 opportunities
 
@@ -112,19 +112,21 @@ Only prioritize after V1 evidence:
 
 - artist/label portal with verified profiles and release management;
 - deeper release editions, liner material, credits, and source-linked context;
-- tickets, merchandise, memberships, or direct support if selected;
-- offline-capable listening where licenses permit;
+- offline-capable listening where rights permit;
 - native mobile apps if web usage proves the need;
 - multilingual interface and licensed lyric translation;
 - accessibility profiles and cross-device continuity;
 - editorial programming, guest curators, and regional scenes;
-- collaborative or social features only if they support listening rather than feed growth.
+- collaborative or social features only if they support listening rather than feed growth;
+- a separately approved payment model, if proven useful.
 
 ## Roadmap guardrails
 
 - Do not start Phase 2 before Phase 0 approval.
-- Do not choose a provider before defining the connector contract and rights needs.
+- Do not implement a source connector until the product owner's legal/source package defines the allowed integration.
+- Do not treat public availability in another app as authorization.
+- Do not load or render an unbounded catalog in the browser.
 - Do not claim live charts without a named source and timestamp.
 - Do not add personalization without real signals and evaluation.
-- Do not add payment before product value and legal/territory obligations are understood.
-- Update this file when scope, order, or assumptions change.
+- Do not add payments to V1.
+- Update this file whenever scope, order, scale assumptions, or owner decisions change.
