@@ -40,8 +40,9 @@ function readSession(raw) {
   }
   if (source.catalogMode === "matching" || source.catalogMode === "all")
     session.catalogMode = source.catalogMode;
-  if (["continue", "artist", "off"].includes(source.repeatMode))
+  if (["continue", "track", "artist"].includes(source.repeatMode))
     session.repeatMode = source.repeatMode;
+  else if (source.repeatMode === "off") session.repeatMode = "continue";
   if (Number.isFinite(source.position) && source.position >= 0)
     session.position = source.position;
   return session;
