@@ -1,0 +1,531 @@
+{
+  "checkedAt": "2026-09-09T18:07:23.533Z",
+  "baseUrl": "http://127.0.0.1:4173/preview-test.html",
+  "captureCount": 18,
+  "captures": [
+    {
+      "name": "01-desktop-discover",
+      "file": ".qa/screenshots/01-desktop-discover.jpg",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "bodyView": "discover",
+      "route": "#/discover",
+      "journeyPage": null,
+      "signalMode": "paused",
+      "appearance": "dark",
+      "overflowX": 0,
+      "pickerVisible": false,
+      "songRoomVisible": false,
+      "songTitleSize": 76.32,
+      "pageTitleSize": 82,
+      "visibleMainCount": 1,
+      "scrollSurfaces": [
+        {
+          "id": "viewSurface",
+          "top": 0,
+          "height": 754,
+          "contentHeight": 5078
+        }
+      ],
+      "brokenRenderedImages": [],
+      "undersizedTouchTargets": []
+    },
+    {
+      "name": "02-desktop-discover-lower",
+      "file": ".qa/screenshots/02-desktop-discover-lower.jpg",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "bodyView": "discover",
+      "route": "#/discover",
+      "journeyPage": null,
+      "signalMode": "paused",
+      "appearance": "dark",
+      "overflowX": 0,
+      "pickerVisible": false,
+      "songRoomVisible": false,
+      "songTitleSize": 76.32,
+      "pageTitleSize": 82,
+      "visibleMainCount": 1,
+      "scrollSurfaces": [
+        {
+          "id": "viewSurface",
+          "top": 2696,
+          "height": 754,
+          "contentHeight": 5078
+        }
+      ],
+      "brokenRenderedImages": [],
+      "undersizedTouchTargets": []
+    },
+    {
+      "name": "03-desktop-discover-sound",
+      "file": ".qa/screenshots/03-desktop-discover-sound.jpg",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "bodyView": "discover",
+      "route": "#/discover",
+      "journeyPage": null,
+      "signalMode": "paused",
+      "appearance": "dark",
+      "overflowX": 0,
+      "pickerVisible": false,
+      "songRoomVisible": false,
+      "songTitleSize": 76.32,
+      "pageTitleSize": 82,
+      "visibleMainCount": 1,
+      "scrollSurfaces": [
+        {
+          "id": "viewSurface",
+          "top": 2355,
+          "height": 754,
+          "contentHeight": 5961
+        }
+      ],
+      "brokenRenderedImages": [],
+      "undersizedTouchTargets": []
+    },
+    {
+      "name": "04-desktop-journey-picker",
+      "file": ".qa/screenshots/04-desktop-journey-picker.jpg",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "bodyView": "journeys",
+      "route": "#/journeys",
+      "journeyPage": null,
+      "signalMode": "paused",
+      "appearance": "dark",
+      "overflowX": 0,
+      "pickerVisible": true,
+      "songRoomVisible": false,
+      "songTitleSize": 76.32,
+      "pageTitleSize": 82,
+      "visibleMainCount": 1,
+      "scrollSurfaces": [
+        {
+          "id": "journey",
+          "top": 0,
+          "height": 754,
+          "contentHeight": 1251
+        }
+      ],
+      "brokenRenderedImages": [],
+      "undersizedTouchTargets": []
+    },
+    {
+      "name": "05-desktop-hiphop-journey",
+      "file": ".qa/screenshots/05-desktop-hiphop-journey.jpg",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "bodyView": "journeys",
+      "route": "#/journeys/hiphop",
+      "journeyPage": "genre",
+      "signalMode": "paused",
+      "appearance": "dark",
+      "overflowX": 0,
+      "pickerVisible": false,
+      "songRoomVisible": false,
+      "songTitleSize": 76.32,
+      "pageTitleSize": 82,
+      "visibleMainCount": 1,
+      "scrollSurfaces": [
+        {
+          "id": "journeyGenrePage",
+          "top": 0,
+          "height": 754,
+          "contentHeight": 3857
+        }
+      ],
+      "brokenRenderedImages": [],
+      "undersizedTouchTargets": []
+    },
+    {
+      "name": "06-desktop-hiphop-songs",
+      "file": ".qa/screenshots/06-desktop-hiphop-songs.jpg",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "bodyView": "journeys",
+      "route": "#/journeys/hiphop",
+      "journeyPage": "genre",
+      "signalMode": "paused",
+      "appearance": "dark",
+      "overflowX": 0,
+      "pickerVisible": false,
+      "songRoomVisible": false,
+      "songTitleSize": 76.32,
+      "pageTitleSize": 82,
+      "visibleMainCount": 1,
+      "scrollSurfaces": [
+        {
+          "id": "journeyGenrePage",
+          "top": 1455,
+          "height": 754,
+          "contentHeight": 3857
+        }
+      ],
+      "brokenRenderedImages": [],
+      "undersizedTouchTargets": []
+    },
+    {
+      "name": "07-desktop-artist-journey",
+      "file": ".qa/screenshots/07-desktop-artist-journey.jpg",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "bodyView": "journeys",
+      "route": "#/journeys/hiphop/artist/kairo-vale",
+      "journeyPage": "artist",
+      "signalMode": "paused",
+      "appearance": "dark",
+      "overflowX": 0,
+      "pickerVisible": false,
+      "songRoomVisible": false,
+      "songTitleSize": 76.32,
+      "pageTitleSize": 82,
+      "visibleMainCount": 1,
+      "scrollSurfaces": [
+        {
+          "id": "journey",
+          "top": 0,
+          "height": 754,
+          "contentHeight": 1251
+        }
+      ],
+      "brokenRenderedImages": [],
+      "undersizedTouchTargets": []
+    },
+    {
+      "name": "08-desktop-song-room-about",
+      "file": ".qa/screenshots/08-desktop-song-room-about.jpg",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "bodyView": "journeys",
+      "route": "#/journeys/hiphop/artist/kairo-vale",
+      "journeyPage": "artist",
+      "signalMode": "audio",
+      "appearance": "dark",
+      "overflowX": 0,
+      "pickerVisible": false,
+      "songRoomVisible": true,
+      "songTitleSize": 76.32,
+      "pageTitleSize": 82,
+      "visibleMainCount": 1,
+      "scrollSurfaces": [
+        {
+          "id": "journey",
+          "top": 0,
+          "height": 754,
+          "contentHeight": 1247
+        }
+      ],
+      "brokenRenderedImages": [],
+      "undersizedTouchTargets": []
+    },
+    {
+      "name": "09-desktop-song-room-lyrics",
+      "file": ".qa/screenshots/09-desktop-song-room-lyrics.jpg",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "bodyView": "journeys",
+      "route": "#/journeys/hiphop/artist/kairo-vale",
+      "journeyPage": "artist",
+      "signalMode": "audio",
+      "appearance": "dark",
+      "overflowX": 0,
+      "pickerVisible": false,
+      "songRoomVisible": true,
+      "songTitleSize": 76.32,
+      "pageTitleSize": 82,
+      "visibleMainCount": 1,
+      "scrollSurfaces": [
+        {
+          "id": "journey",
+          "top": 0,
+          "height": 754,
+          "contentHeight": 1247
+        }
+      ],
+      "brokenRenderedImages": [],
+      "undersizedTouchTargets": []
+    },
+    {
+      "name": "10-desktop-song-room-queue",
+      "file": ".qa/screenshots/10-desktop-song-room-queue.jpg",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "bodyView": "journeys",
+      "route": "#/journeys/hiphop/artist/kairo-vale",
+      "journeyPage": "artist",
+      "signalMode": "audio",
+      "appearance": "dark",
+      "overflowX": 0,
+      "pickerVisible": false,
+      "songRoomVisible": true,
+      "songTitleSize": 76.32,
+      "pageTitleSize": 82,
+      "visibleMainCount": 1,
+      "scrollSurfaces": [
+        {
+          "id": "journey",
+          "top": 0,
+          "height": 754,
+          "contentHeight": 1247
+        }
+      ],
+      "brokenRenderedImages": [],
+      "undersizedTouchTargets": []
+    },
+    {
+      "name": "11-desktop-light-discover",
+      "file": ".qa/screenshots/11-desktop-light-discover.jpg",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "bodyView": "discover",
+      "route": "#/discover",
+      "journeyPage": null,
+      "signalMode": "paused",
+      "appearance": "light",
+      "overflowX": 0,
+      "pickerVisible": false,
+      "songRoomVisible": false,
+      "songTitleSize": 76.32,
+      "pageTitleSize": 82,
+      "visibleMainCount": 1,
+      "scrollSurfaces": [
+        {
+          "id": "viewSurface",
+          "top": 0,
+          "height": 754,
+          "contentHeight": 5078
+        }
+      ],
+      "brokenRenderedImages": [],
+      "undersizedTouchTargets": []
+    },
+    {
+      "name": "12-mobile-discover",
+      "file": ".qa/screenshots/12-mobile-discover.jpg",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "bodyView": "discover",
+      "route": "#/discover",
+      "journeyPage": null,
+      "signalMode": "paused",
+      "appearance": "dark",
+      "overflowX": 0,
+      "pickerVisible": false,
+      "songRoomVisible": false,
+      "songTitleSize": 35,
+      "pageTitleSize": 43,
+      "visibleMainCount": 1,
+      "scrollSurfaces": [
+        {
+          "id": "viewSurface",
+          "top": 0,
+          "height": 656,
+          "contentHeight": 6323
+        }
+      ],
+      "brokenRenderedImages": [],
+      "undersizedTouchTargets": []
+    },
+    {
+      "name": "13-mobile-journey-picker",
+      "file": ".qa/screenshots/13-mobile-journey-picker.jpg",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "bodyView": "journeys",
+      "route": "#/journeys",
+      "journeyPage": null,
+      "signalMode": "paused",
+      "appearance": "dark",
+      "overflowX": 0,
+      "pickerVisible": true,
+      "songRoomVisible": false,
+      "songTitleSize": 35,
+      "pageTitleSize": 43,
+      "visibleMainCount": 1,
+      "scrollSurfaces": [
+        {
+          "id": "journey",
+          "top": 0,
+          "height": 656,
+          "contentHeight": 1209
+        }
+      ],
+      "brokenRenderedImages": [],
+      "undersizedTouchTargets": []
+    },
+    {
+      "name": "14-mobile-rnb-journey",
+      "file": ".qa/screenshots/14-mobile-rnb-journey.jpg",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "bodyView": "journeys",
+      "route": "#/journeys/rnb",
+      "journeyPage": "genre",
+      "signalMode": "paused",
+      "appearance": "dark",
+      "overflowX": 0,
+      "pickerVisible": false,
+      "songRoomVisible": false,
+      "songTitleSize": 35,
+      "pageTitleSize": 43,
+      "visibleMainCount": 1,
+      "scrollSurfaces": [
+        {
+          "id": "journeyGenrePage",
+          "top": 0,
+          "height": 656,
+          "contentHeight": 3717
+        }
+      ],
+      "brokenRenderedImages": [],
+      "undersizedTouchTargets": []
+    },
+    {
+      "name": "15-mobile-rnb-artist",
+      "file": ".qa/screenshots/15-mobile-rnb-artist.jpg",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "bodyView": "journeys",
+      "route": "#/journeys/rnb/artist/asha-north",
+      "journeyPage": "artist",
+      "signalMode": "paused",
+      "appearance": "dark",
+      "overflowX": 0,
+      "pickerVisible": false,
+      "songRoomVisible": false,
+      "songTitleSize": 35,
+      "pageTitleSize": 43,
+      "visibleMainCount": 1,
+      "scrollSurfaces": [
+        {
+          "id": "journey",
+          "top": 0,
+          "height": 656,
+          "contentHeight": 994
+        }
+      ],
+      "brokenRenderedImages": [],
+      "undersizedTouchTargets": []
+    },
+    {
+      "name": "16-mobile-change-genre",
+      "file": ".qa/screenshots/16-mobile-change-genre.jpg",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "bodyView": "journeys",
+      "route": "#/journeys/rnb/artist/asha-north",
+      "journeyPage": "artist",
+      "signalMode": "paused",
+      "appearance": "dark",
+      "overflowX": 0,
+      "pickerVisible": false,
+      "songRoomVisible": false,
+      "songTitleSize": 35,
+      "pageTitleSize": 43,
+      "visibleMainCount": 1,
+      "scrollSurfaces": [
+        {
+          "id": "journey",
+          "top": 0,
+          "height": 656,
+          "contentHeight": 994
+        }
+      ],
+      "brokenRenderedImages": [],
+      "undersizedTouchTargets": []
+    },
+    {
+      "name": "17-compact-discover",
+      "file": ".qa/screenshots/17-compact-discover.jpg",
+      "viewport": {
+        "width": 320,
+        "height": 700
+      },
+      "bodyView": "discover",
+      "route": "#/discover",
+      "journeyPage": null,
+      "signalMode": "paused",
+      "appearance": "dark",
+      "overflowX": 0,
+      "pickerVisible": false,
+      "songRoomVisible": false,
+      "songTitleSize": 35,
+      "pageTitleSize": 43,
+      "visibleMainCount": 1,
+      "scrollSurfaces": [
+        {
+          "id": "viewSurface",
+          "top": 0,
+          "height": 512,
+          "contentHeight": 5803
+        }
+      ],
+      "brokenRenderedImages": [],
+      "undersizedTouchTargets": []
+    },
+    {
+      "name": "18-reduced-motion-song-room",
+      "file": ".qa/screenshots/18-reduced-motion-song-room.jpg",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "bodyView": "discover",
+      "route": "#/discover",
+      "journeyPage": null,
+      "signalMode": "reduced",
+      "appearance": "dark",
+      "overflowX": 0,
+      "pickerVisible": false,
+      "songRoomVisible": true,
+      "songTitleSize": 35,
+      "pageTitleSize": null,
+      "visibleMainCount": 0,
+      "scrollSurfaces": [
+        {
+          "id": "viewSurface",
+          "top": 0,
+          "height": 656,
+          "contentHeight": 4779
+        }
+      ],
+      "brokenRenderedImages": [],
+      "undersizedTouchTargets": []
+    }
+  ],
+  "runtimeErrors": [],
+  "failures": []
+}

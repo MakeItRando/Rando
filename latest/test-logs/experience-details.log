@@ -1,0 +1,13 @@
+label=Experience details
+script=tests/experience.mjs
+status=0
+
+--- stdout ---
+Rondo final experience regression passed.
+
+
+--- stderr ---
+
+
+--- spawn error ---
+

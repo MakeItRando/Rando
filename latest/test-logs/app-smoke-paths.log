@@ -1,0 +1,20 @@
+label=App smoke paths
+script=tests/smoke.mjs
+status=1
+
+--- stdout ---
+
+
+--- stderr ---
+file:///home/runner/work/Rando/Rando/tests/smoke.mjs:109
+  if (errors.length) throw new Error(`Browser errors: ${errors.join(' | ')}`);
+                           ^
+
+Error: Browser errors: Cannot read properties of null (reading 'querySelectorAll')
+    at file:///home/runner/work/Rando/Rando/tests/smoke.mjs:109:28
+
+Node.js v20.20.2
+
+
+--- spawn error ---
+

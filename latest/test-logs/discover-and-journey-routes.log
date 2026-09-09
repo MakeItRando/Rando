@@ -1,0 +1,26 @@
+label=Discover and Journey routes
+script=tests/discovery-hub.mjs
+status=1
+
+--- stdout ---
+
+
+--- stderr ---
+node:internal/modules/run_main:123
+    triggerUncaughtException(
+    ^
+
+locator.waitFor: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator('#fullPlayer') to be visible
+    64 × locator resolved to hidden <div hidden="" role="dialog" id="fullPlayer" aria-modal="true" data-mode="story" data-vibe="drive" aria-labelledby="fullTitle" data-playback-source="audio" class="full-player song-room">…</div>
+
+    at /home/runner/work/Rando/Rando/tests/discovery-hub.mjs:153:37 {
+  name: 'TimeoutError'
+}
+
+Node.js v20.20.2
+
+
+--- spawn error ---
+

@@ -1,0 +1,13 @@
+label=Audio behavior
+script=tests/audio.mjs
+status=0
+
+--- stdout ---
+Authorized audio test passed.
+
+
+--- stderr ---
+
+
+--- spawn error ---
+

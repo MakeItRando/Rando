@@ -1,0 +1,20 @@
+label=Interface quality
+script=tests/quality.mjs
+status=0
+
+--- stdout ---
+{
+  "checkedAt": "2026-09-09T18:05:30.311Z",
+  "findings": [],
+  "metadata": {
+    "genreCount": 4,
+    "browserErrors": []
+  }
+}
+
+
+--- stderr ---
+
+
+--- spawn error ---
+

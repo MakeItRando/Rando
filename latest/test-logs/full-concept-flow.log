@@ -1,0 +1,13 @@
+label=Full concept flow
+script=tests/full-concept.mjs
+status=0
+
+--- stdout ---
+Rondo full-concept regression passed.
+
+
+--- stderr ---
+
+
+--- spawn error ---
+

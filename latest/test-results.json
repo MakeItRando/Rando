@@ -1,0 +1,77 @@
+{
+  "checkedAt": "2026-09-09T18:06:53.923Z",
+  "results": [
+    {
+      "label": "App smoke paths",
+      "script": "tests/smoke.mjs",
+      "status": 1,
+      "log": ".qa/test-logs/app-smoke-paths.log"
+    },
+    {
+      "label": "Interface quality",
+      "script": "tests/quality.mjs",
+      "status": 0,
+      "log": ".qa/test-logs/interface-quality.log"
+    },
+    {
+      "label": "Discover and Journey routes",
+      "script": "tests/discovery-hub.mjs",
+      "status": 1,
+      "log": ".qa/test-logs/discover-and-journey-routes.log"
+    },
+    {
+      "label": "Product policy",
+      "script": "tests/product-policy.mjs",
+      "status": 0,
+      "log": ".qa/test-logs/product-policy.log"
+    },
+    {
+      "label": "Listening flow",
+      "script": "tests/listening.mjs",
+      "status": 0,
+      "log": ".qa/test-logs/listening-flow.log"
+    },
+    {
+      "label": "Song Room",
+      "script": "tests/song-room.mjs",
+      "status": 0,
+      "log": ".qa/test-logs/song-room.log"
+    },
+    {
+      "label": "Audio behavior",
+      "script": "tests/audio.mjs",
+      "status": 0,
+      "log": ".qa/test-logs/audio-behavior.log"
+    },
+    {
+      "label": "Personal surfaces",
+      "script": "tests/personal.mjs",
+      "status": 0,
+      "log": ".qa/test-logs/personal-surfaces.log"
+    },
+    {
+      "label": "User-ready flow",
+      "script": "tests/user-ready.mjs",
+      "status": 0,
+      "log": ".qa/test-logs/user-ready-flow.log"
+    },
+    {
+      "label": "Experience details",
+      "script": "tests/experience.mjs",
+      "status": 0,
+      "log": ".qa/test-logs/experience-details.log"
+    },
+    {
+      "label": "Full concept flow",
+      "script": "tests/full-concept.mjs",
+      "status": 0,
+      "log": ".qa/test-logs/full-concept-flow.log"
+    },
+    {
+      "label": "Release readiness",
+      "script": "tests/release-ready.mjs",
+      "status": 0,
+      "log": ".qa/test-logs/release-readiness.log"
+    }
+  ]
+}
