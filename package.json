@@ -1,6 +1,6 @@
 {
   "name": "rondo-design-prototype",
-  "version": "0.3.3",
+  "version": "0.3.2",
   "private": true,
   "type": "module",
   "description": "Route-backed music discovery, isolated playback contexts, per-genre artist journeys, and an artwork-adaptive Song Room prototype.",
