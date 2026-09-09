@@ -96,8 +96,9 @@ function uniqueItems(nodes) {
 }
 
 function sourceContainer(trigger) {
-  return trigger.closest("[data-music-results], [data-sound-results], .music-section, .saved-list, #searchResults") ||
-    document.querySelector('main[data-rondo-page="discover"]');
+  return trigger.closest("[data-music-results], [data-sound-results], .music-section, .saved-list, .release-page, #searchResults") ||
+    document.querySelector('main[data-rondo-page="discover"]') ||
+    document.body;
 }
 
 function sourceLabelFor(container) {
@@ -106,7 +107,7 @@ function sourceLabelFor(container) {
   if (container.matches("[data-sound-results]")) return text(container, ["h3"]) || "Sound";
   if (container.matches("#searchResults")) return "Search";
   if (container.matches(".saved-list")) return "Library";
-  return text(container, ["h2", "h3"]) || "Discover";
+  return text(container, ["h1", "h2", "h3"]) || "Discover";
 }
 
 function queueFor(trigger) {
