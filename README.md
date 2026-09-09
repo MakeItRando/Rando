@@ -10,7 +10,8 @@ Rondo is not a wrapper around another streaming app. It owns its product languag
 
 | Surface | Reference | Status |
 | --- | --- | --- |
-| Stable prototype | `main` at `eaafc4c` | v0.3.0 Song Room release; deployed by GitHub Pages |
+| Stable runtime baseline | `eaafc4c` | v0.3.0 Song Room release; application files remain unchanged by the later documentation commits on `main` |
+| Canonical documentation | current `main` HEAD | Operating guide, product specs, production plan, and complete handoff |
 | Current experience candidate | [`rondo-v031-user-ready`](https://github.com/MakeItRando/Rando/tree/rondo-v031-user-ready) | v0.3.2; direct Discover, Journey genre pages, route-backed navigation, and UX polish |
 | Review | [draft PR #5](https://github.com/MakeItRando/Rando/pull/5) | Intentionally unmerged until user testing and approval |
 | Portable preview | [`rondo-v031-preview`](https://github.com/MakeItRando/Rando/tree/rondo-v031-preview) | Test-only preview branch |

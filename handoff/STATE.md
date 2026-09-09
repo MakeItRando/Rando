@@ -7,17 +7,19 @@
 
 ## Branch matrix
 
-| Branch | Head observed | Purpose | Merge state |
+| Branch | Reference | Purpose | Merge state |
 | --- | --- | --- | --- |
-| `main` | `ee316d0` after the documentation update | Stable v0.3.0 runtime plus canonical specifications and handoff | Current default branch |
+| `main` | Current HEAD; application baseline `eaafc4c`, followed only by documentation commits in this session | Stable v0.3.0 runtime plus canonical specifications and handoff | Current default branch |
 | `rondo-v031-user-ready` | `305e9a3` | v0.3.2 user-experience candidate | Draft PR #5; unmerged |
 | `rondo-v031-preview` | `bef0535` | Portable test preview | Test-only; keep off `main` |
 | `rondo-v23-song-room` | `a5e4905` | Historical v0.3 Song Room work | Merged through PR #3 |
 | `rondo-v22-immersive` | `ea05c73` | Historical immersive-listening work | Merged through PR #2 |
 
+Always verify the live `main` HEAD before new work. This file avoids a self-referential main SHA because updating it creates a new commit; exact candidate and runtime-baseline SHAs remain fixed evidence.
+
 ## Current release split
 
-- **Stable `main`:** v0.3.0, artwork-adaptive Song Room, fictional 8-artist/15-release/39-track catalog, six authorized Rondo Originals demos, local saves/moments/notes, playback, queue, volume, and responsive states.
+- **Stable `main`:** v0.3.0 runtime, artwork-adaptive Song Room, fictional 8-artist/15-release/39-track catalog, six authorized Rondo Originals demos, local saves/moments/notes, playback, queue, volume, and responsive states. Later commits in this session changed documentation only.
 - **Candidate:** v0.3.2, direct song-first Discover, Journey-owned genre selection, route-backed Genre Journey pages, independent Journey continuity, revised Song Room, expanded QA, and portable preview.
 - **Production system:** not started. Real artists, licensed songs, production accounts, provider connectors, catalog ingestion, backend, live trends, and payments are deferred until experience approval.
 
