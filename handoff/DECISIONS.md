@@ -9,7 +9,7 @@ Statuses:
 
 | ID | Status | Decision | Reason / evidence |
 | --- | --- | --- | --- |
-| D-001 | Confirmed | Product name in the experience is **Rondo**. | Existing brand and user discussion. Repository spelling remains an open cleanup question. |
+| D-001 | Confirmed | Product name in the experience is **Rondo**. | Existing brand and user discussion. |
 | D-002 | Confirmed | Rondo is independent, not a Spotify wrapper or clone. | Product foundation and user ambition. |
 | D-003 | Confirmed | Core product rhythm is `find → play → explore → keep`. | Reconciles immediate discovery with deeper journeys and memory. |
 | D-004 | Confirmed | Primary navigation is Discover, Library, Journeys, and Profile. | Candidate design and recovered chat. |
@@ -31,13 +31,17 @@ Statuses:
 | D-020 | Confirmed | “Because you liked…” appears only after genuine history exists. | Avoids fake personalization in a cold start. |
 | D-021 | Working | Optional release extras may unlock after genuine listening, but core music and required information never lock. | Candidate experiment; validate during user testing. |
 | D-022 | Confirmed | The prototype uses fictional catalog data and original Rondo demo audio only. | Rights boundary and current source. |
-| D-023 | Confirmed | Real artists, songs, accounts, ingestion, backend, and payments start after experience approval. | Explicit phase boundary from the user. |
+| D-023 | Superseded | Real artists, songs, accounts, ingestion, backend, and payments start after experience approval. | Real-system phase boundary remains, but payment scope is replaced by D-032. |
 | D-024 | Confirmed | `main` carries stable runtime and canonical specifications; user-test candidates stay unmerged until accepted. | User requested all important specs on main but testers separate. |
 | D-025 | Confirmed | Every meaningful change updates the handoff in the same work session. | Explicit user request for continuity. |
 | D-026 | Confirmed | Never ask the user to test while required checks are red or visual QA is incomplete. | Quality policy and current QA discrepancy. |
-| D-027 | Open | Repository/package/domain spelling: retain `Rando` infrastructure or normalize to `Rondo`. | Needed before production branding. |
-| D-028 | Open | First real-catalog path: artist uploads, licensed provider, or hybrid. | Determines ingestion, rights, and playback architecture. |
-| D-029 | Open | Payment/value model and launch territories. | Determines entitlements, taxes, refunds, payouts, and store rules. |
+| D-027 | Superseded | Repository/package/domain spelling: retain `Rando` infrastructure or normalize to `Rondo`. | Resolved by D-030. |
+| D-028 | Superseded | First real-catalog path: artist uploads, licensed provider, or hybrid. | Replaced by the source-neutral, owner-supplied legal path in D-031. |
+| D-029 | Superseded | Payment/value model and launch territories. | V1 payment scope is resolved by D-032; territory remains a separate production input in D-033. |
+| D-030 | Confirmed | **Rondo** is the canonical product, repository, package, infrastructure, domain, and future app-store name. Existing `Rando` URLs remain until a planned migration avoids breakage. | Product-owner answer on 2026-09-09: “Rondo everywhere.” |
+| D-031 | Confirmed | The production catalog is artist-, genre-, and source-inclusive. Build provider-neutral ingestion and browsing that can hold thousands of songs initially and scale to millions without redesign. The product owner will supply the legal acquisition plan before source integration begins. | Product-owner answer on 2026-09-09. Public availability in another app is never treated by code as authorization; Rondo integrates only through the supplied legal path. |
+| D-032 | Confirmed | **V1 has no payments.** Do not build checkout, subscriptions, tips, artist billing, payment entitlements, or payout flows into V1. | Product-owner answer on 2026-09-09. Payments may be reconsidered only as a separately approved later phase. |
+| D-033 | Open | Launch territory, platform mix, and the concrete legal/source integration package are required before production ingestion and playback implementation. | These affect availability, rights enforcement, infrastructure, and release operations without narrowing the intended catalog. |
 
 ## Decision-writing rules
 
