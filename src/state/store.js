@@ -87,7 +87,7 @@ function readPersisted() {
   try {
     const parsed = JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}");
     const raw = isRecord(parsed) ? parsed : {};
-    return {
+    const normalized = {
       ...persistedDefaults,
       ...raw,
       onboardingComplete: raw.onboardingComplete === true,
@@ -108,6 +108,12 @@ function readPersisted() {
       theme: raw.theme === "light" ? "light" : "dark",
       session: readSession(raw),
     };
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(normalized));
+    } catch {
+      // The in-memory state remains usable when storage is unavailable.
+    }
+    return normalized;
   } catch {
     return {
       ...persistedDefaults,
