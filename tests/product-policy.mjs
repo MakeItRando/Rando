@@ -58,6 +58,20 @@ try {
   await page.evaluate(() => localStorage.clear());
   await page.reload({ waitUntil: "networkidle" });
   await page.locator('main[data-rondo-page="discover"]').waitFor();
+
+  await page.locator('[data-open-sound="late-night"]').click();
+  await page.locator("[data-sound-results]").waitFor();
+  await page.waitForTimeout(500);
+  const soundAlignment = await page.evaluate(() => ({
+    headingTop: document.querySelector(".discover-sounds h2").getBoundingClientRect().top,
+    topbarBottom: document.querySelector(".topbar").getBoundingClientRect().bottom,
+  }));
+  assert(
+    soundAlignment.headingTop >= soundAlignment.topbarBottom + 4,
+    "The Sounds heading must remain visible below the app bar.",
+  );
+  await page.locator("[data-close-sound]").click();
+
   await page.click('.rail-button[data-view="journeys"]');
   await page.locator("#journeyGenrePicker").waitFor();
   await page.click("[data-cancel-journey-picker]");

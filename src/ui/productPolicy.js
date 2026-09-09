@@ -196,6 +196,7 @@ function scheduleSync() {
 const qualityStyles = document.createElement("style");
 qualityStyles.dataset.rondoProductPolicy = "";
 qualityStyles.textContent = `
+.discover-sounds { scroll-margin-block-start: 16px; }
 .journey-genre-copy > button { margin-right: 12px; }
 html[data-theme="dark"] .journey-directory-switch > span {
   color: rgba(247, 244, 237, .52);
@@ -254,6 +255,18 @@ window.addEventListener(
   (event) => {
     const target = event.target instanceof Element ? event.target : null;
     if (!target) return;
+
+    const soundTrigger = target.closest("[data-open-sound]");
+    if (soundTrigger) {
+      requestAnimationFrame(() => {
+        document.querySelector(".discover-sounds")?.scrollIntoView({
+          block: "start",
+          behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches
+            ? "instant"
+            : "smooth",
+        });
+      });
+    }
 
     const changeTrigger = target.closest("[data-change-journey]");
     if (changeTrigger) pickerReturnFocus = changeTrigger;
