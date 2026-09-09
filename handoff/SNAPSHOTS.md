@@ -2,100 +2,133 @@
 
 ## Source note
 
-The previous chat link supplied on 2026-09-09 could not be loaded as a Notion page or session, and session search was temporarily unavailable. Four screenshots attached by the user were therefore treated as state-recovery evidence. Their actionable content is preserved below so a future agent does not depend on chat access.
+The previous chat link supplied on 2026-09-09 could not be loaded as a Notion page/session, so four user-supplied screenshots were treated as state-recovery evidence. Their product decisions remain preserved below. Repository-native final QA evidence now supplements those screenshots.
 
-The binary originals were not transferred into the repository in this session. Future exportable screenshots/videos must follow `snapshots/README.md` and be linked here with exact branch, SHA, route, viewport, appearance, and state.
-
-## Snapshot 1 — Earlier “ready for your test” state
+## Recovered snapshot 1 — Earlier readiness claim
 
 Visible context:
 
-- User asked for final touches before adding real artists, songs, and the real system.
-- User reported that Play artist still looked unchanged and some concepts felt overexplained.
-- User wanted Song Room to feel active, volume to do more, design to be professional and compelling, and curiosity to be stronger without becoming excessive.
-- Earlier assistant claimed Play/Pause/Resume truthfulness, an active waveform, volume feedback, restrained Song Room, desktop/mobile QA, and no blockers.
+- the user asked for final touches before real artists, songs, and the real system;
+- Play artist still appeared unchanged and some concepts felt overexplained;
+- Song Room needed to feel more active and professional;
+- an earlier assistant claimed readiness.
 
-Recovered decision:
+Controlling interpretation: that readiness claim is historical. Exact-head QA and current handoff evidence determine readiness.
 
-- Treat that readiness statement as historical only. Current check evidence controls readiness.
-- Artist playback labels, active track indication, waveform, volume, and Song Room quality are explicit acceptance criteria.
+## Recovered snapshot 2 — Discover and design correction
 
-## Snapshot 2 — Discover and design correction
+- Discover had become a genre-choice popup; the user wanted a real song-first page with useful search, direct playback, suggestions, hits, bangers, moods, and genre exploration.
+- Discover and guided Journeys must be distinct.
+- The user rejected giant type, excessive animation, generated-looking decoration, and product-strategy copy.
 
-Visible user feedback:
+Decision: Discover opens directly; music/artwork/selection create interest; motion and copy stay restrained.
 
-- Discover had been turned into a genre-choice popup; user wanted a music-first page instead.
-- Desired Discover behavior included songs, suggestions, famous/current picks, genre browsing, search, and direct playback.
-- User separated Explore/Discover from the guided Journey flow.
-- Song Room worked functionally but did not yet feel visually appealing or inviting enough.
-- User rejected huge text, excessive animation, and generated-looking decoration; wanted simple, human, app-scale design.
+## Recovered snapshot 3 — Corrected information architecture
 
-Recovered decision:
+- Genre selection belongs in Journeys.
+- Each genre opens its own page.
+- No permanent Journey genre dropdown.
+- First use shows a focused picker; returning use resumes; Change genre remains available.
+- Meaningful progress persists independently.
 
-- Discover opens directly; no genre popup.
-- Use music, artwork, and concise sections to build interest.
-- Keep motion limited and purposeful.
+Accepted supporting direction: continuous playback, Resume Journey, truthful history-based recommendations, and no streaks, fake charts, autoplay traps, giant banners, or excessive locking.
 
-## Snapshot 3 — Corrected information architecture
+## Recovered snapshot 4 — Route-backed pages
 
-Visible user direction:
+The user accepted page-like SPA routes for accessibility/navigation continuity. Routing provides distinct URLs, titles, landmarks, and Back/Forward while preserving the shared player. It does not by itself reduce bundle size; production performance depends on bounded APIs, pagination, lazy assets, caching, and code splitting.
 
-- Put the genre selection inside Journeys.
-- Each genre should open its own page.
-- Discover should contain music suggestions, today/hit/banger sections, search, and compact genre entry points.
-- Remove the permanent Journey genre dropdown; if no Journey exists, show a picker, and provide a later Change genre action.
-- Save progress independently.
+## Final v0.3.2 repository evidence
 
-Visible assistant recommendation accepted in the next screenshot:
+### Exact references
 
-- Discover as a finite living music homepage.
-- Genre pages as deeper destinations.
-- Preserve meaningful state, not temporary UI state.
-- Keep continuous playback.
-- Add Journey progress and Resume Journey.
-- Add “Because you liked…” only after genuine history.
-- Avoid streaks, excessive unlocks, fake charts, autoplay traps, and giant promotional banners.
+- Candidate: `89fc0d5d352db31ab90ff7d5b25b698db8e8c6cf`
+- Successful run: `34332141798`
+- Evidence: `dbe315e6ad1687537594a80da566af44645c764f`
+- Preview: `873fbbeb1d209889250825b054b235b8493b4e05`
+- Preview HTML blob: `759a9df34423092ee5843f57f09efe7f4bd43363`
+- PR #5: open, draft, unmerged
 
-Recovered decision:
+### Evidence files
 
-- Confirmed Discover/Journeys separation and page hierarchy.
-- Genre pages bridge free browsing into guided Journeys.
+On `rondo-v032-qa-evidence/latest`:
 
-## Snapshot 4 — Route-backed pages accepted
+- `run-summary.txt` — all 12 suites plus visual step successful;
+- `test-results.json` — every browser suite status `0`;
+- `test-logs/` — per-suite logs;
+- `visual-report.json` — 18 captures, no failures/runtime errors/overflow/broken images/undersized targets;
+- `visual-contact-sheet.jpg` — complete visual matrix;
+- `screenshots/` — source captures.
 
-Visible user response:
+### Final 18-capture matrix
 
-- User agreed with the proposed ideas.
-- User asked whether Genre pages should live in Journeys as subpages.
-- User suggested web-app pages for accessibility/performance and wanted loading/resource concerns considered.
+| # | File | Viewport | State | Manual result |
+| --- | --- | --- | --- | --- |
+| 01 | `01-desktop-discover.jpg` | 1440×900 | Direct Discover | Accepted |
+| 02 | `02-desktop-discover-lower.jpg` | 1440×900 | Lower Discover | Accepted |
+| 03 | `03-desktop-discover-sound.jpg` | 1440×900 | Sounds expanded | Accepted |
+| 04 | `04-desktop-journey-picker.jpg` | 1440×900 | First-use picker | Accepted |
+| 05 | `05-desktop-hiphop-journey.jpg` | 1440×900 | Hip-Hop Genre page | Accepted |
+| 06 | `06-desktop-hiphop-songs.jpg` | 1440×900 | Hip-Hop songs | Accepted |
+| 07 | `07-desktop-artist-journey.jpg` | 1440×900 | Artist Journey | Accepted |
+| 08 | `08-desktop-song-room-about.jpg` | 1440×900 | Song Room About | Accepted |
+| 09 | `09-desktop-song-room-lyrics.jpg` | 1440×900 | Song Room Lyrics | Accepted |
+| 10 | `10-desktop-song-room-queue.jpg` | 1440×900 | Song Room Up next | Accepted |
+| 11 | `11-desktop-light-discover.jpg` | 1440×900 | Light Discover | Accepted |
+| 12 | `12-mobile-discover.jpg` | 390×844 | Mobile Discover | Accepted |
+| 13 | `13-mobile-journey-picker.jpg` | 390×844 | Mobile picker | Accepted |
+| 14 | `14-mobile-rnb-journey.jpg` | 390×844 | Mobile R&B Genre page | Accepted |
+| 15 | `15-mobile-rnb-artist.jpg` | 390×844 | Mobile R&B Artist Journey | Accepted |
+| 16 | `16-mobile-change-genre.jpg` | 390×844 | Mobile Change genre/directory | Accepted |
+| 17 | `17-compact-discover.jpg` | 320×700 | Compact Discover | Accepted |
+| 18 | `18-reduced-motion-song-room.jpg` | 390×844 | Reduced Motion Song Room | Accepted |
 
-Recovered decision:
+**Manual acceptance:** `18/18`. No candidate source change was warranted by the final visual review.
 
-- Use route-backed SPA pages so each destination has a distinct URL, title, landmark, and Back/Forward behavior while global playback remains uninterrupted.
-- Be precise: routing alone does not reduce bundle size. Render only the active page now; use lazy artwork and later code splitting/pagination/provider caching for real load improvements.
+## Exact portable-preview runtime audit
 
-## Repository evidence captured during this audit
+The exact published HTML Git blob was extracted without modification and served over HTTP. Its canonical size is `500467` bytes; extraction tools that append a newline produce a non-identical file and must not be used for identity checks.
 
-- `main` head before documentation: `eaafc4c`.
-- v0.3.2 candidate head: `305e9a3`.
-- PR #5: open, draft, unmerged.
-- Latest observed candidate check: failed.
-- Candidate adds route, experience, full-concept, user-ready, release-ready, and visual-capture tests.
-- The preview branch remains separate from `main`.
+The 37-check audit passed:
+
+- malformed raw local state repaired and persisted;
+- direct Discover and cold-start recommendation gating;
+- Discover search and Sounds expansion;
+- real playback path and Song Room;
+- playback continuity through navigation;
+- first-use Journey picker, R&B route, contextual Change genre close, and focus return;
+- Artist Journey plus browser Back/Forward;
+- 320px no-overflow checks;
+- Reduced Motion static signal;
+- non-overlapping Song Room time/metadata columns;
+- zero page, console, request, or HTTP errors.
+
+Local audit-only MP3 fixtures were used under the six exact relative filenames to keep browser playback deterministic after sandbox resets. They were not committed and are not repository evidence for the recordings themselves. The six preview-branch audio objects and their exact SHAs were independently confirmed:
+
+| File | Blob SHA |
+| --- | --- |
+| `afterimage.mp3` | `172c59614f12bbf2b844bd0fcceb8cb407d8dd11` |
+| `blue-hour.mp3` | `74167eb7f3df55f875991f863cd6a3a956d5cb46` |
+| `continuum.mp3` | `566a4608ff5496a153079b7290b946ee599325ad` |
+| `first-light-again.mp3` | `029143c6090c84c8f6098a14ee834bccf3cd044a` |
+| `night-transit.mp3` | `2643293d06f4aaaeb843a823362693cc4331b95c` |
+| `open-circuit.mp3` | `d8e8b61973243ea607a6318bbb68404be2ab1826` |
+
+## Security evidence
+
+A targeted review covered all 58 PR files and patches. Credential-pattern findings: `0`. GitHub Advanced Security was unavailable, so no paid feature was enabled and no unavailable result was represented as coverage.
 
 ## Future evidence template
-
-For every image or video, add:
 
 ```text
 File:
 Date/time:
-Branch and SHA:
-Build/preview URL:
+Branch and exact SHA:
+Build/preview URL and blob:
 Route and state:
 Viewport/device:
 Appearance and motion preference:
 What the evidence proves:
 Known issue visible:
 Related test/run:
+Manual reviewer result:
 ```

@@ -2,27 +2,44 @@
 
 **Find your next repeat.**
 
-Rondo is an independent music-discovery and listening product. **Discover** is the quick, song-first home; **Journeys** is the deeper path through a genre, its artists, releases, and tracks; any song can open in the artwork-adaptive **Song Room**.
+Rondo is an independent music-discovery and listening product. **Discover** is the quick, song-first home; **Journeys** is the deeper route through a genre, its artists, releases, and tracks; any song can open in the artwork-adaptive **Song Room**.
 
-Rondo is not a wrapper around another streaming app. It owns its product language, discovery model, journeys, library, queue, player, memory, personalization, and brand. Production catalog, audio, metadata, artwork, and lyrics will enter through replaceable authorized connectors.
+Rondo owns its product language, discovery model, journeys, library, queue, player, memory, personalization, and brand. Production catalog, audio, metadata, artwork, and lyrics will enter through replaceable authorized connectors rather than coupling the experience to another music app.
 
 ## Repository status
 
 | Surface | Reference | Status |
 | --- | --- | --- |
-| Stable runtime baseline | `eaafc4c` | v0.3.0 Song Room release; application files remain unchanged by the later documentation commits on `main` |
-| Canonical documentation | current `main` HEAD | Operating guide, product specs, production plan, and complete handoff |
-| Current experience candidate | [`rondo-v031-user-ready`](https://github.com/MakeItRando/Rando/tree/rondo-v031-user-ready) | v0.3.2; direct Discover, Journey genre pages, route-backed navigation, and UX polish |
-| Review | [draft PR #5](https://github.com/MakeItRando/Rando/pull/5) | Intentionally unmerged until user testing and approval |
-| Portable preview | [`rondo-v031-preview`](https://github.com/MakeItRando/Rando/tree/rondo-v031-preview) | Test-only preview branch |
+| Stable runtime baseline | `eaafc4c` | v0.3.0 Song Room runtime on `main`; later `main` commits are canonical documentation only |
+| Canonical documentation | current `main` HEAD | Operating guide, product specifications, production plan, QA evidence, and handoff |
+| v0.3.2 candidate | [`89fc0d5`](https://github.com/MakeItRando/Rando/commit/89fc0d5d352db31ab90ff7d5b25b698db8e8c6cf) | Final pre-test candidate on `rondo-v031-user-ready` |
+| Review | [draft PR #5](https://github.com/MakeItRando/Rando/pull/5) | Open, draft, and intentionally unmerged pending product-owner testing and acceptance |
+| QA evidence | [`dbe315e`](https://github.com/MakeItRando/Rando/commit/dbe315e6ad1687537594a80da566af44645c764f) | Exact-head results, logs, 18 screenshots, report, and contact sheet |
+| Portable preview | [`873fbbe`](https://github.com/MakeItRando/Rando/commit/873fbbeb1d209889250825b054b235b8493b4e05) | Test-only preview branch; exact HTML blob `759a9df` |
 
-The latest PR #5 check is currently red. Do **not** describe the candidate as test-ready or merge it until the full gate is green again and the rendered experience has been inspected.
+## Current readiness
+
+The engineering pre-test gate is **green** for candidate `89fc0d5`:
+
+- [workflow run `34332141798`](https://github.com/MakeItRando/Rando/actions/runs/34332141798/job/102403183216) passed the clean install, high-severity dependency audit, build, static/unit checks, all 12 browser suites, and visual capture;
+- all 18 final desktop/mobile/compact/Light/Reduced Motion captures were manually inspected and accepted;
+- the 58 changed files were reviewed for credential patterns with zero findings;
+- the exact portable-preview blob passed a 37-check runtime audit over HTTP with zero page, console, request, or HTTP errors;
+- candidate, evidence, preview, PR, and canonical handoff agree.
+
+This means the candidate is ready for the product owner's experience test. It does **not** mean the candidate is accepted or merged. PR #5 stays draft and unmerged until explicit approval.
+
+## Test preview
+
+[Open the Rondo v0.3.2 candidate](https://htmlpreview.github.io/?https://raw.githubusercontent.com/MakeItRando/Rando/rondo-v031-preview/rondo-v031-preview.html)
+
+The preview deliberately uses the fictional catalog, local artwork, six original Rondo demo recordings, and browser-local persistence. Real artists, authorized production songs, production accounts, ingestion, backend services, and source credentials remain outside this experience gate.
 
 ## Confirmed production direction
 
 - **Rondo everywhere:** Rondo is the canonical product and future technical name; migrate current `Rando` repository/infrastructure naming deliberately before production.
 - **Broad catalog:** support artists and genres broadly through replaceable authorized source connectors, not a product tied to one app.
-- **Large scale:** design for thousands of songs initially and millions without a UI/domain rewrite; use indexed search, bounded APIs, pagination, lazy loading, and background ingestion.
+- **Large scale:** design for thousands of songs initially and millions without a UI/domain rewrite.
 - **Legal source plan:** the product owner will supply the implementation-facing acquisition and authorization package before real-source work begins.
 - **No payments in V1:** subscriptions, checkout, tips, artist billing, payment entitlements, taxes, refunds, disputes, and payouts are deferred.
 
@@ -30,25 +47,35 @@ The latest PR #5 check is currently red. Do **not** describe the candidate as te
 
 ```text
 Discover
-  → search / recommendations / sounds → song → Song Room
+  → search / editorial shelves / truthful recommendations / sounds
+  → song → Song Room
   → compact links into Genre Journeys
 Journeys
   → first visit: genre picker
   → genre page → songs / releases / artists
-  → guided artist Journey → release → track → completion
+  → guided Artist Journey → release → track → completion
 Library
-  → saved artists / releases / tracks / moments / notes / reveals
+  → saved artists / releases / tracks / moments / notes / progress
 Profile
   → account and editable taste setup
 Any song
   → Song Room → Room / About / Lyrics / Credits / Extra / Up next
 ```
 
-## Prototype boundaries
+## Product and scale contracts
 
-The repository currently uses a fictional catalog, local artwork, six original Rondo demo recordings, and browser-local persistence. It does not yet include real artists, authorized production songs, production accounts, source credentials, live charts, catalog ingestion, or backend services.
+- Discover opens directly and never starts with a genre chooser.
+- Made for you is absent until genuine listening history exists.
+- Journeys owns first-use genre selection, Change genre, and route-backed genre/artist exploration.
+- Playback survives navigation; meaningful listening/Journey/Library state persists; dialogs, focus, hover, and animation state do not.
+- Production clients receive bounded shelves and cursor-paginated results. They never receive, flatten, cache, or persist the complete catalog.
+- Search becomes indexed, debounced, alias-aware, typo-tolerant, and rights-aware.
+- Genre pages use one shared data-driven implementation; adding a genre must not require duplicated page code.
+- Stable Rondo IDs and normalized provider-neutral entities remain the contract across source changes.
 
-The next product phase begins only after the experience candidate is approved: real artist and song data through the supplied legal path, authorized playback, secure accounts, indexed search, scalable ingestion, recommendations, and production operations.
+## Canonical implementation note
+
+The v0.3.2 Discover contract lives in `src/ui/discoveryHub.js`. The older `renderDiscoverView()` in `src/ui/views.js` is dormant legacy code with superseded conceptual framing. Do not revive or adapt it into a second Discover implementation. Delete it before production catalog integration, after the accepted candidate is integrated and its callers are confirmed absent.
 
 ## Work on the project
 
@@ -80,13 +107,13 @@ RONDO_URL=http://127.0.0.1:4173/preview-test.html npm test
 npm audit --audit-level=high
 ```
 
-The v0.3.2 candidate adds more browser and visual checks; use its own `package.json` and [`handoff/QUALITY_GATES.md`](handoff/QUALITY_GATES.md) as the release checklist.
+For v0.3.2, use the candidate branch's `package.json`, `.github/workflows/qa.yml`, and [`handoff/QUALITY_GATES.md`](handoff/QUALITY_GATES.md). Never infer candidate readiness from the stable `main` runtime.
 
 ## Canonical specifications
 
 - [`docs/PRODUCT.md`](docs/PRODUCT.md) — product behavior and scope
 - [`docs/DESIGN.md`](docs/DESIGN.md) — interface and interaction system
-- [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) — modules, connector, and catalog-scale boundaries
+- [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) — modules, connectors, and catalog-scale boundaries
 - [`docs/DATA_MODEL.md`](docs/DATA_MODEL.md) — normalized entities, rights, scale, and state ownership
 - [`docs/ONBOARDING.md`](docs/ONBOARDING.md) — account and taste setup
 - [`docs/BRAND.md`](docs/BRAND.md) — identity and visual principles
@@ -94,4 +121,4 @@ The v0.3.2 candidate adds more browser and visual checks; use its own `package.j
 
 ## Rights boundary
 
-Production recordings, artwork, metadata, lyrics, biographies, and liner material require the authorization represented by the product owner's legal/source plan. Public availability in another app is not itself permission. Secure accounts, source credentials, regional rights enforcement, authorized playback, and large-scale ingestion require a server-capable production deployment. Payments remain outside V1.
+Public availability in Spotify, YouTube, Suno, or another app is not authorization. Production recordings, artwork, metadata, lyrics, biographies, and liner material require the permission represented by the product owner's legal/source plan. Secure accounts, source credentials, regional rights enforcement, authorized playback, and large-scale ingestion require a server-capable production deployment. Payments remain outside V1.

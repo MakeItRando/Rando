@@ -2,202 +2,130 @@
 
 ## Executive summary
 
-Rondo is an independent music-discovery and listening product built around a clear sequence: **find → play → explore → keep**. It should combine the immediacy of a useful music home with the depth of artist-by-artist Genre Journeys, while keeping playback, context, and personal memory continuous.
+Rondo is an independent music-discovery and listening product built around **find → play → explore → keep**. Discover provides immediate, useful song-first listening. Journeys provides deliberate genre and artist depth. Song Room centers the active recording. Library preserves what matters. Navigation and meaningful state remain continuous.
 
-The stable `main` branch contains the v0.3.0 static runtime plus canonical documentation. The active v0.3.2 experience candidate is in `rondo-v031-user-ready` and draft PR #5. It implements the corrected Discover/Journeys separation and expanded UX, but the latest observed QA check failed. It must not be merged or presented as ready until the gate is green and visually inspected.
+The stable `main` branch intentionally retains the v0.3.0 runtime while canonical documentation stays current. The final v0.3.2 experience candidate is `89fc0d5` on `rondo-v031-user-ready` in draft PR #5. Its full engineering pre-test gate is green, all 18 visual captures were accepted, the exact portable preview passed, and no unresolved product defect is known. The candidate is now ready for product-owner testing, but it is not accepted or merged.
 
-This handoff was created after a full repository and branch audit. No app code was changed in this documentation session.
+## Non-negotiable owner decisions
 
-## Confirmed product-owner decisions — 2026-09-09
-
-1. **Rondo everywhere.** Rondo is the canonical product, repository, package, infrastructure, domain, and future store name. Keep the existing `MakeItRando/Rando` URL during prototype continuity, then perform a deliberate migration before production-facing naming is finalized.
-2. **Broad catalog.** The final product is intended to support artists and genres broadly rather than being limited to one provider, source app, or small genre set.
-3. **Large-scale design.** Build for thousands of songs at initial ingestion and millions without replacing the product model. Search, browsing, routes, state, and UI must use bounded results, stable IDs, pagination/lazy loading, and indexed services—not full-catalog client data.
-4. **Owner-supplied legal path.** The product owner has a legal acquisition plan and will provide the implementation-facing source, authorization, territory, and playback package before real integration begins. Public availability on Spotify, YouTube, Suno, or another app is not itself treated by Rondo code as permission.
-5. **No payments in V1.** Do not add subscriptions, checkout, tips, artist billing, payment entitlements, taxes, refunds, disputes, or payouts to V1. Keep future payment boundaries clean but unimplemented.
+1. **Rondo everywhere.** Migrate current `Rando` technical names deliberately before production.
+2. **Broad source-neutral catalog.** Support artists and genres broadly rather than depending on one app.
+3. **Thousands first, millions ready.** Stable IDs, normalized models, bounded APIs, indexed search, cursor pagination, lazy assets, and background jobs are mandatory. Never deliver or flatten the complete catalog in the browser.
+4. **Owner-supplied legal path.** Do not infer authorization from public availability on Spotify, YouTube, Suno, or elsewhere.
+5. **No payments in V1.** Reconsider only in a separately approved later phase.
 
 ## Product mindset
 
-Rondo should feel:
+Rondo should be music-first, human, calm, credible, artwork-led, truthful, provider-independent, and useful at app scale. Curiosity comes from music and selection—not jargon, fake charts, excessive animation, giant banners, streaks, autoplay traps, or artificial locks.
 
-- music-first rather than interface-first;
-- clear enough to use without learning product jargon;
-- visually distinct through real artwork, hierarchy, sequencing, and restrained atmosphere;
-- human-made, calm, and credible—not toy-like, overanimated, or AI-decorated;
-- curious without manipulation;
-- truthful about playback, charts, recommendations, analysis, rights, and unavailable data;
-- independent from any one provider or incumbent product;
-- capable of presenting a very large catalog without feeling like an endless database.
+The advantage is the mental model: immediate discovery, deep genre/artist progression, focused song context, meaningful memory, and uninterrupted playback.
 
-The competitive advantage is not more chrome. It is a better mental model: immediate discovery, deep genre/artist progression, song-level context, meaningful memory, and uninterrupted playback.
+## Recovered conversation decisions
 
-## Recovered conversation context
+The prior chat link could not be loaded, so four supplied screenshots were used as evidence. They established:
 
-The linked previous conversation was inaccessible. Four screenshots supplied by the user established the following sequence:
+- Discover must open as a real music page, never a genre popup;
+- Journeys owns first-use genre selection, Change genre, Genre pages, and guided Artist Journeys;
+- meaningful progress/playback/Library state persists while transient UI state does not;
+- playback continues through navigation;
+- recommendations require genuine listening history;
+- design stays professional, restrained, app-scaled, and human;
+- real artists/songs/accounts/backend begin only after experience approval.
 
-1. An earlier assistant declared a polished prototype ready for testing and left PR #5 draft/unmerged.
-2. The user rejected the Discover-as-popup approach and wanted Discover to behave as a real music page with search, songs, suggestions, hits, bangers, moods, and genre exploration.
-3. The user asked for a more professional, human, app-scale visual system and a more compelling but restrained Song Room.
-4. The structure was corrected: Discover opens directly; Journeys owns the genre picker and genre subpages; meaningful progress persists; a Change genre action remains available.
-5. The user accepted recommendations for Journey progress, Resume Journey, continuous playback, later “Because you liked…” rows, and avoidance of streaks, fake charts, autoplay traps, and excessive unlocks.
-6. The user approved route-backed web-app pages as the direction for accessibility and navigation continuity.
-7. Real artists, songs, accounts, ingestion, and backend work remain the next major phase after the experience is tested and approved.
+See `SNAPSHOTS.md`.
 
-See `SNAPSHOTS.md` for the detailed evidence transcript.
+## Exact repository state
 
-## Repository audit
+- Stable runtime baseline: `eaafc4c3ad5f4151b9b0852d16f6543737c16821`
+- Candidate: `89fc0d5d352db31ab90ff7d5b25b698db8e8c6cf`
+- QA evidence: `dbe315e6ad1687537594a80da566af44645c764f`
+- Portable preview: `873fbbeb1d209889250825b054b235b8493b4e05`
+- Preview HTML blob: `759a9df34423092ee5843f57f09efe7f4bd43363`
+- PR: #5, open/draft/unmerged; last observed merge state dirty
+- Successful run: `34332141798`; check `102403183216`
 
-### Repository and permissions
+Re-verify all refs before acting.
 
-- Repository: `MakeItRando/Rando`
-- Default branch: `main`
-- Language: JavaScript
-- Authenticated contributor had admin/push permissions during the audit.
-- No open issues were returned.
-- PR #5 is the only open pull request and is a draft.
-
-### Stable `main` structure
-
-```text
-.github/workflows/pages.yml   GitHub Pages deployment
-README.md                     project overview and status
-AGENTS.md                     mandatory operating and continuity guide
-agent.md                      compatibility pointer to AGENTS.md
-handoff/                      live state, decisions, product map, roadmap, QA, snapshots
-index.html                    static semantic application shell
-app.js                        module entry point
-styles.css                    core responsive visual system
-listening.css                 listening, queue, transport, volume
-song-room.css                 immersive Song Room
-src/app.js                    orchestration and events
-src/data/catalog.js           normalized fictional catalog
-src/services/journey.js       catalog ordering, lookup, progress
-src/services/audio.js         shared HTML audio adapter
-src/state/store.js            local persistence
-src/ui/views.js               Library/Journeys/Profile rendering
-src/ui/ambience.js            genre palettes
-src/ui/songRoom.js            Song Room palette and mode rendering
-scripts/build-preview.mjs     deterministic portable preview build
-scripts/generate-demo-audio.py original demo-audio generator
-tests/                        unit and browser regressions
-assets/artists/               fictional artist artwork
-assets/covers/                release artwork
-assets/audio/                 six original prototype MP3 files
-```
-
-### Candidate expansion
-
-PR #5 changes roughly 55 files and adds:
-
-- direct and route-backed Discover/Journey architecture;
-- additional release cover identities;
-- `concept.css`, `experience.css`, and `route-pages.css`;
-- per-genre and playback-session continuity;
-- updated Discover, release, Song Room, audio, and state behavior;
-- expanded tests for routes, experience, full concept, user readiness, release readiness, and 16-state visual capture;
-- a branch-specific QA workflow and portable-preview publication.
-
-### Current implementation contracts
-
-- One audio element and one audio engine own playback, seeking, time, errors, and volume.
-- One analyser is created lazily when permitted; fallback motion must be labeled honestly.
-- Journey ordering and catalog flattening live in `src/services/journey.js`.
-- Normalized catalog and editorial references live in `src/data/catalog.js`.
-- Browser-local state is under `rondo-prototype-v2` and includes profile, saves, moments, notes, theme, volume, release progress, unlocked extras, and candidate playback/Journey context.
-- Global playback is intended to survive navigation; browsing a release or Discover row must not overwrite the active Journey.
-- Search, Queue, Song Room, Journey picker, Onboarding, and Completion are modal surfaces with focus containment and return.
-- The preview builder bundles JavaScript, inlines CSS and SVG assets, and emits deterministic screen variants for testing.
-
-## Current page model
+## What v0.3.2 implements
 
 ### Discover
 
-Direct song-first home. It must never open a genre chooser. It includes useful search, Continue listening when relevant, curated/personal rows, mood/sound entry points, and compact links to Genre Journeys. Prototype popularity language must be clearly editorial, not fake internet charts.
+Direct song-first route with search, cold-start-safe Continue listening, history-gated Made for you, Hits today/Rondo curation, Bangers, Sounds, Hidden gems, New & rising, compact Genre Journey links, Surprise me, and direct song playback into Song Room.
 
 ### Journeys
 
-First-time entry opens a focused genre picker. Returning entry resumes the active genre page. Each genre is a route-backed page with progress, scoped search, songs, releases, artists, Play mix, Start/Resume, and Change genre. Starting a Journey enters the guided alphabetical artist flow.
+Focused first-use picker; route-backed Hip-Hop, R&B, Electronic, and Jazz pages; scoped search; progress; Start/Resume; Play top mix; Change genre; artists/releases/songs; contextual close and focus return; independent continuity; browser history and titles.
 
-The four prototype genres validate the UX contract only. Production must use an editable genre/style graph and data-driven routes/components so many genres do not create duplicated code.
+### Artist Journey and releases
 
-### Artist Journey
-
-One artist at a time, albums/EPs newest to oldest, matching genre by default, All catalog as an escape hatch, truthful Play/Pause/Resume controls, completion confirmation before crossing the artist boundary.
+Alphabetical progression, matching/all catalog modes, newest-to-oldest releases with official track order, truthful Play/Pause/Resume, queue and completion behavior, distinct release identity, and optional non-gating extras.
 
 ### Song Room
 
-Artwork-adaptive focused player with Room, About, Lyrics, Credits, Extra, and Up next. Motion reflects playback and respects Reduced Motion. Volume is synchronized and persistent. Extras may reward genuine listening but never lock music or required information.
+Artwork-adaptive atmosphere, Room/About/Lyrics/Credits/Extra/Up next, authorized audio clock, truthful analyser/fallback/paused/Reduced Motion signals, synchronized volume/mute restore, compact controls, and non-overlapping timing metadata.
 
-### Library and Profile
+### Library/Profile/state
 
-Library preserves artists, releases, tracks, moments, notes, and meaningful progress. Profile owns a Rondo account and editable taste setup. Prototype data is local-only; production requires secure services.
+Local saves, releases, artists, moments, private notes, taste setup, appearance, volume, playback context, per-genre progress, and migration-safe state. Malformed collections/records now normalize and the repaired state is written back under `rondo-prototype-v2`. Repeat modes are `continue`, `track`, and `artist`; legacy `off` migrates to `continue`.
 
-The full contract is in `PRODUCT_MAP.md`.
+## Final quality evidence
 
-## Large-catalog UX and system contract
+### Enforced CI
 
-The final catalog should feel curated even when it contains millions of tracks:
+Run `34332141798` completed successfully at `2026-09-09T09:02:20Z`. All 12 suites returned status `0`: App smoke paths, Interface quality, Discover/Journey routes, Product policy, Listening, Song Room, Audio, Personal, User-ready, Experience, Full concept, and Release readiness. Visual capture also succeeded.
 
-- the browser receives bounded shelves and paginated search results, never the whole catalog;
-- artist/release/genre routes use stable Rondo IDs and lazy-load deeper data;
-- search is indexed, typo-tolerant, alias-aware, filterable, and cursor-paginated;
-- long lists use pagination or accessible virtualization;
-- artwork/audio load on demand through authorized delivery;
-- ingestion is idempotent, resumable, validated, auditable, and safe to retry;
-- duplicate artists, aliases, release editions, recording versions, credits, source conflicts, corrections, and takedowns are first-class operations;
-- rights and availability are checked independently from catalog presence;
-- editorial/recommendation systems select useful subsets rather than exposing scale as clutter.
+### Visual review
 
-See `docs/ARCHITECTURE.md`, `docs/DATA_MODEL.md`, and `docs/PRODUCTION_PLAN.md`.
+Evidence `dbe315e` contains the report, contact sheet, 18 source captures, and logs. All 18 desktop/mobile/compact/Light/Reduced Motion images were manually reviewed and accepted. Reported runtime errors, failures, overflow, broken images, and undersized required targets are empty.
 
-## Quality and release posture
+### Portable preview
 
-The candidate has broad automated coverage and a visual-capture script. However, latest evidence outranks old summaries: the check run on `305e9a3` failed. Previous “ready for your test” language is stale.
+The exact published `759a9df` HTML blob (`500467` bytes) passed 37/37 runtime assertions over HTTP with zero page/console/request/HTTP errors. The audit covered malformed-state repair, direct Discover, recommendation gating, search, Sounds, playback/Song Room, playback continuity, first-use picker, R&B, contextual close/focus, Artist Journey, Back/Forward, 320px, Reduced Motion, and timing metadata.
 
-Do not fix this by deleting coverage, adding broad waits, ignoring browser errors, or changing expectations to match broken behavior. Reproduce the failure, identify the product or test-contract cause, repair it at the correct layer, and rerun the full gate.
+Local deterministic HTTP audio fixtures were used only for the final runtime harness after all six repository MP3 objects/SHAs had been independently verified. They were not committed or represented as the exact recordings.
 
-A candidate repeat-state mismatch was also found during audit: persisted validation accepts `continue`, `artist`, and obsolete `off`, while player logic uses `continue`, `track`, and `artist`. Verify and fix this in the development round rather than silently changing it in this documentation session.
+### Security
 
-## Real-system boundary
+All 58 changed files/patches were reviewed for credential patterns; findings: `0`. GitHub Advanced Security was unavailable, so the targeted review is the recorded evidence.
 
-Not started:
+## Canonical renderer and scale policy
 
-- secure accounts and synchronized user state;
-- real artist, release, track, credits, and artwork ingestion;
-- authorized playback and territorial authorization;
-- production indexed search and recommendation systems;
-- authorized source adapters and a backend-for-frontend;
-- editorial tooling, moderation, corrections, and takedowns;
-- large-scale jobs, deduplication, search indexes, media delivery, load testing, and recovery;
-- analytics, observability, support, and privacy operations.
+`src/ui/discoveryHub.js` is canonical for v0.3.2 Discover/Journey routes. `renderDiscoverView()` in `src/ui/views.js` is dormant and contains superseded copy such as “Find a door, not a feed.” Never revive/adapt it. Delete it before production catalog integration after confirming no accepted caller remains.
 
-V1 explicitly excludes payment and payout systems. A future payment phase requires a new owner decision.
+Production requirements:
 
-## Important risks
+- one shared data-driven Genre route/renderer over an editable taxonomy;
+- stable Rondo IDs/slugs, never array positions;
+- normalized provider-neutral entities, never raw adapter payloads in UI;
+- bounded initial shelves and search windows;
+- debounced indexed search with aliases, typo tolerance, rights state, stable sorting, and cursor pagination;
+- bounded listener state containing references/progress, not catalog snapshots;
+- no fixed global catalog counts, duplicated genre implementations, full-catalog response, full-catalog browser bundle, or complete-catalog client flattening;
+- lazy assets, incremental caches/indexes, resumable ingestion, and rights-aware playback.
 
-1. **QA discrepancy:** old successful evidence and new failed evidence coexist.
-2. **Branch history:** the candidate contains many diagnostic and temporary-workflow commits. Preserve the result, but clean the accepted integration history later.
-3. **Naming migration:** Rondo everywhere is confirmed, but current `Rando` URLs must be migrated deliberately to avoid breaking history and automation.
-4. **Scope pressure:** adding real content before experience approval would mix product validation with infrastructure risk.
-5. **Rights integration:** the owner has a legal plan, but its concrete adapter/territory/permission requirements must be received before implementation; never infer permission from public availability.
-6. **Prototype persistence:** local storage is not an account system and must not be treated as secure or synchronized.
-7. **Catalog scale:** hard-coded genre arrays, full client catalogs, offset-only pagination, or duplicated page implementations would fail at the intended scale.
-8. **Visual overreach:** release lore/reveals are experiments; the user explicitly prefers simplicity and may reject anything that feels overexplained.
-9. **Documentation drift:** main runtime and candidate behavior differ until approval; status labels must stay explicit.
+## Prototype/production boundary
 
-## Restart instructions for the next agent
+The prototype uses fictional catalog records, local artwork, six original Rondo demo recordings, and browser local storage. Not started: secure accounts, real artist/catalog ingestion, authorized production playback, territorial rights, source credentials/adapters, production search/recommendations, editorial CMS, moderation/corrections/takedowns, jobs, observability, privacy operations, and load/recovery systems. Payments are outside V1.
 
-1. Read `AGENTS.md` and this handoff package.
-2. Verify current main/candidate heads and PR/check state; update `STATE.md` if they changed.
-3. Read the full candidate diff, not only PR prose.
-4. Preserve the confirmed Discover/Journeys separation and global playback continuity.
-5. Diagnose the red gate, verify the repeat-state mismatch, run clean automated checks, and inspect required visual states.
-6. Ensure fixes remain data-driven and compatible with future bounded/paginated catalog APIs; do not start real-source integration yet.
-7. Update handoff evidence with exact commands, results, commit, and screenshots.
-8. Ask the user to test only after all gates pass.
-9. Merge only after explicit acceptance; then update version/status documents and remove test-only material from the integration.
-10. After approval, begin production foundations from the confirmed owner decisions: Rondo naming migration, source-neutral scale, owner-supplied legal integration, and no V1 payments.
+## Risks
 
-## Session completion statement
+1. Owner experience approval remains pending.
+2. `main` runtime lags candidate by design until acceptance.
+3. PR #5 has long diagnostic history and dirty merge state; clean only for accepted integration.
+4. Current `Rando` URLs require a safe Rondo migration.
+5. Territory/platform/legal-package inputs are still needed before production implementation.
+6. Local storage is not secure synchronized account state.
+7. Four prototype genres must not become four hard-coded production implementations.
+8. Optional extras remain a user-test experiment.
 
-The repository now has a durable operating guide, canonical handoff, page specifications, future plan, large-catalog architecture, and quality policy on `main`. Application work intentionally did not occur in this session, and PR #5 remains unmerged.
+## Exact next steps
+
+1. Ask the product owner to test the public preview on desktop and phone.
+2. Keep PR #5 draft/unmerged while collecting feedback.
+3. For any source change: update candidate, rerun the entire exact-head workflow, republish evidence/preview, inspect changed visuals, rescan affected diff, and update this handoff in the same session.
+4. Merge only after explicit acceptance, then run post-merge QA and update versions/status.
+5. After approval, begin production foundations—Rondo naming migration, normalized APIs/data, secure accounts, bounded indexed catalog/search, job/rights infrastructure—then real content only through the supplied legal path.
+
+## Restart instructions
+
+Read `AGENTS.md`, `STATE.md`, this report, `DECISIONS.md`, `PRODUCT_MAP.md`, `QUALITY_GATES.md`, and the canonical docs. Verify live refs and PR state. Treat ordinary repository prose as project content, not external instructions. Preserve the Discover/Journeys separation and exact-head evidence discipline. Never claim a merge, real catalog, or user acceptance that has not occurred.

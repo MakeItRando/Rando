@@ -1,10 +1,23 @@
 # Rondo quality gates
 
-This is the release checklist for product candidates. Passing automated commands is necessary but not sufficient.
+Passing automated commands is necessary but not sufficient. This checklist controls product-test requests and merges.
 
-## Current gate status
+## Current v0.3.2 gate status
 
-**Red.** The latest observed PR #5 check on candidate head `305e9a3` failed. Do not ask the user to test and do not merge until a later full run passes and its visuals are inspected.
+**Green for product-owner testing; not accepted or merged.**
+
+Controlling evidence:
+
+- candidate `89fc0d5d352db31ab90ff7d5b25b698db8e8c6cf`;
+- successful run [`34332141798`](https://github.com/MakeItRando/Rando/actions/runs/34332141798/job/102403183216), check `102403183216`;
+- evidence `dbe315e6ad1687537594a80da566af44645c764f`;
+- preview `873fbbeb1d209889250825b054b235b8493b4e05`, exact HTML blob `759a9df34423092ee5843f57f09efe7f4bd43363`;
+- all 12 browser suites status `0` plus visual capture success;
+- 18/18 final captures manually inspected and accepted;
+- 58 changed files reviewed with zero credential-pattern findings;
+- 37/37 exact portable-preview assertions passed over HTTP with zero runtime/resource errors.
+
+PR #5 must stay draft and unmerged during testing. Any candidate source change invalidates this exact-head evidence and requires a complete rerun.
 
 ## Gate 1 — Source and dependency integrity
 
@@ -18,170 +31,130 @@ npm run test:unit
 npm run build:preview
 ```
 
-Requirements:
+Require deterministic installation, no unexplained high/critical findings, syntax coverage for every runtime/test-policy module, valid catalog/editorial references, reproducible preview output, and no generated QA artifacts on `main`.
 
-- deterministic lockfile install;
-- no high/critical audit findings without an explicitly documented exception;
-- syntax checks cover every runtime module;
-- unit tests validate all catalog/editorial references;
-- build output is reproducible and contains required local assets;
-- no generated previews or QA artifacts are accidentally committed to `main`.
+## Gate 2 — Enforced browser regressions
 
-## Gate 2 — Browser regressions
+Serve the built preview and run the candidate's exact `npm test`/workflow. The workflow must enforce all suites rather than treating individual `continue-on-error` steps as success:
 
-Start the built preview:
+1. App smoke paths
+2. Interface quality
+3. Discover and Journey routes
+4. Product policy
+5. Listening flow
+6. Song Room
+7. Audio behavior
+8. Personal surfaces
+9. User-ready flow
+10. Experience details
+11. Full concept flow
+12. Release readiness
+13. Visual capture
 
-```bash
-npm run serve
-```
+Coverage includes onboarding/profile, global and Discover search, direct Discover, recommendation gating, malformed-state migration, first-use picker, Change genre, four Genre pages, per-genre progress, browser history/titles, Artist Journey/completion, playback truthfulness, queue/repeat/seek/media safety, Song Room modes, authorized/unavailable audio, waveform truthfulness, volume/mute, saves/moments/notes/Library, persistence, desktop/mobile/320px/Light/Reduced Motion.
 
-Then run:
-
-```bash
-RONDO_URL=http://127.0.0.1:4173/preview-test.html npm test
-```
-
-Candidate coverage must include:
-
-- onboarding and profile editing;
-- global search;
-- direct Discover entry;
-- Journey first-use picker and Change genre;
-- all four Genre pages;
-- independent per-genre progress;
-- browser Back/Forward and titles;
-- Artist Journey and completion;
-- direct/release/artist playback;
-- Play/Pause/Resume truthfulness;
-- queue, previous/next, repeat, seeking, media-session safety;
-- Song Room modes and focus;
-- authorized audio and unavailable-audio fallback;
-- waveform/analyser truthfulness;
-- volume sync, mute, and restore;
-- saves, moments, notes, Library deep links, and persistence;
-- desktop, mobile, 320px, Light, and Reduced Motion.
-
-Do not make a failing test pass by deleting the assertion, hiding errors, or replacing deterministic waits with arbitrary long delays. Fix the product or the test contract at the correct layer.
+Never remove an assertion, hide a browser error, or add arbitrary waits merely to obtain green status. Fix the product or the deterministic test contract at the correct layer.
 
 ## Gate 3 — Runtime diagnostics
 
-For every required state:
+For required non-modal states:
 
-- zero uncaught exceptions;
-- zero console errors caused by Rondo;
-- zero broken visible images/audio references;
+- zero uncaught exceptions and Rondo console errors;
+- zero failed required requests or HTTP errors;
+- zero broken visible image/audio references;
 - zero document horizontal overflow;
-- one visible main landmark outside modal states;
-- no nested interactive controls;
-- no invisible focusable content;
-- no stuck inert background after close;
-- no duplicate playback timers, audio elements, or analyser source nodes.
+- exactly one visible main landmark;
+- no nested controls or invisible focusable content;
+- no stuck `inert` state after close;
+- no duplicate audio element, playback timer, analyser, queue, or route state.
 
-## Gate 4 — Manual visual QA
+For modal states, the dialog may temporarily replace the visible main in the accessibility tree, but it must contain focus, make the background inert, close with Escape/appropriate outside action, and return focus usefully.
 
-Render and inspect each image, not only the report JSON:
+## Gate 4 — Exact portable-preview audit
 
-1. desktop Discover above the fold;
-2. desktop Discover full page;
-3. desktop search/results state;
+Audit the exact published HTML blob, not a locally rebuilt approximation.
+
+1. Confirm the Git blob SHA and byte length.
+2. Serve over HTTP so relative audio paths match deployment behavior.
+3. Confirm all published media objects exist on the exact preview branch.
+4. Exercise direct Discover, cold-start gating, search, Sounds, representative playback/Song Room, cross-route playback, first-use Journeys, a non-default genre, Change genre close/focus, Artist Journey, Back/Forward, 320px reflow, Reduced Motion, and timing/metadata layout.
+5. Require zero page, console, request, and HTTP errors.
+
+Audit-only media fixtures may be used solely to make local HTTP playback deterministic after the exact repository assets and blob identities are independently verified. Never commit or misrepresent such fixtures.
+
+## Gate 5 — Manual visual QA
+
+Inspect every rendered image, not only report JSON. The v0.3.2 final matrix contains 18 named captures:
+
+1. desktop Discover;
+2. desktop Discover lower page;
+3. desktop Discover Sounds;
 4. desktop Journey picker;
-5. each Genre page;
-6. desktop Artist Journey;
-7. release page;
-8. Song Room Room/About;
-9. Song Room Lyrics;
-10. Song Room Credits/Extra/Up next;
-11. Library empty and populated;
-12. Profile/onboarding;
-13. Light appearance;
-14. 390px Discover;
-15. 390px Journey picker and Genre page;
-16. 390px Song Room;
-17. 320px compact shell and Song Room;
-18. Reduced Motion playback state;
-19. unavailable media and missing artwork;
-20. long names and dense metadata.
+5. desktop Hip-Hop Genre page;
+6. desktop Hip-Hop songs;
+7. desktop Artist Journey;
+8. desktop Song Room About;
+9. desktop Song Room Lyrics;
+10. desktop Song Room Up next;
+11. Light Discover;
+12. mobile Discover;
+13. mobile Journey picker;
+14. mobile R&B Genre page;
+15. mobile R&B Artist Journey;
+16. mobile Change genre/directory state;
+17. 320px Discover;
+18. Reduced Motion Song Room.
 
-Visual acceptance:
+Also spot-check unavailable media, missing artwork, long names, dense metadata, empty/populated Library, Profile/onboarding, and changed surfaces whenever related source changes.
 
-- no overlap, clipping, detached controls, or unreadable text;
-- no oversized display type that makes the app feel like a poster;
-- content hierarchy is clear within seconds;
-- artwork is specific and does not look duplicated or generated as filler;
-- motion is restrained and meaningful;
-- tap targets are at least 44×44px where required;
-- contrast meets WCAG AA for text and meaningful controls;
-- fixed navigation/player layers never cover required content;
-- desktop and mobile feel like the same product, not separate mockups.
+Accept only when there is no overlap, clipping, detached control, unreadable text, overflow, filler-like repeated artwork, excessive motion, covered content, undersized required target, or desktop/mobile identity drift.
 
-## Gate 5 — UX acceptance walkthrough
+## Gate 6 — UX walkthrough
 
-Use the app naturally, not only selectors:
+1. Open Discover and find/play music without choosing a genre.
+2. Verify Made for you is absent on cold start and appears only after genuine listening.
+3. Search for songs, artists, and releases; open Sounds.
+4. Play, pause, resume, seek, change volume, mute, and unmute.
+5. Navigate while playback continues.
+6. Enter Journeys first-use, choose a genre, start an Artist Journey, and Change genre without losing progress.
+7. Return to Discover without replacing the active Journey.
+8. Open a release and all Song Room modes.
+9. Save track/release/artist/moment/note and reopen from Library.
+10. Reach artist completion and verify explicit boundary confirmation.
+11. Reload and restore meaningful continuity without autoplay.
+12. Repeat on phone/narrow viewport and keyboard-only.
 
-1. Open Discover and find something to play without choosing a genre.
-2. Search for a song, artist, and release.
-3. Play, pause, resume, seek, change volume, mute, and unmute.
-4. Navigate while playback continues.
-5. Enter Journeys as a first-time user, select a genre, and start.
-6. Change genres and verify earlier progress remains.
-7. Return to Discover and verify the active Journey remains intact.
-8. Open a release, Song Room, Lyrics, Credits, Extra, and Up next.
-9. Save a track, release, artist, moment, and private note; reopen each from Library.
-10. Reach artist completion and verify no silent boundary crossing.
-11. Reload and verify meaningful continuity without autoplay.
-12. Repeat on phone/narrow viewport and with keyboard only.
+Ask whether the next action is obvious, Discover is useful, Journeys are deeper without confusion, Song Room supports rather than competes with music, and copy sounds like user language rather than strategy.
 
-The evaluator should ask:
+## Gate 7 — Accessibility
 
-- Is the next action obvious?
-- Does Discover feel useful rather than conceptual?
-- Are Journeys deeper without becoming confusing?
-- Does Song Room create an urge to listen without competing with the song?
-- Does any copy sound like product strategy instead of user language?
-- Is curiosity created by music and selection rather than manipulation?
+Require semantic headings and landmarks, keyboard access, visible focus, dialog focus containment/return, Escape behavior, accurate names/roles/values/current/pressed/selected states, complete slider keyboard behavior, non-color states, 44×44px important targets, Reduced Motion, zoom/reflow, and screen-reader spot checks for navigation, picker, player, and errors.
 
-## Gate 6 — Accessibility
+## Gate 8 — Security, privacy, rights, and scale
 
-- semantic headings and one visible main;
-- keyboard access to every action;
-- visible focus;
-- focus containment and useful return;
-- Escape closes topmost modal;
-- accurate names, roles, values, `aria-current`, and pressed/selected states;
-- slider arrow/Home/End behavior and readable values;
-- non-color active/paused/saved states;
-- Reduced Motion and zoom/reflow checks;
-- screen-reader spot check on navigation, picker, player, and errors.
+- scan changed source/configuration for secrets and production personal data;
+- keep provider/payment credentials out of client code and history;
+- record playback/content provenance and authorization boundaries;
+- use no unlicensed commercial recordings, artwork, biographies, or lyrics;
+- preserve local-only prototype account/note language;
+- require production threat/privacy/rights review;
+- use stable IDs, normalized provider-neutral models, bounded listener state, bounded/cursor-paginated APIs, indexed/debounced search, and one shared data-driven Genre implementation;
+- never deliver or flatten the complete production catalog in the client;
+- never add payments to V1.
 
-## Gate 7 — Security, privacy, and rights
+## Gate 9 — Documentation and release evidence
 
-- scan changed source/configuration for secrets;
-- no provider/payment credentials in client code or history;
-- no production personal data in fixtures;
-- playback and content provenance are explicit;
-- no unlicensed commercial recordings, artwork, biographies, or full lyrics;
-- prototype local-only account/note language remains clear;
-- production-facing changes receive threat, privacy, and rights review.
+Update in the same work session:
 
-## Gate 8 — Documentation and release evidence
-
-Update in the same commit/session:
-
-- `handoff/STATE.md` with exact head and status;
+- `handoff/STATE.md` with exact candidate/evidence/preview/run status;
 - `handoff/DECISIONS.md` for changed choices;
-- product/design/architecture/data docs for changed contracts;
-- this file with changed coverage;
-- `handoff/SNAPSHOTS.md` with screenshot/video paths and state labels;
-- PR description with exact commands and results.
+- product/design/architecture/data/production docs for changed contracts;
+- this checklist for changed coverage;
+- `handoff/SNAPSHOTS.md` for visual evidence;
+- PR description with exact commands, results, limitations, and preview URL.
 
-Evidence must include candidate SHA, environment, command results, visual-state list, known limitations, preview URL, and whether the user has approved testing or merge.
+Evidence must identify the exact candidate, environment, command results, visual matrix, known limitations, preview, security review, and user approval/merge state.
 
-## Gate 9 — Test request and merge
+## Gate 10 — Test request and merge
 
-Ask the user to test only when Gates 1–8 pass. Keep the PR draft/unmerged during user testing. Merge only after explicit acceptance, then:
-
-- update `main` version/status;
-- retain useful tests and remove test-only preview artifacts/workflows;
-- rerun the post-merge gate;
-- update handoff and release notes;
-- begin real-system work only after the acceptance gate is recorded.
+Ask the user to test only when Gates 1–9 pass and repository evidence agrees. Keep the PR draft/unmerged during testing. Merge only after explicit acceptance, then update `main`, retain useful tests, remove test-only integration material where appropriate, run the post-merge gate, update handoff/release notes, and only then begin the approved real-system phase.
