@@ -6,19 +6,9 @@ status=1
 
 
 --- stderr ---
-TypeError: page.click(...).first is not a function
-    at file:///home/runner/work/Rando/Rando/tests/experience.mjs:66:45
-node:internal/process/promises:391
-    triggerUncaughtException(err, true /* fromPromise */);
-    ^
-
-page.click: Target page, context or browser has been closed
-Call log:
-  - waiting for locator('[data-resume-journey]')
-
-    at /home/runner/work/Rando/Rando/tests/experience.mjs:66:14
-
-Node.js v20.20.2
+Error: Genre home should hide the artist-directory trigger.
+    at assert (file:///home/runner/work/Rando/Rando/tests/experience.mjs:7:25)
+    at file:///home/runner/work/Rando/Rando/tests/experience.mjs:120:3
 
 
 --- spawn error ---
