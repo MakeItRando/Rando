@@ -25,9 +25,44 @@ const persistedDefaults = {
   theme: "dark",
 };
 
+const isRecord = (value) =>
+  Boolean(value) && typeof value === "object" && !Array.isArray(value);
+
+const readStringList = (value) =>
+  Array.isArray(value)
+    ? value.filter((item) => typeof item === "string" && item)
+    : [];
+
+const readRecordList = (value) =>
+  Array.isArray(value) ? value.filter(isRecord) : [];
+
+const readPercentage = (value, fallback) =>
+  Number.isFinite(value) ? Math.min(100, Math.max(0, value)) : fallback;
+
+function readProfile(value) {
+  const source = isRecord(value) ? value : {};
+  return {
+    ...defaultProfile,
+    ...source,
+    displayName:
+      typeof source.displayName === "string"
+        ? source.displayName
+        : defaultProfile.displayName,
+    email: typeof source.email === "string" ? source.email : defaultProfile.email,
+    genres: Array.isArray(source.genres)
+      ? readStringList(source.genres)
+      : [...defaultProfile.genres],
+    seedArtists: Array.isArray(source.seedArtists)
+      ? readStringList(source.seedArtists)
+      : [...defaultProfile.seedArtists],
+    discovery: readPercentage(source.discovery, defaultProfile.discovery),
+    popularity: readPercentage(source.popularity, defaultProfile.popularity),
+    albumFocus: readPercentage(source.albumFocus, defaultProfile.albumFocus),
+  };
+}
+
 function readSession(raw) {
-  const source =
-    raw.session && typeof raw.session === "object" ? raw.session : {};
+  const source = isRecord(raw.session) ? raw.session : {};
   const session = {};
   for (const key of [
     "genreId",
@@ -50,20 +85,23 @@ function readSession(raw) {
 
 function readPersisted() {
   try {
-    const raw = JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}");
+    const parsed = JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}");
+    const raw = isRecord(parsed) ? parsed : {};
     return {
       ...persistedDefaults,
       ...raw,
-      profile: { ...defaultProfile, ...(raw.profile || {}) },
-      songNotes:
-        raw.songNotes && typeof raw.songNotes === "object" ? raw.songNotes : {},
-      releaseProgress:
-        raw.releaseProgress && typeof raw.releaseProgress === "object"
-          ? raw.releaseProgress
-          : {},
-      unlockedArtifacts: Array.isArray(raw.unlockedArtifacts)
-        ? raw.unlockedArtifacts
-        : [],
+      onboardingComplete: raw.onboardingComplete === true,
+      profile: readProfile(raw.profile),
+      savedTracks: readStringList(raw.savedTracks),
+      savedReleases: readStringList(raw.savedReleases),
+      savedArtists: readStringList(raw.savedArtists),
+      playedTracks: readStringList(raw.playedTracks),
+      savedMoments: readRecordList(raw.savedMoments),
+      songNotes: isRecord(raw.songNotes) ? raw.songNotes : {},
+      releaseProgress: isRecord(raw.releaseProgress)
+        ? raw.releaseProgress
+        : {},
+      unlockedArtifacts: readStringList(raw.unlockedArtifacts),
       volume: Number.isFinite(raw.volume)
         ? Math.min(1, Math.max(0, raw.volume))
         : 0.82,
