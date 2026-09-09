@@ -2,58 +2,87 @@
 
 **Find your next repeat.**
 
-Rondo is an independent artist-by-artist music journey: choose a genre, move through artists alphabetically, explore albums and EPs, and keep the music worth returning to.
+Rondo is an independent music-discovery and listening product. **Discover** is the quick, song-first home; **Journeys** is the deeper path through a genre, its artists, releases, and tracks; any song can open in the artwork-adaptive **Song Room**.
 
-Rondo is not a Spotify client or wrapper. It owns its account, library, journeys, genre system, queue, player, recommendation rules, and brand. Catalog, audio, metadata, artwork, and lyrics enter through replaceable authorized connectors.
+Rondo is not a wrapper around another streaming app. It owns its product language, discovery model, journeys, library, queue, player, memory, personalization, and brand. Production catalog, audio, metadata, artwork, and lyrics will enter through replaceable authorized connectors.
 
-## Current release — v0.3.0
+## Repository status
 
-This release makes the song the emotional center of Rondo:
+| Surface | Reference | Status |
+| --- | --- | --- |
+| Stable prototype | `main` at `eaafc4c` | v0.3.0 Song Room release; deployed by GitHub Pages |
+| Current experience candidate | [`rondo-v031-user-ready`](https://github.com/MakeItRando/Rando/tree/rondo-v031-user-ready) | v0.3.2; direct Discover, Journey genre pages, route-backed navigation, and UX polish |
+| Review | [draft PR #5](https://github.com/MakeItRando/Rando/pull/5) | Intentionally unmerged until user testing and approval |
+| Portable preview | [`rondo-v031-preview`](https://github.com/MakeItRando/Rando/tree/rondo-v031-preview) | Test-only preview branch |
 
-- cinematic, artwork-adaptive **Song Room** with Room, Lyrics, Story, Credits, and Up Next modes;
-- exact style, album/EP, featured roles, tempo/key, version, credits, and source provenance;
-- synchronized demo lyrics and timestamp seeking;
-- saved moments and private song notes surfaced in Library;
-- persistent, accessible volume control and focus-contained overlays;
-- six original Rondo demo recordings with real play, pause, seek, repeat, and queue continuity;
-- honest simulated fallback for catalog tracks without an authorized recording;
-- responsive desktop/mobile composition and Reduced Motion support.
-
-The included recordings are original 32-second prototype instrumentals by **Rondo Originals**. They are not copies or reconstructions of commercial music.
-
-## Preview locally
-
-```bash
-python3 -m http.server 4173
-```
-
-Open `http://localhost:4173`.
-
-To build the deterministic QA preview and run the complete gate:
-
-```bash
-npm install
-npm run build:preview
-RONDO_URL=file:///absolute/path/to/Rando/preview-test.html npm test
-```
+The latest PR #5 check is currently red. Do **not** describe the candidate as test-ready or merge it until the full gate is green again and the rendered experience has been inspected.
 
 ## Product hierarchy
 
-`Rondo account → taste profile → genre → alphabetical artist → Artist Focus → matching/all catalog → album or EP → track → Song Room → Room/Lyrics/Story/Credits/Up Next → completion confirmation`
+```text
+Discover
+  → search / recommendations / sounds → song → Song Room
+  → compact links into Genre Journeys
+Journeys
+  → first visit: genre picker
+  → genre page → songs / releases / artists
+  → guided artist Journey → release → track → completion
+Library
+  → saved artists / releases / tracks / moments / notes / reveals
+Profile
+  → account and editable taste setup
+Any song
+  → Song Room → Room / About / Lyrics / Credits / Extra / Up next
+```
 
-## Architecture
+## Prototype boundaries
 
-The prototype separates catalog data, journey rules, persisted state, views, artwork ambience, Song Room rendering, and provider-neutral audio. UI code consumes normalized Rondo objects; future providers stay behind connector interfaces. See [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md).
+The repository currently uses a fictional catalog, local artwork, six original Rondo demo recordings, and browser-local persistence. It does not yet include real artists, licensed commercial songs, production accounts, provider credentials, live charts, catalog ingestion, payments, or backend services.
 
-## Documentation
+The next product phase begins only after the experience candidate is approved: real artist and song data, authorized playback, secure accounts, search, ingestion, recommendations, and the production system.
 
-- [`docs/PRODUCT.md`](docs/PRODUCT.md) — confirmed behavior and scope
-- [`docs/ONBOARDING.md`](docs/ONBOARDING.md) — account and taste setup
+## Work on the project
+
+Before changing anything, read:
+
+1. [`AGENTS.md`](AGENTS.md)
+2. [`handoff/STATE.md`](handoff/STATE.md)
+3. [`handoff/HANDOFF_REPORT.md`](handoff/HANDOFF_REPORT.md)
+4. [`handoff/DECISIONS.md`](handoff/DECISIONS.md)
+5. [`handoff/PRODUCT_MAP.md`](handoff/PRODUCT_MAP.md)
+6. [`handoff/QUALITY_GATES.md`](handoff/QUALITY_GATES.md)
+
+Documentation and continuity records live on `main`. Test candidates remain on dedicated branches until accepted. Every meaningful product, design, architecture, data, branch, or QA change must update the relevant handoff files in the same work session.
+
+## Local preview and checks
+
+For the stable `main` prototype:
+
+```bash
+npm ci
+npm run build:preview
+npm run serve
+```
+
+Open `http://localhost:4173`, then run from another terminal:
+
+```bash
+RONDO_URL=http://127.0.0.1:4173/preview-test.html npm test
+npm audit --audit-level=high
+```
+
+The v0.3.2 candidate adds more browser and visual checks; use its own `package.json` and [`handoff/QUALITY_GATES.md`](handoff/QUALITY_GATES.md) as the release checklist.
+
+## Canonical specifications
+
+- [`docs/PRODUCT.md`](docs/PRODUCT.md) — product behavior and scope
 - [`docs/DESIGN.md`](docs/DESIGN.md) — interface and interaction system
 - [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) — modules and connector boundaries
 - [`docs/DATA_MODEL.md`](docs/DATA_MODEL.md) — normalized entities and state ownership
+- [`docs/ONBOARDING.md`](docs/ONBOARDING.md) — account and taste setup
 - [`docs/BRAND.md`](docs/BRAND.md) — identity and visual principles
+- [`docs/PRODUCTION_PLAN.md`](docs/PRODUCTION_PLAN.md) — real-system, catalog, rights, and payment plan
 
 ## Rights boundary
 
-Production recordings, artwork, metadata, and lyrics require authorization through licensed providers, official embeds where permitted, direct artist uploads, Creative Commons/public-domain material, or direct rights agreements. GitHub Pages can host this static prototype; secure accounts, provider credentials, and licensed commercial playback require a server-capable production deployment.
+Production recordings, artwork, metadata, lyrics, biographies, and liner material require authorization through licensed providers, official embeds where permitted, direct artist uploads, Creative Commons/public-domain material, or direct rights agreements. Secure accounts, provider credentials, regional rights enforcement, licensed playback, and payments require a server-capable production deployment.
