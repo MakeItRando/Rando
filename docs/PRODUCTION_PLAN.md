@@ -1,131 +1,117 @@
 # Rondo production-system plan
 
-This plan begins after the v0.3.2 experience candidate is approved. It records architecture direction, not a commitment to a specific framework or provider.
+This plan begins only after v0.3.2 experience approval. It is architecture direction, not a framework/provider commitment.
 
-## Confirmed product-owner direction
+## Confirmed direction
 
-- **Rondo** is the canonical name everywhere. Existing `Rando` repository URLs remain temporarily to preserve prototype history and will be migrated deliberately before production-facing naming is finalized.
-- The intended catalog is broad across artists, genres, and legitimate source systems—not limited to one app or a small curated genre set.
-- Design for thousands of songs at initial ingestion and millions without replacing the domain model or client architecture.
-- The product owner will provide the legal acquisition and source-integration plan before real content integration begins.
-- **V1 has no payments.** Payment infrastructure is deferred until a separately approved later phase.
+- Rondo is canonical everywhere; migrate existing `Rando` technical names safely.
+- Catalog is broad across artists/genres/legitimate sources and is not tied to one app.
+- Start with thousands of songs and scale to millions without replacing domain/client contracts.
+- Product owner supplies the legal acquisition/source-integration package before real content work.
+- V1 has no payments.
 
 ## Goal
 
-Replace the fictional static catalog and browser-only state with a secure, rights-aware system for real artists, releases, songs, accounts, search, playback, recommendations, editorial discovery, and large-scale operations—without changing Rondo's product identity.
+Replace fictional static catalog/browser-only state with a secure, rights-aware system for real artists, releases, songs, accounts, search, playback, recommendations, editorial discovery, and operations without changing Rondo's accepted product identity.
 
-## Proposed system boundary
+## Boundary
 
 ```text
 Web/mobile client
   → Rondo backend-for-frontend
-    → identity and profile service
-    → catalog and search service
-    → rights/playback authorization service
-    → recommendation/editorial service
-    → library and Journey service
-    → analytics/event pipeline
-    → ingestion jobs and authorized source adapters
-    → future payment/entitlement boundary (not V1)
+    → identity/profile
+    → catalog/search
+    → rights/playback authorization
+    → editorial/recommendation
+    → library/Journey
+    → analytics/events
+    → ingestion jobs + authorized adapters
+    → future payment boundary (not V1)
 ```
 
-The client never contains provider secrets, licensing rules, or unbounded catalog payloads. Source payloads are normalized before product code sees them.
+Client contains no provider secrets, licensing decisions, unbounded payloads, or complete catalog. Adapters normalize before product code.
 
-## Real catalog and source ingestion
+## Pre-production cleanup
 
-Rondo must support multiple replaceable, authorized source adapters. Examples may include licensed catalog providers, owner-supplied feeds, and verified artist/label ingestion, but the concrete path comes from the product owner's legal plan.
+After candidate acceptance and before real catalog integration:
 
-Public availability on Spotify, YouTube, Suno, or another app is not itself treated as authorization. No implementation should scrape, copy, store, or stream content merely because it is publicly reachable. Each enabled adapter must encode the supplied authorization, attribution, storage, territory, playback, and takedown rules.
+1. integrate/rerun accepted v0.3.2;
+2. remove dormant `renderDiscoverView()` from `src/ui/views.js` after confirming no caller;
+3. keep `src/ui/discoveryHub.js` behavior as the canonical Discover contract while refactoring it behind normalized APIs;
+4. replace hard-coded four-genre data/routes with one shared data-driven taxonomy/renderer;
+5. freeze stable Rondo IDs, pagination envelopes, listener-state schema, route contracts, and adapter ports;
+6. complete Rando-to-Rondo technical migration plan.
 
-Every catalog asset needs:
+## Catalog/source ingestion
 
-- a stable Rondo identity plus replaceable external IDs;
-- source provenance and owner/contact record;
-- territory and rights window;
-- playback/preview/metadata/artwork/lyrics permissions kept separately;
-- required attribution and reporting fields;
-- correction, replacement, conflict, and takedown history.
+Concrete adapters come only from the owner's legal plan. Public availability on Spotify, YouTube, Suno, or another app does not authorize scraping/copying/storage/playback.
 
-## Catalog scale contract
+Every asset needs stable Rondo identity, replaceable external IDs, provenance/owner, territory/window, separate playback/preview/metadata/art/lyrics permissions, attribution/reporting, correction/conflict/takedown history.
 
-The large-catalog design must avoid assumptions that work only for the 39-track prototype:
+Ingestion is idempotent/resumable and supports queues/retries/backpressure/dead letters/audit, bulk validation, staged publication, deduplication, aliases, merge/split, editions, versions, sourced credits, and incremental index/cache updates.
 
-- canonical artist, alias, release-edition, recording, track, credit, genre, style, and territory entities;
-- durable deduplication and merge/split workflows;
-- idempotent, resumable background imports with queues, retries, dead-letter handling, and audit records;
-- bulk validation and staged publication rather than editing production rows blindly;
-- indexed search with typo tolerance, aliases, facets, ranking, and cursor pagination;
-- bounded API responses and CDN-backed artwork/media delivery;
-- lazy loading, list virtualization where appropriate, and no full-catalog client download;
-- cache invalidation and incremental search-index updates;
-- horizontal job/search/API scaling, load tests, quotas, and abuse controls;
-- metrics for ingestion latency, catalog conflicts, search quality, playback authorization, and unavailable content.
+## Scale contract
 
-Start with controlled batches to prove correctness and operations, while preserving a model that can expand to millions of tracks.
+- bounded APIs with conservative defaults and enforced maximum limits;
+- opaque cursor pagination and stable deterministic sort;
+- narrow list objects and separate detail endpoints;
+- no unbounded `all`, offset-only deep pagination, recursive full trees, or complete-catalog export to clients;
+- indexed search with aliases, typo tolerance, facets, ranking, rights/territory/explicit filters;
+- client debounce, cancellation, stale-response protection, and bounded local cache;
+- one shared Genre implementation driven by taxonomy/editorial configuration;
+- dynamic per-page counts from metadata, no fixed global totals;
+- lazy responsive artwork/media and accessible pagination/virtualization;
+- no complete-catalog browser bundle, local-storage snapshot, recursive cursor fetch, or client flattening;
+- CDN/object media delivery, horizontal workers/search/API, quotas/abuse controls, load tests, and observability.
+
+Start with controlled batches while preserving the same model toward millions.
 
 ## Search and discovery
 
-- normalize artists, aliases, releases, editions, tracks, genres, styles, credits, and identifiers;
-- index only approved and available records;
-- return availability and rights state with each result;
-- separate editorial collections from algorithmic recommendations;
-- label live/trending data with a source and update time;
-- explain personal recommendations using real listening signals;
-- avoid cold-start claims until enough history exists;
-- keep result sets bounded and make deeper exploration intentional.
+Index approved/available normalized artists, aliases, releases/editions, recordings/placements, genres/styles, credits, and identifiers. Return availability/rights summary with results. Separate editorial collections from algorithms. Label trends with source/time. Hide personal recommendation surfaces until genuine signals exist. Keep results bounded and explanations plain.
 
-## Accounts, privacy, and continuity
+## Accounts, privacy, continuity
 
-- secure email/passkey or OAuth-based Rondo account;
-- server-side sessions and device management;
-- versioned taste profile and consent records;
-- sync saves, moments, notes, Journey progress, queue context, volume, and accessibility preferences;
-- export, deletion, privacy controls, and retention policy;
-- encrypt sensitive data in transit and at rest;
-- keep private notes private by default and out of recommendation training unless explicitly consented.
+Secure Rondo account; server-side sessions/devices/recovery; versioned taste/consent; sync saves/moments/notes/Journeys/queue context/preferences; export/deletion/retention; encryption; private notes private by default and excluded from recommendation training absent explicit consent.
+
+Listener state stores references and bounded windows—not catalog objects or full provider payloads. High-volume events use a separate partitioned pipeline.
 
 ## Playback and rights
 
-Playback authorization must check user, territory, asset, rights window, and source policy. Signed or source-issued playback references are short-lived. The system must support unavailable, preview-only, full-play, explicit-content, and region-blocked states without breaking navigation.
-
-Lyrics, biographies, credits, artwork, and editorial material each have independent rights and attribution rules. Takedown and correction flows are required before launch.
+Authorization checks listener, territory, asset, window, and source policy. Playback references are short-lived. Support unavailable/preview/full/explicit/region-blocked states without broken navigation. Lyrics, biographies, credits, art, and editorial material have independent rights/attribution. Correction/takedown is launch-critical.
 
 ## Recommendation layers
 
-1. Editorial shelves: curated and fully explainable.
-2. Content similarity: genre, style, credits, era, and release relationships.
-3. Personal continuation: recent plays, saves, skips, completed Journeys, and explicit taste controls.
-4. Exploration: a bounded unfamiliarity control with no endless autoplay trap.
+1. editorial shelves;
+2. content similarity using supplied genre/style/credits/era/relationships;
+3. personal continuation from plays/saves/skips/completed Journeys/explicit controls;
+4. bounded exploration with no autoplay trap.
 
-“Because you liked…” appears only after genuine history exists. Ranking systems require offline evaluation, diversity constraints, freshness checks, and human review.
+History-backed copy appears only after real history. Ranking requires offline evaluation, diversity/freshness constraints, bias/quality review, and human editorial oversight.
 
-## Payments and entitlements
+## Payments
 
-**V1 contains no payments.** Do not build subscriptions, checkout, tips, merchandise checkout, artist billing, payment entitlements, refunds, disputes, taxes, or payout systems into the V1 critical path.
+V1 contains none: no subscription, checkout, tips, merchandise checkout, artist billing, payment entitlements, refunds, disputes, taxes, or payouts. Keep a clean future extension boundary only. Any later phase starts with a new owner decision and value/territory/store/tax/refund/entitlement/payout definition before provider selection.
 
-Keep provider-neutral extension boundaries so a future approved phase can add payments without coupling them to catalog access, accounts, or playback state. If payments are reconsidered later, create a separate decision record and define the value proposition, territories, taxes, store policy, entitlements, refunds, disputes, and payout obligations before selecting a provider.
+## Operations
 
-## Operational requirements
-
-- environment separation and secret management;
-- migrations, backups, restore tests, and audit logs;
-- observability for API, search, playback, jobs, and ingestion;
-- moderation, takedown, abuse, and support workflows;
-- rate limits, cache strategy, background ingestion, and dead-letter handling;
-- content and schema validation;
-- feature flags and reversible rollouts;
-- accessibility, performance, load, and security gates in CI.
+Environment separation, secret management, migrations/backups/restore tests, audit logs, API/search/playback/job observability, moderation/takedown/abuse/support, rate limits/cache strategy, schema/content validation, feature flags/reversible rollout, accessibility/performance/load/security/rights/privacy CI, SLOs, incident response, and recovery drills.
 
 ## Delivery sequence
 
-1. Approve the experience candidate.
-2. Freeze the normalized domain contracts, scale contract, and source-adapter interfaces.
-3. Receive the product owner's legal/source integration package and choose initial territories.
-4. Build identity, database, search, job, object-storage/CDN, and Rondo API foundations.
-5. Implement ingestion, normalization, deduplication, provenance, rights, and search with controlled batches.
-6. Connect authorized playback and real metadata through the supplied path.
-7. Migrate Library, Profile, Journeys, and notes from local state.
-8. Add recommendation and editorial systems after real listening signals exist.
-9. Load-test catalog/search/playback paths and prove rollback, takedown, correction, backup, and recovery operations.
-10. Complete security, rights, privacy, accessibility, and production-readiness reviews before launch.
-11. Revisit payments only after V1 and a new explicit product-owner decision.
+1. Obtain experience acceptance and integrate with post-merge QA.
+2. Complete canonical-renderer cleanup and Rondo naming plan.
+3. Freeze normalized domain/API/pagination/state/adapter contracts.
+4. Receive legal/source package and initial territories.
+5. Build identity, database, search, jobs, object/CDN, and API foundations.
+6. Implement controlled ingestion, normalization, deduplication, provenance, rights, search.
+7. Connect authorized playback and real supplied metadata.
+8. Migrate Library/Profile/Journeys/notes to server sync.
+9. Add recommendations/editorial depth after real signals.
+10. Load-test and prove rollback/takedown/correction/backup/recovery.
+11. Complete security/rights/privacy/accessibility/production-readiness review.
+12. Revisit payments only after V1 and a new explicit decision.
+
+## Current gate
+
+Candidate `89fc0d5` is green and ready for product-owner testing. Real-system implementation remains blocked on explicit experience acceptance.

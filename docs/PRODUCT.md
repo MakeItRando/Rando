@@ -4,42 +4,41 @@
 
 Rondo helps a listener find a song quickly, move across sounds, explore artists at a comfortable pace, and keep music worth returning to.
 
-The product has two distinct entry points:
-
-- **Discover** is a song-first music home for search, suggestions, hits, bangers, new music, hidden finds, and moods.
+- **Discover** is a song-first home for search, editorial picks, truthful recommendations, hits, bangers, new music, hidden finds, and sounds.
 - **Journeys** is an intentional genre and artist path with saved progress.
+- **Song Room** is the focused context and control surface for the active recording.
+- **Library** keeps songs, releases, artists, moments, notes, and progress.
 
-The interface should feel like a music app made for listeners: clear words, useful motion, strong artwork, and no unnecessary explanation.
+The interface should feel human, professional, restrained, artwork-led, and easy to understand—never toy-like, overexplained, excessively animated, or derivative of a competitor.
 
 ## Core flow
 
 `find → play → explore → keep`
 
-1. **Find:** open Discover, search, choose a sound, or browse a short curated section.
-2. **Play:** start a song directly without losing the page underneath.
-3. **Explore:** enter a Genre Journey, then move through artists, releases, and related songs.
-4. **Keep:** save songs, releases, artists, moments, private notes, and Journey progress.
+1. **Find:** open Discover, search, choose a sound, or scan a short shelf.
+2. **Play:** start a song without losing the page or active Journey underneath.
+3. **Explore:** enter a Genre Journey and move through artists/releases/songs.
+4. **Keep:** save music, exact moments, private notes, and Journey progress.
 
 ## Confirmed decisions
 
-- Primary navigation is Discover, Library, Journeys, and Profile.
-- Discover opens directly; it never opens a genre modal.
-- Journeys owns the first-time genre picker and every genre page.
-- Every genre page is a page-like subroute under Journeys.
-- Returning listeners resume their active genre; Change genre remains available.
-- Progress is independent for Hip-Hop, R&B, Electronic, and Jazz.
-- Playing from Discover does not replace the active Journey.
-- Changing genres does not erase another genre's place or stop the current song.
-- Tracks matching the selected genre are the default guided catalog, with an All option in the artist Journey.
-- After an artist's final eligible track, Rondo asks before continuing.
-- External accounts are not required by the prototype.
-- **Rondo** is the canonical name everywhere; existing `Rando` repository URLs remain temporarily only to avoid breaking prototype history.
-- Production catalog scope is broad across artists and genres and must not be coupled to one provider or source app.
-- The catalog architecture must support thousands of songs initially and scale to millions without a product-model rewrite.
-- The product owner will provide the legal acquisition/integration plan before real-source work begins.
-- **V1 has no payments.** Payment features require a separately approved later phase.
+- Primary navigation: Discover, Library, Journeys, Profile.
+- Discover opens directly and never launches a genre chooser.
+- Journeys owns first-use genre selection, Change genre, Genre pages, and guided Artist Journeys.
+- Genre/artist destinations are route-backed SPA pages with distinct URLs/titles/landmarks, Back/Forward, focus management, and uninterrupted playback.
+- Progress is independent per genre.
+- Discover playback does not replace active Journey context.
+- Changing genres erases no progress and stops no active song.
+- Matching genre is the default guided catalog; Artist Journey offers All catalog.
+- Rondo asks before crossing an artist boundary.
+- Play/Pause/Resume labels reflect actual state and preserve position.
+- Rondo is canonical everywhere; existing `Rando` URLs remain only until a safe technical migration.
+- Production catalog is broad and provider/source neutral.
+- Design for thousands of songs initially and millions without a domain or UX rewrite.
+- Owner provides legal/source implementation package before real integration.
+- V1 has no payments.
 
-## Page hierarchy
+## Routes
 
 ```text
 #/discover
@@ -53,136 +52,130 @@ The interface should feel like a music app made for listeners: clear words, usef
 #/journeys/<genre>/artist/<artist-id>
 ```
 
-These are route-backed SPA pages, not separate document reloads. They provide distinct URLs, browser Back/Forward, accurate page titles, heading focus, one visible main landmark, and uninterrupted global playback.
+The four prototype genres validate behavior only. Production routes derive from an editable taxonomy and stable Rondo IDs/slugs, never duplicated hard-coded pages.
 
 ## Discover
 
-Discover answers one question quickly: what is worth playing now?
+Discover answers: **What is worth playing now?**
 
-The page includes:
+Required content:
 
-- music search;
-- Continue listening when there is meaningful history;
-- Hits today;
-- Made for you;
+- useful song/artist/release search;
+- Continue listening only after meaningful activity;
+- Hits today / Rondo editorial picks;
+- Made for you only after genuine played-track history exists;
 - Bangers;
-- Sounds for a mood;
+- Sounds for mood/situation;
 - Hidden gems;
 - New & rising;
-- compact links into Genre Journeys;
-- direct playback into the existing queue and Song Room.
+- compact Genre Journey links;
+- direct playback into the shared queue and Song Room.
 
-The prototype catalog is fictional, so editorial labels describe Rondo's own curation. It must not claim that demo songs are real internet charts. Live trends will require a named source and update time in the production-data phase.
+Cold-start rules:
 
-## Journey entry
+- hide Made for you completely when there is no genuine history;
+- do not substitute profile defaults and call them personal;
+- keep editorial shelves explicit;
+- never claim a live chart without a named source and update time.
 
-Selecting Journeys behaves differently by state:
+After real history exists, recommendation framing states why the subset appears (candidate eyebrow: `From your recent plays`). “Because you liked…” follows the same evidence rule.
 
-- with no active Journey, open a focused four-genre picker;
-- with an active Journey, open its genre page immediately;
-- Change genre reopens the picker without erasing progress;
-- dismissing the first-time picker returns to Discover rather than leaving an empty page.
+The canonical v0.3.2 implementation is `src/ui/discoveryHub.js`. Dormant `renderDiscoverView()` in `src/ui/views.js` contains rejected conceptual framing and is not a fallback. Do not revive it; delete it before production catalog integration.
 
-The picker contains focus, supports Escape, makes the background inert, has 44px targets, and exposes radio state to assistive technology.
+## Journey entry and Genre pages
 
-## Genre Journey pages
+Journeys behavior:
 
-Each genre has a distinct page beneath Journeys with:
+- no active Journey → focused picker;
+- active Journey → active Genre page;
+- Change genre → picker without erased progress;
+- dismiss on first use → Discover;
+- dismiss from an existing Genre/Artist route → preserve route and return focus.
 
-- a clear genre identity and restrained ambience;
-- current progress and the next artist;
-- scoped song, artist, and album search;
-- Play top mix;
-- Start or Resume Journey;
-- Change genre;
-- top songs;
-- essential releases;
-- hidden finds where available;
-- artists to know;
-- a link back to Discover.
+Picker requirements: direct readable choices, dynamic counts/progress, explicit radio state, primary action naming the genre, keyboard containment, Escape, inert background, contextual close, useful focus return, and 44px targets.
 
-Starting or resuming enters the existing guided artist flow:
+Each Genre page includes identity/atmosphere, progress/next artist, scoped search, Play top mix, Start/Resume, Change genre, songs, releases, artists, optional hidden finds, and Discover return.
 
-`genre page → alphabetical artist → matching/all catalog → release → track → Song Room → completion summary`
+Starting/resuming enters:
 
-The four prototype genres validate the interaction model, not the production taxonomy. Production must support a much larger, editable genre/style graph without hard-coded route or layout assumptions.
+`Genre page → Artist Journey → release → track → Song Room → completion`
 
-## Saved continuity
+## Artist Journey
 
-The prototype stores meaningful state, not transient UI details.
-
-Per genre:
-
-- active genre;
-- last artist;
-- last track and position where available;
-- songs heard and saved;
-- progress percentage;
-- last update time.
-
-Playback context also preserves the selected genre, artist, track, release, catalog mode, repeat mode, and position. Rondo never attempts autoplay after reload because browsers require a fresh user gesture.
-
-Modal state, hover, focus rings, animation phases, and open temporary panels are not persisted.
+- alphabetical artist order;
+- supplied identity/origin/years/tags/biography and progress;
+- releases newest to oldest and tracks in official sequence;
+- matching genre default, All catalog escape hatch;
+- truthful artist-level Play/Pause/Resume;
+- save artist/release/track;
+- queue tied to current artist/catalog mode;
+- explicit completion before next artist;
+- directory/route changes do not stop playback.
 
 ## Releases
 
-Every album or EP can provide distinct cover art, track order, a short hook, concise context, and an optional extra. Release identity should make the music recognizable without covering the page in lore.
+Each album/EP uses distinct authorized art, official order, concise context, truthful actions, and optional extras only when valuable. Unknown production metadata remains unknown. Extras never gate music, credits, or navigation.
 
 ## Song Room
 
-The Song Room is a focused listening surface. Visible modes are:
+Modes:
 
-1. **Room** — cover, song identity, active waveform, current lyric, timeline, and core controls.
-2. **Lyrics** — synchronized authorized or demo words with line seeking.
-3. **About** — short, plain-language context.
-4. **Credits** — supplied artists, writers, producers, and recording details.
-5. **Extra** — optional release material after genuine listening time.
-6. **Up next** — the current queue in sequence.
+1. **Room** — art, identity, waveform, current lyric, timeline, controls.
+2. **About** — short supplied context.
+3. **Lyrics** — synchronized authorized/demo words and line seeking.
+4. **Credits** — supplied performers/writers/producers/recording details.
+5. **Extra** — optional listening-earned material, still a user-test experiment.
+6. **Up next** — current queue and position.
 
-The active cover sets the room's color and blurred backdrop. Motion stays limited to playback feedback, a subtle artwork response, and state changes. Reduced Motion keeps a meaningful static signal.
+The active cover sets a restrained palette/backdrop. Real Web Audio levels are called live only when the analyser is active. Otherwise Rondo says Playback motion. Paused and Reduced Motion states are distinct. Elapsed time, metadata, and remaining time remain non-overlapping at compact widths.
 
-## Truthful playback and volume
+Volume is one persisted value across transport/Song Room. Mute restores the last audible value.
 
-Authorized prototype recordings use the media clock for progress and seeking. Web Audio drives the waveform when analysis is available; otherwise Rondo labels playback-synchronized motion honestly. Paused and Reduced Motion states remain visually distinct.
+## Personal listening and persistence
 
-Volume is one persisted value across the transport and Song Room. Both controls show percentage and level feedback. Mute preserves the last audible value so unmute restores it.
+Persist meaningful state:
 
-## Personal listening
+- profile/onboarding;
+- saves, plays, moments, notes;
+- appearance, volume, accessibility preferences;
+- playback context and position;
+- active Journey and bounded per-genre progress;
+- optional release progress/extras.
 
-Listeners can save an exact timestamp and write a private note for a song. Moments and notes persist locally, appear in Library, and reopen the correct listening context.
+Do not persist dialogs/drawers, hover/focus, animation/waveform frames, transient loading/errors, or autoplay intent. Resume restores context but never autoplays after reload.
 
-## Catalog-scale experience requirements
+Malformed persisted arrays/records must normalize safely and be written back so all readers see one valid state contract. Supported repeat modes are `continue`, `track`, and `artist`; legacy `off` migrates to `continue`.
 
-A large catalog must still feel intentional rather than like an endless database:
+## Catalog-scale experience contract
 
-- search is indexed, typo-tolerant, filterable, and paginated;
-- shelves return bounded, ranked results rather than full collections;
-- genre and artist pages lazy-load deeper content;
-- artwork and audio are loaded only when needed;
-- long lists use pagination or virtualization with accessible focus behavior;
-- unavailable or region-limited recordings remain understandable without dead ends;
-- editorial and recommendation surfaces explain why a small subset is shown;
-- the browser never downloads the complete catalog.
+A large catalog still feels intentional:
 
-## Performance approach
+- each route initially renders a bounded window;
+- shelves return small ranked subsets, not complete collections;
+- production search is indexed, debounced, alias-aware, typo-tolerant, filterable, rights-aware, stably sorted, and cursor-paginated;
+- genre/artist/release data lazy-loads by stable Rondo ID;
+- long lists paginate or virtualize accessibly;
+- artwork/audio loads only when needed;
+- listener state stores references and progress, never catalog copies;
+- unavailable/territory-limited results remain understandable;
+- no fixed global catalog count drives layout or logic;
+- the browser never receives or flattens the complete catalog;
+- all genres use one shared data-driven page/route implementation.
 
-Routes alone do not shrink the bundle. The current architecture improves runtime work by rendering only the active page, avoiding duplicate hidden page DOM, and lazy-loading artwork. Production adds API pagination, server-side/index-backed search, CDN media delivery, bounded caches, background ingestion, and code splitting so catalog growth does not expand the initial client payload.
+Routes alone do not shrink bundles. Production adds code splitting, bounded APIs/caches, indexed services, CDN media, and background ingestion.
 
-## Motion and accessibility
+## Motion, accessibility, and truthfulness
 
-Reduced Motion removes nonessential animation while preserving state. Controls support visible focus, keyboard operation, focus-contained dialogs, 44px touch targets, mobile safe areas, non-color selected states, page titles, route announcements, and meaningful landmarks.
+- visible keyboard focus and complete keyboard actions;
+- semantic headings and one active page landmark outside modal states;
+- dialog focus containment/return and Escape behavior;
+- 44×44px important targets;
+- non-color states;
+- Reduced Motion and zoom/reflow;
+- no fake charts, unsupported live analysis, generated filler, streaks, autoplay traps, giant banners, or manipulative locks.
 
-## Out of scope for this prototype
+## Current phase and scope
 
-- real artists and licensed commercial songs;
-- live charts or unsupported internet-trend claims;
-- production accounts, provider credentials, catalog ingestion, or backend services;
-- social feeds, public comments, and follower counts;
-- fake AI DJs or unsupported audio-analysis claims;
-- artificial song locks or manipulative streaks.
+Candidate `89fc0d5` passed the full pre-test engineering gate, 18/18 manual visual review, exact portable-preview audit, and targeted credential scan. It is ready for owner testing but remains draft/unmerged.
 
-## Out of scope for V1
-
-- subscriptions, checkout, tips, payment entitlements, artist billing, refunds, and payouts;
-- social-feed growth mechanics;
-- any content source not covered by the product owner's supplied legal integration plan.
+Prototype excludes real artists/licensed commercial songs, production accounts, source credentials, catalog ingestion/backend, live charts, social feeds, and payment systems. V1 also excludes all payments and any content outside the supplied legal path.

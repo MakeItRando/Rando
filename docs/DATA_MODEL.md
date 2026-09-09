@@ -1,86 +1,108 @@
 # Rondo normalized data model
 
-Provider/source adapters map authorized external payloads into Rondo-owned domain shapes. UI and feature code use these models only.
+Authorized source adapters map external payloads into Rondo-owned domain shapes. UI and feature code use these models only.
 
 ```ts
+type RondoId = string
+type Cursor = string
+
+type Page<T> = {
+  items: T[]
+  nextCursor?: Cursor
+  appliedLimit: number
+}
+
 type ExternalIds = Record<string, string | undefined>
 
 type SourceProvenance = {
   sourceId: string
   label: string
-  detail: string
   status: 'authorized' | 'demo' | 'unavailable' | 'removed'
   receivedAt?: string
+  attribution?: string
+}
+
+type Artist = {
+  id: RondoId
+  canonicalName: string
+  sortName: string
+  aliasIds: RondoId[]
+  genreIds: RondoId[]
+  externalIds: ExternalIds
 }
 
 type Release = {
-  id: string
+  id: RondoId
   title: string
   type: 'Album' | 'EP' | 'Single'
-  year: number
-  primaryArtistIds: string[]
-  cover?: string
-  accent?: string
+  releaseDate?: string
+  primaryArtistIds: RondoId[]
+  coverAssetId?: RondoId
   externalIds: ExternalIds
 }
 
-type Track = {
-  id: string
-  recordingId?: string
-  externalIds: ExternalIds
-  title: string
-  releaseId: string
-  primaryArtistIds: string[]
-  featuredArtists: string[]
+type TrackPlacement = {
+  id: RondoId
+  recordingId: RondoId
+  releaseId: RondoId
   discNumber?: number
   trackNumber?: number
-  durationSeconds: number
-  playableAsset?: { authorizationRef: string; durationSeconds?: number }
+  title: string
+  durationSeconds?: number
+  primaryArtistIds: RondoId[]
+  featuredArtistIds: RondoId[]
+  genreIds: RondoId[]
+  styleIds: RondoId[]
   explicit?: boolean
-  genreIds: string[]
-  styleIds?: string[]
-  bpm?: number
-  key?: string
-  version?: string
-  writerCreditIds: string[]
-  producerCreditIds: string[]
   source: SourceProvenance
 }
 
+type PlayableAuthorization = {
+  authorizationRef: string
+  mode: 'preview' | 'full'
+  expiresAt: string
+}
+
 type SavedMoment = {
-  id: string
-  trackId: string
+  id: RondoId
+  trackId: RondoId
   position: number
   createdAt: string
 }
 
-type SongNotes = Record<string, string>
-
-type ReleaseProgress = Record<string, number>
-
 type JourneyProgress = {
-  genreId: string
-  artistId: string
-  trackId?: string
+  genreId: RondoId
+  artistId: RondoId
+  trackId?: RondoId
   position: number
-  playedTrackIds: string[]
-  completedArtistIds: string[]
+  recentPlayedTrackIds: RondoId[]
+  completedArtistIds: RondoId[]
   updatedAt: string
+  version: number
+}
+
+type PlaybackContext = {
+  trackId?: RondoId
+  releaseId?: RondoId
+  artistId?: RondoId
+  genreId?: RondoId
+  queueContextId?: RondoId
+  catalogMode: 'matching' | 'all'
+  repeatMode: 'continue' | 'track' | 'artist'
+  position: number
 }
 
 type PersistedPrototypeState = {
   onboardingComplete: boolean
   profile: UserProfile
-  savedTracks: string[]
-  savedReleases: string[]
-  savedArtists: string[]
-  playedTracks: string[]
+  savedTracks: RondoId[]
+  savedReleases: RondoId[]
+  savedArtists: RondoId[]
+  playedTracks: RondoId[]
   savedMoments: SavedMoment[]
-  songNotes: SongNotes
-  releaseProgress: ReleaseProgress
-  unlockedArtifacts: string[]
-  activeGenreId?: string
-  journeyProgressByGenre: Record<string, JourneyProgress>
+  songNotes: Record<RondoId, string>
+  releaseProgress: Record<RondoId, number>
+  unlockedArtifacts: RondoId[]
   playbackContext?: PlaybackContext
   theme: 'dark' | 'light'
   volume: number
@@ -89,71 +111,74 @@ type PersistedPrototypeState = {
 type SignalMode = 'audio' | 'motion' | 'paused' | 'reduced'
 ```
 
-`playableAsset.authorizationRef` is an opaque, short-lived reference resolved by the backend. Production must not persist a permanent public media URL as proof of permission.
+Playable authorization is opaque and short-lived. A public media URL or external catalog ID is never proof of permission.
 
-## Production catalog entities
+## Catalog entities
 
-The large catalog needs first-class, separately identifiable entities for:
+Production needs first-class artists/aliases/name history/memberships; releases/editions/territories/labels/dates; recordings versus track placements/versions; people/organizations and sourced role credits; genres/styles/hierarchy/aliases/editorial mappings; source records/import batches/conflicts/provenance; rights grants/windows per asset/territory; artwork/audio/lyrics/biographies/credits/editorial assets with independent permission; availability/playback authorization/attribution/corrections/takedowns/audit; search documents/editorial collections/recommendations/events.
 
-- artists, aliases, verified profiles, memberships, and name histories;
-- releases, editions, territories, labels/imprints, and release dates;
-- recordings versus release-track placements and alternate versions;
-- people/organizations, role-based credits, and credit sources;
-- genres, styles, parent/child relationships, aliases, and editorial mappings;
-- source records, external IDs, import batches, conflicts, and provenance;
-- rights grants/windows by asset type and territory;
-- artwork, audio, lyrics, biographies, credits, and editorial assets with independent permissions;
-- availability, playback authorization, attribution, corrections, takedowns, and audit logs;
-- search documents, editorial collections, recommendations, and events.
+Listener domain: accounts, sessions, consent, taste, devices, library records, Journey progress, moments, private notes, preferences, privacy requests, and support/moderation records.
 
-The real listener system also needs accounts, sessions, consent, taste profiles, devices, library records, Journey progress, moments, notes, preferences, privacy requests, and moderation/support records.
+V1 excludes plans, subscriptions, customers, invoices, entitlements, refunds, disputes, taxes, and payouts.
 
-V1 explicitly does **not** require plans, subscriptions, payment customers, invoices, payment entitlements, refunds, disputes, taxes, or payouts. Keep those outside the V1 schema; add them only after a separate payment decision.
+## Identity and matching
 
-## Identity and matching rules
-
-- Rondo IDs are primary; source IDs are replaceable references.
-- One source record may map to an existing Rondo entity after reviewed or high-confidence matching.
-- Primary and featured artists remain separate.
-- Artist aliases do not create duplicate artist identities.
+- Rondo IDs are primary and stable; source IDs are replaceable.
+- Source records may map to existing entities only through reviewed or high-confidence matching.
+- Primary/featured artists remain separate.
+- Aliases do not create duplicate artists.
 - Release editions, recordings, and track placements are not silently merged.
-- Merge and split operations retain redirects and full audit history.
-- Unknown values remain unknown; production never uses plausible filler.
-- Matching mode includes only tracks mapped to the active genre; All retains visible style labels.
-- Discovery references must resolve to normalized Rondo track and release IDs.
-- Every release identity requires an accessible fallback if artwork or palette cannot load.
+- Merge/split retains redirects and audit history.
+- Unknown stays unknown; no plausible filler.
+- Discovery/editorial references resolve to Rondo IDs.
+- Artwork/palette has accessible fallback.
 
-## Rights and source rules
+## Rights and source
 
-The product owner will supply the legal/source integration plan before implementation. Public availability in Spotify, YouTube, Suno, or another app is not represented as authorization by default.
+Owner supplies the legal/source plan before implementation. Public availability is not authorization.
 
-Each independently licensed asset type records source, allowed territories, start/end window, storage permission, playback/use mode, attribution, reporting, owner/contact, and removal state. Playback is authorized at request time; catalog metadata alone never grants access.
+Each asset permission records source, territories, time window, storage permission, use/playback mode, attribution, reporting, owner/contact, and removal state. Playback is authorized at request time. Catalog presence never grants playback.
 
-## Catalog scale and query rules
+## Scale and query rules
 
-- Design identifiers and relations for millions of tracks and many source records per entity.
-- Index normalized names, aliases, external IDs, release dates, genres/styles, territories, and availability.
-- Use cursor pagination and stable sort keys; never return a full catalog collection.
-- Keep large artwork/audio blobs in authorized object/CDN storage, not relational rows or Git.
-- Use immutable import-batch records and idempotency keys for replayable ingestion.
-- Track draft, validating, published, unavailable, and removed states.
-- Keep search documents denormalized and rebuildable from canonical records.
-- Apply source updates incrementally and record conflicts rather than silently overwriting trusted fields.
-- Partition/archive high-volume events independently from canonical catalog data.
+- Design identifiers/relations/indexes for millions of tracks and multiple source records.
+- Index normalized names, aliases, external IDs, dates, genres/styles, credits, territory, and availability.
+- Every list/search returns `Page<T>` with enforced maximum limit and opaque cursor.
+- Stable cursor ordering includes a deterministic tie-breaker ID.
+- No endpoint returns a complete catalog or recursively-expanded artist/release tree.
+- List models are narrow; details are requested separately.
+- Search documents are denormalized/rebuildable from canonical records.
+- Large media lives in authorized object/CDN storage, not relational rows/Git.
+- Import batches are immutable; writes use idempotency keys.
+- Draft/validating/published/unavailable/removed are explicit.
+- Updates are incremental; conflicts do not silently overwrite trusted fields.
+- High-volume events partition/archive independently.
+- Fixed prototype counts are not production schema facts.
 
-## Playback source and signal rules
+## Bounded listener state
 
-A playable authorization exists only when Rondo may play that recording for the current listener and territory. Signal mode is runtime truth, not catalog metadata. Audio samples are ephemeral and are never persisted as user data.
+Listener records store IDs, progress, timestamps, user content, preferences, and bounded recent windows. They do not embed complete Track/Release/Artist objects, search result pages, taxonomy copies, source payloads, or full play history in one row/document.
 
-## Journey continuity rules
+Large play/event history belongs in an append/event store with retention/partitioning. Recommendation features read evaluated bounded features, not client-side catalog flattening.
 
-- Store Journey progress independently per genre.
-- Playing from Discover must not overwrite the active Journey.
-- Changing genre must not erase another genre's state.
-- Resume restores context but never autoplays after reload without a new user gesture.
-- Temporary UI state is not persistence data.
-- Journey records reference stable genre/artist/track IDs and survive catalog pagination.
+## Search request contract
+
+A request includes query, filters, locale, territory, explicit setting, cursor, and bounded limit. Client debounce/cancellation prevents stale results. A response includes narrow typed items, playability/rights summary, stable ordering, and next cursor. Search never requires downloading catalog JSON to the browser.
+
+## Journey continuity
+
+- independent per genre;
+- Discover playback does not overwrite Journey;
+- changing genre erases nothing;
+- resume restores context without autoplay;
+- records use stable IDs and survive pagination;
+- `recentPlayedTrackIds` and completed IDs are bounded/paginated or normalized when large;
+- transient UI state is excluded.
+
+## Prototype migration
+
+Storage key: `rondo-prototype-v2`. Read-time normalization validates array/record/profile/session/value shapes, clamps volume, defaults theme, accepts repeat `continue|track|artist`, migrates legacy `off` to `continue`, and writes the repaired snapshot back so direct readers cannot encounter the malformed raw value again.
 
 ## Persistence ownership
 
-Rondo owns accounts, taste profiles, preferences, journeys, progress, saves, moments, private notes, and optional editorial-extra state. Authorized source data remains subject to source-specific storage, attribution, territory, and retention rules. The static prototype stores personal state only in browser local storage under `rondo-prototype-v2`.
+Rondo owns accounts, taste, preferences, journeys, progress, saves, moments, private notes, and optional editorial-extra state. Authorized source data obeys source-specific storage, attribution, territory, and retention rules. Prototype local storage is neither secure nor synchronized.
