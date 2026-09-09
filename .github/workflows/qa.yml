@@ -61,6 +61,10 @@ jobs:
         id: routes
         continue-on-error: true
         run: node scripts/run-test-with-annotations.mjs "Discover and Journey routes" tests/discovery-hub.mjs
+      - name: Test product policy
+        id: product_policy
+        continue-on-error: true
+        run: node scripts/run-test-with-annotations.mjs "Product policy" tests/product-policy.mjs
       - name: Test listening flow
         id: listening
         continue-on-error: true
@@ -117,6 +121,7 @@ jobs:
           smoke=${{ steps.smoke.outcome }}
           quality=${{ steps.quality.outcome }}
           routes=${{ steps.routes.outcome }}
+          product_policy=${{ steps.product_policy.outcome }}
           listening=${{ steps.listening.outcome }}
           song_room=${{ steps.song_room.outcome }}
           audio=${{ steps.audio.outcome }}
@@ -144,6 +149,7 @@ jobs:
             "${{ steps.smoke.outcome }}" \
             "${{ steps.quality.outcome }}" \
             "${{ steps.routes.outcome }}" \
+            "${{ steps.product_policy.outcome }}" \
             "${{ steps.listening.outcome }}" \
             "${{ steps.song_room.outcome }}" \
             "${{ steps.audio.outcome }}" \
