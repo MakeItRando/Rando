@@ -1,0 +1,49 @@
+label=Discover and Journey routes
+script=tests/discovery-hub.mjs
+status=1
+
+--- stdout ---
+
+
+--- stderr ---
+node:internal/modules/run_main:123
+    triggerUncaughtException(
+    ^
+
+locator.click: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator('[data-change-journey]:visible').first()
+    - locator resolved to <button type="button" data-change-journey="">…</button>
+  - attempting click action
+    2 × waiting for element to be visible, enabled and stable
+      - element is not stable
+    - retrying click action
+    - waiting 20ms
+    - waiting for element to be visible, enabled and stable
+    - element is not stable
+  2 × retrying click action
+      - waiting 100ms
+      - waiting for element to be visible, enabled and stable
+      - element is visible, enabled and stable
+      - scrolling into view if needed
+      - done scrolling
+      - element is outside of the viewport
+  57 × retrying click action
+       - waiting 500ms
+       - waiting for element to be visible, enabled and stable
+       - element is visible, enabled and stable
+       - scrolling into view if needed
+       - done scrolling
+       - element is outside of the viewport
+  - retrying click action
+    - waiting 500ms
+
+    at /home/runner/work/Rando/Rando/tests/discovery-hub.mjs:1:5870 {
+  name: 'TimeoutError'
+}
+
+Node.js v20.20.2
+
+
+--- spawn error ---
+

@@ -1,0 +1,13 @@
+label=App smoke paths
+script=tests/smoke.mjs
+status=0
+
+--- stdout ---
+Rondo interaction smoke test passed
+
+
+--- stderr ---
+
+
+--- spawn error ---
+

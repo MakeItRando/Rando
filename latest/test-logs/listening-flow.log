@@ -1,0 +1,21 @@
+label=Listening flow
+script=tests/listening.mjs
+status=1
+
+--- stdout ---
+
+
+--- stderr ---
+file:///home/runner/work/Rando/Rando/tests/listening.mjs:9
+const assert = (condition, message) => { if (!condition) throw new Error(message); };
+                                                               ^
+
+Error: Genre picker should be visible after returning from Song Room.
+    at assert (file:///home/runner/work/Rando/Rando/tests/listening.mjs:9:64)
+    at file:///home/runner/work/Rando/Rando/tests/listening.mjs:40:3
+
+Node.js v20.20.2
+
+
+--- spawn error ---
+
