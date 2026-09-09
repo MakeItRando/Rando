@@ -33,6 +33,11 @@ The interface should feel like a music app made for listeners: clear words, usef
 - Tracks matching the selected genre are the default guided catalog, with an All option in the artist Journey.
 - After an artist's final eligible track, Rondo asks before continuing.
 - External accounts are not required by the prototype.
+- **Rondo** is the canonical name everywhere; existing `Rando` repository URLs remain temporarily only to avoid breaking prototype history.
+- Production catalog scope is broad across artists and genres and must not be coupled to one provider or source app.
+- The catalog architecture must support thousands of songs initially and scale to millions without a product-model rewrite.
+- The product owner will provide the legal acquisition/integration plan before real-source work begins.
+- **V1 has no payments.** Payment features require a separately approved later phase.
 
 ## Page hierarchy
 
@@ -100,6 +105,8 @@ Starting or resuming enters the existing guided artist flow:
 
 `genre page → alphabetical artist → matching/all catalog → release → track → Song Room → completion summary`
 
+The four prototype genres validate the interaction model, not the production taxonomy. Production must support a much larger, editable genre/style graph without hard-coded route or layout assumptions.
+
 ## Saved continuity
 
 The prototype stores meaningful state, not transient UI details.
@@ -144,9 +151,22 @@ Volume is one persisted value across the transport and Song Room. Both controls 
 
 Listeners can save an exact timestamp and write a private note for a song. Moments and notes persist locally, appear in Library, and reopen the correct listening context.
 
+## Catalog-scale experience requirements
+
+A large catalog must still feel intentional rather than like an endless database:
+
+- search is indexed, typo-tolerant, filterable, and paginated;
+- shelves return bounded, ranked results rather than full collections;
+- genre and artist pages lazy-load deeper content;
+- artwork and audio are loaded only when needed;
+- long lists use pagination or virtualization with accessible focus behavior;
+- unavailable or region-limited recordings remain understandable without dead ends;
+- editorial and recommendation surfaces explain why a small subset is shown;
+- the browser never downloads the complete catalog.
+
 ## Performance approach
 
-Routes alone do not shrink the bundle. The current architecture improves runtime work by rendering only the active page, avoiding duplicate hidden page DOM, and lazy-loading artwork. Later code splitting can reduce initial download size when real catalog and account features are introduced.
+Routes alone do not shrink the bundle. The current architecture improves runtime work by rendering only the active page, avoiding duplicate hidden page DOM, and lazy-loading artwork. Production adds API pagination, server-side/index-backed search, CDN media delivery, bounded caches, background ingestion, and code splitting so catalog growth does not expand the initial client payload.
 
 ## Motion and accessibility
 
@@ -160,3 +180,9 @@ Reduced Motion removes nonessential animation while preserving state. Controls s
 - social feeds, public comments, and follower counts;
 - fake AI DJs or unsupported audio-analysis claims;
 - artificial song locks or manipulative streaks.
+
+## Out of scope for V1
+
+- subscriptions, checkout, tips, payment entitlements, artist billing, refunds, and payouts;
+- social-feed growth mechanics;
+- any content source not covered by the product owner's supplied legal integration plan.
