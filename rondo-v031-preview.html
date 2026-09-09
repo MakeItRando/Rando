@@ -3412,10 +3412,10 @@ html[data-theme="light"] .sound-results { color: #191817; border-color: rgba(20,
   var getGenre = (genreId) => genres.find((genre) => genre.id === genreId) || genres[0];
   var getArtist = (artistId) => artists.find((artist) => artist.id === artistId) || artists[0];
   function listArtistsForGenre(genreId) {
-    return artists.filter((artist) => artist.genreIds.includes(genreId)).sort((a, b) => a.sortName.localeCompare(b.sortName));
+    return artists.filter((artist) => artist.genreIds.includes(genreId)).sort((a2, b2) => a2.sortName.localeCompare(b2.sortName));
   }
   function listReleases(artist, genreId, catalogMode = "matching") {
-    return [...artist.releases].sort((a, b) => b.date.localeCompare(a.date)).map((release) => ({
+    return [...artist.releases].sort((a2, b2) => b2.date.localeCompare(a2.date)).map((release) => ({
       ...release,
       tracks: catalogMode === "all" ? release.tracks : release.tracks.filter((track2) => track2.genres.includes(genreId))
     })).filter((release) => release.tracks.length > 0);
@@ -3599,8 +3599,9 @@ html[data-theme="light"] .sound-results { color: #191817; border-color: rgba(20,
     }
     if (source.catalogMode === "matching" || source.catalogMode === "all")
       session.catalogMode = source.catalogMode;
-    if (["continue", "artist", "off"].includes(source.repeatMode))
+    if (["continue", "track", "artist"].includes(source.repeatMode))
       session.repeatMode = source.repeatMode;
+    else if (source.repeatMode === "off") session.repeatMode = "continue";
     if (Number.isFinite(source.position) && source.position >= 0)
       session.position = source.position;
     return session;
@@ -3928,7 +3929,7 @@ html[data-theme="light"] .sound-results { color: #191817; border-color: rgba(20,
   }
   function volumeMarkup(volume) {
     const value = Math.round(Math.max(0, Math.min(1, Number(volume) || 0)) * 100);
-    return `<div class="song-room-room-volume"><button type="button" data-room-mute aria-label="${value ? "Mute" : "Unmute"}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M4 10v4h4l5 4V6L8 10H4Z"/><path class="volume-wave" d="M16 9a4 4 0 0 1 0 6M18.5 6.5a8 8 0 0 1 0 11"/><path class="volume-slash" d="m16 9 5 6"/></svg></button><label><span>Volume <output>${value}</output></span><input data-room-volume type="range" min="0" max="100" value="${value}" style="--volume:${value}%" aria-label="Song Room volume"/></label><div class="sound-meter" aria-hidden="true">${Array.from({ length: 10 }, (_, index) => `<i class="${index < Math.ceil(value / 10) ? "active" : ""}"></i>`).join("")}</div></div>`;
+    return `<div class="song-room-room-volume"><button type="button" data-room-mute aria-label="${value ? "Mute" : "Unmute"}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M4 10v4h4l5 4V6L8 10H4Z"/><path class="volume-wave" d="M16 9a4 4 0 0 1 0 6M18.5 6.5a8 8 0 0 1 0 11"/><path class="volume-slash" d="m16 9 5 6"/></svg></button><label><span>Volume <output>${value}</output></span><input data-room-volume type="range" min="0" max="100" value="${value}" style="--volume:${value}%" aria-label="Song Room volume"/></label><div class="sound-meter" aria-hidden="true">${Array.from({ length: 10 }, (_2, index) => `<i class="${index < Math.ceil(value / 10) ? "active" : ""}"></i>`).join("")}</div></div>`;
   }
   function renderRoom({ artist, release, track: track2 }, volume) {
     return `<div class="song-room-copy song-room-mobile-summary"><p class="song-room-eyebrow">Now playing</p><h3>${escapeHtml2(track2.title)}</h3><p class="song-room-lead">${escapeHtml2(artist.name)} \xB7 ${escapeHtml2(release.title)}</p><div class="song-room-room-actions"><span>${escapeHtml2(track2.style)}</span>${track2.bpm ? `<span>${track2.bpm} BPM</span>` : ""}</div>${volumeMarkup(volume)}</div>`;
@@ -4303,10 +4304,10 @@ html[data-theme="light"] .sound-results { color: #191817; border-color: rgba(20,
   }
   function motionLevels(count, timestamp) {
     const position = state().position;
-    return Array.from({ length: count }, (_, index) => {
-      const a = Math.sin(timestamp / 188 + index * 1.47 + position * 0.37);
-      const b = Math.sin(timestamp / 413 + index * 0.63 - position * 0.21);
-      return Math.max(0.07, Math.min(1, 0.36 + a * 0.23 + b * 0.16 + index * 7 % 5 * 0.035));
+    return Array.from({ length: count }, (_2, index) => {
+      const a2 = Math.sin(timestamp / 188 + index * 1.47 + position * 0.37);
+      const b2 = Math.sin(timestamp / 413 + index * 0.63 - position * 0.21);
+      return Math.max(0.07, Math.min(1, 0.36 + a2 * 0.23 + b2 * 0.16 + index * 7 % 5 * 0.035));
     });
   }
   function paintWaveform(levels, mode, ratio = 0) {
@@ -5651,303 +5652,614 @@ html[data-theme="light"] .sound-results { color: #191817; border-color: rgba(20,
   syncModalState();
 
   // src/ui/discoveryHub.js
-  var entries = artists.flatMap((artist) => artist.releases.flatMap((release) => release.tracks.map((track2) => ({ artist, release, track: track2 }))));
-  var byId = new Map(entries.map((entry) => [entry.track.id, entry]));
-  var popularIds = ["k101", "a101", "g101", "s101", "m102", "n101", "t101", "k105"];
-  var hiddenIds = ["g104", "n104", "a105", "s105", "m104", "k107", "v102", "t102"];
-  var currentScreen = "explore";
-  var selectedGenre = "hiphop";
-  var chooserReturnFocus = null;
-  var initialPromptShown = false;
-  var renderQueued = false;
-  function ensureStyles() {
-    const active = getComputedStyle(document.documentElement).getPropertyValue("--rondo-human-pass").trim();
-    if (active === "1" || document.querySelector("link[data-rondo-human-pass]")) return;
-    const link = document.createElement("link");
-    link.rel = "stylesheet";
-    link.href = "experience.css";
-    link.dataset.rondoHumanPass = "";
-    document.head.append(link);
+  var n = "rondo-route-state-v1";
+  var r = artists.flatMap((e) => e.releases.flatMap((t) => t.tracks.map((n2) => ({ artist: e, release: t, track: n2 }))));
+  var o = new Map(r.map((e) => [e.track.id, e]));
+  var a = ["k101", "a101", "g101", "s101", "m102", "n101", "t101", "k105"];
+  var s = ["k105", "g101", "s101", "t101", "v101", "k101", "a104", "s104"];
+  var i = ["g104", "n104", "a105", "s105", "m104", "k107", "v102", "t102"];
+  var c = [{ id: "late-night", title: "Late night", note: "Quiet, warm, and spacious", match: (e) => /ambient|quiet|soul|jazz|microhouse/i.test(`${e.track.style} ${e.track.genres.join(" ")}`) }, { id: "energy", title: "Energy", note: "Fast starts and heavy movement", match: (e) => Number(e.track.bpm) >= 125 || /trap|techno|industrial/i.test(e.track.style) }, { id: "focus", title: "Focus", note: "Steady rhythm, fewer distractions", match: (e) => /instrumental|jazz|electronic|ambient/i.test(`${e.track.style} ${e.track.genres.join(" ")}`) }, { id: "slow-burn", title: "Slow burn", note: "Songs that open over time", match: (e) => Number(e.track.bpm) < 105 || /r&b|neo-soul|soul/i.test(`${e.track.style} ${e.track.genres.join(" ")}`) }];
+  var d = g(n, { activeGenreId: null, lastRoute: "#/discover", progressByGenre: {}, scrollByRoute: {} });
+  var u = f(d.activeGenreId) ? d.activeGenreId : j();
+  var l = null;
+  var y = { type: "discover" };
+  var m = false;
+  var p = false;
+  function g(e, t) {
+    try {
+      const n2 = JSON.parse(localStorage.getItem(e) || "null");
+      return n2 && "object" == typeof n2 ? { ...t, ...n2 } : { ...t };
+    } catch {
+      return { ...t };
+    }
   }
-  function escapeHtml4(value = "") {
-    return String(value).replace(/[&<>"']/g, (character) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[character]);
+  function h() {
+    return g("rondo-prototype-v2", {});
   }
-  function genreFor(id) {
-    return genres.find((genre) => genre.id === id) || genres[0];
+  function v(e = {}) {
+    d = { ...d, ...e };
+    try {
+      localStorage.setItem(n, JSON.stringify(d));
+    } catch {
+    }
   }
-  function entriesForGenre(id) {
-    return entries.filter(({ track: track2 }) => track2.genres.includes(id));
+  function f(e) {
+    return genres.some((t) => t.id === e);
   }
-  function artwork(entry) {
-    return `<span class="music-card-art"><img src="${escapeHtml4(entry.release.cover)}" alt=""/><i aria-hidden="true">\u25B6</i></span>`;
+  function b(e) {
+    return genres.find((t) => t.id === e) || genres[0];
   }
-  function songCard(entry) {
-    return `<button class="music-card" type="button" data-explore-track="${escapeHtml4(entry.track.id)}" aria-label="Play ${escapeHtml4(entry.track.title)} by ${escapeHtml4(entry.artist.name)}">${artwork(entry)}<span class="music-card-copy"><strong>${escapeHtml4(entry.track.title)}</strong><span>${escapeHtml4(entry.artist.name)}</span><small>${escapeHtml4(entry.track.style)}</small></span></button>`;
+  function j() {
+    return (h().profile?.genres || []).find(f) || genres[0].id;
   }
-  function songRow(entry, index) {
-    return `<button class="genre-song" type="button" data-explore-track="${escapeHtml4(entry.track.id)}"><span class="genre-song-number">${String(index + 1).padStart(2, "0")}</span><img src="${escapeHtml4(entry.release.cover)}" alt=""/><span class="genre-song-name"><strong>${escapeHtml4(entry.track.title)}</strong><small>${escapeHtml4(entry.artist.name)} \xB7 ${escapeHtml4(entry.release.title)}</small></span><span class="genre-song-style">${escapeHtml4(entry.track.style)}</span><time>${escapeHtml4(entry.track.duration)}</time><b aria-hidden="true">\u25B6</b></button>`;
+  function k(e) {
+    return r.filter(({ track: t }) => t.genres.includes(e));
   }
-  function renderExplore() {
-    currentScreen = "explore";
-    const surface = document.getElementById("viewSurface");
-    if (!surface || document.body.dataset.view !== "discover") return;
-    const popular = popularIds.map((id) => byId.get(id)).filter(Boolean);
-    const hidden = hiddenIds.map((id) => byId.get(id)).filter(Boolean);
-    const genreSections = genres.map((genre) => {
-      const songs = entriesForGenre(genre.id).slice(0, 5);
-      return `<section class="music-section music-genre-row"><header><div><span>${escapeHtml4(genre.short)}</span><h2>${escapeHtml4(genre.name)}</h2></div><button type="button" data-explore-genre="${escapeHtml4(genre.id)}">See playlist</button></header><div class="music-card-strip">${songs.map(songCard).join("")}</div></section>`;
-    }).join("");
-    surface.className = "view-surface view-surface-discover discovery-surface";
-    surface.innerHTML = `<main class="music-explore" data-rondo-discovery data-discovery-screen="explore">
-    <header class="music-explore-head"><div><span>Discover</span><h1 class="discover-heading">Find your next song.</h1><p>Popular picks, hidden gems, and every genre in one place.</p></div><button class="music-picker-button" type="button" data-open-discovery-picker>Choose how to listen</button></header>
-    <label class="music-search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="10.8" cy="10.8" r="6.8"/><path d="m16 16 4 4"/></svg><span class="sr-only">Search music</span><input type="search" data-music-search placeholder="Search songs, artists, or albums" autocomplete="off"/></label>
+  function $2(t) {
+    return artists.filter((e) => e.genreIds.includes(t)).sort((e, t2) => e.sortName.localeCompare(t2.sortName));
+  }
+  function w(e = "") {
+    return String(e).replace(/[&<>"']/g, (e2) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[e2]);
+  }
+  function I() {
+    let e = document.getElementById("routeAnnouncer");
+    return e || (e = document.createElement("div"), e.id = "routeAnnouncer", e.className = "sr-only", e.setAttribute("aria-live", "polite"), e.setAttribute("aria-atomic", "true"), document.body.append(e), e);
+  }
+  function S(e) {
+    const t = I();
+    t.textContent = "", requestAnimationFrame(() => {
+      t.textContent = e;
+    });
+  }
+  function E() {
+    const e = document.getElementById("barTitle")?.textContent?.trim(), t = document.getElementById("barArtist")?.textContent?.trim() || "";
+    return r.find((n2) => n2.track.title === e && t.includes(n2.artist.name)) || r.find((t2) => t2.track.title === e) || null;
+  }
+  function B(e) {
+    const t = k(e), n2 = new Set(h().playedTracks || []), r2 = t.filter(({ track: e2 }) => n2.has(e2.id)).length, o2 = t.filter(({ track: e2 }) => (h().savedTracks || []).includes(e2.id)).length, a2 = d.progressByGenre?.[e] || {};
+    return { heard: r2, saved: o2, total: t.length, percentage: t.length ? Math.round(r2 / t.length * 100) : 0, artistId: a2.artistId || $2(e)[0]?.id, trackId: a2.trackId || null, position: Number(a2.position) || 0 };
+  }
+  function C(e, t = {}) {
+    if (!f(e)) return;
+    const n2 = d.progressByGenre?.[e] || {};
+    v({ activeGenreId: e, progressByGenre: { ...d.progressByGenre || {}, [e]: { ...n2, ...t, updatedAt: (/* @__PURE__ */ new Date()).toISOString() } } }), P();
+  }
+  function q(e, { replace: t = false } = {}) {
+    y = e;
+    const n2 = function(e2 = y) {
+      return "journey-genre" === e2.type ? `#/journeys/${e2.genreId}` : "journey-artist" === e2.type ? `#/journeys/${e2.genreId}/artist/${e2.artistId}` : "journeys" === e2.type ? "#/journeys" : "library" === e2.type ? "#/library" : "profile" === e2.type ? "#/profile" : "#/discover";
+    }(e);
+    v({ lastRoute: n2 }), window.location.hash !== n2 && (m = true, history[t ? "replaceState" : "pushState"](null, "", n2), m = false);
+  }
+  function T(e, t = "") {
+    return `<img src="${w(e)}" alt="${w(t)}" loading="lazy" decoding="async"/>`;
+  }
+  function G(e, t = 0) {
+    return e ? `<button class="music-card" type="button" data-play-entry="${w(e.track.id)}" aria-label="Play ${w(e.track.title)} by ${w(e.artist.name)}" style="--card-order:${t}">${function(e2) {
+      return `<span class="music-card-art">${T(e2.release.cover)}<i aria-hidden="true">\u25B6</i></span>`;
+    }(e)}<span class="music-card-copy"><strong>${w(e.track.title)}</strong><span>${w(e.artist.name)}</span><small>${w(e.track.style)}</small></span></button>` : "";
+  }
+  function A(e, t) {
+    return `<button class="genre-song" type="button" data-play-entry="${w(e.track.id)}" aria-label="Play ${w(e.track.title)} by ${w(e.artist.name)}"><span class="genre-song-number">${String(t + 1).padStart(2, "0")}</span>${T(e.release.cover)}<span class="genre-song-name"><strong>${w(e.track.title)}</strong><small>${w(e.artist.name)} \xB7 ${w(e.release.title)}</small></span><span class="genre-song-style">${w(e.track.style)}</span><time>${w(e.track.duration)}</time><b aria-hidden="true">\u25B6</b></button>`;
+  }
+  function L(e, t, n2, r2 = "") {
+    return `<section class="music-section ${r2}"><header><div><span>${w(t)}</span><h2>${w(e)}</h2></div></header><div class="music-card-grid">${n2.filter(Boolean).map(G).join("")}</div></section>`;
+  }
+  function x({ focus: e = false } = {}) {
+    const n2 = document.getElementById("viewSurface");
+    if (!n2 || "discover" !== document.body.dataset.view) return;
+    J();
+    const d2 = a.map((e2) => o.get(e2)).filter(Boolean), u2 = s.map((e2) => o.get(e2)).filter(Boolean), l2 = i.map((e2) => o.get(e2)).filter(Boolean), y2 = genres.map((e2) => {
+      const t = B(e2.id), n3 = k(e2.id)[0];
+      return `<button class="discover-genre-card" type="button" data-open-journey-genre="${w(e2.id)}"><span class="discover-genre-cover">${T(n3?.release.cover || "")}<i aria-hidden="true"></i></span><span><small>JOURNEY \xB7 ${String($2(e2.id).length).padStart(2, "0")} ARTISTS</small><strong>${w(e2.short)}</strong><b>${t.percentage ? `${t.percentage}% complete` : "Open genre"} \u2192</b></span></button>`;
+    }).join(""), m2 = c.map((e2) => `<button type="button" data-open-sound="${e2.id}"><span aria-hidden="true"></span><strong>${e2.title}</strong><small>${e2.note}</small></button>`).join("");
+    n2.className = "view-surface view-surface-discover discovery-surface", n2.hidden = false, n2.innerHTML = `<main class="discover-home route-page" data-rondo-page="discover" aria-labelledby="discoverTitle">
+    <header class="discover-home-head"><div><span>Discover</span><h1 id="discoverTitle" tabindex="-1">Play something good.</h1><p>Hits, new finds, and sounds for right now.</p></div><button type="button" data-surprise-track>Surprise me <span>\u219D</span></button></header>
+    ${function() {
+      const e2 = h();
+      if (!(e2.playedTracks || []).length && !document.body.classList.contains("is-playing")) return "";
+      const t = E() || o.get((e2.playedTracks || []).at(-1));
+      if (!t) return "";
+      const n3 = document.body.classList.contains("is-playing");
+      return `<section class="discover-continue"><div>${T(t.release.cover)}<span><small>CONTINUE LISTENING</small><strong>${w(t.track.title)}</strong><b>${w(t.artist.name)} \xB7 ${w(t.release.title)}</b></span></div><button type="button" data-open-current-song>${n3 ? "Open Song Room" : "Resume"} <span>\u2192</span></button></section>`;
+    }()}
+    <label class="music-search discover-search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="10.8" cy="10.8" r="6.8"/><path d="m16 16 4 4"/></svg><span class="sr-only">Search music</span><input type="search" data-music-search placeholder="Search songs, artists, or albums" autocomplete="off"/></label>
     <section class="music-search-results" data-music-results hidden></section>
-    <section class="music-section music-featured"><header><div><span>Start here</span><h2>Popular now</h2></div></header><div class="music-card-grid">${popular.map(songCard).join("")}</div></section>
-    <section class="music-section music-hidden"><header><div><span>Worth finding</span><h2>Hidden gems</h2></div></header><div class="music-card-grid">${hidden.map(songCard).join("")}</div></section>
-    <div class="music-genre-sections">${genreSections}</div>
-  </main>`;
-    document.body.dataset.discoveryScreen = "explore";
+    ${L("Hits today", "Rondo right now", d2, "music-featured")}
+    ${L("Made for you", "Based on your sounds", function() {
+      const e2 = (h().profile?.genres || []).filter(f);
+      return (e2.length ? r.filter(({ track: t }) => t.genres.some((t2) => e2.includes(t2))) : r).filter((e3) => !a.includes(e3.track.id)).slice(0, 8);
+    }(), "music-personal")}
+    ${L("Bangers", "Turn it up", u2, "music-bangers")}
+    <section class="music-section discover-sounds"><header><div><span>Pick a feeling</span><h2>Sounds</h2></div></header><div class="sound-grid">${m2}</div><div class="sound-results" data-sound-results hidden></div></section>
+    ${L("Hidden gems", "Worth finding", l2, "music-hidden")}
+    ${L("New & rising", "Fresh in Rondo", [...r].sort((e2, t) => String(t.release.date || t.release.year).localeCompare(String(e2.release.date || e2.release.year))).filter((e2, t, n3) => n3.findIndex((t2) => t2.release.id === e2.release.id) === t).slice(0, 8), "music-new")}
+    <section class="music-section discover-journeys"><header><div><span>Go deeper</span><h2>Genre Journeys</h2></div><p>Your progress is saved separately for every genre.</p></header><div class="discover-genre-grid">${y2}</div></section>
+  </main>`, document.body.dataset.discoveryScreen = "home", document.body.dataset.journeyPage = "", document.title = "Discover \u2014 Rondo", q({ type: "discover" }, { replace: !window.location.hash }), S("Discover page"), e && !H() && requestAnimationFrame(() => document.getElementById("discoverTitle")?.focus({ preventScroll: true }));
   }
-  function renderGenre(id) {
-    const genre = genreFor(id);
-    selectedGenre = genre.id;
-    currentScreen = "genre";
-    const surface = document.getElementById("viewSurface");
-    if (!surface || document.body.dataset.view !== "discover") return;
-    const songs = entriesForGenre(genre.id);
-    const lead = songs.find(({ track: track2 }) => track2.previewUrl) || songs[0];
-    const releases = [...new Map(songs.map((entry) => [entry.release.id, entry])).values()].slice(0, 6);
-    surface.className = "view-surface view-surface-discover discovery-surface";
-    surface.innerHTML = `<main class="genre-playlist" data-rondo-discovery data-discovery-screen="genre" data-genre="${escapeHtml4(genre.id)}">
-    <header class="genre-playlist-head"><button type="button" data-open-discovery-picker>\u2190 Discover</button><div><span>${escapeHtml4(genre.short)}</span><h1>${escapeHtml4(genre.short)} mix</h1><p>${songs.length} songs from across Rondo.</p></div><button class="genre-play" type="button" data-explore-track="${escapeHtml4(lead?.track.id || "")}">Play mix <span>\u25B6</span></button></header>
-    <label class="music-search genre-search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="10.8" cy="10.8" r="6.8"/><path d="m16 16 4 4"/></svg><span class="sr-only">Search this playlist</span><input type="search" data-genre-search placeholder="Search this playlist" autocomplete="off"/></label>
-    <section class="genre-song-list" data-genre-song-list>${songs.map(songRow).join("")}</section>
-    <section class="music-section genre-releases"><header><div><span>Albums and EPs</span><h2>More ${escapeHtml4(genre.short)}</h2></div></header><div class="music-card-grid">${releases.map(songCard).join("")}</div></section>
-  </main>`;
-    document.body.dataset.discoveryScreen = "genre";
+  function N() {
+    let e = document.getElementById("journeyGenrePage");
+    return e || (e = document.createElement("main"), e.id = "journeyGenrePage", e.className = "journey-genre-page route-page", e.hidden = true, document.querySelector(".workspace")?.append(e), e);
   }
-  function renderSearchResults2(query, scope = entries) {
-    const value = query.trim().toLowerCase();
-    const target = document.querySelector("[data-music-results]");
-    if (!target) return;
-    if (!value) {
-      target.hidden = true;
-      target.innerHTML = "";
-      return;
+  function P() {
+    const e = f(d.activeGenreId) ? d.activeGenreId : null, t = e ? b(e).short : "Choose genre";
+    document.querySelectorAll("[data-journey-switch-label]").forEach((e2) => {
+      e2.textContent = t;
+    });
+    const n2 = document.getElementById("journeyGenreSwitch");
+    n2 && n2.setAttribute("aria-label", e ? `Change ${t} Journey` : "Choose a Journey genre");
+  }
+  function M() {
+    const e = document.querySelector(".genre-picker");
+    e && (e.hidden = true, e.setAttribute("aria-hidden", "true"));
+    const t = document.querySelector(".directory-top");
+    if (t && !document.getElementById("journeyDirectorySwitch")) {
+      const e2 = document.createElement("div");
+      e2.id = "journeyDirectorySwitch", e2.className = "journey-directory-switch", e2.innerHTML = '<span>Current Journey</span><button type="button" data-change-journey><strong data-journey-switch-label>Choose genre</strong><b>Change</b></button>', t.insertBefore(e2, t.querySelector(".artist-search"));
     }
-    const matches = scope.filter(({ artist, release, track: track2 }) => [track2.title, artist.name, release.title, track2.style, ...track2.genres].join(" ").toLowerCase().includes(value)).slice(0, 12);
-    target.hidden = false;
-    target.innerHTML = `<header><span>Search results</span><b>${matches.length}</b></header>${matches.length ? `<div>${matches.map(songRow).join("")}</div>` : "<p>No songs found.</p>"}`;
-  }
-  function renderChooser() {
-    const existing = document.getElementById("discoveryChoice");
-    if (existing) return existing;
-    const overlay = document.createElement("div");
-    overlay.id = "discoveryChoice";
-    overlay.className = "discovery-choice-overlay";
-    overlay.hidden = true;
-    overlay.innerHTML = `<section class="discovery-choice" role="dialog" aria-modal="true" aria-labelledby="discoveryChoiceTitle"><button class="discovery-choice-close" type="button" data-close-discovery aria-label="Close">\xD7</button><p>Discover</p><h2 id="discoveryChoiceTitle">What do you want to hear?</h2><div class="discovery-choice-grid"><div class="discovery-option discovery-option-genre"><span>Pick a genre</span><h3>Start with a playlist</h3><p>Choose a sound and press play.</p><div class="discovery-genre-chips" role="radiogroup" aria-label="Choose a genre">${genres.map((genre) => `<button type="button" role="radio" aria-checked="${genre.id === selectedGenre}" class="${genre.id === selectedGenre ? "active" : ""}" data-choice-genre="${escapeHtml4(genre.id)}">${escapeHtml4(genre.short)}</button>`).join("")}</div><button class="discovery-listen" type="button" data-listen-genre>Listen to ${escapeHtml4(genreFor(selectedGenre).short)}</button></div><button class="discovery-option discovery-option-explore" type="button" data-choose-explore><span>Explore</span><h3>Browse everything</h3><p>Popular songs, underrated picks, and music from every genre.</p><b>Open Explore \u2192</b></button></div></section>`;
-    document.body.append(overlay);
-    return overlay;
-  }
-  function appModalVisible() {
-    return ["searchOverlay", "fullPlayer", "queueDrawer", "onboardingOverlay", "completionOverlay"].some((id) => {
-      const element = document.getElementById(id);
-      return element && !element.hidden;
-    });
-  }
-  function syncChoice() {
-    const overlay = renderChooser();
-    overlay.querySelectorAll("[data-choice-genre]").forEach((button) => {
-      const active = button.dataset.choiceGenre === selectedGenre;
-      button.classList.toggle("active", active);
-      button.setAttribute("aria-checked", String(active));
-    });
-    overlay.querySelector("[data-listen-genre]").textContent = `Listen to ${genreFor(selectedGenre).short}`;
-  }
-  function openChooser(returnFocus = document.activeElement) {
-    if (appModalVisible()) return;
-    const overlay = renderChooser();
-    chooserReturnFocus = returnFocus instanceof HTMLElement ? returnFocus : null;
-    syncChoice();
-    overlay.hidden = false;
-    document.getElementById("appShell")?.setAttribute("inert", "");
-    document.body.classList.add("modal-open", "discovery-choice-open");
-    requestAnimationFrame(() => overlay.querySelector("[data-choice-genre].active")?.focus());
-  }
-  function closeChooser({ restoreFocus = true } = {}) {
-    const overlay = renderChooser();
-    if (overlay.hidden) return;
-    overlay.hidden = true;
-    document.getElementById("appShell")?.removeAttribute("inert");
-    document.body.classList.remove("modal-open", "discovery-choice-open");
-    if (restoreFocus && chooserReturnFocus?.isConnected) chooserReturnFocus.focus();
-    chooserReturnFocus = null;
-  }
-  var wait = (duration = 70) => new Promise((resolve) => setTimeout(resolve, duration));
-  async function playEntry(entry) {
-    if (!entry) return;
-    closeChooser({ restoreFocus: false });
-    const journeyButton = document.querySelector('.rail-button[data-view="journeys"]') || document.querySelector('.mobile-nav-button[data-mobile-view="journeys"]');
-    journeyButton?.click();
-    await wait();
-    const select = document.getElementById("genreSelect");
-    const genreId = entry.track.genres.find((id) => genres.some((genre) => genre.id === id)) || entry.artist.genreIds[0];
-    if (select && genreId) {
-      select.value = genreId;
-      select.dispatchEvent(new Event("change", { bubbles: true }));
-      await wait();
+    const n2 = document.querySelector(".top-actions");
+    if (n2 && !document.getElementById("journeyGenreSwitch")) {
+      const e2 = document.createElement("button");
+      e2.id = "journeyGenreSwitch", e2.className = "journey-genre-switch", e2.type = "button", e2.hidden = true, e2.setAttribute("data-change-journey", ""), e2.innerHTML = "<span data-journey-switch-label>Choose genre</span><b>Change</b>", n2.insertBefore(e2, document.getElementById("journeyToggle"));
     }
-    document.querySelector(`[data-artist="${CSS.escape(entry.artist.id)}"]`)?.click();
-    await wait();
-    document.getElementById("allMode")?.click();
-    await wait();
-    const row = [...document.querySelectorAll(".track-row")].find((item) => item.textContent.includes(entry.track.title));
-    const playButton = row?.querySelector(".track-play") || row?.querySelector("button");
-    playButton?.click();
-    await wait(120);
-    document.getElementById("mobileTrack")?.click();
+    P();
   }
-  function simpleVibe(entry) {
-    const text = `${entry?.track.style || ""} ${entry?.track.genres?.join(" ") || ""}`.toLowerCase();
-    const bpm = Number(entry?.track.bpm) || 100;
-    if (/ambient|quiet|soul|neo-soul/.test(text)) return "soft";
-    if (/jazz|boom bap/.test(text)) return "warm";
-    if (/electronic|techno|industrial|microhouse/.test(text)) return "electric";
-    if (bpm >= 132 || /trap|rap|hip-hop/.test(text)) return "drive";
-    return "steady";
+  async function R(n2, { focus: r2 = false, replace: a2 = false } = {}) {
+    if (!f(n2)) return;
+    await z("journeys"), U({ restoreFocus: false, navigateBack: false }), C(n2);
+    const s2 = b(n2), c2 = k(n2), d2 = $2(n2), u2 = B(n2), l2 = o.get(u2.trackId) || c2.find(({ track: e }) => e.previewUrl) || c2[0], y2 = [...new Map(c2.map((e) => [e.release.id, e])).values()].slice(0, 8), m2 = i.map((e) => o.get(e)).filter((e) => e?.track.genres.includes(n2)), p2 = N();
+    p2.dataset.genre = n2, p2.setAttribute("aria-labelledby", "journeyGenreTitle"), p2.innerHTML = `<header class="journey-genre-hero"><div class="journey-genre-copy"><button type="button" data-return-discover>\u2190 Discover</button><span>Journeys / ${String(genres.findIndex((e) => e.id === n2) + 1).padStart(2, "0")}</span><h1 id="journeyGenreTitle" tabindex="-1">${w(s2.short)}</h1><p>${d2.length} artists \xB7 ${c2.length} songs \xB7 progress saved</p><div class="journey-genre-actions"><button class="primary-action" type="button" data-resume-journey="${w(n2)}">${u2.heard ? "Resume Journey" : "Start Journey"}</button><button class="secondary-action" type="button" data-play-entry="${w(l2?.track.id || "")}">Play top mix</button><button class="text-action" type="button" data-change-journey>Change genre</button></div></div><div class="journey-genre-art" aria-hidden="true">${y2.slice(0, 3).map((e, t) => `<span style="--stack:${t}">${T(e.release.cover)}</span>`).join("")}</div></header>
+    <section class="journey-progress-card"><div><span>${u2.percentage}%</span><i><b style="width:${u2.percentage}%"></b></i></div><div><small>${u2.heard ? "CONTINUE YOUR JOURNEY" : "YOUR FIRST ARTIST"}</small><h2>${w(artists.find((e) => e.id === u2.artistId)?.name || d2[0]?.name || s2.short)}</h2><p>${u2.heard} of ${u2.total} songs heard \xB7 ${u2.saved} saved</p></div><button type="button" data-resume-journey="${w(n2)}">${u2.heard ? "Continue" : "Begin"} \u2192</button></section>
+    <label class="music-search journey-genre-search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="10.8" cy="10.8" r="6.8"/><path d="m16 16 4 4"/></svg><span class="sr-only">Search ${w(s2.short)}</span><input type="search" data-journey-genre-search placeholder="Search ${w(s2.short)} songs, artists, or albums" autocomplete="off"/></label>
+    <section class="journey-genre-results" data-journey-genre-results hidden></section>
+    <section class="journey-page-section journey-artists"><header><div><span>Artist by artist</span><h2>Choose where to begin</h2></div></header><div>${d2.map((e, t) => function(e2, t2, n3) {
+      const r3 = B(t2).artistId === e2.id, o2 = e2.releases.flatMap((e3) => e3.tracks).filter((e3) => e3.genres.includes(t2));
+      return `<button class="journey-artist-card ${r3 ? "active" : ""}" type="button" data-start-journey-artist="${w(e2.id)}"><span>${T(e2.image, "")}<i>${String(n3 + 1).padStart(2, "0")}</i></span><strong>${w(e2.name)}</strong><small>${w(e2.tags.slice(0, 2).join(" \xB7 "))}</small><b>${o2.length} songs \u2192</b></button>`;
+    }(e, n2, t)).join("")}</div></section>
+    <section class="journey-page-section journey-top-songs"><header><div><span>Start playing</span><h2>Top ${w(s2.short)} songs</h2></div></header><div class="genre-song-list">${c2.slice(0, 10).map(A).join("")}</div></section>
+    <section class="journey-page-section journey-releases"><header><div><span>Albums and EPs</span><h2>Essential releases</h2></div></header><div class="music-card-grid">${y2.map(G).join("")}</div></section>
+    ${m2.length ? L("Hidden gems", `Deeper ${s2.short}`, m2, "journey-hidden") : ""}`, function() {
+      const e = N();
+      e.hidden = false, document.querySelector(".workspace")?.classList.add("journey-genre-open"), document.body.dataset.journeyPage = "genre";
+      for (const e2 of [document.getElementById("directory"), document.getElementById("journey"), document.querySelector(".inspector"), document.getElementById("viewSurface")]) e2 && (e2.hidden = true);
+      const t = document.getElementById("mobileDirectoryButton"), n3 = document.getElementById("journeyToggle"), r3 = document.getElementById("journeyGenreSwitch");
+      t && (t.hidden = true);
+      n3 && (n3.hidden = true);
+      r3 && (r3.hidden = false);
+    }(), document.getElementById("locationSection").textContent = "JOURNEYS", document.getElementById("locationGenre").textContent = s2.name.toUpperCase(), document.getElementById("locationArtist").textContent = "GENRE HOME", document.title = `${s2.short} Journey \u2014 Rondo`, document.documentElement.dataset.genre = n2, q({ type: "journey-genre", genreId: n2 }, { replace: a2 }), S(`${s2.short} Journey page`), r2 && !H() && requestAnimationFrame(() => document.getElementById("journeyGenreTitle")?.focus({ preventScroll: true }));
   }
-  function syncSongRoomVibe() {
-    const room = document.getElementById("fullPlayer");
-    const cover2 = document.getElementById("fullCover");
-    if (!room || !cover2) return;
-    const title = document.getElementById("fullTitle")?.textContent?.trim();
-    const artist = document.getElementById("fullArtist")?.textContent?.trim();
-    const entry = entries.find((item) => item.track.title === title && (!artist || artist.includes(item.artist.name))) || entries.find((item) => item.track.title === title);
-    room.dataset.vibe = simpleVibe(entry);
-    room.style.setProperty("--song-cover", `url("${cover2.getAttribute("src") || ""}")`);
-    room.style.setProperty("--song-tempo", String(Math.max(0.7, Math.min(1.35, (Number(entry?.track.bpm) || 100) / 100))));
-    const storyTab = room.querySelector('[role="tab"][data-song-room-mode="story"]');
-    if (storyTab && storyTab.textContent !== "About") storyTab.textContent = "About";
-    const revealTab = room.querySelector('[role="tab"][data-song-room-mode="reveals"]');
-    if (revealTab?.firstChild && revealTab.firstChild.nodeValue !== "Extra ") revealTab.firstChild.nodeValue = "Extra ";
-    room.querySelectorAll('.song-room-mobile-nav [data-song-room-mode="story"]').forEach((button) => {
-      if (button.textContent !== "About") button.textContent = "About";
+  function J() {
+    N().hidden = true, document.querySelector(".workspace")?.classList.remove("journey-genre-open"), "genre" === document.body.dataset.journeyPage && (document.body.dataset.journeyPage = "");
+    const e = document.getElementById("journeyGenreSwitch");
+    e && "journeys" !== document.body.dataset.view && (e.hidden = true);
+  }
+  function F() {
+    J(), document.body.dataset.journeyPage = "artist";
+    for (const e2 of [document.getElementById("journey"), document.querySelector(".inspector")]) e2 && (e2.hidden = false);
+    const e = document.getElementById("directory");
+    e && (e.hidden = false);
+    const t = document.getElementById("mobileDirectoryButton"), n2 = document.getElementById("journeyToggle"), r2 = document.getElementById("journeyGenreSwitch");
+    t && (t.hidden = false), n2 && (n2.hidden = false), r2 && (r2.hidden = false);
+  }
+  function O() {
+    let e = document.getElementById("journeyGenrePicker");
+    e || (e = document.createElement("div"), e.id = "journeyGenrePicker", e.className = "journey-picker-overlay", e.hidden = true, document.body.append(e));
+    const n2 = genres.map((e2) => {
+      const t = B(e2.id), n3 = u === e2.id, r2 = k(e2.id)[0];
+      return `<button type="button" role="radio" aria-checked="${n3}" class="journey-picker-choice ${n3 ? "active" : ""}" data-picker-genre="${w(e2.id)}"><span>${T(r2?.release.cover || "")}</span><span><strong>${w(e2.short)}</strong><small>${$2(e2.id).length} artists \xB7 ${t.total} songs</small><b>${t.percentage ? `${t.percentage}% complete` : "Not started"}</b></span><i aria-hidden="true"></i></button>`;
+    }).join("");
+    return e.innerHTML = `<section class="journey-picker" role="dialog" aria-modal="true" aria-labelledby="journeyPickerTitle"><header><div><span>Journeys</span><h2 id="journeyPickerTitle">Choose a genre.</h2><p>Each Journey keeps its own place.</p></div><button type="button" data-close-journey-picker aria-label="Close">\xD7</button></header><div class="journey-picker-grid" role="radiogroup" aria-label="Choose a Journey genre">${n2}</div><footer><button type="button" data-cancel-journey-picker>Back to Discover</button><button type="button" data-confirm-journey>Open ${w(b(u).short)} <span>\u2192</span></button></footer></section>`, e;
+  }
+  function H() {
+    return ["searchOverlay", "fullPlayer", "queueDrawer", "onboardingOverlay", "completionOverlay"].some((e) => {
+      const t = document.getElementById(e);
+      return t && !t.hidden;
     });
-    room.querySelectorAll('.song-room-mobile-nav [data-song-room-mode="reveals"]').forEach((button) => {
-      if (button.textContent !== "Extra") button.textContent = "Extra";
-    });
-    const modeLabel = document.getElementById("songRoomModeLabel");
-    const nextLabel = { story: "About", lyrics: "Lyrics", credits: "Credits", reveals: "Extra", queue: "Up next", room: "Now playing" }[room.dataset.mode] || "About";
-    if (modeLabel && modeLabel.textContent !== nextLabel) modeLabel.textContent = nextLabel;
   }
-  function ensureDiscoverySurface() {
-    if (document.body.dataset.view !== "discover") return;
-    const surface = document.getElementById("viewSurface");
-    if (!surface || surface.querySelector("[data-rondo-discovery]")) return;
-    currentScreen === "genre" ? renderGenre(selectedGenre) : renderExplore();
+  function D(e = document.activeElement) {
+    if (H()) return;
+    u = f(d.activeGenreId) ? d.activeGenreId : j(), l = e instanceof HTMLElement ? e : null;
+    const t = O();
+    t.hidden = false, document.getElementById("appShell")?.setAttribute("inert", ""), document.body.classList.add("modal-open", "journey-picker-open"), requestAnimationFrame(() => t.querySelector("[data-picker-genre].active")?.focus());
   }
-  function scheduleSync() {
-    const choice = document.getElementById("discoveryChoice");
-    if (document.body.dataset.view !== "discover" && choice && !choice.hidden) closeChooser({ restoreFocus: false });
-    if (renderQueued) return;
-    renderQueued = true;
-    requestAnimationFrame(() => {
-      renderQueued = false;
-      ensureDiscoverySurface();
-      syncSongRoomVibe();
-      const onboarding = document.getElementById("onboardingOverlay");
-      if (!initialPromptShown && document.body.dataset.view === "discover" && (!onboarding || onboarding.hidden) && !appModalVisible()) {
-        initialPromptShown = true;
-        openChooser(document.querySelector('.rail-button[data-view="discover"]'));
+  function U({ restoreFocus: e = true, navigateBack: t = false } = {}) {
+    const n2 = document.getElementById("journeyGenrePicker");
+    n2 && !n2.hidden && (n2.hidden = true, document.getElementById("appShell")?.removeAttribute("inert"), document.body.classList.remove("modal-open", "journey-picker-open"), t ? V({ focus: true }) : e && l?.isConnected && l.focus(), l = null);
+  }
+  async function z(e) {
+    if (document.body.dataset.view === e) return;
+    const t = document.querySelector(`.rail-button[data-view="${e}"]`) || document.querySelector(`.mobile-nav-button[data-mobile-view="${e}"]`);
+    t && (m = true, t.click(), await X(60), m = false);
+  }
+  async function V({ focus: e = false } = {}) {
+    U({ restoreFocus: false, navigateBack: false }), await z("discover"), x({ focus: e });
+  }
+  async function Y(t, n2, { focus: r2 = true, replace: o2 = false } = {}) {
+    if (!f(t)) return;
+    const a2 = artists.find((e) => e.id === n2 && e.genreIds.includes(t)) || $2(t)[0];
+    if (!a2) return;
+    U({ restoreFocus: false, navigateBack: false }), C(t, { artistId: a2.id }), await z("journeys"), F();
+    const s2 = document.getElementById("genreSelect");
+    s2 && s2.value !== t && (s2.value = t, s2.dispatchEvent(new Event("change", { bubbles: true })), await X(90));
+    const i2 = document.querySelector(`[data-artist="${CSS.escape(a2.id)}"]`);
+    i2 && !i2.classList.contains("active") && (i2.click(), await X(70)), q({ type: "journey-artist", genreId: t, artistId: a2.id }, { replace: o2 }), document.title = `${a2.name} \xB7 ${b(t).short} Journey \u2014 Rondo`, S(`${a2.name}, ${b(t).short} Journey`), r2 && !H() && requestAnimationFrame(() => document.getElementById("artistName")?.focus({ preventScroll: true }));
+  }
+  async function K(e) {
+    if (!e) return;
+    const n2 = { ...y }, r2 = f(d.activeGenreId) ? d.activeGenreId : null;
+    U({ restoreFocus: false, navigateBack: false });
+    const o2 = e.track.genres.find(f) || e.artist.genreIds.find(f) || genres[0].id;
+    await z("journeys"), F();
+    const a2 = document.getElementById("genreSelect");
+    a2 && a2.value !== o2 && (a2.value = o2, a2.dispatchEvent(new Event("change", { bubbles: true })), await X(90)), document.querySelector(`[data-artist="${CSS.escape(e.artist.id)}"]`)?.click(), await X(70), document.getElementById("allMode")?.click(), await X(60);
+    const s2 = document.querySelector(`.track-row[data-track="${CSS.escape(e.track.id)}"]`) || [...document.querySelectorAll(".track-row")].find((t) => t.textContent.includes(e.track.title));
+    (s2?.querySelector(".track-play") || s2?.querySelector("button"))?.click(), await async function(e2, t = 1e3) {
+      const n3 = Date.now();
+      for (; Date.now() - n3 < t; ) {
+        if (e2()) return true;
+        await X(40);
       }
-    });
+      return false;
+    }(() => document.body.classList.contains("is-playing"), 1200), d.activeGenreId !== r2 && (v({ activeGenreId: r2 }), P()), "discover" === n2.type ? (await z("discover"), x()) : "journey-genre" === n2.type ? await R(n2.genreId) : "journey-artist" === n2.type && await Y(n2.genreId, n2.artistId, { focus: false }), document.getElementById("mobileTrack")?.click(), await X(80), W();
   }
-  ensureStyles();
-  renderChooser();
-  var observer = new MutationObserver(scheduleSync);
-  observer.observe(document.body, { subtree: true, childList: true, attributes: true, attributeFilter: ["data-view", "data-mode", "src", "hidden"] });
-  document.addEventListener("click", (event) => {
-    const leavingNav = event.target.closest('.rail-button[data-view]:not([data-view="discover"]), .mobile-nav-button[data-mobile-view]:not([data-mobile-view="discover"])');
-    if (leavingNav) closeChooser({ restoreFocus: false });
-    const discoverNav = event.target.closest('.rail-button[data-view="discover"], .mobile-nav-button[data-mobile-view="discover"], .rail-logo, .wordmark, [data-return-discover]');
-    if (discoverNav) {
-      setTimeout(() => {
-        ensureDiscoverySurface();
-        openChooser(discoverNav);
+  function W() {
+    const e = document.getElementById("fullPlayer"), t = document.getElementById("fullCover");
+    if (!e || !t) return;
+    const n2 = document.getElementById("fullTitle")?.textContent?.trim(), o2 = document.getElementById("fullArtist")?.textContent?.trim(), a2 = r.find((e2) => e2.track.title === n2 && (!o2 || o2.includes(e2.artist.name))) || r.find((e2) => e2.track.title === n2);
+    e.dataset.vibe = function(e2) {
+      const t2 = `${e2?.track.style || ""} ${e2?.track.genres?.join(" ") || ""}`.toLowerCase(), n3 = Number(e2?.track.bpm) || 100;
+      return /ambient|quiet|soul|neo-soul/.test(t2) ? "soft" : /jazz|boom bap/.test(t2) ? "warm" : /electronic|techno|industrial|microhouse/.test(t2) ? "electric" : n3 >= 132 || /trap|rap|hip-hop/.test(t2) ? "drive" : "steady";
+    }(a2), e.style.setProperty("--song-cover", `url("${t.getAttribute("src") || ""}")`), e.style.setProperty("--song-tempo", String(Math.max(0.7, Math.min(1.35, (Number(a2?.track.bpm) || 100) / 100))));
+    const s2 = e.querySelector('[role="tab"][data-song-room-mode="story"]');
+    s2 && "About" !== s2.textContent && (s2.textContent = "About");
+    const i2 = e.querySelector('[role="tab"][data-song-room-mode="reveals"]');
+    i2?.firstChild && "Extra " !== i2.firstChild.nodeValue && (i2.firstChild.nodeValue = "Extra "), e.querySelectorAll('.song-room-mobile-nav [data-song-room-mode="story"]').forEach((e2) => {
+      "About" !== e2.textContent && (e2.textContent = "About");
+    }), e.querySelectorAll('.song-room-mobile-nav [data-song-room-mode="reveals"]').forEach((e2) => {
+      "Extra" !== e2.textContent && (e2.textContent = "Extra");
+    });
+    const c2 = document.getElementById("songRoomModeLabel"), d2 = { story: "About", lyrics: "Lyrics", credits: "Credits", reveals: "Extra", queue: "Up next", room: "Now playing" }[e.dataset.mode] || "About";
+    c2 && c2.textContent !== d2 && (c2.textContent = d2);
+  }
+  function Q() {
+    if ("journeys" !== document.body.dataset.view || "artist" !== document.body.dataset.journeyPage) return;
+    const e = document.getElementById("genreSelect")?.value, t = document.querySelector(".artist-list-item.active")?.dataset.artist, n2 = document.querySelector('.track-row[data-playback-state="playing"], .track-row[data-playback-state="selected"]')?.dataset.track, r2 = Number(document.getElementById("timeline")?.getAttribute("aria-valuenow")) || 0;
+    f(e) && C(e, { artistId: t, trackId: n2, position: r2 });
+  }
+  var X = (e = 60) => new Promise((t) => setTimeout(t, e));
+  function Z() {
+    p || (p = true, requestAnimationFrame(() => {
+      p = false, M(), W(), "discover" !== document.body.dataset.view || document.querySelector('[data-rondo-page="discover"]') || x(), "journeys" !== document.body.dataset.view && J();
+    }));
+  }
+  async function _({ focus: e = false } = {}) {
+    if (m) return;
+    const t = function() {
+      const e2 = window.location.hash.replace(/^#\/?/, "").split("/").filter(Boolean);
+      return "journeys" === e2[0] && f(e2[1]) && "artist" === e2[2] && e2[3] ? { type: "journey-artist", genreId: e2[1], artistId: e2[3] } : "journeys" === e2[0] && f(e2[1]) ? { type: "journey-genre", genreId: e2[1] } : "journeys" === e2[0] ? { type: "journeys" } : "library" === e2[0] ? { type: "library" } : "profile" === e2[0] ? { type: "profile" } : { type: "discover" };
+    }();
+    if ("journey-genre" !== t.type) {
+      if ("journey-artist" !== t.type) return "journeys" === t.type ? (await z("journeys"), void (f(d.activeGenreId) ? await R(d.activeGenreId, { focus: e, replace: true }) : D(document.querySelector('.rail-button[data-view="journeys"]')))) : "library" === t.type || "profile" === t.type ? (J(), await z(t.type), void (y = t)) : void await V({ focus: e });
+      await Y(t.genreId, t.artistId, { focus: e, replace: true });
+    } else await R(t.genreId, { focus: e, replace: true });
+  }
+  !function() {
+    const e = getComputedStyle(document.documentElement);
+    if ("1" !== e.getPropertyValue("--rondo-human-pass").trim() && !document.querySelector("link[data-rondo-human-pass]")) {
+      const e2 = document.createElement("link");
+      e2.rel = "stylesheet", e2.href = "experience.css", e2.dataset.rondoHumanPass = "", document.head.append(e2);
+    }
+    if ("1" !== e.getPropertyValue("--rondo-routes").trim() && !document.querySelector("link[data-rondo-route-pages]")) {
+      const e2 = document.createElement("link");
+      e2.rel = "stylesheet", e2.href = "route-pages.css", e2.dataset.rondoRoutePages = "", document.head.append(e2);
+    }
+  }(), I(), M(), N();
+  new MutationObserver(Z).observe(document.body, { attributes: true, attributeFilter: ["data-view", "class"] });
+  var ee = document.getElementById("fullCover");
+  ee && new MutationObserver(W).observe(ee, { attributes: true, attributeFilter: ["src"] }), window.addEventListener("hashchange", () => _({ focus: true })), window.addEventListener("beforeunload", Q), setInterval(Q, 4e3), document.addEventListener("click", (e) => {
+    const t = e.target, n2 = t.closest(".rail-button[data-view], .mobile-nav-button[data-mobile-view]");
+    if (n2 && !m) {
+      const e2 = n2.dataset.view || n2.dataset.mobileView;
+      return void setTimeout(() => {
+        "discover" === e2 ? x({ focus: true }) : "journeys" === e2 ? f(d.activeGenreId) ? R(d.activeGenreId, { focus: true }) : (q({ type: "journeys" }), D(n2)) : (J(), q({ type: e2 }));
       }, 0);
     }
-  }, true);
-  document.addEventListener("click", (event) => {
-    const target = event.target;
-    if (target.id === "discoveryChoice") {
-      closeChooser();
-      return;
+    if (t.closest(".rail-logo, .wordmark, [data-return-discover]")) return void setTimeout(() => V({ focus: true }), 0);
+    const a2 = t.closest("[data-play-entry]");
+    if (a2) return void K(o.get(a2.dataset.playEntry));
+    if (t.closest("[data-open-current-song]")) return void (document.body.classList.contains("is-playing") ? document.getElementById("mobileTrack")?.click() : K(E()));
+    if (t.closest("[data-surprise-track]")) {
+      const e2 = new Set(h().playedTracks || []), t2 = r.filter(({ track: t3 }) => !e2.has(t3.id));
+      return void K((t2.length ? t2 : r)[Math.floor(Math.random() * (t2.length || r.length))]);
     }
-    const genreChoice = target.closest("[data-choice-genre]");
-    if (genreChoice) {
-      selectedGenre = genreChoice.dataset.choiceGenre;
-      syncChoice();
-      return;
+    const s2 = t.closest("[data-open-sound]");
+    if (s2) return void function(e2) {
+      const t2 = c.find((t3) => t3.id === e2), n3 = document.querySelector("[data-sound-results]");
+      if (!t2 || !n3) return;
+      document.querySelectorAll("[data-open-sound]").forEach((t3) => t3.classList.toggle("active", t3.dataset.openSound === e2));
+      const o2 = r.filter(t2.match).slice(0, 8);
+      n3.hidden = false, n3.innerHTML = `<header><div><span>Sound</span><h3>${w(t2.title)}</h3></div><button type="button" data-close-sound aria-label="Close ${w(t2.title)}">\xD7</button></header><div class="music-card-grid">${o2.map(G).join("")}</div>`, n3.scrollIntoView({ block: "nearest", behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "instant" : "smooth" });
+    }(s2.dataset.openSound);
+    if (t.closest("[data-close-sound]")) {
+      const e2 = document.querySelector("[data-sound-results]");
+      return e2 && (e2.hidden = true, e2.innerHTML = ""), void document.querySelectorAll("[data-open-sound]").forEach((e3) => e3.classList.remove("active"));
     }
-    if (target.closest("[data-listen-genre]")) {
-      closeChooser({ restoreFocus: false });
-      renderGenre(selectedGenre);
-      return;
-    }
-    if (target.closest("[data-choose-explore]")) {
-      closeChooser({ restoreFocus: false });
-      renderExplore();
-      document.getElementById("viewSurface")?.scrollTo({ top: 0 });
-      return;
-    }
-    if (target.closest("[data-close-discovery]")) {
-      closeChooser();
-      return;
-    }
-    if (target.closest("[data-open-discovery-picker]")) {
-      openChooser(target.closest("button"));
-      return;
-    }
-    const genre = target.closest("[data-explore-genre]");
-    if (genre) {
-      renderGenre(genre.dataset.exploreGenre);
-      document.getElementById("viewSurface")?.scrollTo({ top: 0, behavior: "smooth" });
-      return;
-    }
-    const track2 = target.closest("[data-explore-track]");
-    if (track2) playEntry(byId.get(track2.dataset.exploreTrack));
+    const i2 = t.closest("[data-open-journey-genre]");
+    if (i2) return void R(i2.dataset.openJourneyGenre, { focus: true });
+    if (t.closest("[data-change-journey]")) return void D(t.closest("button"));
+    const l2 = t.closest("[data-picker-genre]");
+    if (l2) return u = l2.dataset.pickerGenre, O(), void requestAnimationFrame(() => document.querySelector(`[data-picker-genre="${CSS.escape(u)}"]`)?.focus());
+    if (t.closest("[data-confirm-journey]")) return U({ restoreFocus: false, navigateBack: false }), void R(u, { focus: true });
+    if ("journeyGenrePicker" === t.id || t.closest("[data-close-journey-picker], [data-cancel-journey-picker]")) return void U({ restoreFocus: false, navigateBack: true });
+    const y2 = t.closest("[data-resume-journey]");
+    if (y2) return void async function(e2) {
+      const t2 = B(e2);
+      await Y(e2, t2.artistId);
+    }(y2.dataset.resumeJourney);
+    const p2 = t.closest("[data-start-journey-artist]");
+    if (p2) return void Y(N().dataset.genre, p2.dataset.startJourneyArtist);
+    const g2 = t.closest(".artist-list-item[data-artist]");
+    g2 && setTimeout(() => {
+      const e2 = document.getElementById("genreSelect")?.value;
+      f(e2) && (C(e2, { artistId: g2.dataset.artist }), q({ type: "journey-artist", genreId: e2, artistId: g2.dataset.artist }));
+    }, 0);
+  }, true), document.addEventListener("input", (e) => {
+    e.target.matches("[data-music-search]") && function(e2, t = r) {
+      const n2 = e2.trim().toLowerCase(), o2 = document.querySelector("[data-music-results]");
+      if (!o2) return;
+      if (!n2) return o2.hidden = true, void (o2.innerHTML = "");
+      const a2 = t.filter(({ artist: e3, release: t2, track: r2 }) => [r2.title, e3.name, t2.title, r2.style, ...r2.genres].join(" ").toLowerCase().includes(n2)).slice(0, 12);
+      o2.hidden = false, o2.innerHTML = `<header><span>Search results</span><b>${a2.length}</b></header>${a2.length ? `<div>${a2.map(A).join("")}</div>` : "<p>No songs found.</p>"}`;
+    }(e.target.value), e.target.matches("[data-journey-genre-search]") && function(e2) {
+      const t = N(), n2 = t.dataset.genre, r2 = t.querySelector("[data-journey-genre-results]");
+      if (!r2 || !f(n2)) return;
+      const o2 = e2.trim().toLowerCase();
+      if (!o2) return r2.hidden = true, void (r2.innerHTML = "");
+      const a2 = k(n2).filter(({ artist: e3, release: t2, track: n3 }) => [e3.name, t2.title, n3.title, n3.style].join(" ").toLowerCase().includes(o2)).slice(0, 14);
+      r2.hidden = false, r2.innerHTML = `<header><span>Results</span><b>${a2.length}</b></header>${a2.length ? `<div>${a2.map(A).join("")}</div>` : "<p>No songs found.</p>"}`;
+    }(e.target.value);
+  }), document.addEventListener("keydown", (e) => {
+    const t = document.getElementById("journeyGenrePicker");
+    if (!t || t.hidden) return;
+    if ("Escape" === e.key) return e.preventDefault(), void U({ restoreFocus: false, navigateBack: true });
+    if ("Tab" !== e.key) return;
+    const n2 = [...t.querySelectorAll("button:not(:disabled), input:not(:disabled)")].filter((e2) => null !== e2.offsetParent);
+    if (!n2.length) return;
+    const r2 = n2[0], o2 = n2.at(-1);
+    e.shiftKey && document.activeElement === r2 ? (e.preventDefault(), o2.focus()) : e.shiftKey || document.activeElement !== o2 || (e.preventDefault(), r2.focus());
   });
-  document.addEventListener("input", (event) => {
-    if (event.target.matches("[data-music-search]")) renderSearchResults2(event.target.value);
-    if (event.target.matches("[data-genre-search]")) {
-      const query = event.target.value.trim().toLowerCase();
-      const list = document.querySelector("[data-genre-song-list]");
-      const songs = entriesForGenre(selectedGenre).filter(({ artist, release, track: track2 }) => [track2.title, artist.name, release.title, track2.style].join(" ").toLowerCase().includes(query));
-      if (list) list.innerHTML = songs.length ? songs.map(songRow).join("") : '<p class="genre-empty">No songs found.</p>';
+  var te = new URLSearchParams(window.location.search);
+  var ne = document.body.dataset.preview || te.get("screen") || "";
+  if ("journey-picker" === ne) v({ activeGenreId: null, progressByGenre: {} }), q({ type: "journeys" }, { replace: true }), z("journeys").then(() => D(document.querySelector('.rail-button[data-view="journeys"]')));
+  else if ("journey" === ne) C("hiphop", { artistId: "kairo-vale" }), y = { type: "journey-artist", genreId: "hiphop", artistId: "kairo-vale" }, F(), q(y, { replace: true });
+  else if (ne.startsWith("genre-")) {
+    const e = ne.replace("genre-", "");
+    f(e) && R(e, { replace: true });
+  } else window.location.hash ? _() : "discover" === document.body.dataset.view ? x() : Z();
+  W();
+
+  // src/ui/productPolicy.js
+  var STATE_KEY = "rondo-prototype-v2";
+  var genreNames = new Map(genres.map((genre) => [genre.id, genre.short]));
+  var catalog = artists.flatMap(
+    (artist) => artist.releases.flatMap(
+      (release) => release.tracks.map((track2) => ({ artist, release, track: track2 }))
+    )
+  );
+  var byTrackId = new Map(catalog.map((entry) => [entry.track.id, entry]));
+  var pickerOrigin = null;
+  var pickerReturnFocus = null;
+  var pickerWasOpen = false;
+  var syncScheduled = false;
+  function escapeHtml4(value = "") {
+    return String(value).replace(
+      /[&<>"']/g,
+      (character) => ({
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&#39;"
+      })[character]
+    );
+  }
+  function readState() {
+    try {
+      const value = JSON.parse(localStorage.getItem(STATE_KEY) || "null");
+      return value && typeof value === "object" ? value : {};
+    } catch {
+      return {};
     }
-  });
-  document.addEventListener("keydown", (event) => {
-    const overlay = document.getElementById("discoveryChoice");
-    if (!overlay || overlay.hidden) return;
-    if (event.key === "Escape") {
-      event.preventDefault();
-      closeChooser();
+  }
+  function recommendationEntries(playedTrackIds) {
+    const recent = playedTrackIds.slice(-12).map((id) => byTrackId.get(id)).filter(Boolean);
+    const heard = new Set(playedTrackIds);
+    const genreWeight = /* @__PURE__ */ new Map();
+    const artistWeight = /* @__PURE__ */ new Map();
+    recent.forEach((entry, index) => {
+      const weight = index + 1;
+      entry.track.genres.forEach(
+        (genreId) => genreWeight.set(genreId, (genreWeight.get(genreId) || 0) + weight)
+      );
+      artistWeight.set(
+        entry.artist.id,
+        (artistWeight.get(entry.artist.id) || 0) + weight
+      );
+    });
+    return catalog.filter((entry) => !heard.has(entry.track.id)).map((entry, index) => ({
+      entry,
+      index,
+      score: entry.track.genres.reduce(
+        (total, genreId) => total + (genreWeight.get(genreId) || 0),
+        0
+      ) * 10 + (artistWeight.get(entry.artist.id) || 0) * 2
+    })).sort(
+      (left, right) => right.score - left.score || String(right.entry.release.date || right.entry.release.year).localeCompare(
+        String(left.entry.release.date || left.entry.release.year)
+      ) || left.index - right.index
+    ).slice(0, 8).map(({ entry }) => entry);
+  }
+  function recommendationCard(entry, index) {
+    return `<button class="music-card" type="button" data-play-entry="${escapeHtml4(entry.track.id)}" aria-label="Play ${escapeHtml4(entry.track.title)} by ${escapeHtml4(entry.artist.name)}" style="--card-order:${index}"><span class="music-card-art"><img src="${escapeHtml4(entry.release.cover)}" alt="" loading="lazy" decoding="async"/><i aria-hidden="true">\u25B6</i></span><span class="music-card-copy"><strong>${escapeHtml4(entry.track.title)}</strong><span>${escapeHtml4(entry.artist.name)}</span><small>${escapeHtml4(entry.track.style)}</small></span></button>`;
+  }
+  function syncRecommendations() {
+    const section = document.querySelector(".music-personal");
+    if (!section) return;
+    const playedTrackIds = [...new Set(readState().playedTracks || [])].filter(
+      (id) => byTrackId.has(id)
+    );
+    const hasListeningHistory = playedTrackIds.length > 0;
+    section.hidden = !hasListeningHistory;
+    section.setAttribute("aria-hidden", String(!hasListeningHistory));
+    if (!hasListeningHistory) {
+      section.removeAttribute("data-recommendation-signature");
       return;
     }
-    if (event.key !== "Tab") return;
-    const focusable = [...overlay.querySelectorAll("button:not(:disabled), input:not(:disabled)")].filter((element) => element.offsetParent !== null);
-    if (!focusable.length) return;
-    const first = focusable[0];
-    const last = focusable.at(-1);
-    if (event.shiftKey && document.activeElement === first) {
-      event.preventDefault();
-      last.focus();
-    } else if (!event.shiftKey && document.activeElement === last) {
-      event.preventDefault();
-      first.focus();
+    const recommendations = recommendationEntries(playedTrackIds);
+    const signature = `${playedTrackIds.join(",")}|${recommendations.map((entry) => entry.track.id).join(",")}`;
+    if (section.dataset.recommendationSignature === signature) return;
+    const eyebrow = section.querySelector("header span");
+    const heading = section.querySelector("header h2");
+    const grid = section.querySelector(".music-card-grid");
+    if (eyebrow) eyebrow.textContent = "From your recent plays";
+    if (heading) heading.textContent = "Made for you";
+    if (grid) grid.innerHTML = recommendations.map(recommendationCard).join("");
+    section.dataset.recommendationSignature = signature;
+  }
+  function pickerBackLabel(origin) {
+    const parts = origin.replace(/^#\/?/, "").split("/").filter(Boolean);
+    if (parts[0] !== "journeys" || !parts[1]) return "Back to Discover";
+    if (parts[2] === "artist") {
+      const artistName = document.getElementById("artistName")?.textContent?.trim();
+      if (artistName) return `Back to ${artistName}`;
     }
+    return `Back to ${genreNames.get(parts[1]) || "Journey"} Journey`;
+  }
+  function syncPicker() {
+    const picker = document.getElementById("journeyGenrePicker");
+    const isOpen = Boolean(picker && !picker.hidden);
+    if (isOpen && !pickerWasOpen) {
+      pickerOrigin = location.hash || "#/discover";
+    }
+    pickerWasOpen = isOpen;
+    if (!isOpen) return;
+    const cancel = picker.querySelector("[data-cancel-journey-picker]");
+    const close = picker.querySelector("[data-close-journey-picker]");
+    const label = pickerBackLabel(pickerOrigin || "#/discover");
+    if (cancel && cancel.textContent !== label) cancel.textContent = label;
+    if (close) close.setAttribute("aria-label", label);
+  }
+  function closePickerWithContext() {
+    const picker = document.getElementById("journeyGenrePicker");
+    if (!picker || picker.hidden) return;
+    const origin = pickerOrigin || location.hash || "#/discover";
+    const returnFocus = pickerReturnFocus;
+    picker.hidden = true;
+    document.getElementById("appShell")?.removeAttribute("inert");
+    document.body.classList.remove("modal-open", "journey-picker-open");
+    pickerWasOpen = false;
+    pickerOrigin = null;
+    pickerReturnFocus = null;
+    if (/^#\/journeys\/[^/]+(?:\/artist\/[^/]+)?$/.test(origin)) {
+      if (location.hash !== origin) location.hash = origin;
+      requestAnimationFrame(() => {
+        if (returnFocus?.isConnected) returnFocus.focus({ preventScroll: true });
+      });
+      return;
+    }
+    if (location.hash !== "#/discover") location.hash = "#/discover";
+    else {
+      document.querySelector('[data-mobile-view="discover"], .rail-button[data-view="discover"]')?.focus({ preventScroll: true });
+    }
+  }
+  function syncProductPolicy() {
+    syncRecommendations();
+    syncPicker();
+  }
+  function scheduleSync() {
+    if (syncScheduled) return;
+    syncScheduled = true;
+    requestAnimationFrame(() => {
+      syncScheduled = false;
+      syncProductPolicy();
+    });
+  }
+  var qualityStyles = document.createElement("style");
+  qualityStyles.dataset.rondoProductPolicy = "";
+  qualityStyles.textContent = `
+@media (max-width: 760px) {
+  .top-actions { min-width: max-content; }
+  .top-actions > #themeToggle,
+  .top-actions > #searchTrigger,
+  .top-actions > #profileTrigger {
+    width: 44px;
+    min-width: 44px;
+    height: 44px;
+    min-height: 44px;
+    flex: 0 0 44px;
+  }
+  body[data-journey-page="genre"] #mobileDirectoryButton { display: none !important; }
+  body[data-journey-page="genre"] .topbar {
+    grid-template-columns: minmax(0, 1fr) auto;
+  }
+  body[data-journey-page="genre"] .wordmark { grid-column: 1; }
+  body[data-journey-page="genre"] .top-actions { grid-column: 2; }
+  #directory.open .alphabet {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, 44px);
+    gap: 4px;
+  }
+  #directory.open .alphabet button:disabled { display: none; }
+  #directory.open .alphabet button:not(:disabled) {
+    width: 44px;
+    height: 44px;
+    font-size: 10px;
+  }
+}
+`;
+  document.head.append(qualityStyles);
+  window.addEventListener(
+    "click",
+    (event) => {
+      const target = event.target instanceof Element ? event.target : null;
+      if (!target) return;
+      const changeTrigger = target.closest("[data-change-journey]");
+      if (changeTrigger) pickerReturnFocus = changeTrigger;
+      const picker = document.getElementById("journeyGenrePicker");
+      if (!picker || picker.hidden) {
+        scheduleSync();
+        return;
+      }
+      const closesPicker = target === picker || Boolean(
+        target.closest(
+          "[data-close-journey-picker], [data-cancel-journey-picker]"
+        )
+      );
+      if (!closesPicker) return;
+      event.preventDefault();
+      event.stopImmediatePropagation();
+      closePickerWithContext();
+    },
+    true
+  );
+  window.addEventListener(
+    "keydown",
+    (event) => {
+      const picker = document.getElementById("journeyGenrePicker");
+      if (event.key !== "Escape" || !picker || picker.hidden) return;
+      event.preventDefault();
+      event.stopImmediatePropagation();
+      closePickerWithContext();
+    },
+    true
+  );
+  new MutationObserver(scheduleSync).observe(document.body, {
+    childList: true,
+    subtree: true
   });
+  window.addEventListener("storage", scheduleSync);
+  window.addEventListener("hashchange", scheduleSync);
+  document.addEventListener("visibilitychange", scheduleSync);
   scheduleSync();
 })();
 </script>
