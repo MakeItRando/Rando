@@ -1,10 +1,10 @@
 {
-  "checkedAt": "2026-09-09T18:11:57.267Z",
+  "checkedAt": "2026-09-09T18:18:16.546Z",
   "results": [
     {
       "label": "App smoke paths",
       "script": "tests/smoke.mjs",
-      "status": 1,
+      "status": 0,
       "log": ".qa/test-logs/app-smoke-paths.log"
     },
     {
