@@ -119,14 +119,8 @@ try {
     "The route-backed artist Journey should expose Change genre.",
   );
 
-  const paletteSignals = {
-    hiphop: await page
-      .locator("html")
-      .evaluate((element) =>
-        getComputedStyle(element).getPropertyValue("--genre-accent").trim(),
-      ),
-  };
-  for (const genre of ["rnb", "electronic", "jazz"]) {
+  const paletteSignals = {};
+  for (const genre of ["hiphop", "rnb", "electronic", "jazz"]) {
     await openJourneyPicker(page);
     await page.locator(`[data-picker-genre="${genre}"]`).click();
     assert(
@@ -152,14 +146,15 @@ try {
       "Changing Journey genre must not replace the playing song.",
     );
     paletteSignals[genre] = await page
-      .locator("html")
+      .locator("#journeyGenrePage")
       .evaluate((element) =>
-        getComputedStyle(element).getPropertyValue("--genre-accent").trim(),
+        getComputedStyle(element).getPropertyValue("--journey-page-rgb").trim(),
       );
+    assert(paletteSignals[genre], `${genre} should expose a Journey ambience signal.`);
   }
   assert(
     new Set(Object.values(paletteSignals)).size === 4,
-    "All four genres should have distinct ambience signals.",
+    "All four Journey routes should have distinct ambience signals.",
   );
   await page.close();
 

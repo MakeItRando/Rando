@@ -9,7 +9,7 @@ import {
   listReleases,
   nextArtistFor
 } from '../src/services/journey.js';
-import { renderDiscoverView, renderLibraryView, renderProfileView, renderReleaseView } from '../src/ui/views.js';
+import { renderLibraryView, renderProfileView, renderReleaseView } from '../src/ui/views.js';
 
 assert.equal(genres.length, 4, 'The prototype should expose four complete genre journeys.');
 
@@ -70,13 +70,6 @@ for (const door of discoveryDoors) {
 for (const connection of discoveryConnections) assert(connection.trackIds.every((id) => findTrackContext(id)), `Discovery signal is broken: ${connection.id}`);
 
 const heroContext = findTrackContext(discoveryDoors[0].trackId);
-const discoverMarkup = renderDiscoverView({
-  hero: { ...heroContext, door: discoveryDoors[0], lore: releaseLore[heroContext.release.id] },
-  chapters: [{ artist: heroContext.artist, release: heroContext.release, lore: releaseLore[heroContext.release.id] }],
-  genres: genres.map((genre, index) => ({ ...genre, index: `0${index + 1}`, artistCount: listArtistsForGenre(genre.id).length })),
-  connections: [], unlockedArtifacts: [], playedTracks: [], activeTrackId: '', playing: false
-});
-assert(discoverMarkup.includes('Find a door') && discoverMarkup.includes('Take me somewhere'), 'Dedicated Discover composition is incomplete.');
 const releaseMarkup = renderReleaseView({ artist: heroContext.artist, release: heroContext.release, lore: releaseLore[heroContext.release.id], progress: 0, unlocked: false, playedTracks: [] });
 assert(releaseMarkup.includes('the music is never locked') && releaseMarkup.includes('Play chapter'), 'Release chapter must keep music open and playback truthful.');
 

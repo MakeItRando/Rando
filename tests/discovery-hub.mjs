@@ -45,7 +45,6 @@ try {
   );
   for (const section of [
     "Hits today",
-    "Made for you",
     "Bangers",
     "Sounds",
     "Hidden gems",
@@ -57,6 +56,10 @@ try {
       `Missing Discover section: ${section}`,
     );
   }
+  assert(
+    await page.locator(".music-personal").isHidden(),
+    "Personalized framing must wait for genuine listening history.",
+  );
   assert(
     !(await page.locator("#viewSurface").textContent()).includes("Find a door"),
     "Rejected editorial copy returned.",
@@ -162,6 +165,16 @@ try {
 
   await page.keyboard.press("Escape");
   await page.locator('main[data-rondo-page="discover"]').waitFor();
+  await page.locator(".music-personal").waitFor({ state: "visible" });
+  assert(
+    (await page.locator(".music-personal header span").textContent()).trim() ===
+      "From your recent plays",
+    "Recommendations should explain their genuine listening signal.",
+  );
+  assert(
+    (await page.locator('.music-personal [data-play-entry="k101"]').count()) === 0,
+    "Made for you should not immediately recommend the song just heard.",
+  );
   await page.click('.rail-button[data-view="journeys"]');
   await page.locator('#journeyGenrePage[data-genre="jazz"]').waitFor();
   assert(
@@ -193,6 +206,9 @@ try {
   assert(await mobileDirectory.isVisible(), "Mobile artist Journey needs its directory control.");
   await mobileDirectory.click();
   await page.locator("#directory.open").waitFor();
+  await page.waitForFunction(
+    () => Math.abs(document.querySelector("#directory").getBoundingClientRect().left) < 2,
+  );
   const directoryPosition = await page.locator("#directory").evaluate((element) => ({
     left: element.getBoundingClientRect().left,
     width: element.getBoundingClientRect().width,
@@ -209,8 +225,19 @@ try {
   );
   const genreChoice = await page.locator("[data-picker-genre]").first().boundingBox();
   assert(genreChoice && genreChoice.height >= 44, "Mobile genre choices need 44px targets.");
+  assert(
+    (await page.locator("[data-cancel-journey-picker]").textContent()).includes("Back to"),
+    "Journey picker should name its contextual return action.",
+  );
 
   await page.keyboard.press("Escape");
+  await page.waitForFunction((expected) => location.hash === expected, artistRoute);
+  assert(
+    await page.locator("#journeyGenrePicker").isHidden(),
+    "Escape should close Change genre without abandoning the artist Journey.",
+  );
+  await page.locator("#closeDirectory").click();
+  await page.click('[data-mobile-view="discover"]');
   await page.locator('main[data-rondo-page="discover"]').waitFor();
   await page.setViewportSize({ width: 320, height: 700 });
   assert(
