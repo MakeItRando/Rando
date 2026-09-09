@@ -1,5 +1,5 @@
 {
-  "checkedAt": "2026-09-09T05:46:59.188Z",
+  "checkedAt": "2026-09-09T05:50:57.451Z",
   "results": [
     {
       "label": "App smoke paths",
@@ -16,7 +16,7 @@
     {
       "label": "Discover and Journey routes",
       "script": "tests/discovery-hub.mjs",
-      "status": 1,
+      "status": 0,
       "log": ".qa/test-logs/discover-and-journey-routes.log"
     },
     {
