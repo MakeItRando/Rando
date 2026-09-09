@@ -1,8 +1,8 @@
 # Current project state
 
-**Last updated:** 2026-09-09 10:07 Asia/Calcutta  
+**Last updated:** 2026-09-09 10:31 Asia/Calcutta  
 **Repository:** [MakeItRando/Rando](https://github.com/MakeItRando/Rando)  
-**Product name:** Rondo  
+**Canonical name:** Rondo everywhere  
 **Work mode for this session:** repository audit and documentation only; no product-code changes
 
 ## Branch matrix
@@ -21,7 +21,16 @@ Always verify the live `main` HEAD before new work. This file avoids a self-refe
 
 - **Stable `main`:** v0.3.0 runtime, artwork-adaptive Song Room, fictional 8-artist/15-release/39-track catalog, six authorized Rondo Originals demos, local saves/moments/notes, playback, queue, volume, and responsive states. Later commits in this session changed documentation only.
 - **Candidate:** v0.3.2, direct song-first Discover, Journey-owned genre selection, route-backed Genre Journey pages, independent Journey continuity, revised Song Room, expanded QA, and portable preview.
-- **Production system:** not started. Real artists, licensed songs, production accounts, provider connectors, catalog ingestion, backend, live trends, and payments are deferred until experience approval.
+- **Production system:** not started. Real artists, authorized songs, production accounts, provider/source connectors, catalog ingestion, backend, large-scale search, and operations begin only after experience approval.
+- **Payments:** explicitly excluded from V1.
+
+## Confirmed owner decisions — 2026-09-09
+
+1. **Rondo everywhere.** Normalize repository, package, infrastructure, domain, and future store naming before production through a planned migration; do not break current prototype URLs casually.
+2. **Broad catalog.** The intended system should support artists and genres broadly and must be source/provider neutral.
+3. **Scale.** Design for thousands of songs at initial rollout and millions without a domain or UX rewrite. Never ship the full catalog to the browser.
+4. **Legal/source plan.** The product owner will provide the legal acquisition and integration package before real-source implementation. Public availability in another app is not treated by code as authorization.
+5. **No V1 payments.** Do not build subscriptions, checkout, tips, artist billing, payment entitlements, taxes, refunds, disputes, or payouts into V1.
 
 ## QA state
 
@@ -38,6 +47,7 @@ Always verify the live `main` HEAD before new work. This file avoids a self-refe
 - Added root `AGENTS.md` plus the requested `agent.md` entry point.
 - Added this handoff system, page specifications, roadmap, quality gates, snapshot transcript, and unresolved-decision register.
 - Updated canonical product, design, architecture, data-model, and production-system documents on `main`.
+- Recorded the owner decisions above across the decision log, product spec, production plan, roadmap, architecture, and data model.
 - Did not modify application code, candidate code, tests, preview files, or media.
 - Did not merge PR #5 or tell the user to test.
 
@@ -45,20 +55,21 @@ Always verify the live `main` HEAD before new work. This file avoids a self-refe
 
 When development resumes:
 
-1. Read the full handoff and user answers in `OPEN_QUESTIONS.md`.
+1. Read the full handoff and owner decisions.
 2. Re-read the latest PR #5 diff and candidate head; do not assume the old PR description is current.
 3. Diagnose the latest failing check without weakening assertions.
 4. Run the complete gate in `QUALITY_GATES.md` from a clean install.
 5. Inspect every required visual state; fix all failures and regressions.
-6. Update this file and QA evidence.
-7. Only then ask the user to test the candidate.
-8. Keep PR #5 draft and unmerged until explicit approval.
+6. Verify the accepted UI still supports future paginated/indexed catalog data rather than hard-coded prototype counts.
+7. Update this file and QA evidence.
+8. Only then ask the user to test the candidate.
+9. Keep PR #5 draft and unmerged until explicit approval.
 
 ## Known blockers and risks
 
 - Latest candidate QA is red.
 - The previous chat URL was not accessible; screenshot evidence is preserved in `SNAPSHOTS.md`.
-- `Rando` is the repository name while `Rondo` is the product name; confirmation is needed before production branding, domains, package names, and legal work.
-- The first real-catalog path and payment model are not decided.
+- Launch territory/platform and the concrete legal/source integration package are future production inputs.
 - Main runtime intentionally lags the candidate while testing is pending; documentation must keep that split explicit.
 - The candidate branch has a long diagnostic commit history. Preserve evidence now; squash or otherwise clean history only when preparing the accepted merge.
+- The candidate repeat-state validation appears inconsistent with player repeat modes (`off` versus `track`) and requires verification in the development round.
