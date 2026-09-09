@@ -43,6 +43,14 @@ Rondo follows `find → play → explore → keep`.
 - **Library** preserves artists, releases, tracks, moments, private notes, and meaningful progress.
 - **Profile** owns a Rondo account and editable taste preferences; no external streaming account is required by the product concept.
 
+## Confirmed production constraints
+
+- **Rondo everywhere:** Rondo is the canonical product and future technical name. Keep existing `MakeItRando/Rando` URLs only until a deliberate migration avoids breaking prototype history and automation.
+- **Broad catalog:** production should support artists and genres broadly and remain independent of any single source app.
+- **Large scale:** build for thousands of songs initially and millions without changing the product model. Use stable IDs, indexed search, bounded APIs, pagination, lazy loading, and background ingestion; never put the full catalog in the browser.
+- **Owner-supplied legal path:** wait for the product owner's implementation-facing acquisition/source package before connecting real media. Public availability on Spotify, YouTube, Suno, or another app is not itself authorization.
+- **No payments in V1:** do not implement subscriptions, checkout, tips, artist billing, payment entitlements, taxes, refunds, disputes, or payouts in V1.
+
 ## UX non-negotiables
 
 1. Use familiar, concise language. Prefer Play, Pause, Resume, About, Lyrics, Credits, Extra, Up next, Change genre, and Resume Journey.
@@ -60,13 +68,16 @@ Rondo follows `find → play → explore → keep`.
 
 ## Engineering rules
 
-- Keep UI code on normalized Rondo domain objects; provider payloads stop at adapters.
-- Keep credentials, payment secrets, rights rules, and provider tokens off the client.
+- Keep UI code on normalized Rondo domain objects; source payloads stop at authorized adapters.
+- Keep credentials, rights rules, and source tokens off the client.
 - Maintain one playback state, one queue model, and one audio engine.
 - Do not duplicate sorting, save, palette, progress, route, or reveal rules.
 - Add migration-safe defaults for persisted state.
-- Treat playback rights, territory, attribution, and takedown as product requirements, not later cleanup.
+- Treat playback rights, territory, attribution, correction, and takedown as product requirements, not later cleanup.
 - Keep route transitions accessible and preserve browser Back/Forward behavior.
+- Use data-driven genre/artist/release routes; do not duplicate screens for every genre.
+- Never issue unbounded catalog queries or ship full catalog arrays to the client.
+- Build source ingestion as idempotent, resumable, auditable background work with deduplication and retries.
 - Prefer small, reviewable changes with clear rollback paths.
 
 ## Required quality pass
@@ -98,7 +109,7 @@ Every meaningful change must update continuity in the same work session:
 - status, branch, commit, PR, check, blocker, or next action → `handoff/STATE.md`;
 - product choice or reversed choice → append to `handoff/DECISIONS.md`;
 - page, section, flow, copy, persistence, or navigation → `handoff/PRODUCT_MAP.md` and `docs/PRODUCT.md`;
-- module, route, service, connector, hosting, or security → `docs/ARCHITECTURE.md` and/or `docs/PRODUCTION_PLAN.md`;
+- module, route, service, connector, hosting, security, or scale assumption → `docs/ARCHITECTURE.md` and/or `docs/PRODUCTION_PLAN.md`;
 - entity, field, ID, persistence, analytics, or migration → `docs/DATA_MODEL.md`;
 - visual, responsive, motion, or accessibility rule → `docs/DESIGN.md`;
 - test coverage, result, screenshot, or release evidence → `handoff/QUALITY_GATES.md` and `handoff/SNAPSHOTS.md`;
@@ -119,11 +130,12 @@ A section is done only when behavior, edge cases, accessibility, responsive stat
 
 ## Security, privacy, and rights
 
-- Never commit secrets, tokens, personal production data, licensed media without authorization, or full copyrighted lyrics without rights.
+- Never commit secrets, tokens, personal production data, media without authorization, or full copyrighted lyrics without rights.
 - Run targeted secret scanning for changed source and configuration.
 - Keep prototype accounts and personal notes clearly local-only until secure services exist.
-- Use a compliant payment provider and server-side verification when payments begin; never trust client-only entitlements.
-- Record content provenance and territorial availability for every production asset.
+- Record source provenance and territorial availability for every production asset.
+- Do not infer authorization from public availability in another app.
+- Payments are outside V1. If separately approved later, use a compliant provider and server-side verification; never trust client-only entitlements.
 
 ## Competitive standard
 
