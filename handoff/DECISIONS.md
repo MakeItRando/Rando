@@ -14,9 +14,9 @@ Statuses: **Confirmed** (non-negotiable), **Working** (testable experiment), **O
 | D-008 | Confirmed | Journeys shows a picker only with no active Journey or after Change genre. | Clear first use and fast return. |
 | D-009 | Confirmed | Each genre is a route-backed subpage beneath Journeys. | Distinct URLs/titles/landmarks with shared playback. |
 | D-010 | Confirmed | Meaningful progress is independent per genre and survives navigation/reload. | User continuity requirement. |
-| D-011 | Confirmed | Discover playback does not replace active Journey context. | Separate browsing/playback/Journey state. |
+| D-011 | Superseded | Discover playback merely avoids replacing the active Journey genre. | Too weak; replaced by D-036 through D-040. |
 | D-012 | Confirmed | Changing genre erases no progress and stops no song. | User continuity requirement. |
-| D-013 | Confirmed | Global playback continues through navigation. | Core product quality. |
+| D-013 | Confirmed | Active playback continues through navigation. | Core product quality. |
 | D-014 | Confirmed | Artist Journey uses deliberate alphabetical progression, release sequence, and explicit artist-boundary confirmation. | Original product promise. |
 | D-015 | Confirmed | Controls truthfully say Play, Pause, or Resume and preserve position. | User called out prior behavior. |
 | D-016 | Confirmed | Song Room is immersive but restrained, with honest waveform/volume feedback and familiar language. | User rejected plain/toy-like and excessive presentation. |
@@ -37,8 +37,14 @@ Statuses: **Confirmed** (non-negotiable), **Working** (testable experiment), **O
 | D-031 | Confirmed | Catalog is artist-, genre-, and source-inclusive; build provider-neutral ingestion/browsing for thousands first and millions without redesign. Owner supplies legal acquisition plan first. | Public availability is never code-level authorization. |
 | D-032 | Confirmed | **V1 has no payments.** | Owner answer; revisit only in a separately approved later phase. |
 | D-033 | Open | Launch territory/platform mix and concrete legal/source package are required before production ingestion/playback. | Affects rights, infrastructure, and operations. |
-| D-034 | Confirmed | `src/ui/discoveryHub.js` is the canonical v0.3.2 Discover/Journey route implementation. Dormant `renderDiscoverView()` in `src/ui/views.js` must never be revived and must be deleted before production catalog integration. | The legacy renderer contains the explicitly rejected conceptual Discover framing and would create two competing contracts. |
-| D-035 | Confirmed | Production catalog UI uses stable Rondo IDs, normalized provider-neutral models, bounded shelves/results, cursor pagination, indexed/debounced search, bounded listener references, and one shared data-driven Genre implementation. No complete-catalog client delivery or flattening. | Required to scale from thousands to millions without a product rewrite. |
+| D-034 | Confirmed | `src/ui/discoveryHub.js` is the canonical v0.3.2 Discover/Journey route implementation. Dormant `renderDiscoverView()` in `src/ui/views.js` must never be revived and must be deleted before production catalog integration. | Avoid two competing product contracts. |
+| D-035 | Confirmed | Production catalog UI uses stable Rondo IDs, normalized provider-neutral models, bounded shelves/results, cursor pagination, indexed/debounced search, bounded listener references, and one shared data-driven Genre implementation. | Scale from thousands to millions without a product rewrite. |
+| D-036 | Confirmed | Journey and non-Journey listening are separate logical playback sessions and queues over exactly one physical audio engine. | Owner correction after the prior candidate mutated Journey state from Discover. |
+| D-037 | Confirmed | Navigation never switches playback context. A trusted play action switches context only when its source belongs to the other session. | Audio continuity without accidental state mutation. |
+| D-038 | Confirmed | Starting Discover, Search, Library, Sounds, or Release playback must not change Journey genre, artist, track, queue, route, position, or progress. | Explicit owner requirement. |
+| D-039 | Confirmed | Global playback uses the initiating source's bounded queue, truthful Up Next, persistent bottom transport, desktop side player, and manually expandable Song Room. It never auto-expands Song Room. | Familiar control plus context clarity. |
+| D-040 | Confirmed | Returning to Journeys restores its saved session. Explicit Journey playback switches back without deleting the global session. | Both sessions remain resumable. |
+| D-041 | Confirmed | Prototype compatibility interception is temporary. Production must model contexts in the store/audio controller and remove DOM interception before real-catalog integration. | Prevent prototype glue from becoming production architecture. |
 
 ## Writing rules
 

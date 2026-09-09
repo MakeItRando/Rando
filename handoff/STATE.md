@@ -1,113 +1,94 @@
 # Current project state
 
-**Last updated:** 2026-09-09 — final pre-test audit  
+**Last updated:** 2026-09-09 — playback-context correction fully gated  
 **Repository:** [MakeItRando/Rando](https://github.com/MakeItRando/Rando)  
 **Canonical product name:** Rondo everywhere  
-**Current phase:** v0.3.2 experience candidate ready for product-owner testing; no merge or real-catalog work yet
+**Current phase:** corrected v0.3.2 experience candidate ready for product-owner retest; PR #5 remains draft and unmerged
+
+## Controlling checkpoint
+
+The product owner found a serious context bug in the prior candidate: choosing a song on Discover reused the Journey player path and could change the active Journey artist, track, queue, and progress. The corrected candidate now maintains **two logical playback sessions over one physical audio engine**:
+
+- **Journey session:** active genre, artist, track, queue, route, position, and progress.
+- **Global session:** Discover/Search/Library/Release source, selected track, source-derived queue, queue position, and playback position.
+
+Journey audio continues while the listener navigates. Selecting any non-Journey song switches active playback to the global session without changing the saved Journey. Returning to Journeys restores the saved Journey; explicit Journey playback switches active context back to Journey without deleting the global session.
 
 ## Branch matrix
 
 | Branch | Exact reference | Purpose | State |
 | --- | --- | --- | --- |
-| `main` | current HEAD; runtime baseline `eaafc4c` | Stable v0.3.0 runtime plus canonical specifications and handoff | Default branch; documentation changes only after the runtime baseline |
-| `rondo-v031-user-ready` | `89fc0d5d352db31ab90ff7d5b25b698db8e8c6cf` | v0.3.2 experience candidate | Draft PR #5; green; unmerged |
-| `rondo-v032-qa-evidence` | `dbe315e6ad1687537594a80da566af44645c764f` | Exact-head QA logs, reports, screenshots, and contact sheet | Current for `89fc0d5` |
-| `rondo-v031-preview` | `873fbbeb1d209889250825b054b235b8493b4e05` | Portable v0.3.2 test preview | Test-only; exact HTML blob `759a9df34423092ee5843f57f09efe7f4bd43363` |
-| `rondo-v23-song-room` | `a5e4905` | Historical v0.3 Song Room work | Merged through PR #3 |
-| `rondo-v22-immersive` | `ea05c73` | Historical immersive-listening work | Merged through PR #2 |
+| `main` | current HEAD; runtime baseline `eaafc4c` | Stable runtime plus canonical specifications and handoff | Documentation-only updates after runtime baseline |
+| `rondo-v031-user-ready` | `b752cc6d2d141c453fc9ba66441ccc568516bf8e` | Corrected v0.3.2 experience candidate | Draft PR #5; green; unmerged |
+| `rondo-v032-qa-evidence` | `7f9ddf7cce41b4334981cf5f835c552297cfe459` | Exact-head QA logs, screenshots, and reports | Current for `b752cc6` |
+| `rondo-v031-preview` | `904374d578c14b5dbd1201f55ad947aa7ee29d17` | Portable corrected test preview | Test-only; exact HTML blob `4c587e1a3affaf07a6dd183fcecf2cd5d3f0b0fc` |
 
-Always re-verify live heads before new work. This file intentionally avoids a self-referential exact `main` SHA because updating it creates another `main` commit.
+Always verify live heads before changing code. `main` intentionally avoids a self-referential exact SHA.
 
-## Release split
+## Corrected experience behavior
 
-- **Stable `main`:** v0.3.0 runtime, fictional catalog, six original Rondo demo recordings, local saves/moments/notes, queue, playback, volume, responsive states, and canonical documentation.
-- **v0.3.2 candidate:** direct song-first Discover, recommendation gating, Journey-owned genre picker, route-backed Genre Journey pages, independent continuity, revised Song Room, stronger accessibility/mobile behavior, malformed-state recovery, and expanded QA.
-- **Production system:** not started. Real artists, authorized songs, production accounts, source adapters, ingestion, backend services, large-scale search, and operations begin only after experience approval and receipt of the owner's legal/source package.
-- **Payments:** excluded from V1.
+1. Start or resume a Kairo Vale Journey and play a Journey track.
+2. Navigate to Discover; that Journey audio continues in the bottom transport.
+3. Select a Discover song; Rondo switches to the global session.
+4. Desktop shows a Discover side player and persistent bottom transport. Mobile retains the bottom transport. Song Room opens only when the listener explicitly expands it.
+5. Global Previous/Next and Up Next use the initiating source shelf/results rather than the Journey queue.
+6. Return to Journeys; the saved Journey genre, artist, track, route, and progress remain intact.
+7. Explicitly resume/play within the Journey to switch active playback back to its session.
 
-## Final pre-test evidence
+The same global contract applies to Discover shelves/search, Sounds, global Search, Library, and Release playback. Missing source containers now degrade to a bounded page queue rather than throwing.
 
-### Enforced workflow
+## Controlling QA evidence
 
-- Candidate: [`89fc0d5`](https://github.com/MakeItRando/Rando/commit/89fc0d5d352db31ab90ff7d5b25b698db8e8c6cf)
-- Run: [`34332141798`](https://github.com/MakeItRando/Rando/actions/runs/34332141798/job/102403183216)
-- Check: `102403183216`
-- Completed: `2026-09-09T09:02:20Z`
-- Conclusion: **success**
-- Enforced suites: smoke, interface quality, Discover/Journey routes, product policy, listening, Song Room, audio, personal surfaces, user-ready, experience, full concept, and release readiness — all status `0`
-- Visual capture step: success
+- **Candidate:** [`b752cc6`](https://github.com/MakeItRando/Rando/commit/b752cc6d2d141c453fc9ba66441ccc568516bf8e)
+- **Successful workflow:** [run `34387982105`, job `102588986970`](https://github.com/MakeItRando/Rando/actions/runs/34387982105/job/102588986970)
+- **Completed:** `2026-09-09T18:18:56Z`
+- **Evidence:** [`7f9ddf7`](https://github.com/MakeItRando/Rando/commit/7f9ddf7cce41b4334981cf5f835c552297cfe459)
+- **Published preview:** [`904374d`](https://github.com/MakeItRando/Rando/commit/904374d578c14b5dbd1201f55ad947aa7ee29d17)
+- **Preview Git blob:** `4c587e1a3affaf07a6dd183fcecf2cd5d3f0b0fc`
+- **Preview size:** `517222` bytes
+- **Preview SHA-1:** `51e5d1035ca9c004896a84cadb18656b36ab7881`
 
-### Visual QA
+All enforced steps passed: smoke, interface quality, Discover/Journey routes, playback-context isolation, product policy, listening, Song Room, audio, personal surfaces, user-ready, experience, full concept, release readiness, and visual capture.
 
-- Evidence commit: [`dbe315e`](https://github.com/MakeItRando/Rando/commit/dbe315e6ad1687537594a80da566af44645c764f)
-- Captures: `18`
-- Manually inspected and accepted: `18/18`
-- Viewports: `1440×900`, `390×844`, and `320×700`
-- Included: direct Discover, lower Discover, Sounds, Journey picker, Genre page, top songs, Artist Journey, Song Room About/Lyrics/Up next, Light Discover, mobile Discover/picker/R&B/artist/Change genre, compact Discover, and Reduced Motion Song Room
-- Reported runtime errors: none
-- Reported capture failures: none
-- Broken rendered images: none
-- Horizontal overflow: none
-- Undersized required targets: none
+The exact published HTML was independently extracted and rerun over local HTTP against `tests/playback-contexts.mjs`; it passed. The workflow visual report contains 18 captures, no runtime errors, no failures, no horizontal overflow, no broken rendered images, no undersized required targets, and exactly one visible main in normal page states.
 
-### Security review
+## Failure history retained honestly
 
-- Changed files inspected: `58`
-- Credential/secret-pattern findings: `0`
-- GitHub Advanced Security was unavailable; the targeted full-diff review is the controlling evidence.
+- `160be0f8` failed because package metadata was inconsistent with the lockfile.
+- `1ffadd1e` reached the complete gate; every new and existing suite passed except smoke. Smoke exposed an orphan playback surface where queue derivation attempted `querySelectorAll` on `null`.
+- `b752cc6` added Release/page fallback queue roots and source labels. The exact-head run passed completely.
 
-### Exact portable-preview audit
+Only `b752cc6` and its evidence/preview are controlling.
 
-- Preview branch: [`873fbbe`](https://github.com/MakeItRando/Rando/commit/873fbbeb1d209889250825b054b235b8493b4e05)
-- Exact HTML Git blob: `759a9df34423092ee5843f57f09efe7f4bd43363`
-- Exact blob byte length: `500467`
-- Runtime assertions: `37/37` passed over local HTTP
-- Covered: raw malformed-state repair, direct Discover, cold-start recommendation gating, search, Sounds, playback, Song Room, playback continuity, first-use picker, R&B route, contextual close/focus return, Artist Journey, Back/Forward, 320px overflow, Reduced Motion, and Song Room timing/metadata layout
-- Page, console, request, and HTTP errors: `0`
-- Audit-only local MP3 fixtures exercised HTTP playback under the six exact preview filenames; they were not committed or represented as repository recordings. All six repository MP3 objects and their exact preview-branch blob SHAs were independently confirmed.
+## Current implementation status
 
-## Product corrections now closed
+The candidate uses `src/ui/playbackContexts.js` plus a small layout override as a **prototype compatibility controller** around the existing singleton app. It persists bounded IDs under `rondo-playback-context-v1`, suppresses Discover's old automatic Song Room expansion, protects Journey state during the old internal bridge, and supplies a global queue/side player.
 
-- Discover opens directly rather than showing a genre chooser.
-- Made for you is hidden until real played-track history exists, then uses the explicit eyebrow `From your recent plays`.
-- Continue listening appears only after activity.
-- Sounds opens the correct section and result set.
-- Journeys owns first-use genre selection and route-backed genre pages.
-- Change genre closes contextually and returns focus without losing the origin route.
-- Playback continues through route changes.
-- malformed persisted arrays/records are normalized and the repaired snapshot is written back to `rondo-prototype-v2`.
-- legacy repeat `off` migrates to `continue`; supported modes are `continue`, `track`, and `artist`.
-- mobile top actions and enabled directory alphabet controls meet the 44×44px contract.
-- mobile Genre pages hide the irrelevant directory trigger.
-- Song Room time/metadata columns remain separated in compact layouts.
-- Reduced Motion uses a truthful static signal.
+This is acceptable for owner testing, not the production architecture. Before real catalog integration, migrate context ownership into the store/audio controller and remove DOM event interception. Preserve one physical audio engine.
 
-## Canonical implementation policy
+See [`PLAYBACK_CONTEXTS.md`](PLAYBACK_CONTEXTS.md) for the durable contract and production migration.
 
-`src/ui/discoveryHub.js` is the v0.3.2 Discover/Journey route implementation. `renderDiscoverView()` in `src/ui/views.js` is dormant, noncanonical legacy code containing superseded conceptual framing. Do not revive it. Delete it before production catalog integration, after the accepted candidate is integrated and no caller remains. Do not create a second renderer.
+## Product and production boundaries
 
-## Confirmed owner decisions
-
-1. **Rondo everywhere.** Plan a safe technical naming migration before production.
-2. **Broad, source-neutral catalog.** Support artists and genres broadly.
-3. **Thousands first, millions ready.** Use stable IDs, normalized models, bounded APIs, indexed/debounced search, cursor pagination, lazy assets, and background ingestion. Never send or flatten the full catalog in the browser.
-4. **Owner-supplied legal path.** Public availability in another app is not authorization.
-5. **No payments in V1.** Reconsider only in a separately approved later phase.
+- Fictional artists and original prototype audio only.
+- Real artists, authorized songs, production accounts, ingestion, backend services, source adapters, and large-scale search begin only after experience approval and receipt of the owner's implementation-facing legal/source package.
+- Provider-neutral catalog; thousands first, millions ready.
+- Public presence on another service is not authorization.
+- V1 has no payments.
 
 ## Immediate next action
 
-1. Product owner tests the portable preview on desktop and phone.
-2. Record all feedback without merging PR #5.
-3. If changes are required, update candidate source, rerun the complete exact-head gate, republish evidence/preview, inspect every changed visual, and refresh this handoff in the same session.
-4. Merge only after explicit product-owner acceptance.
-5. Begin production foundations and real-catalog work only after that acceptance; preserve the provider-neutral scale and rights contracts.
+The product owner should retest the exact published preview on desktop and phone using:
+
+**Kairo Vale Journey → play → Discover continuity → select Discover song → inspect global side player/queue → manually expand Song Room → return to restored Kairo Vale Journey.**
+
+Record feedback without merging PR #5. Merge only after explicit owner acceptance and a final post-acceptance exact-head gate.
 
 ## Current risks
 
-- Experience approval is still pending; green engineering evidence is not acceptance.
-- `main` runtime intentionally lags the candidate until approval.
-- PR #5 has a long diagnostic history and a dirty merge state; clean integration history only when preparing an accepted merge.
-- Existing `Rando` technical URLs need a deliberate Rondo migration.
-- The legal/source implementation package, launch territories, and production platform mix remain future inputs.
+- Experience acceptance is still pending; green engineering evidence is not approval.
+- PR #5 remains dirty and has long diagnostic history; clean integration history only after acceptance.
+- The compatibility controller must not become the production playback architecture.
 - Prototype local storage is not secure account sync.
-- The four hard-coded prototype genres validate the interaction model only; production must use one data-driven taxonomy and renderer.
+- Existing `Rando` technical URLs still need a deliberate Rondo migration.
+- Legal/source package, launch territory, and production platform mix remain future inputs.
