@@ -4,9 +4,17 @@
 
 Rondo is an independent music-discovery and listening product built around a clear sequence: **find → play → explore → keep**. It should combine the immediacy of a useful music home with the depth of artist-by-artist Genre Journeys, while keeping playback, context, and personal memory continuous.
 
-The stable `main` branch contains the v0.3.0 static prototype. The active v0.3.2 experience candidate is in `rondo-v031-user-ready` and draft PR #5. It implements the corrected Discover/Journeys separation and expanded UX, but the latest observed QA check failed. It must not be merged or presented as ready until the gate is green and visually inspected.
+The stable `main` branch contains the v0.3.0 static runtime plus canonical documentation. The active v0.3.2 experience candidate is in `rondo-v031-user-ready` and draft PR #5. It implements the corrected Discover/Journeys separation and expanded UX, but the latest observed QA check failed. It must not be merged or presented as ready until the gate is green and visually inspected.
 
-This handoff was created after a full repository and branch audit. No app code was changed in this session.
+This handoff was created after a full repository and branch audit. No app code was changed in this documentation session.
+
+## Confirmed product-owner decisions — 2026-09-09
+
+1. **Rondo everywhere.** Rondo is the canonical product, repository, package, infrastructure, domain, and future store name. Keep the existing `MakeItRando/Rando` URL during prototype continuity, then perform a deliberate migration before production-facing naming is finalized.
+2. **Broad catalog.** The final product is intended to support artists and genres broadly rather than being limited to one provider, source app, or small genre set.
+3. **Large-scale design.** Build for thousands of songs at initial ingestion and millions without replacing the product model. Search, browsing, routes, state, and UI must use bounded results, stable IDs, pagination/lazy loading, and indexed services—not full-catalog client data.
+4. **Owner-supplied legal path.** The product owner has a legal acquisition plan and will provide the implementation-facing source, authorization, territory, and playback package before real integration begins. Public availability on Spotify, YouTube, Suno, or another app is not itself treated by Rondo code as permission.
+5. **No payments in V1.** Do not add subscriptions, checkout, tips, artist billing, payment entitlements, taxes, refunds, disputes, or payouts to V1. Keep future payment boundaries clean but unimplemented.
 
 ## Product mindset
 
@@ -18,7 +26,8 @@ Rondo should feel:
 - human-made, calm, and credible—not toy-like, overanimated, or AI-decorated;
 - curious without manipulation;
 - truthful about playback, charts, recommendations, analysis, rights, and unavailable data;
-- independent from any one provider or incumbent product.
+- independent from any one provider or incumbent product;
+- capable of presenting a very large catalog without feeling like an endless database.
 
 The competitive advantage is not more chrome. It is a better mental model: immediate discovery, deep genre/artist progression, song-level context, meaningful memory, and uninterrupted playback.
 
@@ -52,6 +61,9 @@ See `SNAPSHOTS.md` for the detailed evidence transcript.
 ```text
 .github/workflows/pages.yml   GitHub Pages deployment
 README.md                     project overview and status
+AGENTS.md                     mandatory operating and continuity guide
+agent.md                      compatibility pointer to AGENTS.md
+handoff/                      live state, decisions, product map, roadmap, QA, snapshots
 index.html                    static semantic application shell
 app.js                        module entry point
 styles.css                    core responsive visual system
@@ -106,6 +118,8 @@ Direct song-first home. It must never open a genre chooser. It includes useful s
 
 First-time entry opens a focused genre picker. Returning entry resumes the active genre page. Each genre is a route-backed page with progress, scoped search, songs, releases, artists, Play mix, Start/Resume, and Change genre. Starting a Journey enters the guided alphabetical artist flow.
 
+The four prototype genres validate the UX contract only. Production must use an editable genre/style graph and data-driven routes/components so many genres do not create duplicated code.
+
 ### Artist Journey
 
 One artist at a time, albums/EPs newest to oldest, matching genre by default, All catalog as an escape hatch, truthful Play/Pause/Resume controls, completion confirmation before crossing the artist boundary.
@@ -120,11 +134,29 @@ Library preserves artists, releases, tracks, moments, notes, and meaningful prog
 
 The full contract is in `PRODUCT_MAP.md`.
 
+## Large-catalog UX and system contract
+
+The final catalog should feel curated even when it contains millions of tracks:
+
+- the browser receives bounded shelves and paginated search results, never the whole catalog;
+- artist/release/genre routes use stable Rondo IDs and lazy-load deeper data;
+- search is indexed, typo-tolerant, alias-aware, filterable, and cursor-paginated;
+- long lists use pagination or accessible virtualization;
+- artwork/audio load on demand through authorized delivery;
+- ingestion is idempotent, resumable, validated, auditable, and safe to retry;
+- duplicate artists, aliases, release editions, recording versions, credits, source conflicts, corrections, and takedowns are first-class operations;
+- rights and availability are checked independently from catalog presence;
+- editorial/recommendation systems select useful subsets rather than exposing scale as clutter.
+
+See `docs/ARCHITECTURE.md`, `docs/DATA_MODEL.md`, and `docs/PRODUCTION_PLAN.md`.
+
 ## Quality and release posture
 
 The candidate has broad automated coverage and a visual-capture script. However, latest evidence outranks old summaries: the check run on `305e9a3` failed. Previous “ready for your test” language is stale.
 
 Do not fix this by deleting coverage, adding broad waits, ignoring browser errors, or changing expectations to match broken behavior. Reproduce the failure, identify the product or test-contract cause, repair it at the correct layer, and rerun the full gate.
+
+A candidate repeat-state mismatch was also found during audit: persisted validation accepts `continue`, `artist`, and obsolete `off`, while player logic uses `continue`, `track`, and `artist`. Verify and fix this in the development round rather than silently changing it in this documentation session.
 
 ## Real-system boundary
 
@@ -132,25 +164,26 @@ Not started:
 
 - secure accounts and synchronized user state;
 - real artist, release, track, credits, and artwork ingestion;
-- licensed playback and territorial authorization;
-- production search and recommendation systems;
-- provider adapters and a backend-for-frontend;
+- authorized playback and territorial authorization;
+- production indexed search and recommendation systems;
+- authorized source adapters and a backend-for-frontend;
 - editorial tooling, moderation, corrections, and takedowns;
-- analytics, observability, support, and recovery;
-- plans, subscriptions, payments, entitlements, refunds, or artist payouts.
+- large-scale jobs, deduplication, search indexes, media delivery, load testing, and recovery;
+- analytics, observability, support, and privacy operations.
 
-See `docs/PRODUCTION_PLAN.md` and `ROADMAP.md`.
+V1 explicitly excludes payment and payout systems. A future payment phase requires a new owner decision.
 
 ## Important risks
 
 1. **QA discrepancy:** old successful evidence and new failed evidence coexist.
 2. **Branch history:** the candidate contains many diagnostic and temporary-workflow commits. Preserve the result, but clean the accepted integration history later.
-3. **Naming:** repository `Rando` versus product `Rondo` is unresolved.
+3. **Naming migration:** Rondo everywhere is confirmed, but current `Rando` URLs must be migrated deliberately to avoid breaking history and automation.
 4. **Scope pressure:** adding real content before experience approval would mix product validation with infrastructure risk.
-5. **Rights:** commercial media, lyrics, biographies, artwork, and live charts need independent authorization and provenance.
+5. **Rights integration:** the owner has a legal plan, but its concrete adapter/territory/permission requirements must be received before implementation; never infer permission from public availability.
 6. **Prototype persistence:** local storage is not an account system and must not be treated as secure or synchronized.
-7. **Visual overreach:** release lore/reveals are experiments; the user explicitly prefers simplicity and may reject anything that feels overexplained.
-8. **Documentation drift:** main runtime and candidate behavior differ until approval; status labels must stay explicit.
+7. **Catalog scale:** hard-coded genre arrays, full client catalogs, offset-only pagination, or duplicated page implementations would fail at the intended scale.
+8. **Visual overreach:** release lore/reveals are experiments; the user explicitly prefers simplicity and may reject anything that feels overexplained.
+9. **Documentation drift:** main runtime and candidate behavior differ until approval; status labels must stay explicit.
 
 ## Restart instructions for the next agent
 
@@ -158,12 +191,13 @@ See `docs/PRODUCTION_PLAN.md` and `ROADMAP.md`.
 2. Verify current main/candidate heads and PR/check state; update `STATE.md` if they changed.
 3. Read the full candidate diff, not only PR prose.
 4. Preserve the confirmed Discover/Journeys separation and global playback continuity.
-5. Do not start real-catalog or payment implementation yet.
-6. Diagnose the red gate, run clean automated checks, and inspect required visual states.
+5. Diagnose the red gate, verify the repeat-state mismatch, run clean automated checks, and inspect required visual states.
+6. Ensure fixes remain data-driven and compatible with future bounded/paginated catalog APIs; do not start real-source integration yet.
 7. Update handoff evidence with exact commands, results, commit, and screenshots.
 8. Ask the user to test only after all gates pass.
 9. Merge only after explicit acceptance; then update version/status documents and remove test-only material from the integration.
+10. After approval, begin production foundations from the confirmed owner decisions: Rondo naming migration, source-neutral scale, owner-supplied legal integration, and no V1 payments.
 
 ## Session completion statement
 
-The repository now has a durable operating guide, canonical handoff, page specifications, future plan, and quality policy on `main`. Application work intentionally did not occur in this session, and PR #5 remains unmerged.
+The repository now has a durable operating guide, canonical handoff, page specifications, future plan, large-catalog architecture, and quality policy on `main`. Application work intentionally did not occur in this session, and PR #5 remains unmerged.
