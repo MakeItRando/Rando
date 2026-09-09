@@ -93,7 +93,50 @@ jobs:
         id: release_ready
         continue-on-error: true
         run: node scripts/run-test-with-annotations.mjs "Release readiness" tests/release-ready.mjs
-      - name: Enforce browser regression suite
+      - name: Capture visual QA
+        id: visual
+        if: always()
+        continue-on-error: true
+        run: node scripts/capture-visuals.mjs
+      - name: Publish QA evidence
+        if: always()
+        run: |
+          git fetch origin rondo-v032-qa-evidence
+          rm -rf /tmp/rondo-qa-evidence
+          git worktree add /tmp/rondo-qa-evidence origin/rondo-v032-qa-evidence
+          cd /tmp/rondo-qa-evidence
+          git switch -C rondo-v032-qa-evidence
+          rm -rf latest
+          mkdir -p latest
+          if [ -d "$GITHUB_WORKSPACE/.qa" ]; then
+            cp -R "$GITHUB_WORKSPACE/.qa/." latest/
+          fi
+          cat > latest/run-summary.txt <<EOF
+          commit=${GITHUB_SHA}
+          run_id=${GITHUB_RUN_ID}
+          smoke=${{ steps.smoke.outcome }}
+          quality=${{ steps.quality.outcome }}
+          routes=${{ steps.routes.outcome }}
+          listening=${{ steps.listening.outcome }}
+          song_room=${{ steps.song_room.outcome }}
+          audio=${{ steps.audio.outcome }}
+          personal=${{ steps.personal.outcome }}
+          user_ready=${{ steps.user_ready.outcome }}
+          experience=${{ steps.experience.outcome }}
+          full_concept=${{ steps.full_concept.outcome }}
+          release_ready=${{ steps.release_ready.outcome }}
+          visual=${{ steps.visual.outcome }}
+          EOF
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -A latest
+          if git diff --cached --quiet; then
+            echo 'QA evidence is already current.'
+            exit 0
+          fi
+          git commit -m "qa: preserve evidence for ${GITHUB_SHA::7}"
+          git push origin HEAD:rondo-v032-qa-evidence
+      - name: Enforce complete quality gate
         if: always()
         run: |
           failed=0
@@ -108,14 +151,13 @@ jobs:
             "${{ steps.user_ready.outcome }}" \
             "${{ steps.experience.outcome }}" \
             "${{ steps.full_concept.outcome }}" \
-            "${{ steps.release_ready.outcome }}"; do
+            "${{ steps.release_ready.outcome }}" \
+            "${{ steps.visual.outcome }}"; do
             if [ "$outcome" != "success" ]; then
               failed=1
             fi
           done
           exit "$failed"
-      - name: Capture visual QA
-        run: node scripts/capture-visuals.mjs
       - name: Publish portable preview
         run: |
           test -s preview.html
