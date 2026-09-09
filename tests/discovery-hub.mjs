@@ -150,21 +150,22 @@ try {
   );
   await page.click('[data-music-results] [data-play-entry="k101"]');
   await page.waitForFunction(() => document.body.classList.contains("is-playing"));
-  await page.locator("#fullPlayer").waitFor();
+  await page.waitForFunction(() => document.body.dataset.view === "discover" && document.body.dataset.playbackContext === "global");
+  assert(await page.locator("#fullPlayer").isHidden(), "Discover play should stay on Discover until expanded.");
+  assert(await page.locator(".inspector").isVisible(), "Discover play needs a desktop side player.");
   assert(
     (await page.locator("#barTitle").textContent()).trim() === "Night Transit",
     "Discover direct play chose the wrong song.",
   );
-  assert((await route(page)) === "#/discover", "Song Room should preserve Discover beneath it.");
+  assert((await route(page)) === "#/discover", "Discover playback should preserve its route.");
+  const afterDiscoverPlay = await page.evaluate(() => JSON.parse(localStorage.getItem("rondo-route-state-v1")));
+  assert(afterDiscoverPlay.activeGenreId === "jazz", "Discover playback replaced the active Journey genre.");
   assert(
-    (await page.evaluate(() =>
-      JSON.parse(localStorage.getItem("rondo-route-state-v1")),
-    )).activeGenreId === "jazz",
-    "Discover playback replaced the active Journey.",
+    afterDiscoverPlay.progressByGenre.jazz.artistId === savedRouteState.progressByGenre.jazz.artistId &&
+      afterDiscoverPlay.progressByGenre.jazz.trackId === savedRouteState.progressByGenre.jazz.trackId,
+    "Discover playback changed the saved Journey artist or track.",
   );
 
-  await page.keyboard.press("Escape");
-  await page.locator('main[data-rondo-page="discover"]').waitFor();
   await page.locator(".music-personal").waitFor({ state: "visible" });
   assert(
     (await page.locator(".music-personal header span").textContent()).trim() ===
