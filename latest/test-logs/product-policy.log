@@ -1,24 +1,12 @@
 label=Product policy
 script=tests/product-policy.mjs
-status=1
+status=0
 
 --- stdout ---
+Product policy regression passed.
 
 
 --- stderr ---
-node:internal/modules/run_main:123
-    triggerUncaughtException(
-    ^
-
-locator.waitFor: Timeout 30000ms exceeded.
-Call log:
-  - waiting for locator('main[data-rondo-page="discover"]') to be visible
-
-    at /home/runner/work/Rando/Rando/tests/product-policy.mjs:37:58 {
-  name: 'TimeoutError'
-}
-
-Node.js v20.20.2
 
 
 --- spawn error ---

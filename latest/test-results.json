@@ -1,5 +1,5 @@
 {
-  "checkedAt": "2026-09-09T08:59:22.702Z",
+  "checkedAt": "2026-09-09T09:01:43.306Z",
   "results": [
     {
       "label": "App smoke paths",
@@ -22,7 +22,7 @@
     {
       "label": "Product policy",
       "script": "tests/product-policy.mjs",
-      "status": 1,
+      "status": 0,
       "log": ".qa/test-logs/product-policy.log"
     },
     {
@@ -60,6 +60,18 @@
       "script": "tests/experience.mjs",
       "status": 0,
       "log": ".qa/test-logs/experience-details.log"
+    },
+    {
+      "label": "Full concept flow",
+      "script": "tests/full-concept.mjs",
+      "status": 0,
+      "log": ".qa/test-logs/full-concept-flow.log"
+    },
+    {
+      "label": "Release readiness",
+      "script": "tests/release-ready.mjs",
+      "status": 0,
+      "log": ".qa/test-logs/release-readiness.log"
     }
   ]
 }
