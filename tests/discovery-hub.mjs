@@ -183,6 +183,7 @@ try {
   );
   await page.click('[data-resume-journey="jazz"]');
   await page.locator("#journey").waitFor();
+  await page.waitForFunction(() => location.hash.includes("/artist/"));
   assert(
     (await route(page)).startsWith("#/journeys/jazz/artist/"),
     "Guided Journey should use an artist subroute.",
