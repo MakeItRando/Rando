@@ -1,20 +1,12 @@
 label=Discover and Journey routes
 script=tests/discovery-hub.mjs
-status=1
+status=0
 
 --- stdout ---
+Route-backed Discover and Journey regression passed.
 
 
 --- stderr ---
-file:///home/runner/work/Rando/Rando/tests/discovery-hub.mjs:7
-  if (!condition) throw new Error(message);
-                        ^
-
-Error: Journey picker should receive focus.
-    at assert (file:///home/runner/work/Rando/Rando/tests/discovery-hub.mjs:7:25)
-    at file:///home/runner/work/Rando/Rando/tests/discovery-hub.mjs:84:3
-
-Node.js v20.20.2
 
 
 --- spawn error ---

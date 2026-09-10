@@ -1,31 +1,12 @@
 label=Product policy
 script=tests/product-policy.mjs
-status=1
+status=0
 
 --- stdout ---
+Product policy regression passed.
 
 
 --- stderr ---
-node:internal/modules/run_main:123
-    triggerUncaughtException(
-    ^
-
-page.click: Timeout 30000ms exceeded.
-Call log:
-  - waiting for locator('[data-picker-genre="rnb"]')
-    - locator resolved to <button role="radio" type="button" aria-checked="false" data-picker-genre="rnb" class="journey-picker-choice ">…</button>
-  - attempting click action
-    - waiting for element to be visible, enabled and stable
-    - element is visible, enabled and stable
-    - scrolling into view if needed
-    - done scrolling
-    - performing click action
-
-    at /home/runner/work/Rando/Rando/tests/product-policy.mjs:87:14 {
-  name: 'TimeoutError'
-}
-
-Node.js v20.20.2
 
 
 --- spawn error ---

@@ -1,38 +1,12 @@
 label=Listening flow
 script=tests/listening.mjs
-status=1
+status=0
 
 --- stdout ---
+Immersive listening test passed.
 
 
 --- stderr ---
-node:internal/modules/run_main:123
-    triggerUncaughtException(
-    ^
-
-page.click: Timeout 30000ms exceeded.
-Call log:
-  - waiting for locator('#transportPlay')
-    - locator resolved to <button type="button" aria-label="Play" id="transportPlay" class="transport-play">…</button>
-  - attempting click action
-    2 × waiting for element to be visible, enabled and stable
-      - element is not visible
-    - retrying click action
-    - waiting 20ms
-    2 × waiting for element to be visible, enabled and stable
-      - element is not visible
-    - retrying click action
-      - waiting 100ms
-    56 × waiting for element to be visible, enabled and stable
-       - element is not visible
-     - retrying click action
-       - waiting 500ms
-
-    at /home/runner/work/Rando/Rando/tests/listening.mjs:163:16 {
-  name: 'TimeoutError'
-}
-
-Node.js v20.20.2
 
 
 --- spawn error ---
