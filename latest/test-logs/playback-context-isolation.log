@@ -3,7 +3,7 @@ script=tests/playback-contexts.mjs
 status=0
 
 --- stdout ---
-Journey/global playback-context isolation passed.
+Fresh profile and Journey/global playback-context isolation passed.
 
 
 --- stderr ---

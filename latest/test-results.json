@@ -1,5 +1,5 @@
 {
-  "checkedAt": "2026-09-09T18:18:16.546Z",
+  "checkedAt": "2026-09-10T09:47:42.936Z",
   "results": [
     {
       "label": "App smoke paths",
@@ -16,7 +16,7 @@
     {
       "label": "Discover and Journey routes",
       "script": "tests/discovery-hub.mjs",
-      "status": 0,
+      "status": 1,
       "log": ".qa/test-logs/discover-and-journey-routes.log"
     },
     {
@@ -28,13 +28,13 @@
     {
       "label": "Product policy",
       "script": "tests/product-policy.mjs",
-      "status": 0,
+      "status": 1,
       "log": ".qa/test-logs/product-policy.log"
     },
     {
       "label": "Listening flow",
       "script": "tests/listening.mjs",
-      "status": 0,
+      "status": 1,
       "log": ".qa/test-logs/listening-flow.log"
     },
     {
@@ -76,7 +76,7 @@
     {
       "label": "Release readiness",
       "script": "tests/release-ready.mjs",
-      "status": 0,
+      "status": 1,
       "log": ".qa/test-logs/release-readiness.log"
     }
   ]

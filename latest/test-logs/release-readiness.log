@@ -1,12 +1,30 @@
 label=Release readiness
 script=tests/release-ready.mjs
-status=0
+status=1
 
 --- stdout ---
-Rondo release-readiness regression passed.
 
 
 --- stderr ---
+page.click: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator('#transportPlay')
+    - locator resolved to <button type="button" aria-label="Play" id="transportPlay" class="transport-play">…</button>
+  - attempting click action
+    2 × waiting for element to be visible, enabled and stable
+      - element is not visible
+    - retrying click action
+    - waiting 20ms
+    2 × waiting for element to be visible, enabled and stable
+      - element is not visible
+    - retrying click action
+      - waiting 100ms
+    56 × waiting for element to be visible, enabled and stable
+       - element is not visible
+     - retrying click action
+       - waiting 500ms
+
+    at /home/runner/work/Rando/Rando/tests/release-ready.mjs:145:21
 
 
 --- spawn error ---
