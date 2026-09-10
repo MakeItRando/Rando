@@ -31,9 +31,7 @@ function hasRealListeningHistory() {
 
 const previewParams = new URLSearchParams(window.location.search);
 const explicitPreviewState = Boolean(
-  document.body.dataset.preview ||
-  previewParams.get("screen") ||
-  previewParams.has("onboarding"),
+  previewParams.get("screen") || previewParams.has("onboarding"),
 );
 let playbackIdle = !explicitPreviewState && !hasRealListeningHistory();
 let pendingGenreId = null;
@@ -150,7 +148,7 @@ new MutationObserver(() => {
   attributes: true,
   childList: true,
   subtree: true,
-  attributeFilter: ["hidden", "data-view", "data-playback-context"],
+  attributeFilter: ["class", "hidden", "data-view", "data-playback-context"],
 });
 window.addEventListener("hashchange", scheduleSync);
 window.addEventListener("storage", scheduleSync);
