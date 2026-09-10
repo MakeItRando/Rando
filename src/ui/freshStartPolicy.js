@@ -29,7 +29,13 @@ function hasRealListeningHistory() {
   return hasPlayedTrack || hasJourneyTrack || (typeof globalTrack === "string" && globalTrack);
 }
 
-let playbackIdle = !hasRealListeningHistory();
+const previewParams = new URLSearchParams(window.location.search);
+const explicitPreviewState = Boolean(
+  document.body.dataset.preview ||
+  previewParams.get("screen") ||
+  previewParams.has("onboarding"),
+);
+let playbackIdle = !explicitPreviewState && !hasRealListeningHistory();
 let pendingGenreId = null;
 let pickerWasOpen = false;
 let syncQueued = false;
@@ -78,15 +84,26 @@ function syncFirstJourneyPicker() {
     choice.classList.toggle("active", active);
     choice.setAttribute("aria-checked", String(active));
   });
+  if (!picker.contains(document.activeElement)) {
+    (choices.find((choice) => choice.dataset.pickerGenre === selected) || choices[0])
+      ?.focus({ preventScroll: true });
+  }
 
   const confirm = picker.querySelector("[data-confirm-journey]");
   if (!confirm) return;
   confirm.disabled = !selected;
   confirm.setAttribute("aria-disabled", String(!selected));
   const label = selected
-    ? `Open ${GENRE_LABELS.get(selected)} <span>→</span>`
+    ? `Open ${GENRE_LABELS.get(selected)} →`
     : "Choose a genre to continue";
-  if (confirm.innerHTML !== label) confirm.innerHTML = label;
+  if (confirm.textContent.trim() !== label) {
+    confirm.textContent = selected ? `Open ${GENRE_LABELS.get(selected)} ` : label;
+    if (selected) {
+      const arrow = document.createElement("span");
+      arrow.textContent = "→";
+      confirm.append(arrow);
+    }
+  }
 }
 
 function syncPolicy() {
@@ -133,7 +150,7 @@ new MutationObserver(() => {
   attributes: true,
   childList: true,
   subtree: true,
-  attributeFilter: ["class", "hidden", "data-view", "data-playback-context"],
+  attributeFilter: ["hidden", "data-view", "data-playback-context"],
 });
 window.addEventListener("hashchange", scheduleSync);
 window.addEventListener("storage", scheduleSync);
