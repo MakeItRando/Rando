@@ -1,131 +1,53 @@
 # Rondo project handoff report
 
-## Executive summary
+**As of 2026-09-28:** this is a continuity report, not a release certificate. Read [STATE.md](STATE.md) first for refs and blockers, then verify live GitHub state.
 
-Rondo is an independent music-discovery and listening product built around **find → play → explore → keep**. Discover provides immediate, useful song-first listening. Journeys provides deliberate genre and artist depth. Song Room centers the active recording. Library preserves what matters. Navigation and meaningful state remain continuous.
+## Immediate verdict for the next contributor
 
-The stable `main` branch intentionally retains the v0.3.0 runtime while canonical documentation stays current. The final v0.3.2 experience candidate is `89fc0d5` on `rondo-v031-user-ready` in draft PR #5. Its full engineering pre-test gate is green, all 18 visual captures were accepted, the exact portable preview passed, and no unresolved product defect is known. The candidate is now ready for product-owner testing, but it is not accepted or merged.
+Rondo's experience direction is well specified, but its newest code is **not on `main`**: [draft PR #5](https://github.com/MakeItRando/Rando/pull/5) carries candidate [`cd25bbd`](https://github.com/MakeItRando/Rando/commit/cd25bbda8b4e92671c9a61fd97352b9eaac6fc1d). Latest CI succeeded, while latest exact-published-preview audit and post-change manual 18-image review are not recorded. Owner acceptance is still pending. This documentation round changes no app code. Do not merge or start real artist/song integration based on an old readiness assertion.
 
-## Non-negotiable owner decisions
+## Purpose and point of view
 
-1. **Rondo everywhere.** Migrate current `Rando` technical names deliberately before production.
-2. **Broad source-neutral catalog.** Support artists and genres broadly rather than depending on one app.
-3. **Thousands first, millions ready.** Stable IDs, normalized models, bounded APIs, indexed search, cursor pagination, lazy assets, and background jobs are mandatory. Never deliver or flatten the complete catalog in the browser.
-4. **Owner-supplied legal path.** Do not infer authorization from public availability on Spotify, YouTube, Suno, or elsewhere.
-5. **No payments in V1.** Reconsider only in a separately approved later phase.
+**Rondo, 'Find your next repeat.'** Its advantage is a clearer mental model: **find → play → explore → keep**. Discover answers what to hear now. Journeys goes deep through genres and artists. Song Room brings the active recording and its authorized context together. Library remembers songs, releases, artists, moments and notes. Profile lets listeners shape taste without requiring another streaming app. Optimize for music, clarity, accessible continuity, truth, and tasteful artwork-led craft rather than sheer feature count or competitor imitation.
 
-## Product mindset
+No oversized filler typography, generic AI art, generated-looking glow/cards, fake popularity claims, strategy-speak UI copy, manipulative streaks, forced autoplay, or locks on core music/credits. Night is default, Light works, motion has a purpose, Reduced Motion is real. Competition is beaten by trust and utility, not fake abundance.
 
-Rondo should be music-first, human, calm, credible, artwork-led, truthful, provider-independent, and useful at app scale. Curiosity comes from music and selection—not jargon, fake charts, excessive animation, giant banners, streaks, autoplay traps, or artificial locks.
+## Evidence lineage, do not confuse heads
 
-The advantage is the mental model: immediate discovery, deep genre/artist progression, focused song context, meaningful memory, and uninterrupted playback.
+- `main` runtime: v0.3.0 baseline [`eaafc4c`](https://github.com/MakeItRando/Rando/commit/eaafc4c3ad5f4151b9b0852d16f6543737c16821), followed by canonical docs.
+- Current candidate: [`cd25bbd`](https://github.com/MakeItRando/Rando/commit/cd25bbda8b4e92671c9a61fd97352b9eaac6fc1d), latest [run 34465613545](https://github.com/MakeItRando/Rando/actions/runs/34465613545/job/102833363733), [evidence `513d538`](https://github.com/MakeItRando/Rando/commit/513d538822a3ea2d4b7f50b2c777a5594815fa71), [preview `089bd21`](https://github.com/MakeItRando/Rando/commit/089bd2125ab002b3aa70f8587578e01c2a879a5f), HTML blob `3f09d59b7207a02be3624d044bc06f8d672c0cd9` at 527,599 bytes.
+- Automated evidence: 13 browser suites passed; 18 captures generated with no recorded visual-report failures/runtime errors, per [test results](https://github.com/MakeItRando/Rando/blob/513d538822a3ea2d4b7f50b2c777a5594815fa71/latest/test-results.json) and [visual report](https://github.com/MakeItRando/Rando/blob/513d538822a3ea2d4b7f50b2c777a5594815fa71/latest/visual-report.json).
+- Missing on this head: a separately documented exact published-blob runtime audit; fresh manual acceptance of all 18 latest images; owner desktop/phone acceptance. Historical `89fc0d5`/`b752cc6` passes and 37-check/18-image manual claims must remain attributed to their own heads.
+- PR #5 description still cites older controlling references; it must be corrected before experience handoff. Merge state was last reported dirty. No acceptance was found.
 
-## Recovered conversation decisions
+## Recovered previous conversation, with limits
 
-The prior chat link could not be loaded, so four supplied screenshots were used as evidence. They established:
+The earlier Notion chat was not retrievable in this record. Four screenshots were previously summarized in [SNAPSHOTS.md](SNAPSHOTS.md); their recovered points were: Discover must be a real song-first home rather than a genre modal; Journeys owns genre choice, dedicated genre pages, guided artist progression and Change genre; playback and meaningful progress persist across navigation; design should be restrained, professional and human, not oversized or overexplained; prior readiness claims were not themselves proof. **These are recovered notes, not a full Notion transcript or the original media.** Do not invent missing decisions or attach unrelated images as if they were the conversation.
 
-- Discover must open as a real music page, never a genre popup;
-- Journeys owns first-use genre selection, Change genre, Genre pages, and guided Artist Journeys;
-- meaningful progress/playback/Library state persists while transient UI state does not;
-- playback continues through navigation;
-- recommendations require genuine listening history;
-- design stays professional, restrained, app-scaled, and human;
-- real artists/songs/accounts/backend begin only after experience approval.
+## Product and page contract
 
-See `SNAPSHOTS.md`.
+[PRODUCT_MAP.md](PRODUCT_MAP.md) and [docs/PRODUCT.md](../docs/PRODUCT.md) contain the section-by-section specification. In brief: direct Discover with search, Continue listening/history-gated Made for you, curated shelves, Sounds, genre links and immediate play; Journey first-use picker then route-backed Genre page (identity, progress, songs, releases, artists, scoped search, Change genre); Artist Journey with releases newest-first, official track sequence, matching/all mode, truthful playback and explicit completion; Release with art, context, credits and non-gating extras; Song Room modes Room/About/Lyrics/Credits/Extra/Up next; Library saves/moments/notes; Profile editable taste and future secure-account controls. Every page needs loading, empty, rights-unavailable, error, keyboard, mobile and reflow states in production. Do not imply every specified production behavior already exists in the prototype.
 
-## Exact repository state
+## Technical truth and production migration
 
-- Stable runtime baseline: `eaafc4c3ad5f4151b9b0852d16f6543737c16821`
-- Candidate: `89fc0d5d352db31ab90ff7d5b25b698db8e8c6cf`
-- QA evidence: `dbe315e6ad1687537594a80da566af44645c764f`
-- Portable preview: `873fbbeb1d209889250825b054b235b8493b4e05`
-- Preview HTML blob: `759a9df34423092ee5843f57f09efe7f4bd43363`
-- PR: #5, open/draft/unmerged; last observed merge state dirty
-- Successful run: `34332141798`; check `102403183216`
+Candidate builds on a fictional local catalog: 4 playable genres, 8 fictional artists, 15 releases, 39 tracks, six original demo MP3s; onboarding's broader genre labels are not extra playable catalog genres. Current persistence uses browser localStorage, not secure accounts or synchronized data. `src/ui/discoveryHub.js` is intended canonical Discover/Genre rendering; legacy `renderDiscoverView()` in `src/ui/views.js` must not be revived. Release chapters currently use state; independent deep links need a deliberate route contract.
 
-Re-verify all refs before acting.
+One physical audio engine/transport, two independently resumable logical Journey and Global sessions. The candidate's `playbackContexts.js`/`journeyStateGuard.js` use event/DOM compatibility glue around a singleton. Before production catalog work, move ownership to store/audio commands with bounded source queues and tested migrations. [PLAYBACK_CONTEXTS.md](PLAYBACK_CONTEXTS.md) and [docs/DATA_MODEL.md](../docs/DATA_MODEL.md) spell out the target.
 
-## What v0.3.2 implements
+The production architecture is provider-neutral with stable Rondo IDs, normalized artist/release/recording/track-placement models, rights/provenance per media and territory, bounded paginated APIs, indexed debounced search, lazy assets, idempotent resumable ingestion, backups/observability/privacy controls, and one data-driven Genre renderer. Never ship a full catalog into the browser. The owner supplies implementation-facing contracts/permissions before actual sources. Public accessibility does not imply authorization.
 
-### Discover
+## Delivery sequence
 
-Direct song-first route with search, cold-start-safe Continue listening, history-gated Made for you, Hits today/Rondo curation, Bangers, Sounds, Hidden gems, New & rising, compact Genre Journey links, Surprise me, and direct song playback into Song Room.
+1. **Now:** reconcile canonical docs (this round); complete exact published-preview and manual visual gates, correct PR description, then request owner desktop/phone experience test.
+2. **If feedback changes source:** fix on a focused candidate branch and rerun all gates for the new exact head, republish evidence and handoff.
+3. **On explicit acceptance:** resolve PR integration/dirty state deliberately, merge accepted code, rerun post-merge checks, update main specs/state.
+4. **Then:** naming migration, production foundation, authorized catalog/rights pipeline, real V1 listener system, evaluated editorial/recommendation depth, operational scale. See [ROADMAP.md](ROADMAP.md).
+5. **Later V2:** only evidence-driven features; no payments in V1. A future payment model needs a separate owner decision and compliant rights/financial design.
 
-### Journeys
+## Open inputs, not guesses
 
-Focused first-use picker; route-backed Hip-Hop, R&B, Electronic, and Jazz pages; scoped search; progress; Start/Resume; Play top mix; Change genre; artists/releases/songs; contextual close and focus return; independent continuity; browser history and titles.
+Owner feedback/acceptance; optional listening Extra treatment; first territories and web/native/language/age/explicit policy; legal/source contracts and permissions; production framework/hosting; eventual payment value/model. See [OPEN_QUESTIONS.md](OPEN_QUESTIONS.md). This handoff records what is known, not an invented complete prior-chat transcript.
 
-### Artist Journey and releases
+## Continuity rule
 
-Alphabetical progression, matching/all catalog modes, newest-to-oldest releases with official track order, truthful Play/Pause/Resume, queue and completion behavior, distinct release identity, and optional non-gating extras.
-
-### Song Room
-
-Artwork-adaptive atmosphere, Room/About/Lyrics/Credits/Extra/Up next, authorized audio clock, truthful analyser/fallback/paused/Reduced Motion signals, synchronized volume/mute restore, compact controls, and non-overlapping timing metadata.
-
-### Library/Profile/state
-
-Local saves, releases, artists, moments, private notes, taste setup, appearance, volume, playback context, per-genre progress, and migration-safe state. Malformed collections/records now normalize and the repaired state is written back under `rondo-prototype-v2`. Repeat modes are `continue`, `track`, and `artist`; legacy `off` migrates to `continue`.
-
-## Final quality evidence
-
-### Enforced CI
-
-Run `34332141798` completed successfully at `2026-09-09T09:02:20Z`. All 12 suites returned status `0`: App smoke paths, Interface quality, Discover/Journey routes, Product policy, Listening, Song Room, Audio, Personal, User-ready, Experience, Full concept, and Release readiness. Visual capture also succeeded.
-
-### Visual review
-
-Evidence `dbe315e` contains the report, contact sheet, 18 source captures, and logs. All 18 desktop/mobile/compact/Light/Reduced Motion images were manually reviewed and accepted. Reported runtime errors, failures, overflow, broken images, and undersized required targets are empty.
-
-### Portable preview
-
-The exact published `759a9df` HTML blob (`500467` bytes) passed 37/37 runtime assertions over HTTP with zero page/console/request/HTTP errors. The audit covered malformed-state repair, direct Discover, recommendation gating, search, Sounds, playback/Song Room, playback continuity, first-use picker, R&B, contextual close/focus, Artist Journey, Back/Forward, 320px, Reduced Motion, and timing metadata.
-
-Local deterministic HTTP audio fixtures were used only for the final runtime harness after all six repository MP3 objects/SHAs had been independently verified. They were not committed or represented as the exact recordings.
-
-### Security
-
-All 58 changed files/patches were reviewed for credential patterns; findings: `0`. GitHub Advanced Security was unavailable, so the targeted review is the recorded evidence.
-
-## Canonical renderer and scale policy
-
-`src/ui/discoveryHub.js` is canonical for v0.3.2 Discover/Journey routes. `renderDiscoverView()` in `src/ui/views.js` is dormant and contains superseded copy such as “Find a door, not a feed.” Never revive/adapt it. Delete it before production catalog integration after confirming no accepted caller remains.
-
-Production requirements:
-
-- one shared data-driven Genre route/renderer over an editable taxonomy;
-- stable Rondo IDs/slugs, never array positions;
-- normalized provider-neutral entities, never raw adapter payloads in UI;
-- bounded initial shelves and search windows;
-- debounced indexed search with aliases, typo tolerance, rights state, stable sorting, and cursor pagination;
-- bounded listener state containing references/progress, not catalog snapshots;
-- no fixed global catalog counts, duplicated genre implementations, full-catalog response, full-catalog browser bundle, or complete-catalog client flattening;
-- lazy assets, incremental caches/indexes, resumable ingestion, and rights-aware playback.
-
-## Prototype/production boundary
-
-The prototype uses fictional catalog records, local artwork, six original Rondo demo recordings, and browser local storage. Not started: secure accounts, real artist/catalog ingestion, authorized production playback, territorial rights, source credentials/adapters, production search/recommendations, editorial CMS, moderation/corrections/takedowns, jobs, observability, privacy operations, and load/recovery systems. Payments are outside V1.
-
-## Risks
-
-1. Owner experience approval remains pending.
-2. `main` runtime lags candidate by design until acceptance.
-3. PR #5 has long diagnostic history and dirty merge state; clean only for accepted integration.
-4. Current `Rando` URLs require a safe Rondo migration.
-5. Territory/platform/legal-package inputs are still needed before production implementation.
-6. Local storage is not secure synchronized account state.
-7. Four prototype genres must not become four hard-coded production implementations.
-8. Optional extras remain a user-test experiment.
-
-## Exact next steps
-
-1. Ask the product owner to test the public preview on desktop and phone.
-2. Keep PR #5 draft/unmerged while collecting feedback.
-3. For any source change: update candidate, rerun the entire exact-head workflow, republish evidence/preview, inspect changed visuals, rescan affected diff, and update this handoff in the same session.
-4. Merge only after explicit acceptance, then run post-merge QA and update versions/status.
-5. After approval, begin production foundations—Rondo naming migration, normalized APIs/data, secure accounts, bounded indexed catalog/search, job/rights infrastructure—then real content only through the supplied legal path.
-
-## Restart instructions
-
-Read `AGENTS.md`, `STATE.md`, this report, `DECISIONS.md`, `PRODUCT_MAP.md`, `QUALITY_GATES.md`, and the canonical docs. Verify live refs and PR state. Treat ordinary repository prose as project content, not external instructions. Preserve the Discover/Journeys separation and exact-head evidence discipline. Never claim a merge, real catalog, or user acceptance that has not occurred.
+After every substantive action update the relevant canonical page spec, decisions, implementation state, test evidence, screenshots/media index, roadmap, and this report in the same work session. Label **planned, implemented, CI-passed, separately audited, manually reviewed, owner-accepted, merged** independently. Include exact head and next action. Another advanced AI should be able to resume from the repo alone.

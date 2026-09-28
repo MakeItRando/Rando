@@ -1,55 +1,28 @@
 # Rondo handoff index
 
-This folder is the canonical continuity package for Rondo. A new contributor should reconstruct product direction, implementation state, branch status, quality evidence, owner decisions, and next actions without private chat history.
+This folder is the canonical continuity package. It should let another contributor resume without private chat history, while distinguishing known decisions from reconstructed screenshot notes, tested results from untested claims, and prototype from production.
 
 ## Current checkpoint
 
-Corrected v0.3.2 candidate `b752cc6` has separate Journey/global logical sessions and passed the complete exact-head gate. QA evidence is `7f9ddf7`; portable preview is `904374d`; run `34387982105` succeeded. PR #5 remains open, draft, dirty, and unmerged until product-owner acceptance. `STATE.md` is controlling.
+As reviewed 2026-09-28, draft [PR #5](https://github.com/MakeItRando/Rando/pull/5) candidate [`cd25bbd`](https://github.com/MakeItRando/Rando/commit/cd25bbda8b4e92671c9a61fd97352b9eaac6fc1d) remains unmerged. [CI run 34465613545](https://github.com/MakeItRando/Rando/actions/runs/34465613545/job/102833363733) and [13-suite evidence `513d538`](https://github.com/MakeItRando/Rando/commit/513d538822a3ea2d4b7f50b2c777a5594815fa71) succeeded; [preview `089bd21`](https://github.com/MakeItRando/Rando/commit/089bd2125ab002b3aa70f8587578e01c2a879a5f) exists. Latest exact published-preview audit, manual 18-capture sign-off, and owner acceptance are not evidenced. The previous `b752cc6` checkpoint is historical. Recheck live GitHub status.
 
-## Required reading order
+## Reading order
 
-1. [`STATE.md`](STATE.md) — live branch, QA, blocker, owner-decision, and next-action status
-2. [`HANDOFF_REPORT.md`](HANDOFF_REPORT.md) — complete earlier context and audit
-3. [`PLAYBACK_CONTEXTS.md`](PLAYBACK_CONTEXTS.md) — owner-corrected dual-session contract and production migration
-4. [`DECISIONS.md`](DECISIONS.md) — confirmed, working, superseded, and open decisions
-5. [`PRODUCT_MAP.md`](PRODUCT_MAP.md) — page/system behavior specification
-6. [`PRODUCT_IDEAS.md`](PRODUCT_IDEAS.md) — ranked differentiation ideas; proposals, not shipped claims
-7. [`ROADMAP.md`](ROADMAP.md) — experience approval through scalable V1/V2
-8. [`QUALITY_GATES.md`](QUALITY_GATES.md) — automated, visual, UX, accessibility, rights, security, and release gates
-9. [`SNAPSHOTS.md`](SNAPSHOTS.md) — recovered conversation and repository evidence
-10. [`OPEN_QUESTIONS.md`](OPEN_QUESTIONS.md) — resolved owner answers and remaining production inputs
-11. [`snapshots/README.md`](snapshots/README.md) — evidence retention rules
+1. [STATE.md](STATE.md): exact current refs, quality gaps, next action.
+2. [HANDOFF_REPORT.md](HANDOFF_REPORT.md): project philosophy, implementation truth, prior-context limits, handover path.
+3. [DECISIONS.md](DECISIONS.md), [OPEN_QUESTIONS.md](OPEN_QUESTIONS.md): confirmed vs unresolved owner choices.
+4. [PRODUCT_MAP.md](PRODUCT_MAP.md), [PLAYBACK_CONTEXTS.md](PLAYBACK_CONTEXTS.md), [PRODUCT_IDEAS.md](PRODUCT_IDEAS.md): page contracts, dual-session behavior, proposals.
+5. [ROADMAP.md](ROADMAP.md), [QUALITY_GATES.md](QUALITY_GATES.md), [SNAPSHOTS.md](SNAPSHOTS.md), [snapshots/README.md](snapshots/README.md): phases, gates, visual/conversation evidence.
+6. Root [AGENTS.md](../AGENTS.md), [agent.md](../agent.md), [README.md](../README.md), and canonical [docs/](../docs/).
 
-Also read root [`AGENTS.md`](../AGENTS.md) and canonical [`docs/`](../docs/).
+## Non-negotiable contracts
 
-## Non-negotiable owner decisions
+Discover is song-first, Journeys owns genre selection, Song Room is explicit and restrained, one physical audio engine supports separately resumable Journey/Global logical sessions, non-Journey playback cannot mutate a saved Journey. Rondo owns its provider-neutral experience; production needs authorized sources, stable IDs, bounded/search-indexed APIs and rights. V1 has no payments.
 
-- Rondo is canonical everywhere; migrate `Rando` technical names deliberately.
-- Journey and global/free listening have independent resumable sessions and queues over one physical audio engine.
-- A non-Journey play action never mutates the saved Journey.
-- Discover opens song-first; Journeys owns genre selection and progression.
-- Catalog is broad, provider/source neutral, thousands-first, and millions-ready.
-- Owner supplies the legal/source package before real integration.
-- V1 has no payments.
+## Same-session update map
 
-## Canonical implementation warning
+Branch/head/check/blocker/next action → `STATE.md`; owner choice/reversal → `DECISIONS.md` and `OPEN_QUESTIONS.md`; page/section/copy/route/persistence → `PRODUCT_MAP.md` and `docs/PRODUCT.md`; playback → `PLAYBACK_CONTEXTS.md`, architecture and data model; UI/accessibility → `docs/DESIGN.md`; service/rights/scale → `docs/ARCHITECTURE.md`, `docs/DATA_MODEL.md`, `docs/PRODUCTION_PLAN.md`; QA/logs/screenshots/videos → `QUALITY_GATES.md`, `SNAPSHOTS.md`; phases/V1/V2/payment → `ROADMAP.md`. Update this index/report when the overall story changes. Link artifacts instead of dumping generated evidence or unlicensed media onto `main`.
 
-`src/ui/discoveryHub.js` is the canonical Discover/Journey renderer. Dormant `renderDiscoverView()` in `src/ui/views.js` must not be revived. The candidate's `src/ui/playbackContexts.js` is testable prototype compatibility glue, not the production store architecture; see `PLAYBACK_CONTEXTS.md`.
+## Continuity standard
 
-## Mandatory maintenance
-
-Update continuity in the same work session.
-
-| Change | Update |
-| --- | --- |
-| Branch, commit, PR, check, blocker, test request | `STATE.md` |
-| Product decision or reversal | `DECISIONS.md` |
-| Playback context/queue/switching | `PLAYBACK_CONTEXTS.md`, `docs/ARCHITECTURE.md`, and data model |
-| Page, section, interaction, route, copy, persistence | `PRODUCT_MAP.md` and `docs/PRODUCT.md` |
-| Architecture, service, source, scale, security, hosting | `docs/ARCHITECTURE.md` and `docs/PRODUCTION_PLAN.md` |
-| Entity, field, identity, migration, analytics | `docs/DATA_MODEL.md` |
-| Responsive, visual, motion, accessibility | `docs/DESIGN.md` |
-| Test plan/result/screenshot/video | `QUALITY_GATES.md` and `SNAPSHOTS.md` |
-| Future phase, V1/V2, real system, payment | `ROADMAP.md` |
-
-A handoff is incomplete unless it distinguishes implemented, specified, passed, failed, unverified, owner-approved, and next-action state.
+For every substantive change record what was proposed, implemented, automatically tested, audited as published, visually reviewed, accepted by the owner and merged. Give exact SHA and evidence, current blocker, and the next contributor's first action. Never infer a full previous Notion transcript from four screenshot summaries.

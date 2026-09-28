@@ -1,132 +1,39 @@
-# Rondo roadmap: prototype, scalable V1, and V2
+# Rondo roadmap: experience gate, production V1, then V2
 
-Dates remain intentionally open until the product owner confirms team capacity, launch territory, platform scope, and the implementation-facing legal/source package.
+Dates are open pending team capacity, launch territory/platform, and owner-provided implementation-facing legal/source package. Every phase's scope/decision/status change must update this file plus [STATE.md](STATE.md) and relevant docs in the same session.
 
-## Confirmed roadmap inputs
+## Phase 0: experience approval (current)
 
-- Rondo is canonical everywhere; migrate existing `Rando` technical names deliberately.
-- The catalog should cover artists and genres broadly, independent of one source app.
-- Build for thousands of songs at initial rollout and millions without changing the product model.
-- The product owner supplies the legal acquisition/source plan before real ingestion.
-- V1 has no payments.
+Latest candidate `cd25bbd` on [draft PR #5](https://github.com/MakeItRando/Rando/pull/5) passed local-preview [CI run 34465613545](https://github.com/MakeItRando/Rando/actions/runs/34465613545/job/102833363733): 13 browser suites and automated visual capture. QA evidence [`513d538`](https://github.com/MakeItRando/Rando/commit/513d538822a3ea2d4b7f50b2c777a5594815fa71), preview [`089bd21`](https://github.com/MakeItRando/Rando/commit/089bd2125ab002b3aa70f8587578e01c2a879a5f). Latest exact published-preview audit, latest manual visual sign-off and owner acceptance remain unrecorded. Finish those, reconcile PR body, request desktop/phone experience test, address feedback with new exact-head QA if source changes. Only with explicit approval and clean integration plan merge to `main`, run post-merge gate and update handoff. This documentation-only pass does not move the runtime.
 
-## Phase 0 — Experience approval
+## Phase 1: secure foundation
 
-**Goal:** validate v0.3.2 before real-system complexity begins.
+Deliberately migrate `Rando` technical naming to Rondo; choose framework/hosting based on actual platform/rights needs. Freeze normalized Rondo API/adapter contracts; secure accounts/sessions/recovery, versioned preferences/Journey/Library sync, relational/domain and object/CDN storage, search index, jobs/queues, migrations, environments/secrets, backups, observability, rate limits, feature flags, privacy/security/accessibility/recovery baselines. Preserve accepted UI contract while moving playback context from prototype DOM compatibility layers into store/audio commands. **Exit:** authenticated empty shell, safe persistence, indexed empty catalog, ingestion skeleton, operating controls.
 
-### Engineering status
+## Phase 2: authorized real artists/releases/songs
 
-Completed for candidate `89fc0d5`:
+First obtain owner's source/authorization package (source types, contracts, territories/windows, delivery, storage/playback constraints, credits/attribution/reporting, takedown/corrections and API restrictions). Build replaceable provider-neutral adapters, resumable/idempotent ingestion, entity resolution, aliases, recordings vs track placements/editions, credits and provenance, rights windows and request-time playback authorization, indexed debounced cursor search, staged publication and removal. Start controlled thousands, design for millions. Remove dormant Discover renderer before catalog integration; one data-driven Genre page and bounded client APIs. **Exit:** authorized catalog can be ingested, searched, browsed, played where allowed, corrected and removed safely. Public URL is not a license.
 
-- clean install, high-severity audit, preview build, static/unit checks;
-- all 12 browser suites and enforced visual step green in run `34332141798`;
-- 18/18 final captures manually accepted;
-- exact portable-preview 37-check runtime audit green;
-- 58-file credential-pattern review with zero findings;
-- candidate/evidence/preview/PR/handoff reconciled.
+## Phase 3: V1 listener product
 
-### Remaining
+Real bounded Discover/editorial shelves, genuine-history recommendations, synchronized Genre/Artist Journeys, real Artist/Release pages, authorized Song Room media/lyrics/context, private synced Library/moments/notes, secure taste onboarding, accessibility/mobile/web quality, consented analytics, export/deletion, support/moderation and load/recovery tests. No payment system, public social feed, follower counts, fake AI DJ, manipulative streaks or unauthorised media. **Exit:** a useful, trustworthy `find → play → explore → keep` listener product with territorial rights enforcement.
 
-- product owner tests desktop and phone experience;
-- address any feedback with a new exact-head full gate;
-- obtain explicit acceptance;
-- merge accepted candidate into `main` with clean integration history;
-- update version/status/handoff and run the post-merge gate.
+## Phase 4: recommendation and editorial depth
 
-**Exit:** explicit owner approval plus green exact-head and post-merge evidence.
+Explainable editorial and content similarity (genre/style/credits/era/relationships) plus permissioned listening signals; evaluate diversity/freshness and avoid fatigue, disclose reasons truthfully. Source-labeled trends require real measurements. Reviewed artist/label context may follow verification. Do not fabricate personalized claims for cold-start users.
 
-## Phase 1 — Production and scale foundation
+## Phase 5: catalog/operational maturity
 
-**Goal:** create secure infrastructure while preserving the accepted UI contract.
+Horizontal search/media/ingestion scaling, incremental indexing, territorial updates, edition/duplicate resolution, source conflict/freshness dashboards, SLOs, quotas/backpressure/dead-letter recovery, abuse controls, incident exercises and genre/region/accessibility quality sampling. Keep high-volume events separate from bounded listener state.
 
-- complete the Rando-to-Rondo technical naming migration;
-- choose framework/hosting from requirements;
-- freeze normalized Rondo API and adapter contracts;
-- provision relational/domain storage, search index, object storage/CDN, jobs, migrations, environments, secrets, backups, and observability;
-- implement secure identity, sessions, devices, and recovery;
-- migrate preferences/Journey state to versioned server data;
-- require bounded APIs, cursor pagination, lazy assets, idempotent jobs, rate limits, feature flags, and reversible deployments;
-- establish privacy, security, accessibility, load, and incident-response baselines.
+## V2 opportunities, not commitments
 
-**Scale invariant:** clients receive small route/shelf/search windows and bounded listener references. They never receive, flatten, cache, or persist the complete catalog.
+Evidence-driven artist/label tools, deeper liner/edition context, licensed offline playback, native apps if web demand proves need, multilingual UI/authorized lyric translation, accessibility profiles, regional editorial, listening-supportive collaboration, device handoff, richer private moments, explainable Smart Queue and credits graph. Evaluate impact and rights before priority. See [PRODUCT_IDEAS.md](PRODUCT_IDEAS.md).
 
-**Exit:** authenticated empty product shell, safe persistence, indexed empty catalog, ingestion skeleton, and operational controls.
+## Payments: explicitly beyond V1
 
-## Phase 2 — Real artists, releases, songs, and rights
+Do not prebuild checkout, subscriptions, tips, merch checkout, artist billing, entitlements, taxes, refunds, disputes or payouts. A separate owner-approved decision must define actual paid value, territories/currencies, platform-store rules, cancellations/refunds, artist obligations, rights/accounting and entitlement behavior. Only then design compliant provider-backed server-verified, auditable, idempotent flows without dark patterns.
 
-**Goal:** replace fictional records through the owner's authorized path.
+## Stop rules
 
-- translate the legal/source package into connector, territory, storage, playback, attribution, reporting, correction, and takedown rules;
-- implement replaceable adapters rather than hard-coding Spotify, YouTube, Suno, or another app into product logic;
-- build resumable ingestion, validation, normalization, deduplication, merge/split, correction, and staged publication;
-- represent artists, aliases, releases, editions, recordings, track placements, credits, identifiers, genres/styles, artwork, lyrics, and territorial availability;
-- add rights windows, provenance, attribution, takedown, and audit records;
-- implement rights-aware playback authorization;
-- build indexed, debounced, typo-tolerant, alias-aware, cursor-paginated search;
-- prove controlled batches, then scale from thousands toward millions.
-
-Before this phase, remove the dormant `renderDiscoverView()` legacy renderer. Production Discover and every Genre route must use one normalized, data-driven implementation—never duplicated provider- or genre-specific pages.
-
-**Exit:** authorized real content can be ingested, searched, browsed, played where allowed, corrected, and removed safely.
-
-## Phase 3 — V1 listener product
-
-**Goal:** launch `find → play → explore → keep` without payment complexity.
-
-- real Discover with bounded editorial shelves and source-labeled trends;
-- truthful personalization only after genuine history;
-- server-synced Genre Journeys over an editable taxonomy;
-- real Artist and Release pages;
-- authorized Song Room playback, credits, lyrics/context where permitted;
-- synchronized Library for songs, releases, artists, moments, and private notes;
-- explainable onboarding/taste controls;
-- accessible responsive web experience;
-- consented analytics and product-quality dashboards;
-- privacy export/deletion, support, moderation, corrections, and takedowns;
-- catalog/search/playback load tests and recovery drills.
-
-**V1 exclusions:** all payments; social feed; public comments; follower counts; collaborative listening; fake AI DJ; manipulative streaks; unsupported live-analysis claims; and content outside the supplied legal path.
-
-## Phase 4 — Recommendation and editorial depth
-
-- editorial collections and genre experts;
-- content similarity using genre, style, credits, era, and release relationships;
-- personal continuation using plays, saves, skips, completed Journeys, and explicit controls;
-- “Because you liked…” only after genuine history;
-- bounded exploration/diversity/freshness controls;
-- offline ranking evaluation and human editorial review;
-- reviewed artist/label editorial submissions.
-
-**Exit:** recommendations are useful, explainable, diverse, and never fabricated.
-
-## Phase 5 — Catalog and operational maturity
-
-- horizontal ingestion/search/API/media scaling;
-- incremental reindexing and cache invalidation;
-- bulk rights/territory updates;
-- duplicate/edition resolution and audit history;
-- source freshness/conflict/attribution dashboards;
-- SLOs for search, playback authorization, ingestion, and takedowns;
-- quotas, backpressure, dead-letter recovery, abuse controls, and incident drills;
-- quality sampling across genres, regions, scripts, devices, and accessibility states.
-
-## Deferred beyond V1 — payments
-
-Do not prebuild checkout, subscriptions, tips, artist billing, payment entitlements, taxes, refunds, disputes, or payouts. A later owner-approved phase must first define value, territories/currencies, platform rules, cancellation/refunds, artist obligations, and entitlement behavior, then use compliant providers and auditable idempotent flows without dark patterns.
-
-## V2 opportunities
-
-Only prioritize after V1 evidence: verified artist/label tools, deeper editions/liner context, offline listening where rights permit, native apps if web use proves need, multilingual UI/licensed lyric translation, accessibility profiles, regional editorial programming, listening-supportive collaboration, and a separately approved payment model.
-
-## Guardrails
-
-- Do not start real catalog/backend work before Phase 0 acceptance.
-- Do not implement a source adapter before the legal/source package.
-- Do not infer authorization from public availability.
-- Do not load/render/flatten an unbounded catalog in the browser.
-- Do not use fixed global catalog counts as architecture.
-- Do not duplicate Genre page code or revive the legacy Discover renderer.
-- Do not claim live charts without a source and timestamp.
-- Do not personalize without real signals and evaluation.
-- Do not add payments to V1.
-- Update this file whenever scope, order, scale assumptions, or owner decisions change.
+No real catalog/backend integration before Phase 0 acceptance; no source adapter before legal package; no unbounded browser catalog or hard-coded global counts; no duplicate Genre page code or legacy Discover revival; no live chart without sourced timestamp; no V1 payments. Update this roadmap whenever order, scope or assumptions change.

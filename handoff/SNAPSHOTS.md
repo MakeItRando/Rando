@@ -1,134 +1,56 @@
 # Conversation and visual snapshot index
 
-## Source note
+## Provenance and limits
 
-The previous chat link supplied on 2026-09-09 could not be loaded as a Notion page/session, so four user-supplied screenshots were treated as state-recovery evidence. Their product decisions remain preserved below. Repository-native final QA evidence now supplements those screenshots.
+The previous Notion conversation was not retrievable during the earlier handoff. Four user-supplied screenshots were interpreted in prior repository notes; the original uploaded image bytes are not present in this Git tree. The notes below are a **recovery summary**, not a transcript or proof of every topic discussed. Do not fabricate quotes, decisions, images or videos. Additional verified conversation assets may be added later with date, source, permission, and exact file/ref.
 
-## Recovered snapshot 1 — Earlier readiness claim
+## Recovered decisions from four screenshots
 
-Visible context:
+1. **Earlier readiness claim:** user still saw unchanged Play artist labels and overexplained concepts; Song Room needed to feel more active and professional. Treat prior 'ready' language as historical, not proof.
+2. **Discover correction:** user rejected genre-popup home, giant type, excessive animation and generated-looking decoration. Discover should be a useful song-first page with search, playback, suggestions, hits, bangers, moods and genre links; Journeys is distinct.
+3. **Journeys information architecture:** genre choice belongs in Journeys, each genre has a dedicated page, no permanent Journey dropdown; first visit picks, return resumes, Change genre stays accessible. Preserve progress and playback. No fake charts, streaks or artificial gates.
+4. **Route-backed pages:** distinct accessible SPA URLs, titles/landmarks and Back/Forward with a persistent player. Routing is not itself a bundle-size optimization.
 
-- the user asked for final touches before real artists, songs, and the real system;
-- Play artist still appeared unchanged and some concepts felt overexplained;
-- Song Room needed to feel more active and professional;
-- an earlier assistant claimed readiness.
+See [DECISIONS.md](DECISIONS.md) and [PRODUCT_MAP.md](PRODUCT_MAP.md) for decisions rather than treating screenshots as complete specifications.
 
-Controlling interpretation: that readiness claim is historical. Exact-head QA and current handoff evidence determine readiness.
+## Current `cd25bbd` candidate evidence
 
-## Recovered snapshot 2 — Discover and design correction
+- [Workflow run 34465613545](https://github.com/MakeItRando/Rando/actions/runs/34465613545/job/102833363733), [run summary](https://github.com/MakeItRando/Rando/blob/513d538822a3ea2d4b7f50b2c777a5594815fa71/latest/run-summary.txt), [13-suite results](https://github.com/MakeItRando/Rando/blob/513d538822a3ea2d4b7f50b2c777a5594815fa71/latest/test-results.json).
+- [Visual report](https://github.com/MakeItRando/Rando/blob/513d538822a3ea2d4b7f50b2c777a5594815fa71/latest/visual-report.json), [contact sheet](https://github.com/MakeItRando/Rando/blob/513d538822a3ea2d4b7f50b2c777a5594815fa71/latest/visual-contact-sheet.jpg), [source captures](https://github.com/MakeItRando/Rando/tree/513d538822a3ea2d4b7f50b2c777a5594815fa71/latest/screenshots).
+- [Published test HTML](https://github.com/MakeItRando/Rando/blob/089bd2125ab002b3aa70f8587578e01c2a879a5f/rondo-v031-preview.html): Git blob `3f09d59b7207a02be3624d044bc06f8d672c0cd9`, 527,599 bytes. [Preview URL](https://htmlpreview.github.io/?https://raw.githubusercontent.com/MakeItRando/Rando/rondo-v031-preview/rondo-v031-preview.html).
+- Automated report recorded 18 captures and zero listed runtime/visual failures. **No fresh manual 18/18 sign-off or independently recorded exact published-blob HTTP audit for this candidate has been found.**
 
-- Discover had become a genre-choice popup; the user wanted a real song-first page with useful search, direct playback, suggestions, hits, bangers, moods, and genre exploration.
-- Discover and guided Journeys must be distinct.
-- The user rejected giant type, excessive animation, generated-looking decoration, and product-strategy copy.
+## Latest capture matrix
 
-Decision: Discover opens directly; music/artwork/selection create interest; motion and copy stay restrained.
+Each filename below is available under the [exact `513d538` screenshots tree](https://github.com/MakeItRando/Rando/tree/513d538822a3ea2d4b7f50b2c777a5594815fa71/latest/screenshots), and can be linked by appending its filename to that tree URL. Do not mark manual status accepted until inspected.
 
-## Recovered snapshot 3 — Corrected information architecture
+| # | Filename | State | Manual result |
+| --- | --- | --- | --- |
+| 01 | 01-desktop-discover.jpg | Desktop direct Discover | Pending |
+| 02 | 02-desktop-discover-lower.jpg | Desktop lower Discover | Pending |
+| 03 | 03-desktop-discover-sound.jpg | Desktop Sounds | Pending |
+| 04 | 04-desktop-journey-picker.jpg | Desktop first-use picker | Pending |
+| 05 | 05-desktop-hiphop-journey.jpg | Desktop Genre page | Pending |
+| 06 | 06-desktop-hiphop-songs.jpg | Desktop songs | Pending |
+| 07 | 07-desktop-artist-journey.jpg | Desktop artist | Pending |
+| 08 | 08-desktop-song-room-about.jpg | Desktop About | Pending |
+| 09 | 09-desktop-song-room-lyrics.jpg | Desktop Lyrics | Pending |
+| 10 | 10-desktop-song-room-queue.jpg | Desktop Up next | Pending |
+| 11 | 11-desktop-light-discover.jpg | Light Discover | Pending |
+| 12 | 12-mobile-discover.jpg | 390px Discover | Pending |
+| 13 | 13-mobile-journey-picker.jpg | 390px picker | Pending |
+| 14 | 14-mobile-rnb-journey.jpg | 390px R&B Genre | Pending |
+| 15 | 15-mobile-rnb-artist.jpg | 390px artist | Pending |
+| 16 | 16-mobile-change-genre.jpg | 390px Change genre | Pending |
+| 17 | 17-compact-discover.jpg | 320px Discover | Pending |
+| 18 | 18-reduced-motion-song-room.jpg | Reduced Motion modal | Pending |
 
-- Genre selection belongs in Journeys.
-- Each genre opens its own page.
-- No permanent Journey genre dropdown.
-- First use shows a focused picker; returning use resumes; Change genre remains available.
-- Meaningful progress persists independently.
+The main handoff keeps references and interpretation; generated screenshots stay in the evidence branch, not duplicated on `main`. Prototype [audio assets](https://github.com/MakeItRando/Rando/tree/rondo-v031-preview/assets/audio), [artist art](https://github.com/MakeItRando/Rando/tree/rondo-v031-preview/assets/artists), and [release art](https://github.com/MakeItRando/Rando/tree/rondo-v031-preview/assets/covers) are not previous-chat attachments.
 
-Accepted supporting direction: continuous playback, Resume Journey, truthful history-based recommendations, and no streaks, fake charts, autoplay traps, giant banners, or excessive locking.
+## Historical evidence (not current sign-off)
 
-## Recovered snapshot 4 — Route-backed pages
+Earlier head `89fc0d5` had 12 passing browser suites, 18/18 manual captures and a 37-check exact preview audit in its old evidence. Correction `b752cc6` had [run 34387982105](https://github.com/MakeItRando/Rando/actions/runs/34387982105/job/102588986970) and an exact preview check for its own older blob. Later `cd25bbd` superseded both. Never copy earlier manual/exact-preview claims into current-head QA.
 
-The user accepted page-like SPA routes for accessibility/navigation continuity. Routing provides distinct URLs, titles, landmarks, and Back/Forward while preserving the shared player. It does not by itself reduce bundle size; production performance depends on bounded APIs, pagination, lazy assets, caching, and code splitting.
+## Future snapshot/evidence template
 
-## Final v0.3.2 repository evidence
-
-### Exact references
-
-- Candidate: `89fc0d5d352db31ab90ff7d5b25b698db8e8c6cf`
-- Successful run: `34332141798`
-- Evidence: `dbe315e6ad1687537594a80da566af44645c764f`
-- Preview: `873fbbeb1d209889250825b054b235b8493b4e05`
-- Preview HTML blob: `759a9df34423092ee5843f57f09efe7f4bd43363`
-- PR #5: open, draft, unmerged
-
-### Evidence files
-
-On `rondo-v032-qa-evidence/latest`:
-
-- `run-summary.txt` — all 12 suites plus visual step successful;
-- `test-results.json` — every browser suite status `0`;
-- `test-logs/` — per-suite logs;
-- `visual-report.json` — 18 captures, no failures/runtime errors/overflow/broken images/undersized targets;
-- `visual-contact-sheet.jpg` — complete visual matrix;
-- `screenshots/` — source captures.
-
-### Final 18-capture matrix
-
-| # | File | Viewport | State | Manual result |
-| --- | --- | --- | --- | --- |
-| 01 | `01-desktop-discover.jpg` | 1440×900 | Direct Discover | Accepted |
-| 02 | `02-desktop-discover-lower.jpg` | 1440×900 | Lower Discover | Accepted |
-| 03 | `03-desktop-discover-sound.jpg` | 1440×900 | Sounds expanded | Accepted |
-| 04 | `04-desktop-journey-picker.jpg` | 1440×900 | First-use picker | Accepted |
-| 05 | `05-desktop-hiphop-journey.jpg` | 1440×900 | Hip-Hop Genre page | Accepted |
-| 06 | `06-desktop-hiphop-songs.jpg` | 1440×900 | Hip-Hop songs | Accepted |
-| 07 | `07-desktop-artist-journey.jpg` | 1440×900 | Artist Journey | Accepted |
-| 08 | `08-desktop-song-room-about.jpg` | 1440×900 | Song Room About | Accepted |
-| 09 | `09-desktop-song-room-lyrics.jpg` | 1440×900 | Song Room Lyrics | Accepted |
-| 10 | `10-desktop-song-room-queue.jpg` | 1440×900 | Song Room Up next | Accepted |
-| 11 | `11-desktop-light-discover.jpg` | 1440×900 | Light Discover | Accepted |
-| 12 | `12-mobile-discover.jpg` | 390×844 | Mobile Discover | Accepted |
-| 13 | `13-mobile-journey-picker.jpg` | 390×844 | Mobile picker | Accepted |
-| 14 | `14-mobile-rnb-journey.jpg` | 390×844 | Mobile R&B Genre page | Accepted |
-| 15 | `15-mobile-rnb-artist.jpg` | 390×844 | Mobile R&B Artist Journey | Accepted |
-| 16 | `16-mobile-change-genre.jpg` | 390×844 | Mobile Change genre/directory | Accepted |
-| 17 | `17-compact-discover.jpg` | 320×700 | Compact Discover | Accepted |
-| 18 | `18-reduced-motion-song-room.jpg` | 390×844 | Reduced Motion Song Room | Accepted |
-
-**Manual acceptance:** `18/18`. No candidate source change was warranted by the final visual review.
-
-## Exact portable-preview runtime audit
-
-The exact published HTML Git blob was extracted without modification and served over HTTP. Its canonical size is `500467` bytes; extraction tools that append a newline produce a non-identical file and must not be used for identity checks.
-
-The 37-check audit passed:
-
-- malformed raw local state repaired and persisted;
-- direct Discover and cold-start recommendation gating;
-- Discover search and Sounds expansion;
-- real playback path and Song Room;
-- playback continuity through navigation;
-- first-use Journey picker, R&B route, contextual Change genre close, and focus return;
-- Artist Journey plus browser Back/Forward;
-- 320px no-overflow checks;
-- Reduced Motion static signal;
-- non-overlapping Song Room time/metadata columns;
-- zero page, console, request, or HTTP errors.
-
-Local audit-only MP3 fixtures were used under the six exact relative filenames to keep browser playback deterministic after sandbox resets. They were not committed and are not repository evidence for the recordings themselves. The six preview-branch audio objects and their exact SHAs were independently confirmed:
-
-| File | Blob SHA |
-| --- | --- |
-| `afterimage.mp3` | `172c59614f12bbf2b844bd0fcceb8cb407d8dd11` |
-| `blue-hour.mp3` | `74167eb7f3df55f875991f863cd6a3a956d5cb46` |
-| `continuum.mp3` | `566a4608ff5496a153079b7290b946ee599325ad` |
-| `first-light-again.mp3` | `029143c6090c84c8f6098a14ee834bccf3cd044a` |
-| `night-transit.mp3` | `2643293d06f4aaaeb843a823362693cc4331b95c` |
-| `open-circuit.mp3` | `d8e8b61973243ea607a6318bbb68404be2ab1826` |
-
-## Security evidence
-
-A targeted review covered all 58 PR files and patches. Credential-pattern findings: `0`. GitHub Advanced Security was unavailable, so no paid feature was enabled and no unavailable result was represented as coverage.
-
-## Future evidence template
-
-```text
-File:
-Date/time:
-Branch and exact SHA:
-Build/preview URL and blob:
-Route and state:
-Viewport/device:
-Appearance and motion preference:
-What the evidence proves:
-Known issue visible:
-Related test/run:
-Manual reviewer result:
-```
+Date and author; branch and exact candidate SHA; artifact URL/blob/bytes; page/state/device/viewport/theme/motion; what it visibly proves and cannot prove; runtime/test/run link; reviewer and manual result; issue/decision and next action. Screenshots cannot prove interaction or error-free runtime; videos require rights and an accessible playback/transcript pointer.
