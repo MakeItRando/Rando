@@ -1,117 +1,88 @@
 # Rondo production-system plan
 
-This plan begins only after v0.3.2 experience approval. It is architecture direction, not a framework/provider commitment.
+This plan begins only after experience approval, accepted-code integration and the required quality gates. It is architecture direction, not a framework/provider commitment.
 
 ## Confirmed direction
 
-- Rondo is canonical everywhere; migrate existing `Rando` technical names safely.
-- Catalog is broad across artists/genres/legitimate sources and is not tied to one app.
-- Start with thousands of songs and scale to millions without replacing domain/client contracts.
-- Product owner supplies the legal acquisition/source-integration package before real content work.
-- V1 has no payments.
+Rondo is canonical everywhere; migrate existing `Rando` technical names deliberately. Support a broad legitimate catalog rather than one source app. Start with thousands of songs, scale to millions without replacing domain/client contracts. The product owner supplies an implementation-facing legal/source package before real content integration. **V1 has no payments.**
 
-## Goal
+## Goal and boundary
 
-Replace fictional static catalog/browser-only state with a secure, rights-aware system for real artists, releases, songs, accounts, search, playback, recommendations, editorial discovery, and operations without changing Rondo's accepted product identity.
-
-## Boundary
+Replace fictional static catalog/browser-only state with a secure rights-aware system for real artists, releases, songs, accounts, search, playback, recommendations, editorial discovery and operations without losing the accepted product identity.
 
 ```text
 Web/mobile client
   → Rondo backend-for-frontend
-    → identity/profile
+    → identity/profile and library/Journey state
     → catalog/search
     → rights/playback authorization
     → editorial/recommendation
-    → library/Journey
     → analytics/events
     → ingestion jobs + authorized adapters
     → future payment boundary (not V1)
 ```
 
-Client contains no provider secrets, licensing decisions, unbounded payloads, or complete catalog. Adapters normalize before product code.
+No provider secrets, licensing decisions, unbounded payloads or complete catalog in client. Normalize in adapters before product code.
 
 ## Pre-production cleanup
 
 After candidate acceptance and before real catalog integration:
 
-1. integrate/rerun accepted v0.3.2;
-2. remove dormant `renderDiscoverView()` from `src/ui/views.js` after confirming no caller;
-3. keep `src/ui/discoveryHub.js` behavior as the canonical Discover contract while refactoring it behind normalized APIs;
-4. replace hard-coded four-genre data/routes with one shared data-driven taxonomy/renderer;
-5. freeze stable Rondo IDs, pagination envelopes, listener-state schema, route contracts, and adapter ports;
-6. complete Rando-to-Rondo technical migration plan.
+1. Integrate accepted candidate and rerun post-merge QA; reconcile the draft PR's dirty merge state and exact-head evidence before merge.
+2. Remove old `renderDiscoverView()` from `src/ui/views.js` after confirming callers and preserve `src/ui/discoveryHub.js` behavior behind normalized services.
+3. Move Journey/Global session ownership out of `src/ui/playbackContexts.js`/`journeyStateGuard.js` DOM/event compatibility glue into first-class store/audio controller commands; one physical engine, two logical resumable sessions and source-derived bounded queues. Migrate old local keys and test both restorations.
+4. Replace fixed four-genre data/routes with one shared data-driven taxonomy/renderer, not per-genre code.
+5. Define deep-linkable Release route deliberately if required: current chapter changes state rather than proving independent hash navigation.
+6. Freeze stable Rondo IDs, bounded pagination envelopes, listener-state schema, route contracts and adapter ports; plan technical `Rando`→Rondo migration.
 
 ## Catalog/source ingestion
 
-Concrete adapters come only from the owner's legal plan. Public availability on Spotify, YouTube, Suno, or another app does not authorize scraping/copying/storage/playback.
+Concrete adapters come only from the owner's legal package. Public availability on Spotify, YouTube, Suno or another app does not authorize copying, scraping, storing or playback. Every asset needs stable Rondo identity, replaceable external IDs, provenance/owner, territory/window, separate playback/preview/metadata/art/lyrics permissions, attribution/reporting and correction/takedown history. Ingestion must be idempotent/resumable with queues, retries/backpressure, dead letters/audit, bulk validation, staged publication, deduplication, aliases, merge/split, editions, versions, sourced credits and incremental index/cache updates.
 
-Every asset needs stable Rondo identity, replaceable external IDs, provenance/owner, territory/window, separate playback/preview/metadata/art/lyrics permissions, attribution/reporting, correction/conflict/takedown history.
+## Scale, search and discovery
 
-Ingestion is idempotent/resumable and supports queues/retries/backpressure/dead letters/audit, bulk validation, staged publication, deduplication, aliases, merge/split, editions, versions, sourced credits, and incremental index/cache updates.
+Bounded APIs with conservative defaults/enforced maximums, opaque cursor/stable deterministic sorting, narrow list entities with separate detail endpoints; never unbounded `all`, recursive full trees, complete-catalog client export, offset-only deep pagination or browser flattening. Indexed search covers aliases, typo tolerance, facets, ranking, rights/territory/explicit filters; client debounce/cancellation/stale-response protection and bounded cache. Dynamic per-page counts, no fixed global totals. One shared Genre renderer; lazy responsive art/media and accessible pagination/virtualization. Object/CDN media, horizontally scalable workers/search/API, quotas/abuse controls, load tests and observability. Controlled batches first; same model toward millions.
 
-## Scale contract
+Index approved available artists, aliases, releases/editions, recordings/placements, genres/styles, credits and identifiers. Return playability/rights summaries. Editorial collections differ from algorithms; trend claims need source/time. Personal recommendation surfaces require actual signals and plain explanations, not cold-start fabrication.
 
-- bounded APIs with conservative defaults and enforced maximum limits;
-- opaque cursor pagination and stable deterministic sort;
-- narrow list objects and separate detail endpoints;
-- no unbounded `all`, offset-only deep pagination, recursive full trees, or complete-catalog export to clients;
-- indexed search with aliases, typo tolerance, facets, ranking, rights/territory/explicit filters;
-- client debounce, cancellation, stale-response protection, and bounded local cache;
-- one shared Genre implementation driven by taxonomy/editorial configuration;
-- dynamic per-page counts from metadata, no fixed global totals;
-- lazy responsive artwork/media and accessible pagination/virtualization;
-- no complete-catalog browser bundle, local-storage snapshot, recursive cursor fetch, or client flattening;
-- CDN/object media delivery, horizontal workers/search/API, quotas/abuse controls, load tests, and observability.
+## Accounts, privacy and continuity
 
-Start with controlled batches while preserving the same model toward millions.
-
-## Search and discovery
-
-Index approved/available normalized artists, aliases, releases/editions, recordings/placements, genres/styles, credits, and identifiers. Return availability/rights summary with results. Separate editorial collections from algorithms. Label trends with source/time. Hide personal recommendation surfaces until genuine signals exist. Keep results bounded and explanations plain.
-
-## Accounts, privacy, continuity
-
-Secure Rondo account; server-side sessions/devices/recovery; versioned taste/consent; sync saves/moments/notes/Journeys/queue context/preferences; export/deletion/retention; encryption; private notes private by default and excluded from recommendation training absent explicit consent.
-
-Listener state stores references and bounded windows—not catalog objects or full provider payloads. High-volume events use a separate partitioned pipeline.
+Secure Rondo account and server-side sessions/devices/recovery; versioned taste/consent; sync saves/moments/notes/Journeys and both session references/preferences; export/deletion/retention/encryption. Private notes remain private by default and excluded from recommendation training absent explicit consent. Listener records keep bounded IDs/windows, not catalog objects or provider payloads. High-volume events use separate partitioned retention. Current localStorage prototype implements none of the secure account/sync guarantees.
 
 ## Playback and rights
 
-Authorization checks listener, territory, asset, window, and source policy. Playback references are short-lived. Support unavailable/preview/full/explicit/region-blocked states without broken navigation. Lyrics, biographies, credits, art, and editorial material have independent rights/attribution. Correction/takedown is launch-critical.
+Authorization checks listener, territory, asset, time window and source policy at request time; playback references are short-lived. Model unavailable/preview/full/explicit/region-blocked states without breaking navigation. Lyrics, biography, credits, artwork and editorial text have independent permissions/attribution. Correction/takedown is launch-critical. One physical audio engine renders whichever Journey or Global session is active; navigating a page does not change the context. Rights changes can invalidate queued tracks gracefully.
 
 ## Recommendation layers
 
-1. editorial shelves;
-2. content similarity using supplied genre/style/credits/era/relationships;
-3. personal continuation from plays/saves/skips/completed Journeys/explicit controls;
-4. bounded exploration with no autoplay trap.
+1. Editorial shelves.
+2. Content similarity from supplied genre/style/credits/era/relationships.
+3. Personal continuation from genuine plays/saves/skips/completed Journeys/explicit controls.
+4. Bounded exploration without autoplay traps.
 
-History-backed copy appears only after real history. Ranking requires offline evaluation, diversity/freshness constraints, bias/quality review, and human editorial oversight.
+Ranking needs offline evaluation, diversity/freshness and bias/quality review with editorial oversight. Claims such as “Because you liked” require real evidence.
 
 ## Payments
 
-V1 contains none: no subscription, checkout, tips, merchandise checkout, artist billing, payment entitlements, refunds, disputes, taxes, or payouts. Keep a clean future extension boundary only. Any later phase starts with a new owner decision and value/territory/store/tax/refund/entitlement/payout definition before provider selection.
+V1 contains none: no subscription, checkout, tips, merchandise checkout, artist billing, payment entitlements, refunds, disputes, taxes or payouts. Preserve only a clean future extension boundary. A later phase requires a new owner decision on value, territory, currencies, store rules, cancellation, refunds, entitlement, tax and payout obligations before compliant provider selection.
 
 ## Operations
 
-Environment separation, secret management, migrations/backups/restore tests, audit logs, API/search/playback/job observability, moderation/takedown/abuse/support, rate limits/cache strategy, schema/content validation, feature flags/reversible rollout, accessibility/performance/load/security/rights/privacy CI, SLOs, incident response, and recovery drills.
+Environment separation, secret management, migrations, backup/restore drills, audit logs, API/search/playback/job observability, moderation/takedown/abuse/support, rate limits/cache strategy, schema/content validation, feature flags/reversible rollout, accessibility/performance/load/security/rights/privacy CI, SLOs, incidents and recovery.
 
 ## Delivery sequence
 
-1. Obtain experience acceptance and integrate with post-merge QA.
-2. Complete canonical-renderer cleanup and Rondo naming plan.
+1. Obtain explicit owner experience acceptance, integrate candidate with post-merge QA.
+2. Clean canonical renderer, production session ownership and Rondo naming plan.
 3. Freeze normalized domain/API/pagination/state/adapter contracts.
-4. Receive legal/source package and initial territories.
-5. Build identity, database, search, jobs, object/CDN, and API foundations.
-6. Implement controlled ingestion, normalization, deduplication, provenance, rights, search.
-7. Connect authorized playback and real supplied metadata.
-8. Migrate Library/Profile/Journeys/notes to server sync.
-9. Add recommendations/editorial depth after real signals.
-10. Load-test and prove rollback/takedown/correction/backup/recovery.
-11. Complete security/rights/privacy/accessibility/production-readiness review.
-12. Revisit payments only after V1 and a new explicit decision.
+4. Receive legal/source package and initial territory/platform requirements.
+5. Build identity, database, search, jobs, object/CDN and API foundations.
+6. Ingest controlled authorized catalog with normalization, provenance, rights and search.
+7. Connect authorized playback/metadata and server-synced Library/Profile/Journeys/notes.
+8. Evaluate real recommendation/editorial signals and load/recovery/takedown behavior.
+9. Complete security, rights, privacy, accessibility and production-readiness review.
+10. Revisit payments only after V1 and a separate explicit decision.
 
-## Current gate
+## Current gate (reviewed 2026-09-28)
 
-Candidate `89fc0d5` is green and ready for product-owner testing. Real-system implementation remains blocked on explicit experience acceptance.
+[Draft PR #5](https://github.com/MakeItRando/Rando/pull/5) candidate [`cd25bbd`](https://github.com/MakeItRando/Rando/commit/cd25bbda8b4e92671c9a61fd97352b9eaac6fc1d) passed local-preview automated [run 34465613545](https://github.com/MakeItRando/Rando/actions/runs/34465613545/job/102833363733) with 13 browser suites and visual capture. A separate latest exact published-preview audit and manual visual acceptance are not evidenced; owner acceptance is pending. Do not merge or start real-system implementation from this gate. See [handoff/STATE.md](../handoff/STATE.md). Update plan and handoff in the same session whenever architecture, rights, scope, sequence or QA state changes.

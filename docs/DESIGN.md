@@ -2,137 +2,56 @@
 
 ## Intent
 
-Rondo is music-first, artwork-led, professional, and immediately understandable. It should feel made by a careful product team, not assembled from effects, strategy copy, or competitor patterns.
-
-`find → play → explore → keep`
-
-Curiosity comes from music, artwork, sequencing, contrast, and a few strong choices. Copy explains an action and gets out of the way.
+Rondo is music-first, artwork-led, professional and immediately understandable. It should feel made by a careful product team, not assembled from effects, strategy copy or competitor patterns. `find → play → explore → keep`. Curiosity comes from music, artwork, sequencing, contrast and a few strong choices. Copy explains an action and gets out of the way.
 
 ## Hierarchy
 
 ```text
-Discover
-  → search / editorial / history-backed picks / sounds → song
-  → compact Genre Journey links
-Journeys
-  → first visit: genre picker
-  → Genre page → Artist Journey → release
-Any song
-  → Song Room
-Library / Profile
-  → memory and editable listener setup
+Discover → search / editorial / history-backed picks / sounds → song
+         → compact Genre Journey links
+Journeys → first visit: genre picker → Genre page → Artist Journey → release
+Any song → Song Room
+Library / Profile → memory and editable listener setup
 ```
 
-Discover is quick/song-forward. Journeys is deliberate/artist-forward. They must never become duplicate pages.
+Discover is quick/song-forward; Journeys is deliberate/artist-forward. They must never become duplicate pages.
 
 ## Route and shell behavior
 
-Discover, Library, Profile, Genre pages, and Artist Journeys use distinct hash routes inside one shell. The active route owns title, main landmark, heading focus, and announcement. Back/Forward works without restarting the active recording. Inactive page DOM is removed or hidden intentionally; artwork loads lazily.
+Discover, Library, Profile, Genre pages and Artist Journeys use distinct hash routes in one shell. The active route owns title, main landmark, heading focus and announcement; Back/Forward does not restart the active recording. Release chapter in the current candidate is state-backed, not proven independently deep-linkable. Inactive DOM is removed or intentionally hidden; artwork loads lazily. Production can code-split without changing the accepted route contract.
 
-Separate documents are avoided in the prototype because they would reset playback/queue/position. Production can code-split without changing the route contract.
+The persistent bottom transport shows one active physical audio engine. Journey and Global have independently resumable logical sessions and queues. Browsing another page never switches session; deliberate play does. On desktop, Global playback has a restrained source-labeled side player; mobile keeps the bottom transport. Do not auto-expand Song Room when a Discover song starts or imply its queue is the Journey queue.
 
 ## Discover
 
-Discover opens directly and never asks for a genre before showing music.
+Opens directly with no genre requirement. First concise orientation and useful search, then Continue listening if relevant, finite editorial/history-backed shelves, Sounds/moods and compact Genre Journey links. Made for you is absent at cold start; after genuine history it may say `From your recent plays`. Editorial popularity must be named; production trends need source and time. Cards vary through actual authorized release identity and hierarchy, not random decoration.
 
-Order:
+`src/ui/discoveryHub.js` is the candidate's canonical renderer. The competing old `renderDiscoverView()` in `src/ui/views.js` uses rejected language such as “Find a door, not a feed”; do not revive/adapt it. Remove after accepted integration/caller verification, before production catalog integration.
 
-1. concise orientation and useful search;
-2. Continue listening only when relevant;
-3. finite editorial/history-backed shelves;
-4. Sounds/moods;
-5. compact Genre Journey links.
+## Journey picker and Genre page
 
-Made for you is absent at cold start. Once genuine played-track history exists, the section may appear with plain evidence-based framing such as `From your recent plays`.
+Picker appears only with no active Journey or after Change genre. Require readable choices, dynamic artist/song counts/progress, selected state, genre-named primary action, contextual Back/close, focus containment, Escape, inert background, focus return and 44×44px targets. It is a focused decision, not a Discover interruption.
 
-Cards vary through authorized release identity and hierarchy—not random decoration. Prototype popularity copy is editorial; production trend copy needs source/time.
-
-`src/ui/discoveryHub.js` is the canonical v0.3.2 renderer. The dormant `renderDiscoverView()` in `src/ui/views.js` uses rejected language such as “Find a door, not a feed” and must not be revived/adapted. Remove it before production catalog integration so one Discover contract remains.
-
-## Journey picker
-
-Appears only with no active Journey or after Change genre.
-
-- direct readable choices;
-- dynamic artist/song counts and per-genre progress;
-- selected state and named primary action;
-- contextual Back/close language;
-- focus containment, Escape, inert background, and return;
-- 44×44px targets.
-
-It is a focused decision, not a permanent dropdown or Discover interruption.
-
-## Genre page
-
-A real destination with restrained genre atmosphere, stacked real release art, progress/next artist, Start/Resume, Play top mix, Change genre, scoped search, songs/releases/artists/hidden finds, and Discover return.
-
-All genres share layout, language, and interaction. Variation comes from data/art/accent. Production adds genres by taxonomy/configuration—not copied CSS/JS/routes or fixed counts.
+Genre page is a real destination: restrained atmosphere, real stacked release art, progress/next artist, Start/Resume, Play top mix, Change genre, scoped search, songs/releases/artists/hidden finds and a Discover return. All genres share layout/language/interaction, with variation from data/art/accent. Production adds genres through taxonomy/configuration rather than copied routes, CSS or fixed counts. The prototype currently has four playable Genre pages even if onboarding lists more seed labels.
 
 ## Artist Journey and release identity
 
-Inside Artist Journey, a compact current-genre/Change action replaces the old dropdown. Alphabetical browsing, release sequence, completion, queue, and playback remain clear. Artist primary action truthfully says Play/Pause/Resume.
-
-Each release carries distinct authorized art, accessible accent, official sequence, and concise supplied context across Discover, Genre pages, release, Song Room, and Library.
+Artist Journey uses a compact current-genre/Change action instead of a permanent dropdown. Alphabetical browsing, release sequence, completion, active-session queue and playback state stay clear. Artist primary action truthfully says Play/Pause/Resume. Each release carries distinct authorized art, accessible accent, official sequence and concise supplied context across Discover, Genre, release, Song Room and Library. Unknown metadata stays unknown. Nonessential Extra content never gates playback, credits or navigation.
 
 ## Song Room
 
-The active cover drives accent and restrained blurred atmosphere while controls stay readable.
+The active cover drives accent and restrained blurred atmosphere while controls stay readable. Desktop art/title share a stage without poster-size text; modes About/Lyrics/Credits/Extra/Up next and transport/timeline/volume remain compact. Mobile art is prominent, title compact, previous/play/next obvious, context sheet and mode bar reachable at 390px and 320px. Three-column time row keeps elapsed, metadata and remaining separate; metadata truncates rather than collides.
 
-Desktop: art/title share stage without poster-scale type; active waveform only during playback; compact About/Lyrics/Credits/Extra/Up next; clear transport/timeline/volume.
+Waveform tells the truth: `audio` only with active analyser data, `motion` for playback-driven fallback, `paused` while paused, `reduced` for static Reduced Motion. Native volume slider, icon, percent and restrained feedback share one volume state; mute restores the previous audible level. Modal expands explicitly from the active session, preserves audio, contains focus and returns focus on close.
 
-Mobile: art remains dominant; title is compact; previous/play/next are clear; context becomes a usable sheet; mode bar remains reachable; 390px and 320px layouts do not overflow.
+## Motion and copy
 
-The time row uses three non-overlapping columns for elapsed, metadata, and remaining time. Metadata may truncate rather than collide.
+Animate only playback, focus, navigation or subtle art response. Avoid orbits, particles, automatic cards and constant page-wide effects. Transitions stay short and calm; remove nonessential motion under Reduced Motion. Generated imagery is not part of the system. Use familiar labels: About, Lyrics, Credits, Extra, Up next, Change genre, Resume Journey, Play/Pause/Resume, Saved, Open. Prefer short user-language copy, not product strategy. Rights/provenance remain accessible where decisions require them.
 
-Waveform communicates truth:
+## Accessibility and large-catalog visual contract
 
-- `audio` only with active analyser data;
-- `motion` for deterministic playback-driven fallback;
-- `paused` while paused;
-- `reduced` for meaningful static Reduced Motion.
+One page main outside modal states; route titles/announcements/focus; keyboard actions; top dialog containment/Escape/focus return; accurate current/pressed/selected/value states; 44×44px important controls; non-color states; long names, missing art, unavailable audio and instrumentals usable; no overflow at desktop/390px/320px, no player/nav covering content. Large catalog uses bounded shelves/first renders, progressive disclosure, accessible cursor pagination or virtualization, debounced search with loading/empty/error/rights states, metadata-derived counts, layout-preserving skeletons, responsive art and one data-driven Genre composition. Never flatten full catalog in browser.
 
-Volume uses a native slider, icon, percentage, restrained level feedback, synchronized values, and correct mute restore. It never pretends to be frequency analysis.
+## Current quality status (reviewed 2026-09-28)
 
-## Motion
-
-Animate only playback, focus, navigation, or subtle art response. Avoid orbits, particles, automatic card motion, and constant page-wide effects. Keep transitions short/calm and remove nonessential motion under Reduced Motion. Generated imagery is not part of the system.
-
-## Copy
-
-Use familiar labels: About, Lyrics, Credits, Extra, Up next, Change genre, Resume Journey, Play/Pause/Resume/Saved/Open. Prefer one short sentence. Describe actions, not product strategy. Keep policy/provenance out of primary listening copy while retaining it where decisions/rights need clarity. Unknown metadata stays unavailable.
-
-## Accessibility and interaction quality
-
-- one active page main landmark outside modal states;
-- route titles/announcements and deliberate heading focus;
-- visible focus and keyboard actions;
-- topmost dialog containment/Escape/useful focus return;
-- accurate current/pressed/selected/value states;
-- 44×44px important mobile controls;
-- non-color states;
-- long names, missing art, unavailable sources, and instrumentals remain usable;
-- no document overflow at desktop, 390px, or 320px;
-- nav/player/content never cover each other.
-
-## Large-catalog visual contract
-
-- bounded shelves and first renders;
-- progressive disclosure instead of giant lists;
-- cursor-paginated/accessible virtual lists where needed;
-- debounced search with stable loading/empty/error/rights states;
-- dynamic counts from page metadata, never hard-coded global totals;
-- skeletons preserve layout without false content;
-- stable art aspect ratios and responsive image sizes;
-- one data-driven Genre composition for all taxonomy entries;
-- no full-catalog browser rendering or flattening.
-
-## Current quality status
-
-v0.3.2 candidate `89fc0d5` completed:
-
-- all 12 enforced browser suites plus visual step green in run `34332141798`;
-- 18/18 final desktop/mobile/compact/Light/Reduced Motion captures manually accepted;
-- exact published preview blob passed 37/37 runtime checks with zero runtime/resource errors;
-- no unresolved product defect identified.
-
-It is ready for product-owner testing, not yet accepted or merged.
+Latest candidate [`cd25bbd`](https://github.com/MakeItRando/Rando/commit/cd25bbda8b4e92671c9a61fd97352b9eaac6fc1d) in [draft PR #5](https://github.com/MakeItRando/Rando/pull/5) passed [run 34465613545](https://github.com/MakeItRando/Rando/actions/runs/34465613545/job/102833363733): 13 browser suites and visual capture. The [latest visual report](https://github.com/MakeItRando/Rando/blob/513d538822a3ea2d4b7f50b2c777a5594815fa71/latest/visual-report.json) has 18 captures with no recorded automated failures. **Fresh manual visual sign-off and separate exact published-preview audit for this head are not evidenced.** Older 18/18 and 37/37 claims refer to older heads. Owner acceptance/merge are pending, so no 'perfect' or ready-to-test claim. See [quality gates](../handoff/QUALITY_GATES.md). Keep design, screenshots and handoff synchronized as changes occur.
