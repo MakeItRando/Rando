@@ -5,3 +5,4 @@ import './src/ui/playbackContexts.js';
 import './src/ui/playbackContextLayout.js';
 import './src/ui/freshStartPolicy.js';
 import './src/ui/journeyStateGuard.js';
+import './src/ui/runtimeQualityGuard.js';
