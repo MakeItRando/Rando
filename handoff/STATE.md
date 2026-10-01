@@ -1,34 +1,46 @@
 # Current project state
 
-**Reviewed:** 2026-09-28. Verify live GitHub refs/checks before acting. **Product:** Rondo; repository still has legacy `Rando` technical naming. **Current phase:** candidate experience QA and documentation, not accepted production integration.
+**Reviewed:** 2026-10-02 (orientation session, no app code changed). Verify live GitHub refs/checks before acting. **Product:** Rondo; repository still has legacy `Rando` technical naming. **Current phase:** candidate experience QA, not accepted production integration.
 
 ## Verdict
 
-The candidate in draft [PR #5](https://github.com/MakeItRando/Rando/pull/5) is unmerged. Earlier local-preview CI passed, but 10 owner-supplied PNGs now expose a **user-facing Song Room metadata defect (`undefined`)**, traced to an unset `palette.signal` field in `src/app.js`. See [VISUAL_REVIEW_2026-09-28.md](VISUAL_REVIEW_2026-09-28.md). The review also flags 320px Discover first-screen density/search truncation. Do not invite owner acceptance testing until fixed and fully regated. Earlier exact-preview/manual green claims belong to older source heads.
+The candidate in draft [PR #5](https://github.com/MakeItRando/Rando/pull/5) is unmerged and **red**. Head `9046918` failed [CI run 36836698618](https://github.com/MakeItRando/Rando/actions/runs/36836698618/job/110285723482): 12 browser suites and visual capture passed, **Song Room failed** with `Desktop Credits: Song Room rendered a placeholder value "undefined"` ([log](https://github.com/MakeItRando/Rando/blob/6f68fdabd5bd4e26b50335aa6c486e01a2ac31ec/latest/test-logs/song-room.log)). The 2026-09-28 Song Room `undefined` defect is **not fixed**, despite the 2026-10-01 commit messages claiming it was. Do not invite owner testing.
+
+## Root cause (verified by reading head source)
+
+1. `src/app.js` `renderFullPlayer()` still writes `` `${audioMeta(track)} · ${palette.signal} · ${playbackSource(track)}` ``. `getArtworkPalette()` has no `signal`. On open, `renderNowPlaying()` runs `syncAppearance()` afterwards and overwrites the line correctly, so About looks fine; any mode switch calls only `renderFullPlayer()`, so Credits/Lyrics/Extra/Up next show `undefined`.
+2. Commits `38590a2` and `4f4c19e` describe a `songRoomMetaText()` single writer and desktop `room → story` resolution in `src/app.js`, but **those `src/app.js` changes never landed**. `polish.css`, test changes and `index.html` link did land.
+3. `9046918` added `src/ui/runtimeQualityGuard.js`, a document-wide `MutationObserver` that rewrites the DOM after render. Its regex is double-escaped in a literal (`/\\b(undefined|null|NaN)\\b/`), so it matches a literal backslash and **never strips anything**. It also contradicts AGENTS.md (no new DOM interception glue). It should be deleted, not repaired.
+
+## Correct fix (next session)
+
+In `src/app.js`: one metadata writer (`songRoomMetaText(track)`) used by both `syncAppearance()` and `renderFullPlayer()`; resolve `room` to `story` on desktop inside `renderFullPlayer()`; render play/pause in `#fullPlay` with the shared SVG paths instead of `Ⅱ`/`▶`. Delete `runtimeQualityGuard.js` and its import in root `app.js`. Rerun the full workflow, then review all 18 captures from the new head.
 
 ## Branch and evidence matrix
 
 | Surface | Last verified ref | Status |
 | --- | --- | --- |
-| `main` | Stable runtime baseline [`eaafc4c`](https://github.com/MakeItRando/Rando/commit/eaafc4c3ad5f4151b9b0852d16f6543737c16821); documentation commits later | Canonical specs and review, no candidate runtime |
-| [PR #5](https://github.com/MakeItRando/Rando/pull/5) / `rondo-v031-user-ready` | [`cd25bbd`](https://github.com/MakeItRando/Rando/commit/cd25bbda8b4e92671c9a61fd97352b9eaac6fc1d) | Open draft, unmerged; last reported dirty |
-| Candidate CI | [run 34465613545, job 102833363733](https://github.com/MakeItRando/Rando/actions/runs/34465613545/job/102833363733) | Successful local built-preview workflow: install, audit, build/check/unit, 13 browser suites, visual capture. **Not a passing gate for newly discovered defect** |
-| Evidence branch `rondo-v032-qa-evidence` | [`513d538`](https://github.com/MakeItRando/Rando/commit/513d538822a3ea2d4b7f50b2c777a5594815fa71) | [run summary](https://github.com/MakeItRando/Rando/blob/513d538822a3ea2d4b7f50b2c777a5594815fa71/latest/run-summary.txt), [test results](https://github.com/MakeItRando/Rando/blob/513d538822a3ea2d4b7f50b2c777a5594815fa71/latest/test-results.json), [18-capture report](https://github.com/MakeItRando/Rando/blob/513d538822a3ea2d4b7f50b2c777a5594815fa71/latest/visual-report.json) |
-| Preview branch `rondo-v031-preview` | [`089bd21`](https://github.com/MakeItRando/Rando/commit/089bd2125ab002b3aa70f8587578e01c2a879a5f) | Generated test artifact; HTML blob `3f09d59b7207a02be3624d044bc06f8d672c0cd9`, 527,599 bytes; exact published-preview runtime audit not yet recorded |
-
-The [portable preview](https://htmlpreview.github.io/?https://raw.githubusercontent.com/MakeItRando/Rando/rondo-v031-preview/rondo-v031-preview.html) is a candidate surface, not an accepted release. Earlier `b752cc6` and `89fc0d5` refs are history, not the current QA head.
+| `main` | Runtime baseline [`eaafc4c`](https://github.com/MakeItRando/Rando/commit/eaafc4c3ad5f4151b9b0852d16f6543737c16821); docs after | Canonical specs; no candidate runtime |
+| [PR #5](https://github.com/MakeItRando/Rando/pull/5) / `rondo-v031-user-ready` | `9046918` | Open draft, `mergeable_state: dirty`, 206 commits, PR body still describes `cd25bbd` |
+| Candidate CI | [run 36836698618](https://github.com/MakeItRando/Rando/actions/runs/36836698618/job/110285723482) | **Failed** (song_room) |
+| Evidence `rondo-v032-qa-evidence` | [`6f68fda`](https://github.com/MakeItRando/Rando/commit/6f68fdabd5bd4e26b50335aa6c486e01a2ac31ec) | Evidence for `9046918`; [run summary](https://github.com/MakeItRando/Rando/blob/6f68fdabd5bd4e26b50335aa6c486e01a2ac31ec/latest/run-summary.txt) |
+| Preview `rondo-v031-preview` | `089bd21` | **Stale**: built from `cd25bbd`. The workflow publishes previews only after the quality gate passes, so it was not updated |
 
 ## Candidate behavior and production boundary
 
-One physical audio engine supports two resumable logical sessions. Journey retains genre, artist, track, route, queue, position and progress; Global retains playback source, track, bounded source queue and position. Navigation alone does not change session. Explicit Global play should preserve Journey; explicit Journey play should preserve Global. Candidate `src/ui/playbackContexts.js` and `src/ui/journeyStateGuard.js` are DOM/event compatibility controllers, not production ownership. Migrate to store/audio before real catalog. `src/ui/discoveryHub.js` is intended Discover/Genre renderer; dormant `renderDiscoverView()` is competing code. Release chapter state is not proven independently deep-linkable.
+Unchanged from prior record: one physical audio engine, two resumable logical Journey/Global sessions; `playbackContexts.js`, `journeyStateGuard.js` and now `runtimeQualityGuard.js` are compatibility glue, not production ownership. `src/ui/discoveryHub.js` is canonical Discover/Genre; dormant `renderDiscoverView()` remains competing code and is still imported by `src/app.js`.
 
 ## Next work, in order
 
-1. Fix Song Room `palette.signal` defect at candidate source, assert metadata never renders `undefined`/`null`, and inspect all affected surfaces. Address compact Discover density/copy if feasible without breaking navigation/playback.
-2. Run complete exact-head candidate CI and republish evidence/preview. Independently audit exact published HTML/media over HTTP; local build alone is not sufficient.
-3. Inspect all 18 screenshots from the **new** head, including desktop/mobile/320px/Light/Reduced Motion and Global side player; record actual visual result. Current attachment-based review covers only 10 PNGs, not exact Git JPEG bytes or the whole set.
-4. Reconcile PR #5 description with new head/results. After gates pass, ask owner to test Kairo Vale Journey → Discover continuity → Global source queue/side player → explicit Song Room → restored Journey on desktop and phone. Obtain explicit acceptance before clean integration/merge and post-merge QA.
+1. Apply the correct fix above at source; delete the guard; full CI green at the new exact head.
+2. Manual review of all 18 new captures; audit the exact published preview over HTTP.
+3. Rewrite PR #5 body to the new head and results.
+4. Owner desktop/phone test, then explicit acceptance before merge.
+
+## Process lesson
+
+A commit message is not evidence. After every push, re-read the changed file at the new SHA and confirm CI on that SHA before reporting a fix.
 
 ## Future dependencies
 
-Real artists/songs, secure accounts, authorized source adapters/territorial rights, indexed search and backend are not implemented. Await experience acceptance and owner's implementation-facing legal/source package; confirm territory/platform. Public availability is not rights clearance. Provider-neutral, thousands first and millions ready. V1 excludes payments. Update this state and affected specs in the same session as every code, decision, evidence or branch change.
+Real artists/songs, secure accounts, authorized adapters/territorial rights, indexed search and backend are not implemented. Await experience acceptance and the owner's legal/source package. V1 excludes payments. Update this file in the same session as every code, decision, evidence or branch change.
