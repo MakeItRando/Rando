@@ -34,6 +34,7 @@ const css = [
   "concept.css",
   "experience.css",
   "route-pages.css",
+  "polish.css",
 ]
   .map((file) => readFileSync(resolve(root, file), "utf8"))
   .join("\n");
@@ -56,8 +57,11 @@ html = html.replace(
 html = html.replace(/\s*<link rel="stylesheet" href="listening\.css" \/>/, "");
 html = html.replace(/\s*<link rel="stylesheet" href="song-room\.css" \/>/, "");
 html = html.replace(/\s*<link rel="stylesheet" href="concept\.css" \/>/, "");
+html = html.replace(/\s*<link rel="stylesheet" href="polish\.css" \/>/, "");
 html = html.replace(/\s*<script type="module" src="app\.js"><\/script>/, "");
 html = html.replace("</body>", `<script>${js}</script>\n</body>`);
+if (/<link rel="stylesheet" href="[^"]+\.css" \/>/.test(html))
+  throw new Error("Portable preview still references an external stylesheet.");
 const withMode = (mode) =>
   html.replace("<body>", `<body data-preview="${mode}">`);
 writeFileSync(output, withMode("discover"));
