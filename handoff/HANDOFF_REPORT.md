@@ -4,7 +4,7 @@
 
 ## Immediate verdict for the next contributor
 
-Rondo's direction is unusually well documented, but the newest experience is neither accepted nor on `main`. Draft [PR #5](https://github.com/MakeItRando/Rando/pull/5) is at `9046918` and red: Song Room can show `undefined`. The evidence branch records the failure, the published portable preview is stale, and the PR body still describes an older green head. `main` itself passes its build/static/unit/browser suite locally but fails the high-severity dependency audit on its older Playwright version. This orientation round changes documentation only. Do not ask for owner testing, merge the candidate, or start real artist/song/backend integration until the current blockers are fixed and exact-head gates pass.
+Rondo's direction is unusually well documented, but the newest experience is neither accepted nor on `main`. Draft [PR #5](https://github.com/MakeItRando/Rando/pull/5) is at `9046918` and red: Song Room can show `undefined`. The evidence branch records the failure and the published portable preview is stale. PR #5's description was reconciled to `9046918` on 2026-10-03; it must be updated again whenever the candidate head or evidence changes. `main` itself passes its build/static/unit/browser suite locally but fails the high-severity dependency audit on its older Playwright version. This orientation round changes documentation only. Do not ask for owner testing, merge the candidate, or start real artist/song/backend integration until the current blockers are fixed and exact-head gates pass.
 
 ## Purpose and point of view
 
