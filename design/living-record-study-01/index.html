@@ -1,0 +1,576 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Rondo Living Record design-system and experience prototype."
+    />
+    <title>Rondo — Living Record design study</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="study-header">
+      <a class="study-brand" href="#principles" aria-label="Rondo design study home">
+        <span class="brand-orbit" aria-hidden="true"><i></i></span>
+        <span>rondo</span>
+      </a>
+      <p>Experience study <span>01</span></p>
+      <nav aria-label="Study sections">
+        <a href="#principles">Principles</a>
+        <a href="#prototype">Prototype</a>
+        <a href="#system">System</a>
+      </nav>
+    </header>
+
+    <main>
+      <section class="manifesto" id="principles">
+        <p class="eyebrow">Design thesis</p>
+        <h1>Music has a surface.<br />Listening has a room.</h1>
+        <div class="manifesto-grid">
+          <p class="lede">
+            Rondo should feel open while you explore and disappear when you listen.
+            Album art supplies emotion. The interface supplies clarity.
+          </p>
+          <div class="principle-list">
+            <article>
+              <span>01</span>
+              <h2>One good song first</h2>
+              <p>Onboarding earns trust with an immediate listen—not a long survey.</p>
+            </article>
+            <article>
+              <span>02</span>
+              <h2>Color behaves like light</h2>
+              <p>Track color reflects from artwork. It never floods the interface.</p>
+            </article>
+            <article>
+              <span>03</span>
+              <h2>Motion preserves place</h2>
+              <p>Covers, queues, and rooms transform from the thing you touched.</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="prototype-section" id="prototype">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">Interactive experience</p>
+            <h2>From curiosity to immersion.</h2>
+          </div>
+          <p>
+            Switch scenes to inspect the same system across onboarding, discovery,
+            journeys, artists, and playback.
+          </p>
+        </div>
+
+        <div class="prototype-shell">
+          <aside class="scene-picker" aria-label="Prototype scenes">
+            <button class="scene-button is-active" data-scene="welcome">
+              <span>01</span> First minute
+            </button>
+            <button class="scene-button" data-scene="discover">
+              <span>02</span> Discover
+            </button>
+            <button class="scene-button" data-scene="journey">
+              <span>03</span> Journey
+            </button>
+            <button class="scene-button" data-scene="artist">
+              <span>04</span> Artist
+            </button>
+            <button class="scene-button" data-scene="room">
+              <span>05</span> Song Room
+            </button>
+          </aside>
+
+          <div class="stage">
+            <div class="phone" aria-label="Rondo mobile prototype">
+              <div class="phone-safe"></div>
+
+              <section class="screen welcome-screen is-visible" data-screen="welcome">
+                <header class="mobile-head quiet">
+                  <span class="mobile-mark" aria-hidden="true"><i></i></span>
+                  <button class="text-button" type="button">Sign in</button>
+                </header>
+                <div class="welcome-copy">
+                  <p class="eyebrow">Welcome to Rondo</p>
+                  <h3>Let’s find one<br />good song.</h3>
+                  <p>
+                    Start with someone you already love. We’ll learn from what you
+                    play—not from a personality test.
+                  </p>
+                </div>
+                <div class="seed-panel">
+                  <label for="artistSeed">An artist you come back to</label>
+                  <div class="seed-input">
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                      <path d="m20 20-4.4-4.4m2.4-5.1a7.5 7.5 0 1 1-15 0 7.5 7.5 0 0 1 15 0Z" />
+                    </svg>
+                    <input id="artistSeed" value="Asha North" aria-label="Artist seed" />
+                    <span class="seed-confirm" aria-hidden="true">✓</span>
+                  </div>
+                  <button class="primary-action scene-link" data-target="discover">
+                    Make my first mix
+                    <span aria-hidden="true">→</span>
+                  </button>
+                  <button class="quiet-action scene-link" data-target="discover">
+                    I’d rather look around
+                  </button>
+                </div>
+              </section>
+
+              <section class="screen discover-screen" data-screen="discover">
+                <header class="mobile-head">
+                  <span class="mobile-mark" aria-hidden="true"><i></i></span>
+                  <p>For Marco</p>
+                  <button class="avatar" type="button" aria-label="Open profile">M</button>
+                </header>
+                <div class="discover-intro">
+                  <p class="eyebrow">Saturday evening</p>
+                  <h3>Stay for a while.</h3>
+                  <button type="button" class="search-bar">
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                      <path d="m20 20-4.4-4.4m2.4-5.1a7.5 7.5 0 1 1-15 0 7.5 7.5 0 0 1 15 0Z" />
+                    </svg>
+                    Search music
+                    <kbd>⌘ K</kbd>
+                  </button>
+                </div>
+
+                <article class="editorial-pick scene-link" data-target="room">
+                  <img src="assets/covers/night-transit.svg" alt="" />
+                  <div>
+                    <p class="eyebrow">Picked from Asha North</p>
+                    <h4>Night Transit</h4>
+                    <p>Kairo Vale · 3:42</p>
+                    <button class="round-play" type="button" aria-label="Play Night Transit">
+                      <span></span>
+                    </button>
+                  </div>
+                </article>
+
+                <div class="shelf-heading">
+                  <div>
+                    <p class="eyebrow">A little further out</p>
+                    <h4>New, but not random.</h4>
+                  </div>
+                  <button type="button">Why these?</button>
+                </div>
+                <div class="release-row">
+                  <article>
+                    <img src="assets/covers/silver-weather.svg" alt="" />
+                    <h5>Silver Weather</h5>
+                    <p>Asha North</p>
+                  </article>
+                  <article>
+                    <img src="assets/covers/continuum.svg" alt="" />
+                    <h5>Continuum</h5>
+                    <p>Mira Son</p>
+                  </article>
+                  <article>
+                    <img src="assets/covers/soft-collision.svg" alt="" />
+                    <h5>Soft Collision</h5>
+                    <p>Nia Vale</p>
+                  </article>
+                </div>
+              </section>
+
+              <section class="screen journey-screen" data-screen="journey">
+                <header class="mobile-head dark-head">
+                  <button class="icon-button scene-link" data-target="discover" aria-label="Back">
+                    ←
+                  </button>
+                  <p>Journey 01</p>
+                  <button class="icon-button" type="button" aria-label="More options">•••</button>
+                </header>
+                <div class="journey-intro">
+                  <p class="eyebrow">R&amp;B · 32 minutes</p>
+                  <h3>After dark,<br />before quiet.</h3>
+                  <p>
+                    Five songs tracing the space between late-night soul and
+                    electronic R&amp;B.
+                  </p>
+                  <button class="journey-play" type="button">
+                    <span class="round-play"><span></span></span>
+                    Start the journey
+                  </button>
+                </div>
+                <ol class="journey-path">
+                  <li class="is-current">
+                    <span class="path-node">01</span>
+                    <img src="assets/covers/night-transit.svg" alt="" />
+                    <div><strong>Night Transit</strong><small>Kairo Vale</small></div>
+                    <span class="path-duration">3:42</span>
+                  </li>
+                  <li>
+                    <span class="path-node">02</span>
+                    <img src="assets/covers/blue-hour.svg" alt="" />
+                    <div><strong>Blue Hour</strong><small>Mira Son</small></div>
+                    <span class="path-duration">4:06</span>
+                  </li>
+                  <li>
+                    <span class="path-node">03</span>
+                    <img src="assets/covers/silver-weather.svg" alt="" />
+                    <div><strong>Silver Weather</strong><small>Asha North</small></div>
+                    <span class="path-duration">3:18</span>
+                  </li>
+                  <li class="path-fade">
+                    <span class="path-node">04</span>
+                    <div><strong>A softer turn</strong><small>Revealed as you listen</small></div>
+                  </li>
+                </ol>
+              </section>
+
+              <section class="screen artist-screen" data-screen="artist">
+                <header class="mobile-head artist-head">
+                  <button class="icon-button scene-link" data-target="discover" aria-label="Back">
+                    ←
+                  </button>
+                  <button class="icon-button" type="button" aria-label="More options">•••</button>
+                </header>
+                <div class="artist-portrait">
+                  <img src="assets/artists/asha-north.svg" alt="Asha North" />
+                  <div class="portrait-wash"></div>
+                </div>
+                <div class="artist-copy">
+                  <p class="eyebrow">Artist</p>
+                  <h3>Asha North</h3>
+                  <p>London · Alternative R&amp;B</p>
+                  <div class="artist-actions">
+                    <button class="follow-button" type="button">
+                      <span class="follow-ring" aria-hidden="true"></span>
+                      Follow
+                    </button>
+                    <button class="round-play dark-play" type="button" aria-label="Play Asha North">
+                      <span></span>
+                    </button>
+                  </div>
+                </div>
+                <div class="artist-note">
+                  <p class="eyebrow">Start here</p>
+                  <p>
+                    <strong>Silver Weather</strong> turns a restless night into
+                    something warm and close.
+                  </p>
+                </div>
+                <div class="release-feature">
+                  <img src="assets/covers/silver-weather.svg" alt="" />
+                  <div><p>Latest release</p><h4>Silver Weather</h4><span>EP · 2026</span></div>
+                </div>
+              </section>
+
+              <section class="screen room-screen" data-screen="room">
+                <div class="room-glow" aria-hidden="true"></div>
+                <header class="mobile-head room-head">
+                  <button class="icon-button scene-link" data-target="discover" aria-label="Collapse player">
+                    ↓
+                  </button>
+                  <p>Song Room</p>
+                  <button class="icon-button" type="button" aria-label="More options">•••</button>
+                </header>
+                <div class="room-art">
+                  <img src="assets/covers/night-transit.svg" alt="Night Transit cover" />
+                </div>
+                <div class="room-title">
+                  <div>
+                    <h3>Night Transit</h3>
+                    <button class="artist-link scene-link" data-target="artist">
+                      Kairo Vale featuring Mira Son
+                    </button>
+                  </div>
+                  <button class="save-button" type="button" aria-label="Save Night Transit">♡</button>
+                </div>
+                <div class="active-lyric" aria-live="polite">
+                  <p>Headlights fold into the rain</p>
+                  <span>Lyrics move with the song</span>
+                </div>
+                <div class="waveform" aria-hidden="true">
+                  <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+                  <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+                </div>
+                <div class="timeline"><span>1:18</span><i><b></b></i><span>−2:24</span></div>
+                <div class="transport">
+                  <button type="button" aria-label="Previous">┃◀</button>
+                  <button class="transport-main" type="button" aria-label="Pause">
+                    <span class="pause-icon"></span>
+                  </button>
+                  <button type="button" aria-label="Next">▶┃</button>
+                </div>
+                <nav class="room-tabs" aria-label="Song Room sections">
+                  <button class="is-active" type="button">Room</button>
+                  <button type="button">Lyrics</button>
+                  <button type="button">About</button>
+                  <button type="button">Credits</button>
+                  <button type="button">Queue</button>
+                </nav>
+              </section>
+
+              <nav class="mobile-nav" aria-label="Primary navigation">
+                <button class="is-active" type="button">
+                  <svg viewBox="0 0 24 24" aria-hidden="true">
+                    <circle cx="12" cy="12" r="7.5"></circle>
+                    <path d="m14.8 9.2-1.6 4-4 1.6 1.6-4 4-1.6Z"></path>
+                  </svg>
+                  Discover
+                </button>
+                <button type="button">
+                  <svg viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M5 5.5h4v13H5zM10.5 5.5h3v13h-3zM15 5.5h4v13h-4z"></path>
+                  </svg>
+                  Library
+                </button>
+                <button class="scene-link" data-target="journey">
+                  <svg viewBox="0 0 24 24" aria-hidden="true">
+                    <circle cx="6" cy="7" r="2"></circle>
+                    <circle cx="18" cy="17" r="2"></circle>
+                    <path d="M8 7h3a3 3 0 0 1 3 3v4a3 3 0 0 0 3 3h-1"></path>
+                  </svg>
+                  Journeys
+                </button>
+                <button class="scene-link" data-target="artist">
+                  <svg viewBox="0 0 24 24" aria-hidden="true">
+                    <circle cx="12" cy="8" r="3"></circle>
+                    <path d="M6.5 19a5.5 5.5 0 0 1 11 0"></path>
+                  </svg>
+                  Profile
+                </button>
+              </nav>
+
+              <div class="mini-player scene-link" data-target="room">
+                <img src="assets/covers/night-transit.svg" alt="" />
+                <div><strong>Night Transit</strong><span>Kairo Vale</span></div>
+                <button type="button" aria-label="Play"><span></span></button>
+              </div>
+            </div>
+
+            <aside class="scene-notes" aria-live="polite">
+              <p class="eyebrow">Scene rationale</p>
+              <div data-note="welcome" class="is-visible">
+                <h3>Earn the first play.</h3>
+                <p>
+                  One familiar artist is enough to begin. Account creation and
+                  preference tuning can happen after Rondo proves its value.
+                </p>
+                <ul>
+                  <li>One decision, one primary action</li>
+                  <li>Clear skip path without guilt</li>
+                  <li>No abstract “taste calibration” language</li>
+                </ul>
+              </div>
+              <div data-note="discover">
+                <h3>A point of view—not an infinite feed.</h3>
+                <p>
+                  A daily editorial lead gives Rondo a voice. Smaller shelves explain
+                  how far each recommendation moves from familiar territory.
+                </p>
+                <ul>
+                  <li>Finite, calm recommendations</li>
+                  <li>Visible recommendation rationale</li>
+                  <li>Artwork carries color and emotion</li>
+                </ul>
+              </div>
+              <div data-note="journey">
+                <h3>A route through music.</h3>
+                <p>
+                  Journeys are sequenced stories with progression and editorial
+                  context, visually distinct from playlists and search results.
+                </p>
+                <ul>
+                  <li>Chapters instead of a song table</li>
+                  <li>Future songs retain some surprise</li>
+                  <li>No manipulative streaks or urgency</li>
+                </ul>
+              </div>
+              <div data-note="artist">
+                <h3>Make following feel meaningful.</h3>
+                <p>
+                  Artist pages lead with identity, a human editorial entry point, and
+                  releases. Metrics stay secondary.
+                </p>
+                <ul>
+                  <li>Functional follow ring</li>
+                  <li>Clear “start here” recommendation</li>
+                  <li>Artwork-first release browsing</li>
+                </ul>
+              </div>
+              <div data-note="room">
+                <h3>The interface becomes quiet.</h3>
+                <p>
+                  Explore’s warm surface falls away. The cover, one lyric, and the
+                  physical act of playback become the room.
+                </p>
+                <ul>
+                  <li>Localized album-color reflection</li>
+                  <li>Large, reachable transport controls</li>
+                  <li>Reduced-motion crossfade equivalent</li>
+                </ul>
+              </div>
+            </aside>
+          </div>
+        </div>
+      </section>
+
+      <section class="system-section" id="system">
+        <div class="section-heading system-heading">
+          <div>
+            <p class="eyebrow">Design system</p>
+            <h2>Recognizable through behavior.</h2>
+          </div>
+          <p>
+            The identity is not a collection of gradients. It is a consistent set
+            of surfaces, states, geometry, and motion rules.
+          </p>
+        </div>
+
+        <div class="system-grid">
+          <article class="system-card palette-card">
+            <p class="system-index">01 / Surface</p>
+            <h3>Paper to ink</h3>
+            <p>Exploration is warm and tactile. Focused listening is deep and quiet.</p>
+            <div class="swatches">
+              <span style="--swatch:#f0ece3"><i>Paper</i><b>#F0ECE3</b></span>
+              <span style="--swatch:#111217"><i>Ink</i><b>#111217</b></span>
+              <span style="--swatch:#f0644b"><i>Signal</i><b>#F0644B</b></span>
+              <span style="--swatch:#6279cf"><i>Track</i><b>Adaptive</b></span>
+            </div>
+          </article>
+
+          <article class="system-card ring-card">
+            <p class="system-index">02 / Signature</p>
+            <h3>The ring does work</h3>
+            <div class="ring-examples">
+              <div><span class="demo-ring progress-ring"><i></i></span><p>Playing</p></div>
+              <div><span class="demo-ring complete-ring">✓</span><p>Selected</p></div>
+              <div><span class="demo-ring follow-demo"><i></i></span><p>Following</p></div>
+              <div><span class="demo-ring load-ring"><i></i></span><p>Loading</p></div>
+            </div>
+          </article>
+
+          <article class="system-card copy-card">
+            <p class="system-index">03 / Voice</p>
+            <h3>Say what a person would say.</h3>
+            <div class="copy-compare">
+              <p><span>Instead of</span>Calibrate your listening journey</p>
+              <p><span>Rondo says</span>What sounds right today?</p>
+            </div>
+            <div class="copy-compare">
+              <p><span>Instead of</span>Generate personalized recommendations</p>
+              <p><span>Rondo says</span>Make my first mix</p>
+            </div>
+          </article>
+
+          <article class="system-card motion-card">
+            <p class="system-index">04 / Motion</p>
+            <h3>Every movement has a source.</h3>
+            <div class="motion-demo" aria-hidden="true">
+              <div class="motion-cover"></div>
+              <div class="motion-room"></div>
+            </div>
+            <dl>
+              <div><dt>Tap</dt><dd>90ms feedback</dd></div>
+              <div><dt>Transform</dt><dd>280–420ms</dd></div>
+              <div><dt>Settle</dt><dd>Low-bounce spring</dd></div>
+              <div><dt>Reduced motion</dt><dd>160ms crossfade</dd></div>
+            </dl>
+          </article>
+
+          <article class="system-card state-card">
+            <p class="system-index">05 / Trust</p>
+            <h3>The quiet states are designed too.</h3>
+            <div class="state-examples">
+              <div>
+                <span class="state-icon">⌁</span>
+                <strong>You’re offline</strong>
+                <p>Saved music is still here.</p>
+              </div>
+              <div>
+                <span class="state-icon">＋</span>
+                <strong>Your Library has room</strong>
+                <p>Save something worth returning to.</p>
+              </div>
+              <div>
+                <span class="state-icon">↻</span>
+                <strong>This one slipped</strong>
+                <p>Try loading the song again.</p>
+              </div>
+            </div>
+          </article>
+
+          <article class="system-card accessibility-card">
+            <p class="system-index">06 / Access</p>
+            <h3>Premium means dependable.</h3>
+            <ul>
+              <li><span>44px</span> minimum target</li>
+              <li><span>4.5:1</span> text contrast</li>
+              <li><span>200%</span> text zoom support</li>
+              <li><span>0 motion</span> required for meaning</li>
+            </ul>
+          </article>
+        </div>
+      </section>
+
+      <section class="desktop-study">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">Desktop behavior</p>
+            <h2>More room, not more noise.</h2>
+          </div>
+          <p>
+            Desktop keeps discovery visible while the active recording opens as a
+            focused listening space. It does not simply stretch the mobile layout.
+          </p>
+        </div>
+        <div class="desktop-frame">
+          <header>
+            <span class="desktop-logo"><i></i>rondo</span>
+            <nav><b>Discover</b><span>Library</span><span>Journeys</span></nav>
+            <button type="button">Search Rondo <kbd>⌘ K</kbd></button>
+            <span class="avatar">M</span>
+          </header>
+          <aside>
+            <p class="eyebrow">Now playing</p>
+            <img src="assets/covers/night-transit.svg" alt="" />
+            <h3>Night Transit</h3>
+            <p>Kairo Vale featuring Mira Son</p>
+            <div class="desktop-lyric">Headlights fold<br />into the rain</div>
+          </aside>
+          <main>
+            <p class="eyebrow">Saturday evening</p>
+            <h3>Stay for a while.</h3>
+            <article>
+              <img src="assets/covers/silver-weather.svg" alt="" />
+              <div>
+                <p class="eyebrow">A little further out</p>
+                <h4>Silver Weather</h4>
+                <p>Asha North turns a restless night into something warm and close.</p>
+              </div>
+            </article>
+            <div class="desktop-shelf">
+              <img src="assets/covers/continuum.svg" alt="" />
+              <img src="assets/covers/blue-hour.svg" alt="" />
+              <img src="assets/covers/soft-collision.svg" alt="" />
+            </div>
+          </main>
+          <footer>
+            <img src="assets/covers/night-transit.svg" alt="" />
+            <div><strong>Night Transit</strong><span>Kairo Vale</span></div>
+            <button type="button">◀</button>
+            <button class="desktop-play" type="button"><span class="pause-icon"></span></button>
+            <button type="button">▶</button>
+            <i><b></b></i>
+            <span>1:18</span>
+          </footer>
+        </div>
+      </section>
+    </main>
+
+    <footer class="study-footer">
+      <span>Rondo / Living Record</span>
+      <p>Design study—not production UI</p>
+      <span>October 2026</span>
+    </footer>
+
+    <script src="app.js"></script>
+  </body>
+</html>
