@@ -16,7 +16,7 @@ One physical audio element/clock/volume/analyser and persistent bottom transport
 
 ## Prototype truth
 
-Candidate `9046918` stores bounded IDs under `rondo-playback-context-v1` alongside legacy `rondo-prototype-v2` and `rondo-route-state-v1`. `src/ui/playbackContexts.js`, `src/ui/playbackContextLayout.js`, and `src/ui/journeyStateGuard.js` bridge the singleton app through DOM/event interception; the global prototype queue limit is 20 track IDs. Do not persist artwork/base64/provider payloads. The layers are compatibility glue, not production architecture. In the 2026-10-03 local recheck, the dedicated playback-context suite passed before the later Song Room failure; this proves that test at that head, not overall release readiness. Preview `089bd21` is stale and cannot certify the current implementation. The compatibility layers remain migration debt: production ownership must move into explicit store/audio commands, not DOM observation or event interception.
+Candidate `742abac` stores bounded IDs under `rondo-playback-context-v1` alongside legacy `rondo-prototype-v2` and `rondo-route-state-v1`. `src/ui/playbackContexts.js`, `src/ui/playbackContextLayout.js`, and `src/ui/journeyStateGuard.js` bridge the singleton app through DOM/event interception; the global prototype queue limit is 20 track IDs. Do not persist artwork/base64/provider payloads. The dedicated isolation suite passed in local, CI, and independent exact-published-preview HTTP runs on 2026-10-03. This validates candidate behavior, not the compatibility architecture; production ownership must move into explicit store/audio commands.
 
 ## Production target
 
