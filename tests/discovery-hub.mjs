@@ -229,6 +229,10 @@ try {
   );
   const surprise = await page.locator("[data-surprise-track]").boundingBox();
   assert(surprise && surprise.height >= 44, "Compact Discover action needs a 44px target.");
+  assert(
+    (await page.locator("[data-music-search]").getAttribute("placeholder")) === "Search music",
+    "Compact Discover should use a complete search hint instead of clipped copy.",
+  );
 
   await page.close();
   assert(errors.length === 0, `Discover/Journey browser errors: ${errors.join(" | ")}`);

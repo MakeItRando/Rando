@@ -100,6 +100,11 @@ const listeningGenreId = () => {
 const audioMeta = (track) => [track?.bpm ? `${track.bpm} BPM` : null, track?.key || null].filter(Boolean).join(' · ') || 'PLAYBACK SIGNAL';
 const playbackDuration = (track) => track?.previewUrl && track?.previewDurationSeconds ? track.previewDurationSeconds : track?.durationSeconds || 0;
 const playbackSource = (track) => track?.previewUrl ? 'RONDO ORIGINAL' : 'DEMO TIMELINE';
+const songRoomMetaText = (track) => `${audioMeta(track).toUpperCase()} · ${playbackSource(track)}`;
+const resolveSongRoomMode = (mode) => {
+  const validMode = songRoomModes.includes(mode) ? mode : 'story';
+  return validMode === 'room' && window.matchMedia('(min-width: 761px)').matches ? 'story' : validMode;
+};
 
 function syncAppearance() {
   const theme = state().theme === 'light' ? 'light' : 'dark';
@@ -116,7 +121,7 @@ function syncAppearance() {
   elements.nowGenreMode.textContent = genreLabel;
   elements.nowAudioMeta.textContent = meta;
   elements.fullGenreMode.textContent = genreLabel;
-  elements.fullAudioMeta.textContent = `${meta} · ${playbackSource(context?.track)}`;
+  elements.fullAudioMeta.textContent = songRoomMetaText(context?.track);
   const themeMeta = document.querySelector('meta[name="theme-color"]');
   if (themeMeta) themeMeta.content = theme === 'dark' ? songPalette.base : '#f3f0e9';
 }
@@ -616,7 +621,7 @@ function songRoomLabel(mode) {
 }
 
 function setSongRoomMode(mode) {
-  const nextMode = songRoomModes.includes(mode) ? mode : 'story';
+  const nextMode = resolveSongRoomMode(mode);
   store.set({ songRoomMode: nextMode });
   renderFullPlayer();
 }
@@ -678,9 +683,9 @@ function renderFullPlayer(context = currentContext()) {
   const { artist, release, track } = context;
   const queue = currentQueue();
   const queueIndex = Math.max(0, queue.findIndex((item) => item.id === track.id));
-  const mode = songRoomModes.includes(state().songRoomMode) ? state().songRoomMode : 'story';
+  const mode = resolveSongRoomMode(state().songRoomMode);
   const saved = includes(state().savedTracks, track.id);
-  const palette = applyArtworkPalette(release);
+  applyArtworkPalette(release);
   elements.fullPlayer.dataset.mode = mode;
   elements.fullCover.src = release.cover;
   elements.fullCover.alt = `${track.title} artwork`;
@@ -700,7 +705,7 @@ function renderFullPlayer(context = currentContext()) {
   elements.songRoomJourneyProgress.style.setProperty('--song-room-progress', `${journeyPercent}%`);
   elements.songRoomJourneyPercent.textContent = String(Math.round(journeyPercent));
   elements.songRoomModeLabel.textContent = songRoomLabel(mode);
-  elements.fullAudioMeta.textContent = `${audioMeta(track).toUpperCase()} · ${palette.signal} · ${playbackSource(track)}`;
+  elements.fullAudioMeta.textContent = songRoomMetaText(track);
   elements.fullPlayer.dataset.playbackSource = track.previewUrl ? 'audio' : 'simulated';
   const lore = releaseLore[release.id] || null;
   const revealProgress = Number(state().releaseProgress?.[release.id]) || 0;
@@ -763,7 +768,8 @@ function updatePlayerUI() {
   elements.fullTimeline.setAttribute('aria-valuetext', `${formatTime(state().position)} of ${formatTime(duration)}`);
   elements.transportPlayIcon.innerHTML = state().playing ? pausePath : playPath;
   elements.transportPlay.setAttribute('aria-label', state().playing ? 'Pause' : 'Play');
-  elements.fullPlay.textContent = state().playing ? 'Ⅱ' : '▶';
+  elements.fullPlay.innerHTML = `<svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor" aria-hidden="true">${state().playing ? pausePath : playPath}</svg>`;
+  elements.fullPlay.dataset.icon = state().playing ? 'pause' : 'play';
   elements.fullPlay.setAttribute('aria-label', state().playing ? 'Pause' : 'Play');
   document.body.classList.toggle('is-playing', state().playing);
   syncArtistPlaybackAction();
@@ -1073,7 +1079,7 @@ function topModal() {
 function openFullPlayer(event, mode = state().songRoomMode || 'story') {
   if (topModal()) return;
   rememberModalFocus(event?.currentTarget || $('openFullPlayer'));
-  store.set({ songRoomMode: songRoomModes.includes(mode) ? mode : 'story' });
+  store.set({ songRoomMode: resolveSongRoomMode(mode) });
   elements.fullPlayer.hidden = false;
   renderNowPlaying();
   syncModalState();

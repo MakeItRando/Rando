@@ -2,144 +2,56 @@
 
 ## Intent
 
-Rondo is music-first, artwork-led, and easy to understand. It should feel designed by a careful product team, not generated from a pile of effects or marketing phrases.
+Rondo is music-first, artwork-led, professional and immediately understandable. It should feel made by a careful product team, not assembled from effects, strategy copy or competitor patterns. `find → play → explore → keep`. Curiosity comes from music, artwork, sequencing, contrast and a few strong choices. Copy explains an action and gets out of the way.
 
-The interface follows a simple rhythm:
-
-`find → play → explore → keep`
-
-Curiosity comes from music, artwork, and a few strong choices. Copy explains what an action does and then gets out of the way.
-
-## Primary hierarchy
+## Hierarchy
 
 ```text
-Discover
-  → search / suggestions / sounds → song
-  → Genre Journeys
-Journeys
-  → first visit: genre picker
-  → genre page → artist → release
-Any song
-  → Song Room
+Discover → search / editorial / history-backed picks / sounds → song
+         → compact Genre Journey links
+Journeys → first visit: genre picker → Genre page → Artist Journey → release
+Any song → Song Room
+Library / Profile → memory and editable listener setup
 ```
 
-Discover and Journeys must never feel like duplicate pages. Discover is quick and song-forward. Journeys is deliberate and artist-forward.
+Discover is quick/song-forward; Journeys is deliberate/artist-forward. They must never become duplicate pages.
 
-## Page partitions
+## Route and shell behavior
 
-Discover, Library, Profile, Journey genres, and guided artist Journeys use distinct hash routes inside one application shell. The visible route owns the main landmark, document title, and heading focus.
+Discover, Library, Profile, Genre pages and Artist Journeys use distinct hash routes in one shell. The active route owns title, main landmark, heading focus and announcement; Back/Forward does not restart the active recording. Release chapter in the current candidate is state-backed, not proven independently deep-linkable. Inactive DOM is removed or intentionally hidden; artwork loads lazily. Production can code-split without changing the accepted route contract.
 
-This page model gives listeners clear destinations and browser Back/Forward without restarting the active song. Inactive page content is removed rather than left as a large hidden duplicate. Artwork below the fold loads lazily.
-
-Separate HTML documents are intentionally avoided because they would reset playback, queue, position, and Song Room unless Rondo introduced a much more complex shared-player process.
+The persistent bottom transport shows one active physical audio engine. Journey and Global have independently resumable logical sessions and queues. Browsing another page never switches session; deliberate play does. On desktop, Global playback has a restrained source-labeled side player; mobile keeps the bottom transport. Do not auto-expand Song Room when a Discover song starts or imply its queue is the Journey queue.
 
 ## Discover
 
-Discover opens immediately. It does not ask someone to choose a genre before seeing music.
+Opens directly with no genre requirement. First concise orientation and useful search, then Continue listening if relevant, finite editorial/history-backed shelves, Sounds/moods and compact Genre Journey links. Made for you is absent at cold start; after genuine history it may say `From your recent plays`. Editorial popularity must be named; production trends need source and time. Cards vary through actual authorized release identity and hierarchy, not random decoration.
 
-The page begins with one concise line, a useful search field, and Continue listening only when it is relevant. Scannable sections then surface Hits today, personal picks, Bangers, Sounds, Hidden gems, New & rising, and links into Genre Journeys.
+`src/ui/discoveryHub.js` is the candidate's canonical renderer. The competing old `renderDiscoverView()` in `src/ui/views.js` uses rejected language such as “Find a door, not a feed”; do not revive/adapt it. Remove after accepted integration/caller verification, before production catalog integration.
 
-Cards should vary through real release artwork and content hierarchy, not random decoration. Music feels special through sequencing, contrast, scale, and art—not paragraphs of lore.
+## Journey picker and Genre page
 
-## Journey picker
+Picker appears only with no active Journey or after Change genre. Require readable choices, dynamic artist/song counts/progress, selected state, genre-named primary action, contextual Back/close, focus containment, Escape, inert background, focus return and 44×44px targets. It is a focused decision, not a Discover interruption.
 
-The genre picker appears only when Journeys has no saved active genre or when the listener chooses Change genre.
+Genre page is a real destination: restrained atmosphere, real stacked release art, progress/next artist, Start/Resume, Play top mix, Change genre, scoped search, songs/releases/artists/hidden finds and a Discover return. All genres share layout/language/interaction, with variation from data/art/accent. Production adds genres through taxonomy/configuration rather than copied routes, CSS or fixed counts. The prototype currently has four playable Genre pages even if onboarding lists more seed labels.
 
-- four direct, readable choices;
-- artist and song counts;
-- per-genre progress;
-- a primary action that names the selected genre;
-- focus containment, Escape, background inertness, and clear focus state;
-- a safe Back to Discover path.
+## Artist Journey and release identity
 
-It is a focused decision, not a permanent dropdown and not a Discover interruption.
+Artist Journey uses a compact current-genre/Change action instead of a permanent dropdown. Alphabetical browsing, release sequence, completion, active-session queue and playback state stay clear. Artist primary action truthfully says Play/Pause/Resume. Each release carries distinct authorized art, accessible accent, official sequence and concise supplied context across Discover, Genre, release, Song Room and Library. Unknown metadata stays unknown. Nonessential Extra content never gates playback, credits or navigation.
 
-## Genre Journey page
+## Song Room
 
-A genre page should feel like a real destination:
+The active cover drives accent and restrained blurred atmosphere while controls stay readable. Desktop art/title share a stage without poster-size text; modes About/Lyrics/Credits/Extra/Up next and transport/timeline/volume remain compact. Mobile art is prominent, title compact, previous/play/next obvious, context sheet and mode bar reachable at 390px and 320px. Three-column time row keeps elapsed, metadata and remaining separate; metadata truncates rather than collides.
 
-- a distinct genre title and restrained color atmosphere;
-- stacked release art rather than generated illustration;
-- progress and the next artist near the top;
-- Start/Resume, Play top mix, and Change genre as the main actions;
-- scoped search;
-- songs, releases, artists, and hidden finds in clear sections;
-- a visible path back to Discover.
+Waveform tells the truth: `audio` only with active analyser data, `motion` for playback-driven fallback, `paused` while paused, `reduced` for static Reduced Motion. Native volume slider, icon, percent and restrained feedback share one volume state; mute restores the previous audible level. Modal expands explicitly from the active session, preserves audio, contains focus and returns focus on close.
 
-The page can vary its accent by genre, but layout, control placement, and language stay consistent. The genre page belongs under Journeys and leads into the existing artist-by-artist flow.
+## Motion and copy
 
-## Guided artist Journey
+Animate only playback, focus, navigation or subtle art response. Avoid orbits, particles, automatic cards and constant page-wide effects. Transitions stay short and calm; remove nonessential motion under Reduced Motion. Generated imagery is not part of the system. Use familiar labels: About, Lyrics, Credits, Extra, Up next, Change genre, Resume Journey, Play/Pause/Resume, Saved, Open. Prefer short user-language copy, not product strategy. Rights/provenance remain accessible where decisions require them.
 
-Inside an artist Journey, the old visible genre dropdown is removed. A compact current-genre summary and Change action replace it. Alphabetical browsing, release sequence, completion, queue, and playback remain intact.
+## Accessibility and large-catalog visual contract
 
-The artist-level primary control must say Play artist, Pause artist, or Resume artist truthfully. Changing pages or reopening the artist directory never stops playback by itself.
+One page main outside modal states; route titles/announcements/focus; keyboard actions; top dialog containment/Escape/focus return; accurate current/pressed/selected/value states; 44×44px important controls; non-color states; long names, missing art, unavailable audio and instrumentals usable; no overflow at desktop/390px/320px, no player/nav covering content. Large catalog uses bounded shelves/first renders, progressive disclosure, accessible cursor pagination or virtualization, debounced search with loading/empty/error/rights states, metadata-derived counts, layout-preserving skeletons, responsive art and one data-driven Genre composition. Never flatten full catalog in browser.
 
-## Release identity
+## Current quality status (reviewed 2026-10-03)
 
-Each release carries distinct cover art, accessible accent, official sequence, and concise context. Those elements recur across Discover, Journey pages, release pages, Song Room, and Library so an album is recognizable rather than generic.
-
-## Artwork-adaptive Song Room
-
-The Song Room remains an immersive listening surface. It uses the active cover to set its accent and blurred atmosphere while keeping controls readable.
-
-### Desktop
-
-- artwork and song title share the stage without oversized type;
-- the waveform is active only when playback is active;
-- About, Lyrics, Credits, Extra, and Up next sit in a compact context panel;
-- previous, play/pause, next, repeat, timeline, and volume remain easy to find;
-- a subtle cover/backdrop response adds life without competing with the song.
-
-### Mobile
-
-- artwork stays dominant;
-- the song title remains compact;
-- previous, play/pause, and next are always clear;
-- context becomes a usable lower sheet;
-- a bottom mode bar keeps About and Lyrics reachable;
-- 390px and 320px layouts avoid horizontal overflow.
-
-## Waveform and volume
-
-The waveform communicates state, not decoration. Authorized audio can drive analyser levels. If analysis is unavailable, synchronized deterministic motion is labeled Playback motion. Paused and Reduced Motion states are visually distinct.
-
-Volume stays a familiar native slider with an icon, numeric percentage, artwork-colored fill, restrained level feedback, synchronized values, and correct mute restoration. It never pretends to be frequency analysis.
-
-## Motion rules
-
-- animate only playback, focus, navigation, or a subtle artwork response;
-- avoid orbiting decoration, floating particles, automatic card motion, or constant page-wide animation;
-- keep transitions short and calm;
-- remove nonessential motion when Reduced Motion is enabled;
-- generated imagery is not part of the visual system.
-
-## Copy rules
-
-- use familiar labels such as About, Lyrics, Credits, Extra, Up next, Change genre, and Resume Journey;
-- prefer one short sentence over a paragraph;
-- describe the action, not the product strategy;
-- avoid policy or provenance language in the main listening flow;
-- use Play, Pause, Resume, Saved, and Open truthfully;
-- build curiosity through selection and art rather than vague language;
-- leave unknown metadata unavailable rather than inventing it.
-
-## Accessibility and interaction quality
-
-- one visible main landmark per page state;
-- route-specific document titles and route announcements;
-- heading focus after in-app route changes;
-- visible keyboard focus and focus containment in modal surfaces;
-- focus returns to a useful place after close;
-- 44×44px important controls;
-- `aria-current` on active primary navigation;
-- non-color selection states;
-- long names, missing artwork, unavailable sources, and instrumental tracks remain usable;
-- no document-level horizontal overflow at desktop, 390px, or 320px.
-
-## Performance truth
-
-Page routing improves organization and lets Rondo render only what is active. It does not automatically reduce the JavaScript download. Real initial-load savings will come later from code splitting, paginated catalog data, image sizing, and provider-side caching.
-
-## Prototype status
-
-Version 0.3.2 is the user-test candidate for the corrected page architecture. It includes a direct Discover home, first-time Journey picker, four Journey genre subpages, independent per-genre progress, persistent playback context, route navigation, distinct release art, the restrained Song Room, six Rondo Originals demos, responsive layouts, Reduced Motion, and automated desktop/mobile visual QA.
+Candidate `9046918` is not ready for owner testing: Song Room Credits visibly renders `undefined`, compact Discover and Light-mode refinements still require new-head visual review, and the attempted runtime guard is ineffective architectural glue. Evidence `6f68fda` belongs to the failed head; preview `089bd21` belongs to older `cd25bbd`. After a source-level correction, regenerate and manually inspect all 18 desktop/mobile/Light/320px/Reduced Motion captures and audit the exact published artifact. Automated visual zeros are never visual approval.
