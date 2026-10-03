@@ -25,7 +25,7 @@ In `src/app.js`: one metadata writer (`songRoomMetaText(track)`) used by both `s
 | Surface | Last verified ref | Status |
 | --- | --- | --- |
 | `main` | Runtime baseline [`eaafc4c`](https://github.com/MakeItRando/Rando/commit/eaafc4c3ad5f4151b9b0852d16f6543737c16821); docs after | Canonical specs; no candidate runtime |
-| [PR #5](https://github.com/MakeItRando/Rando/pull/5) / `rondo-v031-user-ready` | `9046918` | Open draft, `mergeable_state: dirty`, 206 commits, PR body still describes `cd25bbd` |
+| [PR #5](https://github.com/MakeItRando/Rando/pull/5) / `rondo-v031-user-ready` | `9046918` | Open draft, 206 commits; body reconciled to `9046918` on 2026-10-03; mergeability was previously dirty and returned unknown during the audit |
 | Candidate CI | [run 36836698618](https://github.com/MakeItRando/Rando/actions/runs/36836698618/job/110285723482) | **Failed** (song_room) |
 | Evidence `rondo-v032-qa-evidence` | [`6f68fda`](https://github.com/MakeItRando/Rando/commit/6f68fdabd5bd4e26b50335aa6c486e01a2ac31ec) | Evidence for `9046918`; [run summary](https://github.com/MakeItRando/Rando/blob/6f68fdabd5bd4e26b50335aa6c486e01a2ac31ec/latest/run-summary.txt) |
 | Preview `rondo-v031-preview` | `089bd21` | **Stale**: built from `cd25bbd`. The workflow publishes previews only after the quality gate passes, so it was not updated |
