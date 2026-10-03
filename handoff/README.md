@@ -4,7 +4,7 @@ This folder is the canonical continuity package. It should let another contribut
 
 ## Current checkpoint
 
-Verified 2026-10-03: draft [PR #5](https://github.com/MakeItRando/Rando/pull/5) is open and unmerged at `9046918`. Its latest [CI run 36836698618](https://github.com/MakeItRando/Rando/actions/runs/36836698618/job/110285723482) failed because Song Room Credits renders `undefined`. Evidence `6f68fda` is failure evidence; preview `089bd21` is stale at older candidate `cd25bbd`. `main` is `c0a11fe`, with stable runtime `eaafc4c` plus canonical documentation. Owner acceptance has not happened. Read [AUDIT_2026-10-03.md](AUDIT_2026-10-03.md) for the full repository audit and [STATE.md](STATE.md) for the shortest live handoff.
+Verified 2026-10-03: draft [PR #5](https://github.com/MakeItRando/Rando/pull/5) is open and unmerged at `742abac`, cleanly synchronized with `main`. CI run `37125303981` passed against the portable artifact; evidence `f163d25`, preview `74272e6`. The downloaded published HTML matched the certified Git blob byte-for-byte and passed all 13 browser suites plus 18-state visual capture over HTTP. Manual 18-state review found no blocker. The candidate is ready for owner desktop/phone testing, not merge or production rollout. Read [STATE.md](STATE.md) first.
 
 ## Reading order
 

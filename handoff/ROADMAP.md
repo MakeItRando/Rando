@@ -4,7 +4,7 @@ Dates are open pending team capacity, launch territory/platform, and owner-provi
 
 ## Phase 0: experience approval (current)
 
-Current candidate `9046918` on draft PR #5 is red in Song Room; evidence `6f68fda` records the failure and preview `089bd21` is stale at older `cd25bbd`. Stable `main` passes its runtime suite locally but has a high-severity Playwright audit finding. Next: source-level Song Room correction, removal of the ineffective runtime guard, deliberate dependency remediation, full exact-head CI, new visual evidence, manual 18-capture review, exact published-preview audit, PR/handoff reconciliation, then owner desktop/phone experience test. Only explicit approval plus a clean integration plan permits merge and post-merge QA. Real artists, songs, accounts, backend, rights integration, and payments do not begin in this phase.
+Candidate `742abac` on draft PR #5 is synchronized with `main` and passed exact portable-artifact CI run `37125303981`; evidence `f163d25`, preview `74272e6`. Independent downloaded-byte HTTP testing passed all 13 browser suites and 18 visual states, and manual review found no blocker. **Current action:** owner desktop/phone experience test. Explicit acceptance is required before merge; then run post-merge QA and update the handoff. Real artists, songs, accounts, backend, rights integration, and payments do not begin in this phase.
 
 ## Phase 1: secure foundation
 

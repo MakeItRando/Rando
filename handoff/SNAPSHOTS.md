@@ -13,13 +13,17 @@ The previous Notion conversation was not retrievable during the earlier handoff.
 
 See [DECISIONS.md](DECISIONS.md) and [PRODUCT_MAP.md](PRODUCT_MAP.md) for decisions rather than treating screenshots as complete specifications.
 
-## Current `9046918` candidate evidence
+## Current `742abac` candidate evidence
 
-- CI run `36836698618`; evidence commit `6f68fda`.
-- Automated result: 12 browser suites and visual capture succeeded, Song Room failed because Credits rendered `undefined`; aggregate gate failed.
-- The 18 images at `6f68fda` are diagnostic output from a failed head, not approved visual evidence. They may still reveal defects but cannot support a readiness claim.
-- No portable preview was published for `9046918`; `089bd21` remains the older `cd25bbd` artifact.
-- Five screenshots attached to the 2026-10-03 Notion message show prior conversation/history, not app pixels or current QA. They were used only to reconstruct context and were not committed as product evidence.
+- CI run `37125303981`; evidence commit `f163d25`; all 13 browser suites and visual capture succeeded against `preview.html`.
+- Portable preview commit `74272e6`; HTML Git blob `0405bc5a0ba00a03b492dd29af83c38d39019e95`, 532,629 bytes, SHA-256 `39db95b35f3a2421631e2178417a08e4af9d8bda0774e4cb4f3be68fd1ef38b5`.
+- Published HTML downloaded byte-identically and served over HTTP with the preview branch's six demo audio files; 13 browser suites and 18-state capture passed independently.
+- Manual review: all 18 evidence states reviewed via contact sheet; Song Room Lyrics, desktop Light, 320px Discover, and Reduced Motion Song Room spot-checked full-size. No blocker found.
+- Five screenshots attached to the owner's 2026-10-03 Notion message remain conversation-history evidence, not product QA.
+
+## Historical `9046918` failure evidence
+
+- CI run `36836698618`; evidence `6f68fda`; Song Room failed on visible `undefined`; preview remained stale. Superseded by the source-level correction in `742abac`.
 
 ## Historical `cd25bbd` candidate evidence
 

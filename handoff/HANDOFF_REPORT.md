@@ -4,7 +4,7 @@
 
 ## Immediate verdict for the next contributor
 
-Rondo's direction is unusually well documented, but the newest experience is neither accepted nor on `main`. Draft [PR #5](https://github.com/MakeItRando/Rando/pull/5) is at `9046918` and red: Song Room can show `undefined`. The evidence branch records the failure and the published portable preview is stale. PR #5's description was reconciled to `9046918` on 2026-10-03; it must be updated again whenever the candidate head or evidence changes. `main` itself passes its build/static/unit/browser suite locally but fails the high-severity dependency audit on its older Playwright version. This orientation round changes documentation only. Do not ask for owner testing, merge the candidate, or start real artist/song/backend integration until the current blockers are fixed and exact-head gates pass.
+Rondo's corrected experience candidate is ready for owner testing but remains unmerged. PR #5 head `742abac` is synchronized with `main`; CI run `37125303981`, evidence `f163d25`, and preview `74272e6` align. The published artifact was independently byte-matched and passed all 13 browser suites plus 18-state visual capture over HTTP; manual review found no blocking visual issue. Do not merge until explicit owner acceptance, and do not mistake this prototype gate for production security, rights, backend, or real-catalog readiness.
 
 ## Purpose and point of view
 
@@ -14,14 +14,14 @@ No oversized filler typography, generic AI art, generated-looking glow/cards, fa
 
 ## Evidence lineage, do not confuse heads
 
-- `main`: `c0a11fe`; v0.3.0 runtime baseline `eaafc4c`, followed by documentation commits.
-- Current candidate: `rondo-v031-user-ready` at `9046918`, open draft PR #5, 206 commits ahead of its merge base and 22 commits behind current `main` at audit time.
-- Current candidate automation: CI run `36836698618` failed in `song_room`. Evidence branch `rondo-v032-qa-evidence` at `6f68fda` records 12 successful browser suites, visual capture success, and Song Room failure. It is generated evidence, not a source branch.
-- Current candidate local reproduction on 2026-10-03: clean install, zero-vulnerability audit, preview build, static/unit and the first six ordered browser suites passed; `tests/song-room.mjs` then failed with `Desktop Credits: Song Room rendered a placeholder value "undefined"`.
-- Portable preview: `rondo-v031-preview` at `089bd21`, built from older `cd25bbd`; it is not evidence for `9046918`.
-- `main` local verification on 2026-10-03: preview build, static, unit and all six browser suites passed. `npm audit --audit-level=high` failed on Playwright advisory `GHSA-7mvr-c777-76hp`; treat dependency remediation as required engineering work, not a documentation-only edit.
-- Missing: current-head green CI, current-head published preview, exact-preview HTTP audit, current-head 18-capture manual review, accessibility/security/rights sign-off, owner desktop/phone acceptance, and post-merge verification.
-- Historical green results for `cd25bbd`, `b752cc6`, or `89fc0d5` stay historical and must never be attached to `9046918`.
+- `main`: `947f1a8`; stable v0.3.0 runtime baseline `eaafc4c`, followed by canonical docs.
+- Current candidate: `rondo-v031-user-ready` at `742abac`, open draft PR #5, synchronized cleanly with current `main`.
+- Current automation: run `37125303981` passed clean install, zero-vulnerability audit, portable build, static/unit/migration checks, 13 browser suites, and visual capture against `preview.html`.
+- Current evidence: `rondo-v032-qa-evidence` at `f163d25`; 13/13 status `0`, 18 captures, zero automated findings/runtime errors.
+- Current portable preview: `rondo-v031-preview` at `74272e6`; HTML Git blob `0405bc5a0ba00a03b492dd29af83c38d39019e95`, 532,629 bytes, SHA-256 `39db95b35f3a2421631e2178417a08e4af9d8bda0774e4cb4f3be68fd1ef38b5`.
+- Independent audit: downloaded HTML was byte-identical to the locally certified artifact; with the preview branch's referenced demo audio, all 13 browser suites and 18-state visual capture passed over HTTP.
+- Manual visual review: complete evidence contact sheet reviewed; critical Song Room, Light, compact, and Reduced Motion states checked full-size; no blocker found.
+- Missing: owner desktop/phone acceptance, merge, post-merge QA, and every production-system gate. Historical red `9046918` and green `cd25bbd` results remain attributed to their own heads.
 
 ## Recovered previous conversation, with limits
 
@@ -41,7 +41,7 @@ The production architecture is provider-neutral with stable Rondo IDs, normalize
 
 ## Delivery sequence
 
-1. **Next development round:** fix Song Room at its source-level writer, remove the ineffective runtime guard, deliberately remediate the dependency audit, and rerun the complete exact-head workflow. Then inspect all 18 new captures, audit the exact published preview, reconcile the PR body/handoff, and only then request owner desktop/phone experience testing.
+1. **Now:** owner tests candidate `742abac` on desktop and phone using the current preview. Keep PR #5 draft until explicit acceptance.
 2. **If feedback changes source:** fix on a focused candidate branch and rerun all gates for the new exact head, republish evidence and handoff.
 3. **On explicit acceptance:** resolve PR integration/dirty state deliberately, merge accepted code, rerun post-merge checks, update main specs/state.
 4. **Then:** naming migration, production foundation, authorized catalog/rights pipeline, real V1 listener system, evaluated editorial/recommendation depth, operational scale. See [ROADMAP.md](ROADMAP.md).

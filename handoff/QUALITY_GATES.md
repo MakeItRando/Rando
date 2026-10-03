@@ -2,14 +2,15 @@
 
 A clean automated workflow is necessary but not a release certificate. Source, locally tested build, exact published preview, manual visual review, owner decision, and merged runtime are separate states.
 
-## Current candidate status (2026-10-03 audit)
+## Current candidate status (2026-10-03 acceptance gate)
 
-- Candidate `9046918` on open draft [PR #5](https://github.com/MakeItRando/Rando/pull/5) is **red**.
-- [Run 36836698618](https://github.com/MakeItRando/Rando/actions/runs/36836698618/job/110285723482) failed in Song Room because Credits renders `undefined`. Evidence `6f68fda` records 12 browser suites and visual capture succeeding before the enforced aggregate gate failed.
-- A local 2026-10-03 clean recheck reproduced the failure after install, zero-vulnerability audit, preview build, static/unit, smoke, interface, routes, product policy, playback-context, and listening checks passed.
-- Preview `089bd21` is stale and represents older `cd25bbd`. No current-head published artifact exists; therefore an exact-preview audit and current-head manual capture review cannot pass.
-- Stable `main` build/static/unit/all six browser suites passed locally on 2026-10-03, but its dependency audit failed on high-severity Playwright advisory `GHSA-7mvr-c777-76hp`.
-- Owner acceptance and merge remain pending. Do not request testing or claim readiness.
+- Candidate `742abac` on draft [PR #5](https://github.com/MakeItRando/Rando/pull/5) is synchronized with current `main` and unmerged.
+- [Run 37125303981](https://github.com/MakeItRando/Rando/actions/runs/37125303981/job/111209288795) passed clean install, zero-vulnerability audit, portable build, static/unit/migration checks, 13 browser suites, and visual capture against `preview.html`.
+- Evidence `f163d25`: all 13 browser results status `0`; 18 captures; zero automated findings/runtime errors.
+- Preview `74272e6`: HTML blob `0405bc5a0ba00a03b492dd29af83c38d39019e95`, 532,629 bytes, SHA-256 `39db95b35f3a2421631e2178417a08e4af9d8bda0774e4cb4f3be68fd1ef38b5`.
+- Independent exact-preview audit: published HTML downloaded byte-identically; all 13 browser suites and 18-state visual capture passed over HTTP with preview-branch media.
+- Manual review: 18/18 contact-sheet states plus full-size critical states reviewed; no blocker found.
+- Owner acceptance and post-merge verification remain pending. The candidate is test-ready, not released.
 
 ## Gate 1: source/dependencies
 
