@@ -2987,7 +2987,7 @@ html[data-theme] body:not([data-view="journeys"]) .transport-meta > #transportMo
 }
 </style>
 </head>
-<body data-preview="discover">
+<body>
   <div class="app-shell" id="appShell">
     <aside class="rail" aria-label="Primary navigation">
       <a class="rail-logo" href="#" aria-label="Rondo home">
@@ -5737,7 +5737,7 @@ html[data-theme] body:not([data-view="journeys"]) .transport-meta > #transportMo
   showView("discover");
   $("profileTrigger").textContent = (state().profile?.displayName || "M").charAt(0).toUpperCase();
   var params = new URLSearchParams(window.location.search);
-  var previewMode = document.body.dataset.preview || (params.has("onboarding") ? "onboarding" : params.get("screen"));
+  var previewMode = (params.has("onboarding") ? "onboarding" : params.get("screen")) || document.body.dataset.preview;
   if (previewMode === "onboarding") openOnboarding();
   else if (previewMode === "lyrics") openFullPlayer(void 0, "lyrics");
   else if (previewMode === "completion") openCompletion({ preview: true });
@@ -6149,7 +6149,7 @@ html[data-theme] body:not([data-view="journeys"]) .transport-meta > #transportMo
     e.shiftKey && document.activeElement === r2 ? (e.preventDefault(), o2.focus()) : e.shiftKey || document.activeElement !== o2 || (e.preventDefault(), r2.focus());
   });
   var te = new URLSearchParams(window.location.search);
-  var ne = document.body.dataset.preview || te.get("screen") || "";
+  var ne = te.get("screen") || document.body.dataset.preview || "";
   if ("journey-picker" === ne) v({ activeGenreId: null, progressByGenre: {} }), q({ type: "journeys" }, { replace: true }), z("journeys").then(() => D(document.querySelector('.rail-button[data-view="journeys"]')));
   else if ("journey" === ne) C("hiphop", { artistId: "kairo-vale" }), y = { type: "journey-artist", genreId: "hiphop", artistId: "kairo-vale" }, F(), q(y, { replace: true });
   else if (ne.startsWith("genre-")) {
