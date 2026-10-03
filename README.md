@@ -15,14 +15,15 @@ Recheck live refs, CI, and PR status; this README is a dated checkpoint, not a s
 
 | Surface | Verified state |
 | --- | --- |
-| `main` | `c0a11fe`; stable v0.3.0 runtime remains `eaafc4c`, followed by canonical documentation commits |
-| [Draft PR #5](https://github.com/MakeItRando/Rando/pull/5) | Open/unmerged; `rondo-v031-user-ready` at `9046918`; 206 commits ahead of its merge base and 22 commits behind current `main`; mergeability returned `unknown` during this audit and was previously reported dirty |
-| Candidate CI | [Run 36836698618](https://github.com/MakeItRando/Rando/actions/runs/36836698618/job/110285723482) failed in Song Room because visible metadata contains `undefined` |
-| Candidate evidence | `rondo-v032-qa-evidence` at `6f68fda`; generated evidence only, never a source branch or merge target |
-| Portable preview | `rondo-v031-preview` at `089bd21`; stale, built from older green candidate `cd25bbd`, not current head |
-| Local recheck | On 2026-10-03, `main` build/static/unit/6 browser suites passed; its dependency audit failed on high-severity advisory `GHSA-7mvr-c777-76hp`. Candidate clean install/audit/build/static/unit and the first six browser suites passed, then Song Room reproduced the `undefined` failure |
+| `main` | `947f1a8`; stable v0.3.0 runtime remains `eaafc4c`, followed by canonical documentation commits |
+| [Draft PR #5](https://github.com/MakeItRando/Rando/pull/5) | Open, unmerged, and cleanly synchronized with `main`; candidate `742abac` |
+| Candidate CI | [Run 37125303981](https://github.com/MakeItRando/Rando/actions/runs/37125303981/job/111209288795) passed clean install, zero-vulnerability audit, portable build, static/unit/migration checks, 13 browser suites, and visual capture against `preview.html` |
+| QA archive | `rondo-v032-qa-evidence` at `f163d25`; all 13 browser results status `0`, 18 captures, zero automated findings/runtime errors |
+| Portable preview | `rondo-v031-preview` at `74272e6`; HTML Git blob `0405bc5a0ba00a03b492dd29af83c38d39019e95`, 532,629 bytes, SHA-256 `39db95b35f3a2421631e2178417a08e4af9d8bda0774e4cb4f3be68fd1ef38b5` |
+| Independent audit | Downloaded published HTML was byte-identical to the locally certified artifact; all 13 browser suites and 18-state visual capture passed over HTTP with published media |
+| Manual visual review | 18/18 evidence contact-sheet states reviewed; critical Song Room, Light, 320px, and Reduced Motion states spot-checked full-size; no blocking visual defect found |
 
-**Do not conflate these gates.** The current candidate is red, the preview is stale, owner acceptance has not happened, and the evidence branch is not product code. Do not ask the owner to test, merge PR #5, or begin real artist/song integration yet. The next development round must fix the source-level Song Room writer, remove the ineffective runtime guard, update dependencies deliberately, rerun the exact-head workflow, manually inspect all new captures, and audit the exact published preview.
+The candidate is ready for product-owner desktop/phone testing, but it is **not merged or released**. Merge only after explicit owner acceptance; if feedback changes source, rerun every exact-head gate and republish aligned evidence/preview.
 
 ## Product map
 

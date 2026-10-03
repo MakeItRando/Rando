@@ -101,6 +101,6 @@ Visible keyboard focus and complete keyboard actions; semantic headings and one 
 
 ## Current phase and scope (reviewed 2026-10-03)
 
-The newest candidate is `9046918` in draft, unmerged PR #5. Its latest CI and local reproduction fail because Song Room Credits renders `undefined`. Evidence `6f68fda` is diagnostic failure evidence; preview `089bd21` is stale at older `cd25bbd`. `main` remains stable v0.3.0 runtime plus canonical docs; its local runtime suite passes, but its older Playwright dependency fails a high-severity audit. No current-head visual, exact-preview, owner-acceptance, or merge gate is complete. The next work is quality correction—not real catalog/backend implementation.
+Candidate `742abac` in draft PR #5 is synchronized with `main` and passed exact portable-artifact CI run `37125303981`; evidence `f163d25`, preview `74272e6`. Independent byte-matched HTTP testing passed all 13 browser suites and 18 visual states; manual review found no blocker. The prototype is ready for owner desktop/phone experience testing, not merged or production-ready. Explicit acceptance and post-merge QA precede real catalog/backend work.
 
 The prototype excludes real artists/licensed commercial songs, production accounts, source credentials, catalog ingestion/backend, live charts, social feeds and payment systems. V1 also excludes payments and content outside the supplied legal path. Keep this spec and the handoff updated whenever behavior, sections or scope change.

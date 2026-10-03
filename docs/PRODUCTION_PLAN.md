@@ -85,4 +85,4 @@ Environment separation, secret management, migrations, backup/restore drills, au
 
 ## Current gate (reviewed 2026-10-03)
 
-Draft PR #5 at `9046918` is red in Song Room; evidence `6f68fda` records that failure and preview `089bd21` is stale. Stable `main` passes its runtime suites locally but fails its high-severity Playwright dependency audit. Complete source-level prototype correction, dependency remediation, exact-head CI, full manual capture review, exact-preview audit, owner acceptance, clean integration, and post-merge verification before beginning this production plan. This gate prevents real-system work from inheriting prototype defects or ambiguous provenance.
+Draft PR #5 candidate `742abac` is synchronized with `main` and has passed exact portable-artifact CI, independent published-byte HTTP testing, and manual 18-state review. It is ready for owner desktop/phone acceptance, not merged or production-approved. After explicit acceptance, merge and run post-merge QA before beginning this production plan. This gate prevents real-system work from inheriting unaccepted prototype behavior or ambiguous provenance.
