@@ -13,12 +13,18 @@ The previous Notion conversation was not retrievable during the earlier handoff.
 
 See [DECISIONS.md](DECISIONS.md) and [PRODUCT_MAP.md](PRODUCT_MAP.md) for decisions rather than treating screenshots as complete specifications.
 
-## Current `cd25bbd` candidate evidence
+## Current `9046918` candidate evidence
 
-- [Workflow run 34465613545](https://github.com/MakeItRando/Rando/actions/runs/34465613545/job/102833363733), [run summary](https://github.com/MakeItRando/Rando/blob/513d538822a3ea2d4b7f50b2c777a5594815fa71/latest/run-summary.txt), [13-suite results](https://github.com/MakeItRando/Rando/blob/513d538822a3ea2d4b7f50b2c777a5594815fa71/latest/test-results.json).
-- [Visual report](https://github.com/MakeItRando/Rando/blob/513d538822a3ea2d4b7f50b2c777a5594815fa71/latest/visual-report.json), [contact sheet](https://github.com/MakeItRando/Rando/blob/513d538822a3ea2d4b7f50b2c777a5594815fa71/latest/visual-contact-sheet.jpg), [source captures](https://github.com/MakeItRando/Rando/tree/513d538822a3ea2d4b7f50b2c777a5594815fa71/latest/screenshots).
-- [Published test HTML](https://github.com/MakeItRando/Rando/blob/089bd2125ab002b3aa70f8587578e01c2a879a5f/rondo-v031-preview.html): Git blob `3f09d59b7207a02be3624d044bc06f8d672c0cd9`, 527,599 bytes. [Preview URL](https://htmlpreview.github.io/?https://raw.githubusercontent.com/MakeItRando/Rando/rondo-v031-preview/rondo-v031-preview.html).
-- Automated report recorded 18 captures and zero listed runtime/visual failures. **No fresh manual 18/18 sign-off or independently recorded exact published-blob HTTP audit for this candidate has been found.**
+- CI run `36836698618`; evidence commit `6f68fda`.
+- Automated result: 12 browser suites and visual capture succeeded, Song Room failed because Credits rendered `undefined`; aggregate gate failed.
+- The 18 images at `6f68fda` are diagnostic output from a failed head, not approved visual evidence. They may still reveal defects but cannot support a readiness claim.
+- No portable preview was published for `9046918`; `089bd21` remains the older `cd25bbd` artifact.
+- Five screenshots attached to the 2026-10-03 Notion message show prior conversation/history, not app pixels or current QA. They were used only to reconstruct context and were not committed as product evidence.
+
+## Historical `cd25bbd` candidate evidence
+
+- Workflow run `34465613545`, evidence `513d538`, and preview `089bd21` belong only to `cd25bbd`.
+- That automated run passed 13 browser suites and generated 18 captures, but later human review exposed the Song Room metadata defect. It is useful history, not current acceptance.
 
 ## Latest capture matrix
 

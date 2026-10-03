@@ -2,13 +2,14 @@
 
 A clean automated workflow is necessary but not a release certificate. Source, locally tested build, exact published preview, manual visual review, owner decision, and merged runtime are separate states.
 
-## Current candidate status (2026-09-28 review)
+## Current candidate status (2026-10-03 audit)
 
-- Candidate [`cd25bbd`](https://github.com/MakeItRando/Rando/commit/cd25bbda8b4e92671c9a61fd97352b9eaac6fc1d) on draft/unmerged [PR #5](https://github.com/MakeItRando/Rando/pull/5).
-- [Run 34465613545](https://github.com/MakeItRando/Rando/actions/runs/34465613545/job/102833363733) completed successfully after `npm ci`, high-severity audit, preview build, check, unit, 13 browser suites, and visual capture. [Result manifest](https://github.com/MakeItRando/Rando/blob/513d538822a3ea2d4b7f50b2c777a5594815fa71/latest/test-results.json) records status `0` for the browser scripts.
-- [Visual report](https://github.com/MakeItRando/Rando/blob/513d538822a3ea2d4b7f50b2c777a5594815fa71/latest/visual-report.json) has 18 captures and no recorded failures/runtime errors, overflow, broken visible images, or undersized targets. **Manual inspection/acceptance of these latest images is not evidenced.** A modal Reduced Motion Song Room capture can correctly have no visible ordinary page main.
-- Portable preview `089bd21`, HTML blob `3f09d59b7207a02be3624d044bc06f8d672c0cd9`, 527,599 bytes. **The separate exact published-blob HTTP audit for this head is not evidenced.** Earlier 37/37 exact-preview and 18/18 manual claims belong to older candidate heads.
-- Owner acceptance and post-merge checks are pending. Do not claim fully ready/perfect/no errors or merge yet.
+- Candidate `9046918` on open draft [PR #5](https://github.com/MakeItRando/Rando/pull/5) is **red**.
+- [Run 36836698618](https://github.com/MakeItRando/Rando/actions/runs/36836698618/job/110285723482) failed in Song Room because Credits renders `undefined`. Evidence `6f68fda` records 12 browser suites and visual capture succeeding before the enforced aggregate gate failed.
+- A local 2026-10-03 clean recheck reproduced the failure after install, zero-vulnerability audit, preview build, static/unit, smoke, interface, routes, product policy, playback-context, and listening checks passed.
+- Preview `089bd21` is stale and represents older `cd25bbd`. No current-head published artifact exists; therefore an exact-preview audit and current-head manual capture review cannot pass.
+- Stable `main` build/static/unit/all six browser suites passed locally on 2026-10-03, but its dependency audit failed on high-severity Playwright advisory `GHSA-7mvr-c777-76hp`.
+- Owner acceptance and merge remain pending. Do not request testing or claim readiness.
 
 ## Gate 1: source/dependencies
 
@@ -38,7 +39,7 @@ Once Gates 1-5 and evidence alignment are complete, ask the product owner to tes
 
 ## Gate 7: security, rights and scale
 
-Inspect changed source/config/patches for credentials, production personal data and unauthorized media/lyrics/art; source provenance and rights/territory are first-class, not implied by public URLs. Before real-system work: threat/privacy review, server-side secrets/authorization, stable IDs, bounded/cursor APIs, indexed/debounced/cancellable rights-aware search, bounded listener refs, and lazy assets. No complete catalog browser JSON and no V1 payments.
+Inspect changed source/config/patches for credentials, production personal data and unauthorized media/lyrics/art; source provenance and rights/territory are first-class, not implied by public URLs. Treat a high-severity dependency audit as a failed gate unless a time-bounded, owner-visible exception records impact, mitigation, and upgrade plan. Before real-system work: threat/privacy review, server-side secrets/authorization, stable IDs, bounded/cursor APIs, indexed/debounced/cancellable rights-aware search, bounded listener refs, and lazy assets. No complete catalog browser JSON and no V1 payments.
 
 ## Gate 8: release evidence and merge
 

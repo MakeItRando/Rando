@@ -1,10 +1,14 @@
 # Current project state
 
-**Reviewed:** 2026-10-02 (orientation session, no app code changed). Verify live GitHub refs/checks before acting. **Product:** Rondo; repository still has legacy `Rando` technical naming. **Current phase:** candidate experience QA, not accepted production integration.
+**Reviewed:** 2026-10-03 (full repository audit, no app code changed). Verify live GitHub refs/checks before acting. **Product:** Rondo; repository still has legacy `Rando` technical naming. **Current phase:** candidate experience QA, not accepted production integration.
 
 ## Verdict
 
-The candidate in draft [PR #5](https://github.com/MakeItRando/Rando/pull/5) is unmerged and **red**. Head `9046918` failed [CI run 36836698618](https://github.com/MakeItRando/Rando/actions/runs/36836698618/job/110285723482): 12 browser suites and visual capture passed, **Song Room failed** with `Desktop Credits: Song Room rendered a placeholder value "undefined"` ([log](https://github.com/MakeItRando/Rando/blob/6f68fdabd5bd4e26b50335aa6c486e01a2ac31ec/latest/test-logs/song-room.log)). The 2026-09-28 Song Room `undefined` defect is **not fixed**, despite the 2026-10-01 commit messages claiming it was. Do not invite owner testing.
+Pre-update `main` was `c0a11fe`; its stable runtime remains `eaafc4c` followed by canonical documentation. The candidate in draft [PR #5](https://github.com/MakeItRando/Rando/pull/5) is unmerged and **red**. Head `9046918` failed [CI run 36836698618](https://github.com/MakeItRando/Rando/actions/runs/36836698618/job/110285723482): 12 browser suites and visual capture passed, **Song Room failed** with `Desktop Credits: Song Room rendered a placeholder value "undefined"` ([log](https://github.com/MakeItRando/Rando/blob/6f68fdabd5bd4e26b50335aa6c486e01a2ac31ec/latest/test-logs/song-room.log)). The 2026-09-28 Song Room `undefined` defect is **not fixed**, despite the 2026-10-01 commit messages claiming it was. Do not invite owner testing.
+
+## 2026-10-03 verification
+
+A clean local candidate recheck passed install, zero-vulnerability audit, preview build, static/unit, smoke, interface, routes, product policy, playback-context, and listening checks, then reproduced the same Song Room `undefined` failure. Stable `main` passed preview build, static/unit, and all six browser suites, but `npm audit --audit-level=high` failed on Playwright advisory `GHSA-7mvr-c777-76hp`. See [AUDIT_2026-10-03.md](AUDIT_2026-10-03.md). Dependency remediation is required engineering work for the next integration candidate.
 
 ## Root cause (verified by reading head source)
 

@@ -16,9 +16,7 @@ One physical audio element/clock/volume/analyser and persistent bottom transport
 
 ## Prototype truth
 
-The candidate stores bounded IDs under `rondo-playback-context-v1` alongside legacy `rondo-prototype-v2` and `rondo-route-state-v1`. `src/ui/playbackContexts.js`, `src/ui/playbackContextLayout.js` and `src/ui/journeyStateGuard.js` bridge the singleton app through DOM/event interception; this is testable compatibility glue, not a production architecture or a proof that every field of the target model is already persisted. Global prototype queue limit is 20 track IDs. Avoid storing artwork/base64/provider payloads.
-
-Current candidate [`cd25bbd`](https://github.com/MakeItRando/Rando/commit/cd25bbda8b4e92671c9a61fd97352b9eaac6fc1d) had [successful CI run 34465613545](https://github.com/MakeItRando/Rando/actions/runs/34465613545/job/102833363733) including `tests/playback-contexts.mjs` according to [result manifest](https://github.com/MakeItRando/Rando/blob/513d538822a3ea2d4b7f50b2c777a5594815fa71/latest/test-results.json). The exact published HTML at preview commit `089bd21` has **not** been separately documented as audited for this head. Earlier `b752cc6` playback-context test and preview audit were for a different head.
+Candidate `9046918` stores bounded IDs under `rondo-playback-context-v1` alongside legacy `rondo-prototype-v2` and `rondo-route-state-v1`. `src/ui/playbackContexts.js`, `src/ui/playbackContextLayout.js`, and `src/ui/journeyStateGuard.js` bridge the singleton app through DOM/event interception; the global prototype queue limit is 20 track IDs. Do not persist artwork/base64/provider payloads. The layers are compatibility glue, not production architecture. In the 2026-10-03 local recheck, the dedicated playback-context suite passed before the later Song Room failure; this proves that test at that head, not overall release readiness. Preview `089bd21` is stale and cannot certify the current implementation. The compatibility layers remain migration debt: production ownership must move into explicit store/audio commands, not DOM observation or event interception.
 
 ## Production target
 

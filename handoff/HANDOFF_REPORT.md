@@ -1,10 +1,10 @@
 # Rondo project handoff report
 
-**As of 2026-09-28:** this is a continuity report, not a release certificate. Read [STATE.md](STATE.md) first for refs and blockers, then verify live GitHub state.
+**As of 2026-10-03:** this is a continuity report, not a release certificate. Read [STATE.md](STATE.md) first, then [AUDIT_2026-10-03.md](AUDIT_2026-10-03.md), and verify live GitHub state.
 
 ## Immediate verdict for the next contributor
 
-Rondo's experience direction is well specified, but its newest code is **not on `main`**: [draft PR #5](https://github.com/MakeItRando/Rando/pull/5) carries candidate [`cd25bbd`](https://github.com/MakeItRando/Rando/commit/cd25bbda8b4e92671c9a61fd97352b9eaac6fc1d). Latest CI succeeded, while latest exact-published-preview audit and post-change manual 18-image review are not recorded. Owner acceptance is still pending. This documentation round changes no app code. Do not merge or start real artist/song integration based on an old readiness assertion.
+Rondo's direction is unusually well documented, but the newest experience is neither accepted nor on `main`. Draft [PR #5](https://github.com/MakeItRando/Rando/pull/5) is at `9046918` and red: Song Room can show `undefined`. The evidence branch records the failure, the published portable preview is stale, and the PR body still describes an older green head. `main` itself passes its build/static/unit/browser suite locally but fails the high-severity dependency audit on its older Playwright version. This orientation round changes documentation only. Do not ask for owner testing, merge the candidate, or start real artist/song/backend integration until the current blockers are fixed and exact-head gates pass.
 
 ## Purpose and point of view
 
@@ -14,11 +14,14 @@ No oversized filler typography, generic AI art, generated-looking glow/cards, fa
 
 ## Evidence lineage, do not confuse heads
 
-- `main` runtime: v0.3.0 baseline [`eaafc4c`](https://github.com/MakeItRando/Rando/commit/eaafc4c3ad5f4151b9b0852d16f6543737c16821), followed by canonical docs.
-- Current candidate: [`cd25bbd`](https://github.com/MakeItRando/Rando/commit/cd25bbda8b4e92671c9a61fd97352b9eaac6fc1d), latest [run 34465613545](https://github.com/MakeItRando/Rando/actions/runs/34465613545/job/102833363733), [evidence `513d538`](https://github.com/MakeItRando/Rando/commit/513d538822a3ea2d4b7f50b2c777a5594815fa71), [preview `089bd21`](https://github.com/MakeItRando/Rando/commit/089bd2125ab002b3aa70f8587578e01c2a879a5f), HTML blob `3f09d59b7207a02be3624d044bc06f8d672c0cd9` at 527,599 bytes.
-- Automated evidence: 13 browser suites passed; 18 captures generated with no recorded visual-report failures/runtime errors, per [test results](https://github.com/MakeItRando/Rando/blob/513d538822a3ea2d4b7f50b2c777a5594815fa71/latest/test-results.json) and [visual report](https://github.com/MakeItRando/Rando/blob/513d538822a3ea2d4b7f50b2c777a5594815fa71/latest/visual-report.json).
-- Missing on this head: a separately documented exact published-blob runtime audit; fresh manual acceptance of all 18 latest images; owner desktop/phone acceptance. Historical `89fc0d5`/`b752cc6` passes and 37-check/18-image manual claims must remain attributed to their own heads.
-- PR #5 description still cites older controlling references; it must be corrected before experience handoff. Merge state was last reported dirty. No acceptance was found.
+- `main`: `c0a11fe`; v0.3.0 runtime baseline `eaafc4c`, followed by documentation commits.
+- Current candidate: `rondo-v031-user-ready` at `9046918`, open draft PR #5, 206 commits ahead of its merge base and 22 commits behind current `main` at audit time.
+- Current candidate automation: CI run `36836698618` failed in `song_room`. Evidence branch `rondo-v032-qa-evidence` at `6f68fda` records 12 successful browser suites, visual capture success, and Song Room failure. It is generated evidence, not a source branch.
+- Current candidate local reproduction on 2026-10-03: clean install, zero-vulnerability audit, preview build, static/unit and the first six ordered browser suites passed; `tests/song-room.mjs` then failed with `Desktop Credits: Song Room rendered a placeholder value "undefined"`.
+- Portable preview: `rondo-v031-preview` at `089bd21`, built from older `cd25bbd`; it is not evidence for `9046918`.
+- `main` local verification on 2026-10-03: preview build, static, unit and all six browser suites passed. `npm audit --audit-level=high` failed on Playwright advisory `GHSA-7mvr-c777-76hp`; treat dependency remediation as required engineering work, not a documentation-only edit.
+- Missing: current-head green CI, current-head published preview, exact-preview HTTP audit, current-head 18-capture manual review, accessibility/security/rights sign-off, owner desktop/phone acceptance, and post-merge verification.
+- Historical green results for `cd25bbd`, `b752cc6`, or `89fc0d5` stay historical and must never be attached to `9046918`.
 
 ## Recovered previous conversation, with limits
 
@@ -38,7 +41,7 @@ The production architecture is provider-neutral with stable Rondo IDs, normalize
 
 ## Delivery sequence
 
-1. **Now:** reconcile canonical docs (this round); complete exact published-preview and manual visual gates, correct PR description, then request owner desktop/phone experience test.
+1. **Next development round:** fix Song Room at its source-level writer, remove the ineffective runtime guard, deliberately remediate the dependency audit, and rerun the complete exact-head workflow. Then inspect all 18 new captures, audit the exact published preview, reconcile the PR body/handoff, and only then request owner desktop/phone experience testing.
 2. **If feedback changes source:** fix on a focused candidate branch and rerun all gates for the new exact head, republish evidence and handoff.
 3. **On explicit acceptance:** resolve PR integration/dirty state deliberately, merge accepted code, rerun post-merge checks, update main specs/state.
 4. **Then:** naming migration, production foundation, authorized catalog/rights pipeline, real V1 listener system, evaluated editorial/recommendation depth, operational scale. See [ROADMAP.md](ROADMAP.md).

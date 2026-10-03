@@ -4,7 +4,7 @@ Dates are open pending team capacity, launch territory/platform, and owner-provi
 
 ## Phase 0: experience approval (current)
 
-Latest candidate `cd25bbd` on [draft PR #5](https://github.com/MakeItRando/Rando/pull/5) passed local-preview [CI run 34465613545](https://github.com/MakeItRando/Rando/actions/runs/34465613545/job/102833363733): 13 browser suites and automated visual capture. QA evidence [`513d538`](https://github.com/MakeItRando/Rando/commit/513d538822a3ea2d4b7f50b2c777a5594815fa71), preview [`089bd21`](https://github.com/MakeItRando/Rando/commit/089bd2125ab002b3aa70f8587578e01c2a879a5f). Latest exact published-preview audit, latest manual visual sign-off and owner acceptance remain unrecorded. Finish those, reconcile PR body, request desktop/phone experience test, address feedback with new exact-head QA if source changes. Only with explicit approval and clean integration plan merge to `main`, run post-merge gate and update handoff. This documentation-only pass does not move the runtime.
+Current candidate `9046918` on draft PR #5 is red in Song Room; evidence `6f68fda` records the failure and preview `089bd21` is stale at older `cd25bbd`. Stable `main` passes its runtime suite locally but has a high-severity Playwright audit finding. Next: source-level Song Room correction, removal of the ineffective runtime guard, deliberate dependency remediation, full exact-head CI, new visual evidence, manual 18-capture review, exact published-preview audit, PR/handoff reconciliation, then owner desktop/phone experience test. Only explicit approval plus a clean integration plan permits merge and post-merge QA. Real artists, songs, accounts, backend, rights integration, and payments do not begin in this phase.
 
 ## Phase 1: secure foundation
 
