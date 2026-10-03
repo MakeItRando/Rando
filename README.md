@@ -11,17 +11,18 @@
 
 Recheck live refs, CI, and PR status; this README is a dated checkpoint, not a substitute for GitHub. Every meaningful product, code, decision, test, design, or branch change must update relevant docs and the handoff in the same session.
 
-## Checkpoint (2026-09-28)
+## Checkpoint (2026-10-03)
 
-| Surface | State |
+| Surface | Verified state |
 | --- | --- |
-| `main` | Stable v0.3.0 runtime baseline `eaafc4c`; subsequent commits are canonical documentation, not the candidate runtime |
-| [Draft PR #5](https://github.com/MakeItRando/Rando/pull/5) | Open/unmerged; candidate branch `rondo-v031-user-ready` at [`cd25bbd`](https://github.com/MakeItRando/Rando/commit/cd25bbda8b4e92671c9a61fd97352b9eaac6fc1d); merge state last reported dirty |
-| Candidate CI | [Run 34465613545](https://github.com/MakeItRando/Rando/actions/runs/34465613545/job/102833363733) succeeded; 13 browser suites plus visual capture, per [evidence](https://github.com/MakeItRando/Rando/blob/513d538822a3ea2d4b7f50b2c777a5594815fa71/latest/run-summary.txt) |
-| QA archive | [`513d538`](https://github.com/MakeItRando/Rando/commit/513d538822a3ea2d4b7f50b2c777a5594815fa71); 18 automated captures, no recorded visual-report failures |
-| Portable preview | [`089bd21`](https://github.com/MakeItRando/Rando/commit/089bd2125ab002b3aa70f8587578e01c2a879a5f); HTML blob `3f09d59b7207a02be3624d044bc06f8d672c0cd9` (527,599 bytes) |
+| `main` | `c0a11fe`; stable v0.3.0 runtime remains `eaafc4c`, followed by canonical documentation commits |
+| [Draft PR #5](https://github.com/MakeItRando/Rando/pull/5) | Open/unmerged; `rondo-v031-user-ready` at `9046918`; 206 commits ahead of its merge base and 22 commits behind current `main`; mergeability returned `unknown` during this audit and was previously reported dirty |
+| Candidate CI | [Run 36836698618](https://github.com/MakeItRando/Rando/actions/runs/36836698618/job/110285723482) failed in Song Room because visible metadata contains `undefined` |
+| Candidate evidence | `rondo-v032-qa-evidence` at `6f68fda`; generated evidence only, never a source branch or merge target |
+| Portable preview | `rondo-v031-preview` at `089bd21`; stale, built from older green candidate `cd25bbd`, not current head |
+| Local recheck | On 2026-10-03, `main` build/static/unit/6 browser suites passed; its dependency audit failed on high-severity advisory `GHSA-7mvr-c777-76hp`. Candidate clean install/audit/build/static/unit and the first six browser suites passed, then Song Room reproduced the `undefined` failure |
 
-**Do not conflate these gates.** Latest local-preview CI passed, but a separate audit against that exact published blob and a fresh manual review of all 18 latest captures are not evidenced in the handoff. The older 37-check published-preview audit and 18/18 manual review apply to earlier heads, not `cd25bbd`. Owner experience acceptance is pending. Do not call it perfect, ask the owner to test as a completed quality gate, or merge based on older evidence.
+**Do not conflate these gates.** The current candidate is red, the preview is stale, owner acceptance has not happened, and the evidence branch is not product code. Do not ask the owner to test, merge PR #5, or begin real artist/song integration yet. The next development round must fix the source-level Song Room writer, remove the ineffective runtime guard, update dependencies deliberately, rerun the exact-head workflow, manually inspect all new captures, and audit the exact published preview.
 
 ## Product map
 

@@ -4,7 +4,7 @@ This folder is the canonical continuity package. It should let another contribut
 
 ## Current checkpoint
 
-As reviewed 2026-09-28, draft [PR #5](https://github.com/MakeItRando/Rando/pull/5) candidate [`cd25bbd`](https://github.com/MakeItRando/Rando/commit/cd25bbda8b4e92671c9a61fd97352b9eaac6fc1d) remains unmerged. [CI run 34465613545](https://github.com/MakeItRando/Rando/actions/runs/34465613545/job/102833363733) and [13-suite evidence `513d538`](https://github.com/MakeItRando/Rando/commit/513d538822a3ea2d4b7f50b2c777a5594815fa71) succeeded; [preview `089bd21`](https://github.com/MakeItRando/Rando/commit/089bd2125ab002b3aa70f8587578e01c2a879a5f) exists. Latest exact published-preview audit, manual 18-capture sign-off, and owner acceptance are not evidenced. The previous `b752cc6` checkpoint is historical. Recheck live GitHub status.
+Verified 2026-10-03: draft [PR #5](https://github.com/MakeItRando/Rando/pull/5) is open and unmerged at `9046918`. Its latest [CI run 36836698618](https://github.com/MakeItRando/Rando/actions/runs/36836698618/job/110285723482) failed because Song Room Credits renders `undefined`. Evidence `6f68fda` is failure evidence; preview `089bd21` is stale at older candidate `cd25bbd`. `main` is `c0a11fe`, with stable runtime `eaafc4c` plus canonical documentation. Owner acceptance has not happened. Read [AUDIT_2026-10-03.md](AUDIT_2026-10-03.md) for the full repository audit and [STATE.md](STATE.md) for the shortest live handoff.
 
 ## Reading order
 
@@ -13,7 +13,8 @@ As reviewed 2026-09-28, draft [PR #5](https://github.com/MakeItRando/Rando/pull/
 3. [DECISIONS.md](DECISIONS.md), [OPEN_QUESTIONS.md](OPEN_QUESTIONS.md): confirmed vs unresolved owner choices.
 4. [PRODUCT_MAP.md](PRODUCT_MAP.md), [PLAYBACK_CONTEXTS.md](PLAYBACK_CONTEXTS.md), [PRODUCT_IDEAS.md](PRODUCT_IDEAS.md): page contracts, dual-session behavior, proposals.
 5. [ROADMAP.md](ROADMAP.md), [QUALITY_GATES.md](QUALITY_GATES.md), [SNAPSHOTS.md](SNAPSHOTS.md), [snapshots/README.md](snapshots/README.md): phases, gates, visual/conversation evidence.
-6. Root [AGENTS.md](../AGENTS.md), [agent.md](../agent.md), [README.md](../README.md), and canonical [docs/](../docs/).
+6. [AUDIT_2026-10-03.md](AUDIT_2026-10-03.md), [SESSION_2026-10-03.md](SESSION_2026-10-03.md), and [EXPERIENCE_STRATEGY.md](EXPERIENCE_STRATEGY.md): latest comprehensive audit, owner context, and proposed differentiation principles.
+7. Root [AGENTS.md](../AGENTS.md), [agent.md](../agent.md), [README.md](../README.md), and canonical [docs/](../docs/).
 
 ## Non-negotiable contracts
 

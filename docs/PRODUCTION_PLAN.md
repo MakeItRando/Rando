@@ -83,6 +83,6 @@ Environment separation, secret management, migrations, backup/restore drills, au
 9. Complete security, rights, privacy, accessibility and production-readiness review.
 10. Revisit payments only after V1 and a separate explicit decision.
 
-## Current gate (reviewed 2026-09-28)
+## Current gate (reviewed 2026-10-03)
 
-[Draft PR #5](https://github.com/MakeItRando/Rando/pull/5) candidate [`cd25bbd`](https://github.com/MakeItRando/Rando/commit/cd25bbda8b4e92671c9a61fd97352b9eaac6fc1d) passed local-preview automated [run 34465613545](https://github.com/MakeItRando/Rando/actions/runs/34465613545/job/102833363733) with 13 browser suites and visual capture. A separate latest exact published-preview audit and manual visual acceptance are not evidenced; owner acceptance is pending. Do not merge or start real-system implementation from this gate. See [handoff/STATE.md](../handoff/STATE.md). Update plan and handoff in the same session whenever architecture, rights, scope, sequence or QA state changes.
+Draft PR #5 at `9046918` is red in Song Room; evidence `6f68fda` records that failure and preview `089bd21` is stale. Stable `main` passes its runtime suites locally but fails its high-severity Playwright dependency audit. Complete source-level prototype correction, dependency remediation, exact-head CI, full manual capture review, exact-preview audit, owner acceptance, clean integration, and post-merge verification before beginning this production plan. This gate prevents real-system work from inheriting prototype defects or ambiguous provenance.
