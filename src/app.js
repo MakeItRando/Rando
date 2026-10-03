@@ -1496,7 +1496,7 @@ bindMediaSession();
 showView('discover');
 $('profileTrigger').textContent = (state().profile?.displayName || 'M').charAt(0).toUpperCase();
 const params = new URLSearchParams(window.location.search);
-const previewMode = document.body.dataset.preview || (params.has('onboarding') ? 'onboarding' : params.get('screen'));
+const previewMode = (params.has('onboarding') ? 'onboarding' : params.get('screen')) || document.body.dataset.preview;
 if (previewMode === 'onboarding') openOnboarding();
 else if (previewMode === 'lyrics') openFullPlayer(undefined, 'lyrics');
 else if (previewMode === 'completion') openCompletion({ preview: true });

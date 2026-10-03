@@ -64,7 +64,7 @@ if (/<link rel="stylesheet" href="[^"]+\.css" \/>/.test(html))
   throw new Error("Portable preview still references an external stylesheet.");
 const withMode = (mode) =>
   html.replace("<body>", `<body data-preview="${mode}">`);
-writeFileSync(output, withMode("discover"));
+writeFileSync(output, html);
 writeFileSync(resolve(root, "preview-test.html"), html);
 for (const mode of [
   "onboarding",
