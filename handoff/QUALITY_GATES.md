@@ -2,15 +2,11 @@
 
 A clean automated workflow is necessary but not a release certificate. Source, locally tested build, exact published preview, manual visual review, owner decision, and merged runtime are separate states.
 
-## Current candidate status (2026-10-03 acceptance gate)
+## Current candidate status — 2026-10-04
 
-- Candidate `742abac` on draft [PR #5](https://github.com/MakeItRando/Rando/pull/5) is synchronized with current `main` and unmerged.
-- [Run 37125303981](https://github.com/MakeItRando/Rando/actions/runs/37125303981/job/111209288795) passed clean install, zero-vulnerability audit, portable build, static/unit/migration checks, 13 browser suites, and visual capture against `preview.html`.
-- Evidence `f163d25`: all 13 browser results status `0`; 18 captures; zero automated findings/runtime errors.
-- Preview `74272e6`: HTML blob `0405bc5a0ba00a03b492dd29af83c38d39019e95`, 532,629 bytes, SHA-256 `39db95b35f3a2421631e2178417a08e4af9d8bda0774e4cb4f3be68fd1ef38b5`.
-- Independent exact-preview audit: published HTML downloaded byte-identically; all 13 browser suites and 18-state visual capture passed over HTTP with preview-branch media.
-- Manual review: 18/18 contact-sheet states plus full-size critical states reviewed; no blocker found.
-- Owner acceptance and post-merge verification remain pending. The candidate is test-ready, not released.
+Candidate `d9bc54f`, CI run `37125854133`, evidence `d1635f5`, preview `74272e6` are aligned. Fresh candidate install/audit/static/unit/build and all 13 browser suites pass; 18 automated captures have zero failures/runtime errors. Local rebuild matches the published Git HTML SHA-256. Prior manual/deployed audits remain historical evidence, not repeated full acceptance here.
+
+**Acceptance gate blocked:** B-001 natural Global end uses wrong queue/stale ID; B-002 one-result Search broadens unrelated queue. Main has one high Playwright advisory. Reproductions/limits are in [AUDIT_2026-10-04.md](AUDIT_2026-10-04.md). Existing suites passing does not override the new probes. Rejected design PR #9 is not an alternate acceptance candidate.
 
 ## Gate 1: source/dependencies
 
@@ -19,6 +15,8 @@ From a clean checkout of the exact candidate head: `npm ci`, `npm audit --audit-
 ## Gate 2: enforced browser behavior
 
 Serve the built preview over HTTP, then run the candidate's enforced `npm test`/workflow. Required 13 browser suites: smoke, interface quality, Discover/Journey routes, playback-context isolation, product policy, listening, Song Room, audio, personal surfaces, user-ready, experience, full concept, release readiness. Visual capture is a separate workflow step. Confirm failures actually fail the workflow; do not suppress an assertion or add arbitrary sleeps just to make green.
+
+**Mandatory added cases:** actual media natural end; active-session Previous/Next through buttons, keyboard and Media Session; one-item/empty/source-end Search/Sounds/Library/Release queues; no silent unrelated fallback; exact selected ID/index/position across transport, Song Room and persistence; independent reload restoration; repeat/queue-end behavior. Add deterministic commands tests plus browser media-event coverage.
 
 Test direct Discover, genuine-history recommendation gating, global/search/Sounds, first-use and Change genre picker, all four prototype genres, Artist Journey/completion, source-derived queue, Journey/global isolation and restoration, Release/Library/Profile, save/moments/notes, migration, repeat/seek/volume/media fallback, Song Room modes, Back/Forward, reload without autoplay, mobile and keyboard.
 
@@ -32,7 +30,7 @@ Independently identify published HTML Git blob SHA and byte count, then serve **
 
 ## Gate 5: manual visual review
 
-Open all [18 latest source captures](https://github.com/MakeItRando/Rando/tree/513d538822a3ea2d4b7f50b2c777a5594815fa71/latest/screenshots), plus [contact sheet](https://github.com/MakeItRando/Rando/blob/513d538822a3ea2d4b7f50b2c777a5594815fa71/latest/visual-contact-sheet.jpg). They cover desktop Discover/Sounds/Journey/Artist/Song Room, Light, mobile Discover/picker/R&B/artist/Change genre, 320px, and Reduced Motion. Record who inspected, date, exact image ref, outcome, and defects. Spot-check changed playback context/side player, long titles, unavailable audio/art, dense metadata, empty/populated Library and Profile. Reject overlap, clipping, detached controls, illegible text, covered content, motion overload and mobile identity drift. Automated report zeros are not manual acceptance.
+Open all [18 latest source captures](https://github.com/MakeItRando/Rando/tree/d1635f515cc81e7d82b614f483e7894e8a70b10f/latest/screenshots), plus [contact sheet](https://github.com/MakeItRando/Rando/blob/d1635f515cc81e7d82b614f483e7894e8a70b10f/latest/visual-contact-sheet.jpg). They cover desktop Discover/Sounds/Journey/Artist/Song Room, Light, mobile Discover/picker/R&B/artist/Change genre, 320px, and Reduced Motion. Add first-run onboarding, active Global side player, empty/populated Library/Profile, long text, browser zoom and keyboard-focus states beyond the existing 18 captures. Record who inspected, date, exact image ref, outcome, and defects. Spot-check changed playback context/side player, long titles, unavailable audio/art, dense metadata, empty/populated Library and Profile. Reject overlap, clipping, detached controls, illegible text, covered content, motion overload and mobile identity drift. Automated report zeros are not manual acceptance.
 
 ## Gate 6: owner UX walkthrough
 
@@ -44,4 +42,6 @@ Inspect changed source/config/patches for credentials, production personal data 
 
 ## Gate 8: release evidence and merge
 
-Update [STATE.md](STATE.md), [SNAPSHOTS.md](SNAPSHOTS.md), affected specs, and PR description with exact candidate SHA, commands/results, workflow, preview blob, visual review, exceptions, secret review, owner decision and merge status. For any candidate source change, rerun the entire gate and republish exact-head evidence. Resolve dirty PR integration after acceptance, then post-merge gate and handoff update. Never attach an older green result to a newer source head.
+Candidate workflow currently only triggers on its named branch; main Pages deploy is not equivalent QA. Before accepted integration, enforce equivalent PR/main/post-merge checks and artifact identity. A deploy success alone is not a release certificate.
+
+Update [STATE.md](STATE.md), [SNAPSHOTS.md](SNAPSHOTS.md), affected specs, and PR description with exact candidate SHA, commands/results, workflow, preview blob, visual review, exceptions, secret review, owner decision and merge status. For any candidate source change, rerun the entire gate and republish exact-head evidence. Recheck PR integration after acceptance, then post-merge gate and handoff update. Never attach an older green result to a newer source head.

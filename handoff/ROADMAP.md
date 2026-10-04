@@ -2,9 +2,11 @@
 
 Dates are open pending team capacity, launch territory/platform, and owner-provided implementation-facing legal/source package. Every phase's scope/decision/status change must update this file plus [STATE.md](STATE.md) and relevant docs in the same session.
 
-## Phase 0: experience approval (current)
+## Phase 0: original experience refinement and approval (current)
 
-Candidate `742abac` on draft PR #5 is synchronized with `main` and passed exact portable-artifact CI run `37125303981`; evidence `f163d25`, preview `74272e6`. Independent downloaded-byte HTTP testing passed all 13 browser suites and 18 visual states, and manual review found no blocker. **Current action:** owner desktop/phone experience test. Explicit acceptance is required before merge; then run post-merge QA and update the handoff. Real artists, songs, accounts, backend, rights integration, and payments do not begin in this phase.
+Candidate `d9bc54f` is draft/unmerged. Existing CI/evidence passes, but B-001 Global natural-end progression and B-002 Search source-queue leakage block acceptance. Main dependency and pre/post-merge QA policy need deliberate remediation. See [AUDIT_2026-10-04.md](AUDIT_2026-10-04.md).
+
+This orientation round changed docs/archive only. Next authorized development round: source-level fixes and regression expansion; clarify onboarding before related UX edits; preserve original Rondo and never revive rejected PR #9. After all expanded exact-head/published/manual gates pass, ask owner desktop/phone testing; then explicit acceptance, merge and post-merge QA. Real catalog/backend/payment work does not start here.
 
 ## Phase 1: secure foundation
 
@@ -12,7 +14,7 @@ Deliberately migrate `Rando` technical naming to Rondo; choose framework/hosting
 
 ## Phase 2: authorized real artists/releases/songs
 
-First obtain owner's source/authorization package (source types, contracts, territories/windows, delivery, storage/playback constraints, credits/attribution/reporting, takedown/corrections and API restrictions). Build replaceable provider-neutral adapters, resumable/idempotent ingestion, entity resolution, aliases, recordings vs track placements/editions, credits and provenance, rights windows and request-time playback authorization, indexed debounced cursor search, staged publication and removal. Start controlled thousands, design for millions. Remove dormant Discover renderer before catalog integration; one data-driven Genre page and bounded client APIs. **Exit:** authorized catalog can be ingested, searched, browsed, played where allowed, corrected and removed safely. Public URL is not a license.
+First obtain owner's source/authorization package (source types, contracts, territories/windows, delivery, storage/playback constraints, credits/attribution/reporting, takedown/corrections and API restrictions). Build replaceable provider-neutral adapters, resumable/idempotent ingestion, entity resolution, aliases, recordings vs track placements/editions, credits and provenance, rights windows and request-time playback authorization, indexed debounced cursor search, staged publication and removal. Start controlled thousands, design for millions. Migrate callers and remove legacy Discover renderer before catalog integration; one data-driven Genre page and bounded client APIs. **Exit:** authorized catalog can be ingested, searched, browsed, played where allowed, corrected and removed safely. Public URL is not a license.
 
 ## Phase 3: V1 listener product
 

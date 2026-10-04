@@ -1,0 +1,33 @@
+{
+  "candidate": "d9bc54f8db83efc1cc3360266391cd5d0a3442a0",
+  "query": "Night Transit",
+  "resultIds": [
+    "k101"
+  ],
+  "globalSession": {
+    "sourceLabel": "Discover search",
+    "currentTrackId": "k101",
+    "queueTrackIds": [
+      "k101",
+      "a101",
+      "g101",
+      "s101",
+      "m102",
+      "n101",
+      "t101",
+      "k105",
+      "a102",
+      "a103",
+      "a104",
+      "a105",
+      "k102",
+      "k103",
+      "k104",
+      "k106",
+      "v101",
+      "s104",
+      "g104",
+      "n104"
+    ]
+  }
+}

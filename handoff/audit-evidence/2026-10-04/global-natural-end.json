@@ -1,0 +1,81 @@
+{
+  "candidate": "d9bc54f8db83efc1cc3360266391cd5d0a3442a0",
+  "test": "Real audio end after Global a101 playback",
+  "before": {
+    "title": "Continuum",
+    "context": {
+      "version": 1,
+      "activePlaybackContext": "global",
+      "journeySession": {
+        "activeGenreId": null,
+        "progressByGenre": {},
+        "lastJourneyRoute": null
+      },
+      "globalSession": {
+        "sourceLabel": "Hits today",
+        "currentTrackId": "a101",
+        "queueTrackIds": [
+          "k101",
+          "a101",
+          "g101",
+          "s101",
+          "m102",
+          "n101",
+          "t101",
+          "k105"
+        ]
+      }
+    },
+    "audio": {
+      "duration": 32,
+      "time": 0.470204
+    }
+  },
+  "after": {
+    "title": "Half Awake",
+    "context": {
+      "version": 1,
+      "activePlaybackContext": "global",
+      "journeySession": {
+        "activeGenreId": null,
+        "progressByGenre": {},
+        "lastJourneyRoute": null
+      },
+      "globalSession": {
+        "sourceLabel": "Hits today",
+        "currentTrackId": "a101",
+        "queueTrackIds": [
+          "k101",
+          "a101",
+          "g101",
+          "s101",
+          "m102",
+          "n101",
+          "t101",
+          "k105"
+        ]
+      }
+    },
+    "endedEvents": [
+      {
+        "time": 1791110661820,
+        "title": "Half Awake"
+      }
+    ],
+    "prototype": {
+      "genreId": "rnb",
+      "artistId": "asha-north",
+      "selectedTrackId": "a102",
+      "activeReleaseId": "blacktop-studies",
+      "catalogMode": "all",
+      "repeatMode": "continue",
+      "position": 0
+    },
+    "completionOpen": false,
+    "audio": {
+      "duration": 32,
+      "time": 0
+    }
+  },
+  "errors": []
+}

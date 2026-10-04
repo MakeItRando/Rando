@@ -28,7 +28,7 @@ No provider secrets, licensing decisions, unbounded payloads or complete catalog
 
 After candidate acceptance and before real catalog integration:
 
-1. Integrate accepted candidate and rerun post-merge QA; reconcile the draft PR's dirty merge state and exact-head evidence before merge.
+1. Integrate accepted candidate and rerun post-merge QA; recheck live mergeability and exact-head evidence before merge.
 2. Remove old `renderDiscoverView()` from `src/ui/views.js` after confirming callers and preserve `src/ui/discoveryHub.js` behavior behind normalized services.
 3. Move Journey/Global session ownership out of `src/ui/playbackContexts.js`/`journeyStateGuard.js` DOM/event compatibility glue into first-class store/audio controller commands; one physical engine, two logical resumable sessions and source-derived bounded queues. Migrate old local keys and test both restorations.
 4. Replace fixed four-genre data/routes with one shared data-driven taxonomy/renderer, not per-genre code.
@@ -85,4 +85,4 @@ Environment separation, secret management, migrations, backup/restore drills, au
 
 ## Current gate (reviewed 2026-10-03)
 
-Draft PR #5 candidate `742abac` is synchronized with `main` and has passed exact portable-artifact CI, independent published-byte HTTP testing, and manual 18-state review. It is ready for owner desktop/phone acceptance, not merged or production-approved. After explicit acceptance, merge and run post-merge QA before beginning this production plan. This gate prevents real-system work from inheriting unaccepted prototype behavior or ambiguous provenance.
+Draft PR #5 candidate d9bc54f passes existing automation but has new reproduced playback/source-queue blockers. Experience acceptance is not currently ready. Fix B-001/B-002, remediate main dependency/CI policy and rerun expanded exact-head/manual/published gates before owner testing, accepted merge and production-system work. Living Record PR #9 is rejected; original Rondo is the foundation. See ../handoff/STATE.md and ../handoff/AUDIT_2026-10-04.md.

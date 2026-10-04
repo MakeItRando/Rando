@@ -33,3 +33,7 @@ Add its metadata and purpose to `../SNAPSHOTS.md`:
 - Keep source captures outside the release tree when they are merely generated QA output.
 - Commit representative evidence only after visual inspection.
 - Never treat a screenshot as proof that interactions, accessibility, or runtime errors passed.
+
+## Current owner-conversation archive
+
+[2026-10-04-owner-context/](2026-10-04-owner-context/) contains five supplied previous-conversation screenshots losslessly wrapped as SVG, with original PNG hashes and provenance. Do not confuse these with QA screenshots or a full transcript. Final screenshot records rejection of Living Record; consult ../DESIGN_RESET_2026-10-04.md.

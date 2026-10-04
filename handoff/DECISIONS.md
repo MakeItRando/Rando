@@ -37,7 +37,7 @@ Statuses: **Confirmed** (non-negotiable), **Working** (testable experiment), **O
 | D-031 | Confirmed | Catalog is artist-, genre-, and source-inclusive; build provider-neutral ingestion/browsing for thousands first and millions without redesign. Owner supplies legal acquisition plan first. | Public availability is never code-level authorization. |
 | D-032 | Confirmed | **V1 has no payments.** | Owner answer; revisit only in a separately approved later phase. |
 | D-033 | Open | Launch territory/platform mix and concrete legal/source package are required before production ingestion/playback. | Affects rights, infrastructure, and operations. |
-| D-034 | Confirmed | `src/ui/discoveryHub.js` is the canonical v0.3.2 Discover/Journey route implementation. Dormant `renderDiscoverView()` in `src/ui/views.js` must never be revived and must be deleted before production catalog integration. | Avoid two competing product contracts. |
+| D-034 | Confirmed | `src/ui/discoveryHub.js` is the canonical v0.3.2 Discover/Journey route implementation. Legacy `renderDiscoverView()` in `src/ui/views.js` must never be revived and must be deleted before production catalog integration after caller migration/verification. | Avoid two competing product contracts. |
 | D-035 | Confirmed | Production catalog UI uses stable Rondo IDs, normalized provider-neutral models, bounded shelves/results, cursor pagination, indexed/debounced search, bounded listener references, and one shared data-driven Genre implementation. | Scale from thousands to millions without a product rewrite. |
 | D-036 | Confirmed | Journey and non-Journey listening are separate logical playback sessions and queues over exactly one physical audio engine. | Owner correction after the prior candidate mutated Journey state from Discover. |
 | D-037 | Confirmed | Navigation never switches playback context. A trusted play action switches context only when its source belongs to the other session. | Audio continuity without accidental state mutation. |
@@ -45,6 +45,13 @@ Statuses: **Confirmed** (non-negotiable), **Working** (testable experiment), **O
 | D-039 | Confirmed | Global playback uses the initiating source's bounded queue, truthful Up Next, persistent bottom transport, desktop side player, and manually expandable Song Room. It never auto-expands Song Room. | Familiar control plus context clarity. |
 | D-040 | Confirmed | Returning to Journeys restores its saved session. Explicit Journey playback switches back without deleting the global session. | Both sessions remain resumable. |
 | D-041 | Confirmed | Prototype compatibility interception is temporary. Production must model contexts in the store/audio controller and remove DOM interception before real-catalog integration. | Prevent prototype glue from becoming production architecture. |
+
+
+| D-042 | Confirmed | Living Record study PR #9 is rejected, closed and unmerged; original Rondo is the sole design foundation. | Owner explicitly preferred original; current screenshot 05 and PR #9 record verdict. Do not revive or blend rejected concepts. |
+| D-043 | Confirmed | Improve actual components through small comparative changes, not wholesale concept-board resets. | Owner rejection plus contributor reset; preserve dark musical identity, art, navigation and Song Room. |
+| D-044 | Confirmed | This 2026-10-04 round is orientation, documentation and archive only; no application development or candidate merge. | Explicit current owner instruction. |
+| D-045 | Open | Permit first listening before account/taste setup, or retain required setup? | Proposed reduction in onboarding friction; current runtime mandates email, three genres/two artists. Needs owner answer. |
+| D-046 | Open | Does artist following mean a saved artist, or a release-update/follow feed? | Current code has saved artists; real subscriptions/notifications are not implemented or approved by this round. |
 
 ## Writing rules
 

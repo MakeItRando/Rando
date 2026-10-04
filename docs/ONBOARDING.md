@@ -1,5 +1,11 @@
 # Rondo onboarding
 
+## Implementation status — 2026-10-04
+
+The flow below is a **production specification, not the current prototype**. At candidate d9bc54f the implemented flow has four local-profile steps: display name/email; at least three genres; at least two fictional artists; three taste sliders. It creates no authenticated account. Default selections exist, and not every preference has the specified uncertainty path. The owner criticized current copy/craft and rejected the replacement Living Record direction.
+
+An optional guest-first entry is proposed, not approved. Before changing the required-setup contract, ask whether a listener may play from Discover before email/taste setup. Keep refinements within original Rondo and document measured first-play/abandonment criteria; do not invent metrics. See [design reset](../handoff/DESIGN_RESET_2026-10-04.md).
+
 ## Goal
 
 Create a useful taste profile without making the user feel tested. Setup is required, but every preference question provides a `Not sure yet` path. The profile can be edited later.

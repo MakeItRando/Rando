@@ -7,7 +7,10 @@ Build a distinctive, calm, accessible music product around **find → play → e
 Read [README.md](README.md), [handoff/STATE.md](handoff/STATE.md), [handoff/HANDOFF_REPORT.md](handoff/HANDOFF_REPORT.md), [handoff/DECISIONS.md](handoff/DECISIONS.md), [handoff/PRODUCT_MAP.md](handoff/PRODUCT_MAP.md), [handoff/PLAYBACK_CONTEXTS.md](handoff/PLAYBACK_CONTEXTS.md), [handoff/QUALITY_GATES.md](handoff/QUALITY_GATES.md), [handoff/ROADMAP.md](handoff/ROADMAP.md), and all applicable [docs/](docs/). Inspect current branch, PR #5, checks, and changes before planning. `agent.md` points here; do not implement from a pointer or screenshot alone.
 
 ## Live-state discipline
-As verified 2026-10-03, `main` is `947f1a8`; its stable runtime is v0.3.0 at `eaafc4c` with later canonical documentation. The newer experience exists only in draft [PR #5](https://github.com/MakeItRando/Rando/pull/5), candidate `742abac`, cleanly synchronized with `main`. [CI run 37125303981](https://github.com/MakeItRando/Rando/actions/runs/37125303981/job/111209288795) passed the portable artifact gate; evidence `f163d25`, preview `74272e6`. The published HTML was independently byte-matched and passed all 13 browser suites plus 18-state visual capture over HTTP; manual visual review found no blocker. Owner acceptance is pending. Reverify live refs before acting; do not merge, call it released, or begin real catalog work until explicit acceptance and post-merge verification.
+
+Audit baseline main `c656489` contains stable v0.3.0 runtime; this round adds docs/archive only. Draft PR #5 candidate `d9bc54f`, CI `37125854133`, evidence `d1635f5` and preview `74272e6` align. Existing suites pass but fresh B-001/B-002 probes block acceptance readiness. Main has a high Playwright advisory. Read [AUDIT_2026-10-04.md](handoff/AUDIT_2026-10-04.md) and recheck live refs before acting. Never infer approval from generic merge delegation or label latest main synchronized after docs-only commits.
+
+Read [DESIGN_RESET_2026-10-04.md](handoff/DESIGN_RESET_2026-10-04.md). PR #9/Living Record is explicitly rejected, closed and unmerged. Preserve original Rondo; no revival/blending/wholesale concept-board redesign. The owner requested no app development in this orientation round; later scope must be explicit.
 
 ## Product and UX invariants
 - Discover opens directly, song-first. Made for you appears only after genuine history. Journeys owns genre picking, route-backed genre pages, and artist progression.
@@ -17,7 +20,7 @@ As verified 2026-10-03, `main` is `947f1a8`; its stable runtime is v0.3.0 at `ea
 - Persist meaningful bounded references, progress, preferences, saves, moments, and notes, not dialogs, focus, animation samples, source payloads, full catalog snapshots, or autoplay intent.
 
 ## Engineering boundaries
-- Canonical candidate Discover/Genre renderer: `src/ui/discoveryHub.js`. The older `renderDiscoverView()` in `src/ui/views.js` remains a competing dormant path; remove after accepted integration and caller verification, before production catalog work. Release chapters are not proven to have standalone hash routes.
+- Canonical candidate Discover/Genre renderer: `src/ui/discoveryHub.js`. The older `renderDiscoverView()` in `src/ui/views.js` remains a competing legacy path with a caller; remove after accepted integration and caller verification, before production catalog work. Release chapters are not proven to have standalone hash routes.
 - `src/ui/playbackContexts.js` and `src/ui/journeyStateGuard.js` are prototype compatibility glue. Move ownership into first-class store/audio intents before real catalog work; remove DOM interception without regressing dual-session behavior.
 - Rondo IDs and provider-neutral entities; source payloads stop at adapters. One shared data-driven Genre renderer; bounded cursor APIs; indexed/debounced/cancellable rights-aware search; lazy assets; auditable resumable ingestion. Never flatten the catalog client-side.
 - Credentials and rights decisions stay server-side. The owner supplies legal/source and territory inputs before integration. V1 has **no payments**. Current browser-local profile/notes are not secure account sync.

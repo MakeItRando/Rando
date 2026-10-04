@@ -52,6 +52,8 @@ Animate only playback, focus, navigation or subtle art response. Avoid orbits, p
 
 One page main outside modal states; route titles/announcements/focus; keyboard actions; top dialog containment/Escape/focus return; accurate current/pressed/selected/value states; 44×44px important controls; non-color states; long names, missing art, unavailable audio and instrumentals usable; no overflow at desktop/390px/320px, no player/nav covering content. Large catalog uses bounded shelves/first renders, progressive disclosure, accessible cursor pagination or virtualization, debounced search with loading/empty/error/rights states, metadata-derived counts, layout-preserving skeletons, responsive art and one data-driven Genre composition. Never flatten full catalog in browser.
 
-## Current quality status (reviewed 2026-10-03)
+## Current checkpoint — 2026-10-04
 
-Candidate `742abac` corrected Song Room metadata, desktop mode ownership, transport icons, and compact Discover search copy. CI run `37125303981` and evidence `f163d25` report 13 successful browser suites and 18 captures with zero findings. Published preview `74272e6` was independently byte-matched and passed the same browser/visual matrix over HTTP. Manual 18-state review found no blocker, including desktop Light, 320px, and Reduced Motion. Owner experience acceptance and post-merge review remain pending.
+Candidate `d9bc54f` remains draft/unmerged. Existing 13-suite/18-capture automation and exact Git-artifact identity checks pass, but fresh natural-end and single-result Search probes reproduced B-001/B-002; acceptance readiness is blocked. Main still has a high Playwright advisory. Read [current state](../handoff/STATE.md) and [audit](../handoff/AUDIT_2026-10-04.md).
+
+Original Rondo is the design foundation; Living Record study PR #9 is rejected. Refine the existing interface with component-level before/after evidence. Prototype browser-local profile/taste data is not secure account sync; no real ingestion/backend/rights enforcement/payments is implemented. V1 excludes payments. No app code changed this round.

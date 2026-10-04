@@ -39,3 +39,7 @@ Production search: indexed, debounced/cancellable, alias/typo/edition/rights-awa
 ## Phases and payments
 
 Experience approval and integration first; then secure Rondo foundations; owner-authorized real catalog/rights; V1 listener product; recommendation/editorial maturity; operations at scale. V2 ideas follow measured need. **No payments in V1**; any later subscriptions/tips/artist transactions require a separate decision and compliant rights/finance design. See [ROADMAP.md](ROADMAP.md) and [PRODUCT_IDEAS.md](PRODUCT_IDEAS.md).
+
+## Current audit overlay — 2026-10-04
+
+Contracts above remain targets, not certification that every source path satisfies them. Natural Global audio end and one-result Search queue behavior currently fail their contracts; see AUDIT_2026-10-04.md. Artist saving exists; a real following/release notification service does not. Onboarding is four local-profile steps in the prototype, while docs/ONBOARDING.md describes planned production setup. Clarify guest-first entry and artist-follow meaning before changes. Original design is retained; rejected PR #9 must not be revived.

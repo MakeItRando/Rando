@@ -1,8 +1,8 @@
 # Product-owner decisions and remaining questions
 
-**Last updated:** 2026-09-09
+**Last updated:** 2026-10-04
 
-v0.3.2 is green and ready for product-owner testing; these remaining questions do not authorize merge or production implementation. Resolve each before its dependent phase.
+Existing v0.3.2 suites are green, but newly reproduced playback/source-queue defects block acceptance readiness. These questions do not authorize merge or production implementation. Resolve each before its dependent phase.
 
 ## Resolved decisions
 
@@ -24,7 +24,7 @@ Engineering uses normalized stable Rondo IDs, replaceable authorized connectors,
 
 ### Canonical renderer
 
-`src/ui/discoveryHub.js` is canonical for the accepted v0.3.2 Discover/Journey contract. Dormant `renderDiscoverView()` in `src/ui/views.js` must not be revived and must be deleted before production catalog integration.
+`src/ui/discoveryHub.js` is canonical for the accepted v0.3.2 Discover/Journey contract. Legacy `renderDiscoverView()` in `src/ui/views.js` must not be revived and must be deleted before production catalog integration.
 
 ## Remaining questions
 
@@ -36,7 +36,7 @@ After testing, choose: keep; simplify to always-available liner context; or remo
 
 ### 2. Experience acceptance
 
-The engineering pre-test gate is complete. Owner must test desktop and phone and explicitly accept the experience before PR #5 merges or real-system work begins.
+The pre-test gate is reopened by B-001/B-002 in AUDIT_2026-10-04.md. Fix and expand checks first, then owner desktop/phone testing and explicit acceptance before merge or real-system work.
 
 ### 3. Launch territory and platforms
 
@@ -44,8 +44,16 @@ Before production licensing/infrastructure, decide initial countries/regions, we
 
 ### 4. Candidate integration strategy
 
-Candidate is green but not accepted. After acceptance, choose squash versus normal merge. Recommended default: retain full history until acceptance, then squash noisy diagnostic history into a clear release commit while preserving QA evidence branches and links.
+Candidate passes existing automation but has reproduced uncovered blockers and is not accepted. After acceptance, choose squash versus normal merge. Recommended default: retain full history until acceptance, then squash noisy diagnostic history into a clear release commit while preserving QA evidence branches and links.
 
 ### 5. Legal/source integration handoff
 
 Before real ingestion, owner provides implementation-facing authorized source types, represented contracts/permissions, territories, delivery methods, metadata/credit obligations, reporting, corrections/takedowns, storage/playback limits, and provider/API restrictions. Do not paste secrets into chat or commit them.
+
+### 6. First-listen setup contract — ask before onboarding edits
+
+May a listener play music from Discover before supplying email or choosing genres/artists, with account/taste setup offered when needed? This is a proposal to reduce friction, not a change already approved. Current implementation mandates setup; preserve it until the owner resolves the contract.
+
+### 7. Artist-follow meaning — ask before dependent features
+
+Does following an artist mean keeping them in Library, receiving new-release updates, or both? Current prototype only saves artists. Real following/subscriptions/notifications need a separately specified identity, privacy and delivery model. Do not imply a public social feed is approved.

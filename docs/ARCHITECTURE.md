@@ -33,7 +33,7 @@ src/ui/discoveryHub.js             canonical Discover/Genre route renderer
 src/ui/productPolicy.js            recommendation/picker/accessibility policy
 src/ui/playbackContexts.js         prototype dual-session compatibility controller
 src/ui/playbackContextLayout.js    prototype desktop global-player placement
-src/ui/views.js                    other pages; dormant legacy Discover renderer
+src/ui/views.js                    other pages; legacy Discover renderer still called by src/app.js
 tests/playback-contexts.mjs        Journey/global isolation regression
 ```
 
@@ -41,7 +41,7 @@ Candidate-only runtime files remain on `rondo-v031-user-ready` until acceptance.
 
 ## Canonical renderer policy
 
-`src/ui/discoveryHub.js` is the sole canonical Discover/Genre renderer. Dormant `renderDiscoverView()` in `src/ui/views.js` is not a rollback path. Delete it before production catalog integration after accepted integration confirms no caller remains.
+`src/ui/discoveryHub.js` is the sole canonical Discover/Genre renderer. Legacy `renderDiscoverView()` in `src/ui/views.js` is not a rollback path. At `d9bc54f`, src/app.js still imports it and calls it in renderActiveSurface(); a later route/policy layer replaces presentation. Migrate that caller deliberately and test the canonical route path before deleting the export. Do not mistake the legacy path for a caller-free file.
 
 ## Routes and rendering
 
@@ -126,7 +126,7 @@ V1 has no payments. Checkout, subscriptions, tips, billing, entitlements, taxes,
 4. No duplicate audio engine, queue rules, progress rules, or Genre renderer.
 5. No navigation-driven playback-context changes.
 6. No global play mutating Journey state.
-7. No revival of dormant `renderDiscoverView()`.
+7. No revival of legacy `renderDiscoverView()`.
 8. No invented metadata, popularity, stories, or rights.
 9. No feature without loading/empty/error/accessibility/mobile states.
 10. No unbounded query/full-catalog client state.
@@ -135,3 +135,7 @@ V1 has no payments. Checkout, subscriptions, tips, billing, entitlements, taxes,
 ## Deployment
 
 GitHub Pages is suitable only for the static prototype. Secure accounts, credentials, territorial rights, authorized playback/lyrics, moderation, ingestion/search, editorial workflows, observability, and recovery require a server-capable production platform.
+
+## Audit checkpoint — 2026-10-04
+
+The target active-session contract is not fully met: natural-end handling still takes the singleton artist queue; single-result queue derivation silently broadens sources. Independent Global position/repeat/index persistence is not modeled directly in the context key. See [audit](../handoff/AUDIT_2026-10-04.md) and [STATE](../handoff/STATE.md). Fix at source through explicit store/audio/route intents; do not add another DOM repair guard. Candidate CI is branch-specific; main Pages deployment has no equivalent enforced gate.

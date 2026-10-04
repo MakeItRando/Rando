@@ -1,53 +1,42 @@
 # Current project state
 
-**Reviewed:** 2026-10-03 after source correction, exact-artifact CI, independent published-preview audit, and manual visual review. Verify live GitHub refs before acting. **Product:** Rondo. **Current phase:** owner experience acceptance; production integration has not started.
+**Reviewed:** 2026-10-04. **Product:** Rondo. **Phase:** orientation complete; original experience refinement/quality gate. **This round:** documentation and conversation archive only, no app development.
 
 ## Verdict
 
-Draft [PR #5](https://github.com/MakeItRando/Rando/pull/5) is ready for product-owner desktop/phone testing. Candidate `742abac` is unmerged and cleanly synchronized with `main` (`947f1a8`). [CI run 37125303981](https://github.com/MakeItRando/Rando/actions/runs/37125303981/job/111209288795) passed the exact portable `preview.html` gate. Evidence branch `f163d25` records all 13 browser suites and visual capture successful. Preview branch `74272e6` is current.
+**Do not request acceptance testing or merge PR #5 yet.** Existing candidate automation passes, but fresh read-only probes reproduced wrong Global natural-end progression and one-result Search queue leakage. See [AUDIT_2026-10-04.md](AUDIT_2026-10-04.md). Earlier blanket test-ready language is superseded, not proof of full listening-session correctness.
 
-This is **test-ready, not merged, released, production-secure, or approved**. Explicit owner acceptance remains the merge gate.
+Original Rondo is the design foundation. Living Record study PR #9 is rejected and closed, never merged. See [DESIGN_RESET_2026-10-04.md](DESIGN_RESET_2026-10-04.md).
 
-## Implemented corrections
+## Exact evidence and branch boundary
 
-1. One `songRoomMetaText(track)` writer now owns truthful Song Room transport metadata in both appearance sync and full-player rendering. No invented palette metadata.
-2. Mobile-only Room mode resolves to About/story on desktop at the renderer boundary.
-3. Full-player play/pause uses the shared SVG icon family.
-4. The ineffective document-wide `runtimeQualityGuard.js` and import were deleted.
-5. Compact Discover uses the complete `Search music` hint, with a 320px regression assertion.
-6. Portable preview query state now overrides named screenshot defaults in both route controllers.
-7. Canonical `preview.html` no longer hard-codes a Discover-only body state; it behaves like the real first-run app.
-8. Candidate CI now tests `preview.html` itself rather than the nearby `preview-test.html` artifact.
-
-## Evidence matrix
-
-| Surface | Exact ref | Verified status |
+| Surface | Exact ref | Status |
 | --- | --- | --- |
-| `main` | `947f1a8` | Canonical specs; stable runtime still `eaafc4c` |
-| PR #5 / candidate | `742abac` | Open draft, unmerged, synchronized with `main` |
-| Candidate CI | run `37125303981` | **Passed** |
-| Evidence | `f163d25` | 13/13 browser suites success; 18 captures; zero automated findings/runtime errors |
-| Portable preview | `74272e6` | Current build from `742abac` |
-| HTML identity | Git blob `0405bc5a0ba00a03b492dd29af83c38d39019e95`; 532,629 bytes; SHA-256 `39db95b35f3a2421631e2178417a08e4af9d8bda0774e4cb4f3be68fd1ef38b5` | Downloaded published HTML byte-identical to locally certified build |
-| Independent HTTP audit | downloaded published HTML plus preview-branch demo media | 13 browser suites and 18-state visual capture passed |
-| Manual visual review | evidence contact sheet plus full-size critical states | 18/18 reviewed; no blocker found |
-| Owner acceptance | pending | Required before merge |
+| Audited main baseline | `c656489a2892c9e6864d8e0a03b74d967e68bb20` | Stable v0.3.0 runtime; this round adds docs/archive commits only; resolve current main live |
+| Candidate / PR #5 | `d9bc54f8db83efc1cc3360266391cd5d0a3442a0` | Open draft, unmerged, based on main baseline; not synchronized with later docs-only main commits |
+| Candidate CI | run `37125854133`, job `111210924804` | Passed at exact candidate head |
+| Archived evidence | `d1635f515cc81e7d82b614f483e7894e8a70b10f` | 13 suites and visual success; not coverage of new blockers |
+| Portable preview | `74272e6e1e05f6abcfde1b7df5fcb5bf3662c52f` | Current unchanged runtime build; HTML blob `0405bc5a0ba00a03b492dd29af83c38d39019e95` |
+| HTML identity | 532629 bytes; SHA-256 `39db95b35f3a2421631e2178417a08e4af9d8bda0774e4cb4f3be68fd1ef38b5` | Git-published bytes and local candidate rebuild match this round |
+| Fresh local checks | unchanged `d9bc54f` | Install, zero-reported-vulnerability candidate audit, static, unit/migration, build, all 13 browser suites passed; 18 automated captures, 0 failures/runtime errors |
+| Main dependency audit | audited baseline | **1 high Playwright advisory remains** |
+| Visual review this round | exact archived contact sheet + full-size About/mobile Discover | Original identity retained; not exhaustive accessibility or full-size 18-state acceptance |
+| Owner acceptance | not given | Prior onboarding/design criticism remains unresolved |
 
-## Manual review notes
+The source-level Song Room metadata/desktop-mode/SVG/320px/query-first/canonical-preview fixes at `742abac` remain implemented. Later integration head `d9bc54f` added documentation synchronization, not another runtime redesign.
 
-Desktop Discover/Journeys/Artist/Song Room, desktop Light, mobile Discover/picker/R&B/artist/change-genre, 320px Discover, and Reduced Motion Song Room preserve hierarchy, readable controls, artwork, player clearance, and responsive identity. Song Room metadata no longer exposes `undefined`. Compact Discover reaches music in the first viewport and shows an untruncated `Search music` hint. Light mode remains intentionally restrained but legible. No horizontal overflow, broken rendered image, undersized recorded target, or runtime error was reported.
+## Blockers and next development sequence
 
-## Next work
+1. **B-001:** Global natural end changes `a101` → artist track `a102`, not queued `g101`; global selected ID stays stale. Unify end/buttons/media actions under active session ownership and add regressions.
+2. **B-002:** a single Search result silently expands to unrelated 20-item Discover queue. Respect source boundaries and deliberate queue endings.
+3. **B-003:** main still carries high-risk Playwright development dependency; resolve in a deliberate dependency/integration pass.
+4. Verify first-class session persistence, Media Session controls, and legacy renderer caller migration. Avoid new DOM repair guards.
+5. Refine onboarding within original design only after first-listen/setup contract is clarified. No rejected concepts.
+6. Reconcile current main docs and candidate, run complete exact-head gates plus added edge cases, publish aligned preview/evidence, manually review desktop/mobile/onboarding/Global player/Library/Profile/zoom/reduced-motion states.
+7. Only then invite owner desktop/phone testing. Acceptance → deliberate merge → post-merge QA → secure foundation and authorized catalog phase.
 
-1. Owner tests the current preview on desktop and phone: Discover → play → Journeys → artist/release → Song Room modes → Global playback → return to the saved Journey.
-2. If accepted, merge PR #5 deliberately, run the complete post-merge gate on `main`, and update every handoff/evidence reference.
-3. If feedback changes source, keep PR #5 draft, fix only the observed issue, and rerun install/audit/build/static/unit/13 browser/18 visual/exact-preview/manual gates at the new head.
-4. Only after accepted post-merge verification begin the secure foundation and owner-authorized real artist/song system. V1 excludes payments.
+## Production boundary and continuity
 
-## Production boundary
+Fictional 8 artists, 15 releases, 39 tracks, four playable genres and six original 32-second demo recordings; other tracks can be simulated timelines. Browser-local profile/saves/notes/progress are not accounts or cloud sync. No real ingestion, backend, production search, territory enforcement or payments. V1 excludes payments.
 
-The candidate still uses fictional artists, original demo recordings, browser-local profile/progress/notes, and prototype compatibility layers around a monolithic runtime. It does not implement secure accounts, backend ingestion, production search, territorial rights enforcement, authorized real catalog sources, or payments. `playbackContexts.js` and `journeyStateGuard.js` remain migration debt; move ownership into first-class store/audio commands before real-system scale.
-
-## Continuity rule
-
-Update this file in the same session as every candidate, CI, evidence, preview, manual-review, owner-decision, merge, or post-merge change. A commit message is not evidence; read the exact source and match every result to its SHA.
+Update this state, affected page/architecture specs, decisions, QA/media index, roadmap and handoff report in the same session as every meaningful change. Label proposal, implementation, automated pass, manual review, owner acceptance, merge and post-merge verification separately. Preserve history and exact SHAs; never convert green checks into a promise of perfection.

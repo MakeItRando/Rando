@@ -13,12 +13,12 @@ The previous Notion conversation was not retrievable during the earlier handoff.
 
 See [DECISIONS.md](DECISIONS.md) and [PRODUCT_MAP.md](PRODUCT_MAP.md) for decisions rather than treating screenshots as complete specifications.
 
-## Current `742abac` candidate evidence
+## Archived current-head `d9bc54f` automated evidence — not acceptance
 
-- CI run `37125303981`; evidence commit `f163d25`; all 13 browser suites and visual capture succeeded against `preview.html`.
+- CI run `37125854133`; evidence commit `d1635f5`; all 13 browser suites and visual capture succeeded against `preview.html`.
 - Portable preview commit `74272e6`; HTML Git blob `0405bc5a0ba00a03b492dd29af83c38d39019e95`, 532,629 bytes, SHA-256 `39db95b35f3a2421631e2178417a08e4af9d8bda0774e4cb4f3be68fd1ef38b5`.
-- Published HTML downloaded byte-identically and served over HTTP with the preview branch's six demo audio files; 13 browser suites and 18-state capture passed independently.
-- Manual review: all 18 evidence states reviewed via contact sheet; Song Room Lyrics, desktop Light, 320px Discover, and Reduced Motion Song Room spot-checked full-size. No blocker found.
+- Prior 2026-10-03 deployed audit: published HTML downloaded byte-identically and served over HTTP with the preview branch's six demo audio files; 13 browser suites and 18-state capture passed independently.
+- Prior 2026-10-03 manual review: all 18 evidence states reviewed via contact sheet; Song Room Lyrics, desktop Light, 320px Discover, and Reduced Motion Song Room spot-checked full-size. No blocker found.
 - Five screenshots attached to the owner's 2026-10-03 Notion message remain conversation-history evidence, not product QA.
 
 ## Historical `9046918` failure evidence
@@ -30,30 +30,30 @@ See [DECISIONS.md](DECISIONS.md) and [PRODUCT_MAP.md](PRODUCT_MAP.md) for decisi
 - Workflow run `34465613545`, evidence `513d538`, and preview `089bd21` belong only to `cd25bbd`.
 - That automated run passed 13 browser suites and generated 18 captures, but later human review exposed the Song Room metadata defect. It is useful history, not current acceptance.
 
-## Latest capture matrix
+## Latest archived capture matrix
 
-Each filename below is available under the [exact `513d538` screenshots tree](https://github.com/MakeItRando/Rando/tree/513d538822a3ea2d4b7f50b2c777a5594815fa71/latest/screenshots), and can be linked by appending its filename to that tree URL. Do not mark manual status accepted until inspected.
+Each filename below is available under the [exact `d1635f5` screenshots tree](https://github.com/MakeItRando/Rando/tree/d1635f515cc81e7d82b614f483e7894e8a70b10f/latest/screenshots), and can be linked by appending its filename to that tree URL. Do not mark manual status accepted until inspected.
 
 | # | Filename | State | Manual result |
 | --- | --- | --- | --- |
-| 01 | 01-desktop-discover.jpg | Desktop direct Discover | Pending |
-| 02 | 02-desktop-discover-lower.jpg | Desktop lower Discover | Pending |
-| 03 | 03-desktop-discover-sound.jpg | Desktop Sounds | Pending |
-| 04 | 04-desktop-journey-picker.jpg | Desktop first-use picker | Pending |
-| 05 | 05-desktop-hiphop-journey.jpg | Desktop Genre page | Pending |
-| 06 | 06-desktop-hiphop-songs.jpg | Desktop songs | Pending |
-| 07 | 07-desktop-artist-journey.jpg | Desktop artist | Pending |
-| 08 | 08-desktop-song-room-about.jpg | Desktop About | Pending |
-| 09 | 09-desktop-song-room-lyrics.jpg | Desktop Lyrics | Pending |
-| 10 | 10-desktop-song-room-queue.jpg | Desktop Up next | Pending |
-| 11 | 11-desktop-light-discover.jpg | Light Discover | Pending |
-| 12 | 12-mobile-discover.jpg | 390px Discover | Pending |
-| 13 | 13-mobile-journey-picker.jpg | 390px picker | Pending |
-| 14 | 14-mobile-rnb-journey.jpg | 390px R&B Genre | Pending |
-| 15 | 15-mobile-rnb-artist.jpg | 390px artist | Pending |
-| 16 | 16-mobile-change-genre.jpg | 390px Change genre | Pending |
-| 17 | 17-compact-discover.jpg | 320px Discover | Pending |
-| 18 | 18-reduced-motion-song-room.jpg | Reduced Motion modal | Pending |
+| 01 | 01-desktop-discover.jpg | Desktop direct Discover | Prior review recorded; not owner-accepted |
+| 02 | 02-desktop-discover-lower.jpg | Desktop lower Discover | Prior review recorded; not owner-accepted |
+| 03 | 03-desktop-discover-sound.jpg | Desktop Sounds | Prior review recorded; not owner-accepted |
+| 04 | 04-desktop-journey-picker.jpg | Desktop first-use picker | Prior review recorded; not owner-accepted |
+| 05 | 05-desktop-hiphop-journey.jpg | Desktop Genre page | Prior review recorded; not owner-accepted |
+| 06 | 06-desktop-hiphop-songs.jpg | Desktop songs | Prior review recorded; not owner-accepted |
+| 07 | 07-desktop-artist-journey.jpg | Desktop artist | Prior review recorded; not owner-accepted |
+| 08 | 08-desktop-song-room-about.jpg | Desktop About | Prior review recorded; not owner-accepted |
+| 09 | 09-desktop-song-room-lyrics.jpg | Desktop Lyrics | Prior review recorded; not owner-accepted |
+| 10 | 10-desktop-song-room-queue.jpg | Desktop Up next | Prior review recorded; not owner-accepted |
+| 11 | 11-desktop-light-discover.jpg | Light Discover | Prior review recorded; not owner-accepted |
+| 12 | 12-mobile-discover.jpg | 390px Discover | Prior review recorded; not owner-accepted |
+| 13 | 13-mobile-journey-picker.jpg | 390px picker | Prior review recorded; not owner-accepted |
+| 14 | 14-mobile-rnb-journey.jpg | 390px R&B Genre | Prior review recorded; not owner-accepted |
+| 15 | 15-mobile-rnb-artist.jpg | 390px artist | Prior review recorded; not owner-accepted |
+| 16 | 16-mobile-change-genre.jpg | 390px Change genre | Prior review recorded; not owner-accepted |
+| 17 | 17-compact-discover.jpg | 320px Discover | Prior review recorded; not owner-accepted |
+| 18 | 18-reduced-motion-song-room.jpg | Reduced Motion modal | Prior review recorded; not owner-accepted |
 
 The main handoff keeps references and interpretation; generated screenshots stay in the evidence branch, not duplicated on `main`. Prototype [audio assets](https://github.com/MakeItRando/Rando/tree/rondo-v031-preview/assets/audio), [artist art](https://github.com/MakeItRando/Rando/tree/rondo-v031-preview/assets/artists), and [release art](https://github.com/MakeItRando/Rando/tree/rondo-v031-preview/assets/covers) are not previous-chat attachments.
 
@@ -64,3 +64,9 @@ Earlier head `89fc0d5` had 12 passing browser suites, 18/18 manual captures and 
 ## Future snapshot/evidence template
 
 Date and author; branch and exact candidate SHA; artifact URL/blob/bytes; page/state/device/viewport/theme/motion; what it visibly proves and cannot prove; runtime/test/run link; reviewer and manual result; issue/decision and next action. Screenshots cannot prove interaction or error-free runtime; videos require rights and an accessible playback/transcript pointer.
+
+## Owner conversation archive and current audit — 2026-10-04
+
+All five supplied PNG payloads are now preserved losslessly inside [SVG wrappers](snapshots/2026-10-04-owner-context/) with original byte hashes/dimensions/provenance. These show engineering checkpoints, onboarding criticism, the Living Record proposal and its final rejection; they are not current app QA or a full transcript. The rejection controls future design work.
+
+Fresh candidate automation captured 18 states with no automated failures/runtime errors; existing exact archived contact sheet plus full-size About/mobile Discover were reviewed for orientation. This is not a new full-size 18/18 or accessibility sign-off. B-001/B-002 behavioral probes independently block readiness despite passing screenshots/suites. See [AUDIT_2026-10-04.md](AUDIT_2026-10-04.md). No videos or original concept-package files were supplied this round.

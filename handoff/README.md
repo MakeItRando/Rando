@@ -4,7 +4,7 @@ This folder is the canonical continuity package. It should let another contribut
 
 ## Current checkpoint
 
-Verified 2026-10-03: draft [PR #5](https://github.com/MakeItRando/Rando/pull/5) is open and unmerged at `742abac`, cleanly synchronized with `main`. CI run `37125303981` passed against the portable artifact; evidence `f163d25`, preview `74272e6`. The downloaded published HTML matched the certified Git blob byte-for-byte and passed all 13 browser suites plus 18-state visual capture over HTTP. Manual 18-state review found no blocker. The candidate is ready for owner desktop/phone testing, not merge or production rollout. Read [STATE.md](STATE.md) first.
+2026-10-04 orientation/docs round completed with no app development. PR #5 remains draft/unmerged at `d9bc54f`; existing checks pass but B-001/B-002 probes block acceptance readiness. Main still has a high Playwright advisory. Original Rondo is the foundation; rejected Living Record PR #9 is closed. Read [STATE.md](STATE.md), [AUDIT_2026-10-04.md](AUDIT_2026-10-04.md), [DESIGN_RESET_2026-10-04.md](DESIGN_RESET_2026-10-04.md) and [SESSION_2026-10-04.md](SESSION_2026-10-04.md) first. Five original screenshot payloads are archived under [snapshots/2026-10-04-owner-context/](snapshots/2026-10-04-owner-context/).
 
 ## Reading order
 

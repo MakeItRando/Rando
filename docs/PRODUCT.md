@@ -62,7 +62,7 @@ Discover answers: **What is worth playing now?**
 - Direct song playback activates the source-labeled Global session and source-derived bounded queue; Journey continues unmodified. Song Room expands only when the listener requests it.
 - A production live chart requires a named source and update time. Keep editorial curation clearly identified and shelves finite, not an endless feed.
 
-The candidate's canonical renderer is `src/ui/discoveryHub.js`. Dormant `renderDiscoverView()` in `src/ui/views.js` contains rejected conceptual framing and is not a fallback; remove it after accepted integration and caller verification, before production catalog work.
+The candidate's canonical renderer is `src/ui/discoveryHub.js`. Legacy `renderDiscoverView()` in `src/ui/views.js` contains rejected conceptual framing and is not a fallback; remove it after accepted integration and caller verification, before production catalog work.
 
 ## Journey entry and Genre pages
 
@@ -99,8 +99,8 @@ Every route/shelf/search starts with a bounded window, not an entire collection.
 
 Visible keyboard focus and complete keyboard actions; semantic headings and one active page landmark outside modal states; dialog focus containment/return and Escape; 44×44px important targets; non-color states; Reduced Motion, zoom and reflow. No fake charts, unsupported live analysis, generated filler, streaks, autoplay traps, giant banners or manipulative locks. Production pages require loading, empty, unavailable, partial, offline, rights-blocked, rate-limited and retry paths.
 
-## Current phase and scope (reviewed 2026-10-03)
+## Current checkpoint — 2026-10-04
 
-Candidate `742abac` in draft PR #5 is synchronized with `main` and passed exact portable-artifact CI run `37125303981`; evidence `f163d25`, preview `74272e6`. Independent byte-matched HTTP testing passed all 13 browser suites and 18 visual states; manual review found no blocker. The prototype is ready for owner desktop/phone experience testing, not merged or production-ready. Explicit acceptance and post-merge QA precede real catalog/backend work.
+Candidate `d9bc54f` remains draft/unmerged. Existing 13-suite/18-capture automation and exact Git-artifact identity checks pass, but fresh natural-end and single-result Search probes reproduced B-001/B-002; acceptance readiness is blocked. Main still has a high Playwright advisory. Read [current state](../handoff/STATE.md) and [audit](../handoff/AUDIT_2026-10-04.md).
 
-The prototype excludes real artists/licensed commercial songs, production accounts, source credentials, catalog ingestion/backend, live charts, social feeds and payment systems. V1 also excludes payments and content outside the supplied legal path. Keep this spec and the handoff updated whenever behavior, sections or scope change.
+Original Rondo is the design foundation; Living Record study PR #9 is rejected. Refine the existing interface with component-level before/after evidence. Prototype browser-local profile/taste data is not secure account sync; no real ingestion/backend/rights enforcement/payments is implemented. V1 excludes payments. No app code changed this round.
