@@ -54,7 +54,10 @@ Statuses: **Confirmed** (non-negotiable), **Working** (testable experiment), **O
 | D-046 | Confirmed | Following an artist means both: saved in Library and new-release updates. See docs/specs/FOLLOWING.md. | Owner answer 2026-10-04 session 2. |
 | D-047 | Confirmed | Listeners can create their own playlists (V1 scope). See docs/specs/PLAYLISTS.md. | Owner request 2026-10-04 session 2. |
 | D-048 | Confirmed | Design-first phase: design every page (systematic, page by page) to a modern standard before choosing implementation approaches. Wholesale visual modernization is allowed; D-042 (no Living Record) still holds. See handoff/DESIGN_PROGRAM.md. | Owner: v0.3.1 preview "fine but not that good", looks dated; "design it first then we will think about approaches". |
-| D-049 | Proposal | Foundation study A: neutral graphite canvas, artwork-derived ambience, single coral accent, Geist type, Home + persistent Now Playing panel, "Playing from" source line everywhere. | Awaiting owner verdict. |
+| D-049 | Superseded by D-051 | Foundation study A: neutral graphite canvas, artwork-derived ambience, single coral accent, Geist type, Home + persistent Now Playing panel, "Playing from" source line everywhere. | Owner 2026-10-05: right direction, but colors and wording feel overused/AI slop. |
+| D-050 | Confirmed | No AI features in Rondo for now. Any later AI must solve a stated listener problem and make no unverifiable claims. | Owner 2026-10-05: "no ai for rando yet". |
+| D-051 | Proposal | Study B "instrument" foundation: neutral hairline UI, mono metadata, flat sleeves, waveform scrubber, plain wording, single live-state accent. Anti-slop rules in DESIGN_PROGRAM.md are binding. | Awaiting owner verdict. |
+| D-052 | Confirmed | Design placeholders must not look like AI imagery; use flat designed sleeves until real catalog art exists. | Owner 2026-10-05: "don't make it look like AI slop". |
 
 ## Writing rules
 

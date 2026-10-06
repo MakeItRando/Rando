@@ -1,0 +1,48 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><title>Rondo — Playlist (study B)</title><link rel="stylesheet" href="base.css"><style>
+body{width:390px;height:844px;overflow:hidden;position:relative}
+.w{padding:48px 20px 0}
+.cb{width:44px;height:44px;display:grid;place-items:center;margin-left:-12px}
+.hdr{display:flex;gap:16px;align-items:flex-end;margin-top:8px}
+.mo{width:132px;height:132px;display:grid;grid-template-columns:1fr 1fr;flex:none;border-radius:2px;overflow:hidden}
+.mo .cover{border-radius:0}
+.hdr .m{color:var(--t3)}
+h1{font-size:24px;font-weight:650;letter-spacing:-.02em;margin-top:4px;line-height:1.15}
+.hdr p{font-size:12.5px;color:var(--t3);margin-top:6px}
+.acts{display:flex;align-items:center;gap:4px;margin-top:16px;color:var(--t2)}
+.acts .b{width:44px;height:44px;display:grid;place-items:center}
+.acts .grow{flex:1}
+.acts .btn{height:40px}
+.acts .shuf{color:var(--acc)}
+.list{margin-top:10px;border-top:1px solid var(--line)}
+.r{display:flex;align-items:center;gap:12px;height:56px;border-bottom:1px solid var(--line)}
+.r .n{width:20px;color:var(--t3)}
+.r .cover{width:36px;height:36px}
+.r div{flex:1;min-width:0}.r b{display:block;font-weight:550;font-size:14.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.r span.a{font-size:12.5px;color:var(--t3)}
+.r .d{color:var(--t3)}
+.r.on b,.r.on .n{color:var(--acc)}
+.sg{margin-top:22px}
+.sg .hd{display:flex;justify-content:space-between;align-items:baseline}.sg .hd span{font-size:12px;color:var(--t3)}
+.sg .r .add{width:36px;height:36px;border-radius:var(--r);box-shadow:0 0 0 1px var(--line2) inset;display:grid;place-items:center}
+.mini{position:absolute;left:0;right:0;bottom:76px;height:60px;background:#141414;border-top:1px solid var(--line);display:flex;align-items:center;gap:12px;padding:0 12px 0 16px}
+.mini .cover{width:40px;height:40px}.mini b{font-weight:550;font-size:13.5px;display:block}.mini span{font-size:12px;color:var(--t3)}
+.mini .r2{margin-left:auto;display:flex}.mini .r2>*{width:44px;height:44px;display:grid;place-items:center}
+.mini .pr{position:absolute;left:0;right:0;top:-1px;height:2px}.mini .pr i{display:block;height:100%;width:38%;background:var(--t1)}
+.tab{position:absolute;left:0;right:0;bottom:0;height:76px;background:var(--bg);border-top:1px solid var(--line);display:flex;justify-content:space-around;padding-top:12px;font-size:11px;color:var(--t3)}
+.tab span{display:flex;flex-direction:column;align-items:center;gap:4px}.tab .on{color:var(--t1)}
+</style></head><body><div class="w">
+<span class="cb"><i data-i="back"></i></span>
+<div class="hdr"><div class="mo"><span class="cover" data-art="night"></span><span class="cover" data-art="open"></span><span class="cover" data-art="blue"></span><span class="cover" data-art="small"></span></div>
+<div><span class="m">Playlist</span><h1>Late drive</h1><p>Mikoto · 23 songs · 1 h 14 min</p></div></div>
+<div class="acts"><span class="b"><i data-i="plus"></i></span><span class="b"><i data-i="share"></i></span><span class="b"><i data-i="more"></i></span><span class="grow"></span><span class="b shuf"><i data-i="shuffle"></i></span><button class="btn pri"><i data-i="pause"></i>Pause</button></div>
+<div class="list">
+ <div class="r on"><span class="n m">01</span><span class="cover" data-art="night"></span><div><b>Night Transit</b><span class="a">Kairo Vale, Mira Son</span></div><span class="d m">3:08</span></div>
+ <div class="r"><span class="n m">02</span><span class="cover" data-art="open"></span><div><b>Open Circuit</b><span class="a">Vale &amp; Lio</span></div><span class="d m">3:41</span></div>
+ <div class="r"><span class="n m">03</span><span class="cover" data-art="blue"></span><div><b>Blue Hour</b><span class="a">Nia Vale</span></div><span class="d m">2:58</span></div>
+ <div class="r"><span class="n m">04</span><span class="cover" data-art="small"></span><div><b>Small Hours</b><span class="a">Moni Gray</span></div><span class="d m">4:12</span></div>
+</div>
+<div class="sg"><div class="hd"><h2 class="h2">Suggested</h2><span>Same artists and genres</span></div>
+ <div class="r"><span class="cover" data-art="margins"></span><div><b>Margins</b><span class="a">Sora K</span></div><span class="add"><i data-i="plus"></i></span></div></div>
+</div>
+<div class="mini"><div class="pr"><i></i></div><span class="cover" data-art="night"></span><div><b>Night Transit</b><span>Kairo Vale, Mira Son</span></div><div class="r2"><span><i data-i="dev"></i></span><span><i data-i="pause"></i></span></div></div>
+<nav class="tab"><span><i data-i="home"></i>Home</span><span><i data-i="search"></i>Search</span><span><i data-i="journey"></i>Journeys</span><span class="on"><i data-i="lib"></i>Library</span></nav>
+<script src="covers.js"></script><script src="icons.js"></script></body></html>

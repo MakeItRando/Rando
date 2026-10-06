@@ -29,7 +29,7 @@ The owner reviewed the v0.3.1 preview and judged it "fine but not that good": it
 6. **Motion is causal and short** (120–240 ms; shared-element art transition into Now Playing; progress, like and add-to-playlist feedback). Reduced Motion gets the full experience without movement.
 7. **Readable at real size:** 14px floor for secondary text, 44×44 targets, AA contrast, 320px safe.
 
-## Foundation tokens (study A, proposal)
+## Foundation tokens (study A, superseded — see Study B)
 
 - Canvas `#0a0a0b`; surfaces `#121214` / `#1a1a1d` / `#242428`; hairlines 8% / 14% white.
 - Text 100% / 66% / 46% of `#f5f5f4`. Brand coral `#ff6b4a` (dark ink on coral).
@@ -56,7 +56,22 @@ Each page goes through: **brief → study (real-size desktop + mobile renders in
 | 10 | First run (play-first, optional setup) | Not started; owner answer: play before setup during development |
 | 11 | Notifications/new releases from followed artists | Not started |
 
-## Study A (2026-10-04) — proposal, not approved
+## Anti-slop rules (owner verdict on study A, 2026-10-05)
+
+Owner: study A is "the right direction" but "feels kinda overused and AI… not giving tech vibe, giving AI slop vibe" (colors and wording). Banned from now on:
+
+- Purple/pink/cyan gradients, glowing blobs, neon bokeh, page-wide ambient washes, glassmorphism.
+- Greetings and chatty copy ("Good evening, Mikoto", "picks up where … left off", "Fits this playlist", "Surprise me").
+- Rounded-pill everything, soft drop shadows, emoji-ish iconography.
+- Decorative visuals without data; generic AI imagery.
+
+Required instead: neutral canvas with hairline structure; numbers and metadata as design material (track numbers, durations, counts, BPM/key, dates in mono); flat, intentional sleeves; real waveform scrubber; plain labels; one accent for live/now-playing state only. Every element must answer "what is it, what can I do". Reference feel: professional audio tools and well-made dev tools (precise, quiet, information-rich), not concept art.
+
+## Study B (2026-10-05) — current proposal
+
+Files: [`design/studies/2026-10-05-foundation-b/`](../design/studies/2026-10-05-foundation-b/README.md). Same three surfaces as A, rebuilt under the anti-slop rules. Awaiting owner verdict (D-051). Study B tokens: canvas `#0c0c0c`, surfaces `#131313/#1b1b1b/#262626`, hairline `#232323`, text `#ededed/#a3a3a3/#6e6e6e`, accent `#ff5b1f`, radius 4px (2px sleeves), Geist + Geist Mono 500.
+
+## Study A (2026-10-04) — superseded by B (direction right, styling read as AI slop)
 
 Files: [`design/studies/2026-10-04-foundation-a/`](../design/studies/2026-10-04-foundation-a/README.md). Renders: Home desktop 1440×900, Now Playing mobile 390×844, Playlist mobile 390×844. Covers are code-drawn abstract placeholders for the study only (no text in art); they are not product assets. Awaiting owner verdict on: overall direction, Geist type, coral-only accent, layout of Home, Now Playing, playlist page.
 

@@ -1,0 +1,142 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><title>Rondo — Home (study B)</title><link rel="stylesheet" href="base.css"><style>
+body{height:900px;overflow:hidden;display:grid;grid-template-columns:232px 1fr 320px;grid-template-rows:56px 1fr 72px}
+.tb{grid-column:1/-1;display:flex;align-items:center;border-bottom:1px solid var(--line);padding:0 16px;gap:16px}
+.logo{display:flex;align-items:center;gap:9px;width:200px;font-weight:650;font-size:15px;letter-spacing:-.01em}
+.sf{width:420px;height:34px;border-radius:var(--r);background:var(--s2);display:flex;align-items:center;gap:10px;padding:0 12px;color:var(--t3);font-size:13px}
+.sf .m{margin-left:auto;color:var(--t3);border:1px solid var(--line2);padding:1px 5px;border-radius:3px;font-size:11px}
+.tb .r{margin-left:auto;display:flex;gap:6px;align-items:center;color:var(--t2)}
+.tb .r>span{width:36px;height:36px;display:grid;place-items:center;position:relative}
+.tb .r .badge:after{content:"";position:absolute;top:9px;right:9px;width:6px;height:6px;background:var(--acc);border-radius:50%}
+.av{width:28px;height:28px;border-radius:50%;background:var(--s3);display:grid;place-items:center;font-size:12px;font-weight:600;color:var(--t1)}
+.side{border-right:1px solid var(--line);padding:12px 8px;overflow:hidden}
+.nav a{display:flex;align-items:center;gap:12px;height:36px;padding:0 10px;border-radius:var(--r);color:var(--t2);font-weight:500}
+.nav a.on{color:var(--t1);background:var(--s2)}
+.sh{display:flex;justify-content:space-between;align-items:center;padding:20px 10px 6px;font-size:12px;color:var(--t3);font-weight:500}
+.sh .ic{width:16px;height:16px}
+.li{display:flex;align-items:center;gap:10px;height:44px;padding:0 8px;border-radius:var(--r)}
+.li .cover{width:32px;height:32px}
+.li b{display:block;font-weight:500;font-size:13.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.li span{font-size:12px;color:var(--t3)}
+.li.on b{color:var(--acc)}
+.li .eq{margin-left:auto;display:flex;gap:2px;align-items:end;height:12px}.li .eq i{width:2px;background:var(--acc)}
+.liked{width:32px;height:32px;border-radius:2px;background:var(--t1);color:#0c0c0c;display:grid;place-items:center}
+.main{overflow:hidden;padding:28px 32px}
+h1{font-size:22px;font-weight:650;letter-spacing:-.02em;display:flex;align-items:baseline;gap:12px}
+h1 .m{color:var(--t3);font-weight:500}
+.sec{margin-top:28px}
+.sec .hd{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:10px}
+.sec .hd a{font-size:12.5px;color:var(--t3)}
+table{width:100%;border-collapse:collapse}
+td{height:48px;border-top:1px solid var(--line);padding:0 10px;vertical-align:middle;white-space:nowrap}
+tr:last-child td{border-bottom:1px solid var(--line)}
+td.n{width:36px;color:var(--t3);padding-left:4px}
+td.t{display:flex;align-items:center;gap:12px;height:48px}
+td.t .cover{width:32px;height:32px}
+td.t b{font-weight:550}
+td .sub{color:var(--t3);font-size:12.5px}
+td.p{width:150px}
+.pb{height:2px;background:var(--s3);position:relative}.pb i{position:absolute;left:0;top:0;bottom:0;background:var(--t2)}
+td.d{width:56px;text-align:right;color:var(--t3)}
+tr.on td.t b{color:var(--acc)}
+/* journey */
+.jr{border:1px solid var(--line);border-radius:var(--r);padding:16px 18px}
+.jr .top{display:flex;align-items:center;gap:14px;flex-wrap:nowrap}.jr .top .ttl{flex:1;min-width:0}
+.jr .top .ttl{font-weight:600;font-size:15px}.jr .top .ttl span{color:var(--t3);font-weight:450}
+.jr .top .act{display:flex;gap:8px;flex:none}
+.steps{display:grid;grid-template-columns:repeat(7,1fr);gap:8px;margin-top:16px}
+.st{border-top:2px solid var(--s3);padding-top:10px}
+.st .m{color:var(--t3);font-size:11px}
+.st b{display:block;font-size:13px;font-weight:550;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.st span{font-size:12px;color:var(--t3)}
+.st.d{border-color:var(--t2)}.st.d b{color:var(--t2)}
+.st.c{border-color:var(--acc)}.st.c .m{color:var(--acc)}
+.st.l b{color:var(--t3)}
+.grid{display:grid;grid-template-columns:repeat(6,1fr);gap:16px}
+.rel b{display:block;margin-top:10px;font-weight:550;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rel span{font-size:12.5px;color:var(--t3)}
+.rel .m{display:block;margin-top:2px;color:var(--t3);font-size:11px}
+.rel .m.new{color:var(--acc)}
+/* now playing */
+.np{border-left:1px solid var(--line);padding:20px;overflow:hidden}
+.np .src{font-size:12.5px;color:var(--t3);margin-bottom:14px;display:flex;justify-content:space-between}.np .src b{color:var(--t1);font-weight:550}
+.np h3{font-size:19px;font-weight:650;letter-spacing:-.015em;margin-top:16px}
+.np .who{display:flex;justify-content:space-between;align-items:center;color:var(--t2);margin-top:4px}
+.np .who .btn{height:28px;padding:0 10px;font-size:12px}
+dl{display:grid;grid-template-columns:auto 1fr;margin-top:16px;border-top:1px solid var(--line)}
+dt,dd{padding:7px 0;border-bottom:1px solid var(--line);font-size:12.5px}
+dt{color:var(--t3);padding-right:16px}dd{text-align:right}
+.np h4{font-size:12.5px;color:var(--t3);font-weight:500;margin:18px 0 4px;display:flex;justify-content:space-between}
+.un{display:flex;align-items:center;gap:10px;height:40px}.un .m{color:var(--t3)}.un .m:first-child{width:22px}.un b{font-weight:500;font-size:13.5px;flex:1}.un span{color:var(--t3)}
+/* bar */
+.bar{grid-column:1/-1;border-top:1px solid var(--line);display:grid;grid-template-columns:300px 1fr 300px;align-items:center;padding:0 16px;gap:24px}
+.cur{display:flex;gap:12px;align-items:center}.cur .cover{width:44px;height:44px}.cur b{display:block;font-weight:550}.cur span{font-size:12.5px;color:var(--t3)}
+.mid{display:flex;align-items:center;gap:18px}
+.ctl{display:flex;align-items:center;gap:14px;color:var(--t2)}
+.pp{width:36px;height:36px;border-radius:50%;background:var(--t1);color:#0c0c0c;display:grid;place-items:center}
+.ctl .on{color:var(--acc)}
+.wv{flex:1;height:28px;display:flex;align-items:center;gap:2px}.wv i{flex:1;border-radius:1px}
+.mid .m{color:var(--t3)}
+.rt{display:flex;justify-content:flex-end;align-items:center;gap:14px;color:var(--t2)}
+.vol{width:84px;height:2px;background:var(--s3);position:relative}.vol i{position:absolute;inset:0 30% 0 0;background:var(--t2)}
+</style></head><body>
+<header class="tb"><div class="logo"><svg width="20" height="20" viewBox="0 0 20 20"><circle cx="10" cy="10" r="7.5" fill="none" stroke="#ededed" stroke-width="2.5" stroke-dasharray="38 9" transform="rotate(-60 10 10)"/></svg>rondo</div>
+<div class="sf"><i data-i="search"></i>Search songs, artists, playlists<span class="m">⌘K</span></div>
+<div class="r"><span class="badge"><i data-i="bell"></i></span><span><span class="av">M</span></span></div></header>
+<aside class="side">
+ <nav class="nav"><a class="on"><i data-i="home"></i>Home</a><a><i data-i="journey"></i>Journeys</a><a><i data-i="lib"></i>Library</a></nav>
+ <div class="sh">Playlists<i data-i="plus"></i></div>
+ <div class="li"><span class="liked"><svg class="ic f" viewBox="0 0 24 24" style="width:14px;height:14px"><path d="M12 20s-7.5-4.4-7.5-10A4.3 4.3 0 0 1 12 7.3 4.3 4.3 0 0 1 19.5 10c0 5.6-7.5 10-7.5 10z"/></svg></span><div><b>Liked songs</b><span>48 songs</span></div></div>
+ <div class="li on"><span class="cover" data-art="night"></span><div><b>Late drive</b><span>23 songs</span></div><span class="eq"><i style="height:6px"></i><i style="height:12px"></i><i style="height:8px"></i></span></div>
+ <div class="li"><span class="cover" data-art="blue"></span><div><b>Sunday, slow</b><span>17 songs</span></div></div>
+ <div class="li"><span class="cover" data-art="open"></span><div><b>Focus, no vocals</b><span>31 songs</span></div></div>
+ <div class="sh">Following</div>
+ <div class="li"><span class="cover" data-art="cont" style="border-radius:50%"></span><div><b>Asha North</b><span>New EP</span></div></div>
+ <div class="li"><span class="cover" data-art="night" style="border-radius:50%"></span><div><b>Kairo Vale</b><span>Artist</span></div></div>
+ <div class="li"><span class="cover" data-art="soft" style="border-radius:50%"></span><div><b>Mira Son</b><span>New single</span></div></div>
+</aside>
+<main class="main">
+ <h1>Home</h1>
+ <section class="sec"><div class="hd"><h2 class="h2">Continue listening</h2><a>History</a></div>
+ <table>
+  <tr class="on"><td class="n m">01</td><td class="t"><span class="cover" data-art="night"></span><div><b>Late drive</b> <span class="sub">· Playlist · Night Transit</span></div></td><td class="p"><div class="pb"><i style="width:22%"></i></div></td><td class="d m">5/23</td></tr>
+  <tr><td class="n m">02</td><td class="t"><span class="cover" data-art="cont"></span><div><b>Hip-Hop Journey</b> <span class="sub">· Kairo Vale · Continuum</span></div></td><td class="p"><div class="pb"><i style="width:43%"></i></div></td><td class="d m">3/7</td></tr>
+  <tr><td class="n m">03</td><td class="t"><span class="cover" data-art="silver"></span><div><b>Silver Weather</b> <span class="sub">· EP · Asha North</span></div></td><td class="p"><div class="pb"><i style="width:60%"></i></div></td><td class="d m">3/5</td></tr>
+ </table></section>
+ <section class="sec"><div class="jr"><div class="top"><div class="ttl">Hip-Hop Journey <span>· next: Moni Gray, Small Hours</span></div><div class="act"><button class="btn ghost">Open</button><button class="btn pri"><i data-i="play"></i>Resume</button></div></div>
+  <div class="steps">
+   <div class="st d"><span class="m">01</span><b>Asha North</b><span>Done</span></div>
+   <div class="st d"><span class="m">02</span><b>Dax Moreno</b><span>Done</span></div>
+   <div class="st d"><span class="m">03</span><b>Kairo Vale</b><span>Done</span></div>
+   <div class="st c"><span class="m">04</span><b>Moni Gray</b><span>Up next</span></div>
+   <div class="st l"><span class="m">05</span><b>Nia Vale</b><span>2 releases</span></div>
+   <div class="st l"><span class="m">06</span><b>Sora K</b><span>1 release</span></div>
+   <div class="st l"><span class="m">07</span><b>Theo June</b><span>3 releases</span></div>
+  </div></div></section>
+ <section class="sec"><div class="hd"><h2 class="h2">New releases from artists you follow</h2><a>All</a></div>
+ <div class="grid">
+  <div class="rel"><span class="cover" data-art="silver"></span><b>Silver Weather</b><span>Asha North</span><span class="m new">EP · 2d ago</span></div>
+  <div class="rel"><span class="cover" data-art="soft"></span><b>Soft Collision</b><span>Mira Son</span><span class="m new">Single · 5d ago</span></div>
+  <div class="rel"><span class="cover" data-art="north"></span><b>North Window</b><span>Nia Vale</span><span class="m">Album · Sep 18</span></div>
+  <div class="rel"><span class="cover" data-art="margins"></span><b>Margins</b><span>Sora K</span><span class="m">EP · Sep 02</span></div>
+  <div class="rel"><span class="cover" data-art="open"></span><b>Signal Memory</b><span>Vale &amp; Lio</span><span class="m">Album · Aug 21</span></div>
+  <div class="rel"><span class="cover" data-art="first"></span><b>First Light</b><span>Theo June</span><span class="m">Single · Aug 09</span></div>
+ </div></section>
+</main>
+<aside class="np">
+ <div class="src"><span>From playlist <b>Late drive</b></span><span class="m">05/23</span></div>
+ <span class="cover" data-art="night"></span>
+ <h3>Night Transit</h3>
+ <div class="who"><span>Kairo Vale, Mira Son</span><button class="btn ghost">Following</button></div>
+ <dl><dt>Release</dt><dd>Blacktop Studies, 2026</dd><dt>Genre</dt><dd>Hip-Hop</dd><dt>Tempo / key</dt><dd class="m">142 BPM · F min</dd></dl>
+ <h4><span>Up next</span><span>Queue</span></h4>
+ <div class="un"><span class="m">06</span><b>Open Circuit</b><span class="m">3:41</span></div>
+ <div class="un"><span class="m">07</span><b>Blue Hour</b><span class="m">2:58</span></div>
+ <div class="un"><span class="m">08</span><b>Small Hours</b><span class="m">4:12</span></div>
+</aside>
+<footer class="bar">
+ <div class="cur"><span class="cover" data-art="night"></span><div><b>Night Transit</b><span>Kairo Vale, Mira Son</span></div></div>
+ <div class="mid"><div class="ctl"><span class="on"><i data-i="shuffle"></i></span><i data-i="prev"></i><span class="pp"><i data-i="pause"></i></span><i data-i="next"></i><i data-i="repeat"></i></div>
+  <span class="m">1:12</span><div class="wv" data-wave="110" data-played=".38"></div><span class="m">3:08</span></div>
+ <div class="rt"><i data-i="lyrics"></i><i data-i="queue"></i><i data-i="dev"></i><i data-i="vol"></i><div class="vol"><i></i></div></div>
+</footer>
+<script src="covers.js"></script><script src="icons.js"></script></body></html>

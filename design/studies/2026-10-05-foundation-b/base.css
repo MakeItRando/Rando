@@ -1,0 +1,17 @@
+@import url("https://fonts.googleapis.com/css2?family=Geist:wght@400..800&family=Geist+Mono:wght@500&display=swap");
+
+:root{--bg:#0c0c0c;--s1:#131313;--s2:#1b1b1b;--s3:#262626;--line:#232323;--line2:#333;
+--t1:#ededed;--t2:#a3a3a3;--t3:#6e6e6e;--acc:#ff5b1f;--r:4px}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--t1);font:400 14px/1.45 Geist,system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+.m{font-family:"Geist Mono",GeistMono,ui-monospace,monospace;font-weight:500;font-size:12px;letter-spacing:0;font-variant-numeric:tabular-nums}
+.cover{display:block;width:100%;aspect-ratio:1;border-radius:2px;overflow:hidden;flex:none}
+.cover svg{display:block;width:100%;height:100%}
+.ic{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:1.6;stroke-linecap:square;stroke-linejoin:miter;flex:none}
+.ic.f{fill:currentColor;stroke:none}
+.lbl{font-size:13px;color:var(--t2);font-weight:500}
+.h2{font-size:15px;font-weight:600;letter-spacing:-.005em}
+.btn{height:36px;padding:0 14px;border-radius:var(--r);font:600 13px Geist;display:inline-flex;align-items:center;gap:8px;border:0;background:none;color:inherit}
+.btn.pri{background:var(--t1);color:#0c0c0c}
+.btn.ghost{box-shadow:0 0 0 1px var(--line2) inset;color:var(--t1)}
+.acc{color:var(--acc)}

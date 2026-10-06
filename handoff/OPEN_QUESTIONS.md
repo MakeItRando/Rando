@@ -64,14 +64,14 @@ May a listener play music from Discover before supplying email or choosing genre
 
 Does following an artist mean keeping them in Library, receiving new-release updates, or both? Current prototype only saves artists. Real following/subscriptions/notifications need a separately specified identity, privacy and delivery model. Do not imply a public social feed is approved.
 
-### 8. Study A verdict (2026-10-04 session 2)
+### 8. Study A verdict — ANSWERED (right direction, AI-slop styling → study B; D-051 now awaits verdict)
 
 Does the foundation direction in DESIGN_PROGRAM.md (graphite canvas, art-driven color, coral accent, Geist, familiar layout) feel right? Which parts to keep, push further or drop?
 
-### 9. AI scope
+### 9. AI scope — RESOLVED (D-050: no AI for now)
 
 The owner's brief mentions "really capable AI". Which listener problems should AI solve in Rondo (e.g. playlist suggestions, "why this song", natural-language search, Journey guidance)? Roadmap still forbids a fake AI DJ or unverifiable AI claims.
 
-### 10. Placeholder artwork for studies
+### 10. Placeholder artwork — RESOLVED (D-052: no AI-looking art; flat sleeves)
 
 May design studies use generated (AI) photographic cover art clearly marked as placeholders, or stay with code-drawn abstract covers until real catalog art exists?
