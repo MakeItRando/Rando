@@ -1,0 +1,58 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><title>Rondo — Home mobile (study C)</title><style>
+@import url("https://fonts.googleapis.com/css2?family=Geist:wght@400..800&family=Geist+Mono:wght@500&display=swap");
+
+:root{--bg:#0d0d0c;--s1:#141413;--s2:#1c1c1a;--s3:#2a2a27;--line:#22221f;--line2:#34342f;--t1:#efeee9;--t2:#a6a59f;--t3:#6f6e69;--acc:#ff5b1f}
+*{box-sizing:border-box;margin:0;padding:0}
+body{width:390px;height:844px;overflow:hidden;position:relative;background:var(--bg);color:var(--t1);font:400 14px/1.45 Geist,sans-serif;-webkit-font-smoothing:antialiased}
+.m{font-family:"Geist Mono",GeistMono,monospace;font-weight:500;font-size:12px}
+.cap{font-family:"Geist Mono",GeistMono,monospace;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--t3)}
+.cover{display:block;aspect-ratio:1;border-radius:3px;overflow:hidden;flex:none}.cover svg{display:block;width:100%;height:100%}
+.ic{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.6;stroke-linecap:square;flex:none}.ic.f{fill:currentColor;stroke:none}
+.top{display:flex;align-items:center;padding:52px 20px 0;gap:8px}
+.logo{display:flex;align-items:center;gap:9px;font-weight:650;font-size:17px}
+.top .r{margin-left:auto;display:flex;align-items:center;gap:4px;color:var(--t2)}.top .r span{width:40px;height:40px;display:grid;place-items:center;position:relative}
+.dotn:after{content:"";position:absolute;top:9px;right:10px;width:6px;height:6px;border-radius:50%;background:var(--acc)}
+.av{width:30px;height:30px;border-radius:50%;background:#3a2c22;color:var(--t1);display:grid;place-items:center;font-size:12px;font-weight:650}
+.seg{display:flex;gap:6px;padding:16px 20px 0}.seg span{height:32px;padding:0 12px;border-radius:6px;background:var(--s2);display:flex;align-items:center;font-size:13px;color:var(--t2);font-weight:500}.seg .on{background:var(--t1);color:#0d0d0c}
+h2{font-size:16px;font-weight:600;letter-spacing:-.01em}
+.sec{padding:24px 0 0}.sec .hd{display:flex;justify-content:space-between;align-items:baseline;padding:0 20px 10px}.sec .hd a{font-size:12.5px;color:var(--t3)}
+.row{display:flex;gap:10px;padding:0 20px;overflow:hidden}
+.cc{flex:none;width:272px;height:88px;display:flex;border-radius:6px;overflow:hidden}
+.cc .cover{width:88px;border-radius:0}
+.cc .tx{flex:1;min-width:0;padding:10px 12px;display:flex;flex-direction:column}
+.cc .cap{color:rgba(239,238,233,.55)}.cc b{font-size:15px;font-weight:600;margin-top:2px}
+.cc .pr{margin-top:auto;display:flex;align-items:center;gap:8px;color:rgba(239,238,233,.6)}.bar2{flex:1;height:2px;background:rgba(239,238,233,.18)}.bar2 i{display:block;height:100%;background:var(--t1)}
+.jr{margin:0 20px;border:1px solid var(--line);border-radius:8px;background:var(--s1);padding:14px 14px 16px}
+.jr .t{display:flex;justify-content:space-between;align-items:baseline}.jr .t b{font-size:15px;font-weight:600}.jr .t .m{color:var(--t3)}
+.path{position:relative;display:flex;justify-content:space-between;margin:16px 4px 0}
+.path:before{content:"";position:absolute;left:18px;right:18px;top:18px;border-top:1px dashed var(--line2)}
+.path .dl{position:absolute;left:18px;width:44%;top:18px;border-top:1px solid var(--t2)}
+.path .cover{width:36px;border-radius:50%;position:relative;box-shadow:0 0 0 3px var(--s1)}
+.path .l{opacity:.45}.path .c{width:36px;box-shadow:0 0 0 3px var(--s1),0 0 0 5px var(--acc)}
+.jr .nx{display:flex;align-items:center;justify-content:space-between;margin-top:14px}
+.jr .nx div{font-size:13px;color:var(--t2)}.jr .nx div b{color:var(--t1);font-weight:600;display:block;font-size:14px}
+.btn{height:40px;padding:0 14px;border-radius:6px;font-weight:600;font-size:13px;display:inline-flex;align-items:center;gap:8px;background:var(--t1);color:#0d0d0c}
+.rel{flex:none;width:136px}.rel b{display:block;margin-top:8px;font-weight:550;font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.rel span{display:block;font-size:12.5px;color:var(--t3)}.rel .m{font-size:11px;margin-top:2px}.rel .n{color:var(--acc)}
+.mini{position:absolute;left:8px;right:8px;bottom:84px;height:60px;border-radius:8px;background:#17223a;display:flex;align-items:center;gap:10px;padding:0 6px 0 10px;overflow:hidden}
+.mini .cover{width:42px}.mini b{font-size:14px;font-weight:600;display:block}.mini span{font-size:12px;color:rgba(239,238,233,.65)}
+.mini .r{margin-left:auto;display:flex}.mini .r>*{width:44px;height:44px;display:grid;place-items:center}
+.mini .pr{position:absolute;left:10px;right:10px;bottom:0;height:2px;background:rgba(239,238,233,.2)}.mini .pr i{display:block;height:100%;width:38%;background:var(--t1)}
+.tab{position:absolute;left:0;right:0;bottom:0;height:84px;background:var(--bg);border-top:1px solid var(--line);display:flex;justify-content:space-around;padding-top:12px;font-size:11px;color:var(--t3)}.tab span{display:flex;flex-direction:column;align-items:center;gap:4px}.tab .on{color:var(--t1)}
+</style></head><body>
+<div class="top"><div class="logo"><svg width="22" height="22" viewBox="0 0 20 20"><circle cx="10" cy="10" r="7.5" fill="none" stroke="#efeee9" stroke-width="2.5" stroke-dasharray="38 9" transform="rotate(-60 10 10)"/></svg>rondo</div><div class="r"><span class="dotn"><i data-i="bell"></i></span><span><span class="av">M</span></span></div></div>
+<div class="seg"><span class="on">All</span><span>Music</span><span>Journeys</span><span>Following</span></div>
+<div class="sec"><div class="hd"><h2>Recently played</h2><a>History</a></div><div class="row">
+ <div class="cc" style="background:#17223a"><span class="cover" data-art="night"></span><div class="tx"><span class="cap">Playlist</span><b>Late drive</b><div class="pr"><div class="bar2"><i style="width:22%"></i></div><span class="m">5/23</span></div></div></div>
+ <div class="cc" style="background:#361515"><span class="cover" data-art="small"></span><div class="tx"><span class="cap">Journey</span><b>Moni Gray</b><div class="pr"><div class="bar2"><i style="width:43%"></i></div><span class="m">3/7</span></div></div></div>
+</div></div>
+<div class="sec"><div class="jr"><div class="t"><b>Hip-Hop Journey</b><span class="m">3/7 artists</span></div>
+ <div class="path"><span class="dl"></span><span class="cover" data-art="cont"></span><span class="cover" data-art="margins"></span><span class="cover" data-art="night"></span><span class="cover c" data-art="small"></span><span class="cover l" data-art="north"></span><span class="cover l" data-art="open"></span><span class="cover l" data-art="first"></span></div>
+ <div class="nx"><div>Next artist<b>Moni Gray · 14 songs</b></div><span class="btn"><i data-i="play"></i>Continue</span></div></div></div>
+<div class="sec"><div class="hd"><h2>New from artists you follow</h2><a>See all</a></div><div class="row">
+ <div class="rel"><span class="cover" data-art="silver"></span><b>Silver Weather</b><span>Asha North</span><span class="m n">EP · 2d ago</span></div>
+ <div class="rel"><span class="cover" data-art="soft"></span><b>Soft Collision</b><span>Mira Son</span><span class="m n">Single · 5d ago</span></div>
+ <div class="rel"><span class="cover" data-art="north"></span><b>North Window</b><span>Nia Vale</span><span class="m">Album · Sep 18</span></div>
+</div></div>
+<div class="mini"><span class="cover" data-art="night"></span><div><b>Night Transit</b><span>Kairo Vale, Mira Son</span></div><div class="r"><span><i data-i="dev"></i></span><span><i data-i="pause"></i></span></div><div class="pr"><i></i></div></div>
+<nav class="tab"><span class="on"><i data-i="home"></i>Home</span><span><i data-i="search"></i>Search</span><span><i data-i="journey"></i>Journeys</span><span><i data-i="lib"></i>Library</span></nav>
+<script src="covers.js"></script><script src="icons.js"></script></body></html>

@@ -67,7 +67,11 @@ Owner: study A is "the right direction" but "feels kinda overused and AI… not 
 
 Required instead: neutral canvas with hairline structure; numbers and metadata as design material (track numbers, durations, counts, BPM/key, dates in mono); flat, intentional sleeves; real waveform scrubber; plain labels; one accent for live/now-playing state only. Every element must answer "what is it, what can I do". Reference feel: professional audio tools and well-made dev tools (precise, quiet, information-rich), not concept art.
 
-## Study B (2026-10-05) — current proposal
+## Study C (2026-10-05) — current proposal (interactive)
+
+Owner on B: right direction but not satisfying; wants more engaging, smooth, advanced, creative and unique, systematic, user-friendly, no AI wording. Files: [`design/studies/2026-10-05-foundation-c/`](../design/studies/2026-10-05-foundation-c/README.md). Keeps B's anti-slop system and adds: flat sleeve-colour surfaces, Journey artist path as the signature component, real interaction and motion (hover lift, sleeve swap, live lyric line, playing indicator, waveform seek), truthful source switching. Awaiting verdict (D-053).
+
+## Study B (2026-10-05) — superseded by C
 
 Files: [`design/studies/2026-10-05-foundation-b/`](../design/studies/2026-10-05-foundation-b/README.md). Same three surfaces as A, rebuilt under the anti-slop rules. Awaiting owner verdict (D-051). Study B tokens: canvas `#0c0c0c`, surfaces `#131313/#1b1b1b/#262626`, hairline `#232323`, text `#ededed/#a3a3a3/#6e6e6e`, accent `#ff5b1f`, radius 4px (2px sleeves), Geist + Geist Mono 500.
 

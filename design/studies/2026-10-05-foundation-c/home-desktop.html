@@ -1,0 +1,228 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Rondo — Home (study C, interactive)</title>
+<style>
+@import url("https://fonts.googleapis.com/css2?family=Geist:wght@400..800&family=Geist+Mono:wght@500&display=swap");
+
+:root{--bg:#0d0d0c;--s1:#141413;--s2:#1c1c1a;--s3:#2a2a27;--line:#22221f;--line2:#34342f;--t1:#efeee9;--t2:#a6a59f;--t3:#6f6e69;--acc:#ff5b1f;--ease:cubic-bezier(.2,.7,.2,1)}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{background:var(--bg);color:var(--t1);font:400 14px/1.45 Geist,system-ui,sans-serif;-webkit-font-smoothing:antialiased;height:100vh;min-height:760px;overflow:hidden;display:grid;grid-template-columns:240px 1fr 340px;grid-template-rows:56px 1fr 76px}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+button:focus-visible{outline:2px solid var(--t1);outline-offset:2px;border-radius:4px}
+.m{font-family:"Geist Mono",GeistMono,ui-monospace,monospace;font-weight:500;font-size:12px;font-variant-numeric:tabular-nums}
+.cap{font-family:"Geist Mono",GeistMono,ui-monospace,monospace;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--t3)}
+.cover{display:block;aspect-ratio:1;border-radius:3px;overflow:hidden;flex:none;background:var(--s2)}
+.cover svg{display:block;width:100%;height:100%}
+.ic{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:1.6;stroke-linecap:square;flex:none}.ic.f{fill:currentColor;stroke:none}
+/* top */
+.tb{grid-column:1/-1;display:flex;align-items:center;gap:16px;padding:0 16px;border-bottom:1px solid var(--line)}
+.logo{width:208px;display:flex;align-items:center;gap:10px;font-weight:650;font-size:15px;letter-spacing:-.01em}
+.logo svg{animation:spin 8s linear infinite;animation-play-state:var(--spin,paused)}
+@keyframes spin{to{transform:rotate(360deg)}}
+.sf{width:440px;height:36px;border-radius:6px;background:var(--s2);display:flex;align-items:center;gap:10px;padding:0 12px;color:var(--t3);font-size:13px;box-shadow:inset 0 0 0 1px transparent;transition:box-shadow .15s}
+.sf:hover{box-shadow:inset 0 0 0 1px var(--line2)}
+.sf .m{margin-left:auto;border:1px solid var(--line2);padding:1px 6px;border-radius:4px;font-size:11px}
+.seg{display:flex;background:var(--s1);border:1px solid var(--line);border-radius:6px;padding:2px}
+.seg button{height:30px;padding:0 12px;border-radius:4px;font-size:13px;color:var(--t2);font-weight:500}
+.seg button.on{background:var(--s3);color:var(--t1)}
+.tb .r{margin-left:auto;display:flex;align-items:center;gap:4px;color:var(--t2)}
+.tb .r button{width:36px;height:36px;display:grid;place-items:center;position:relative;border-radius:6px}
+.tb .r button:hover{background:var(--s2);color:var(--t1)}
+.dotn:after{content:"";position:absolute;top:8px;right:8px;width:6px;height:6px;border-radius:50%;background:var(--acc)}
+.av{width:28px;height:28px;border-radius:50%;background:#3a2c22;color:var(--t1);display:grid;place-items:center;font-size:12px;font-weight:650}
+/* side */
+.side{border-right:1px solid var(--line);padding:12px 8px;overflow:auto}
+.nav button{width:100%;display:flex;align-items:center;gap:12px;height:38px;padding:0 10px;border-radius:6px;color:var(--t2);font-weight:500}
+.nav button:hover{color:var(--t1)}.nav button.on{background:var(--s2);color:var(--t1)}
+.sh{display:flex;align-items:center;justify-content:space-between;padding:22px 10px 6px}
+.sh button{width:28px;height:28px;display:grid;place-items:center;border-radius:6px;color:var(--t2)}.sh button:hover{background:var(--s2);color:var(--t1)}
+.li{width:100%;display:flex;align-items:center;gap:10px;height:48px;padding:0 8px;border-radius:6px;text-align:left;transition:background .15s}
+.li:hover{background:var(--s1)}
+.li .cover{width:34px}
+.li div{min-width:0;flex:1}.li b{display:block;font-weight:500;font-size:13.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.li span{font-size:12px;color:var(--t3)}
+.li.on b{color:var(--acc)}
+.eq{display:flex;gap:2px;align-items:flex-end;height:12px;opacity:0}.li.on .eq{opacity:1}
+.eq i{width:2px;background:var(--acc);height:4px;animation:eq .9s var(--ease) infinite alternate;animation-play-state:var(--spin,paused)}.eq i:nth-child(2){animation-delay:-.3s}.eq i:nth-child(3){animation-delay:-.6s}
+@keyframes eq{to{height:12px}}
+.li .new{width:6px;height:6px;border-radius:50%;background:var(--acc);flex:none}
+.liked{width:34px;height:34px;border-radius:3px;background:var(--t1);color:#0d0d0c;display:grid;place-items:center;flex:none}
+/* main */
+.main{overflow:auto;padding:24px 32px 40px}
+.hd{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:12px}
+.hd h2{font-size:16px;font-weight:600;letter-spacing:-.01em}
+.hd a{font-size:12.5px;color:var(--t3);cursor:pointer}.hd a:hover{color:var(--t1)}
+section+section{margin-top:36px}
+.cont{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.cc{position:relative;display:flex;height:112px;border-radius:6px;overflow:hidden;text-align:left;transition:transform .25s var(--ease),filter .25s}
+.cc:hover{transform:translateY(-2px);filter:brightness(1.08)}
+.cc .cover{width:112px;border-radius:0}.cc .cap,.cc b,.cc .sub{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cc .tx{flex:1;min-width:0;padding:12px 16px;display:flex;flex-direction:column}
+.cc .cap{color:rgba(239,238,233,.55)}
+.cc b{font-size:16px;font-weight:600;letter-spacing:-.01em;margin-top:4px}
+.cc .sub{font-size:12.5px;color:rgba(239,238,233,.6)}
+.cc .pr{margin-top:auto;display:flex;align-items:center;gap:10px;color:rgba(239,238,233,.6)}
+.bar2{flex:1;height:2px;background:rgba(239,238,233,.18)}.bar2 i{display:block;height:100%;background:var(--t1)}
+.pbtn{position:absolute;right:12px;top:12px;width:40px;height:40px;border-radius:50%;background:var(--t1);color:#0d0d0c;display:grid;place-items:center;opacity:0;transform:translateY(4px);transition:.2s var(--ease);box-shadow:0 6px 16px rgba(0,0,0,.35)}
+.cc:hover .pbtn,.rel:hover .pbtn,.cc:focus-visible .pbtn{opacity:1;transform:none}
+/* journey */
+.jr{border:1px solid var(--line);border-radius:8px;padding:20px 22px 22px;background:var(--s1)}
+.jr .top{display:flex;align-items:center;gap:16px}
+.jr .top h3{font-size:16px;font-weight:600}
+.jr .top .m{color:var(--t3)}
+.jr .top .act{margin-left:auto;display:flex;gap:8px}
+.btn{height:36px;padding:0 14px;border-radius:6px;font-weight:600;font-size:13px;display:inline-flex;align-items:center;gap:8px;transition:background .15s,transform .1s}
+.btn:active{transform:scale(.98)}
+.btn.pri{background:var(--t1);color:#0d0d0c}.btn.pri:hover{background:#fff}
+.btn.gh{box-shadow:inset 0 0 0 1px var(--line2)}.btn.gh:hover{background:var(--s2)}
+.path{position:relative;display:grid;grid-template-columns:repeat(7,1fr);margin-top:22px}
+.path:before{content:"";position:absolute;left:calc(100%/14);right:calc(100%/14);top:32px;border-top:1px dashed var(--line2)}
+.path .done-line{position:absolute;left:calc(100%/14);width:calc(100%*3/7);top:32px;border-top:1px solid var(--t2)}
+.node{position:relative;display:flex;flex-direction:column;align-items:center;text-align:center;gap:8px}
+.node .cover{width:64px;border-radius:50%;box-shadow:0 0 0 4px var(--s1);transition:transform .25s var(--ease)}
+.node:hover .cover{transform:scale(1.06)}
+.node.d .cover{filter:saturate(.6)}
+.node.l .cover{opacity:.45}
+.node.c .cover{box-shadow:0 0 0 4px var(--s1),0 0 0 6px var(--acc)}
+.node b{font-size:13px;font-weight:550}.node.l b{color:var(--t2)}
+.node .m{font-size:11px;color:var(--t3);margin-top:-6px}.node.c .m{color:var(--acc)}
+.node .chk{position:absolute;top:44px;left:calc(50% + 16px);width:18px;height:18px;border-radius:50%;background:var(--t1);color:#0d0d0c;display:grid;place-items:center}
+.node .chk .ic{width:12px;height:12px;stroke-width:2.4}
+/* releases */
+.grid{display:grid;grid-template-columns:repeat(6,1fr);gap:16px}
+.rel{text-align:left;position:relative}
+.rel .wrap{position:relative;transition:transform .25s var(--ease)}
+.rel:hover .wrap{transform:translateY(-3px)}
+.rel .pbtn{top:auto;bottom:10px;right:10px}
+.rel b{display:block;margin-top:10px;font-weight:550;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rel span{display:block;font-size:12.5px;color:var(--t3)}
+.rel .m{margin-top:3px;font-size:11px;color:var(--t3)}.rel .m.n{color:var(--acc)}
+.rel.on b{color:var(--acc)}
+/* now playing */
+.np{position:relative;overflow:hidden;padding:18px 20px;display:flex;flex-direction:column;transition:background-color .6s var(--ease);background:var(--tone,#17223a)}
+.np:after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 55%,rgba(13,13,12,.85));pointer-events:none}
+.np>*{position:relative;z-index:1}
+.np .src{display:flex;justify-content:space-between;align-items:center;font-size:12.5px;color:rgba(239,238,233,.6)}.np .src b{color:var(--t1);font-weight:550}
+.np .art{margin-top:14px;box-shadow:0 18px 40px rgba(0,0,0,.35);border-radius:4px}
+.np .art.swap{animation:swap .45s var(--ease)}
+@keyframes swap{from{opacity:.2;transform:scale(.97)}}
+.np h3{font-size:22px;font-weight:650;letter-spacing:-.02em;margin-top:18px}
+.np .who{display:flex;justify-content:space-between;align-items:center;color:rgba(239,238,233,.7)}
+.fol{height:28px;padding:0 10px;border-radius:6px;box-shadow:inset 0 0 0 1px rgba(239,238,233,.25);font-size:12px;font-weight:600}
+.fol.on{background:var(--t1);color:#0d0d0c;box-shadow:none}
+.tags{display:flex;gap:6px;margin-top:12px}.tags span{font-family:"Geist Mono";font-size:11px;padding:3px 7px;border-radius:4px;background:rgba(239,238,233,.08);color:rgba(239,238,233,.75)}
+.ly{margin-top:18px;min-height:64px}
+.ly .cap{color:rgba(239,238,233,.5)}
+.ly p{font-size:17px;font-weight:600;letter-spacing:-.01em;margin-top:6px;transition:opacity .3s}
+.ly p.nx{color:rgba(239,238,233,.38);margin-top:2px;font-size:15px}
+.un{margin-top:auto}
+.un .cap{display:flex;justify-content:space-between;margin-bottom:6px;color:rgba(239,238,233,.5)}
+.ui{width:100%;display:flex;align-items:center;gap:10px;height:40px;text-align:left;border-radius:4px;padding:0 4px;margin:0 -4px;transition:background .15s}
+.ui:hover{background:rgba(239,238,233,.06)}
+.ui .m{color:var(--t3);width:20px}.ui b{flex:1;font-weight:500;font-size:13.5px}.ui span{font-size:12px;color:var(--t3)}
+/* bar */
+.bar{grid-column:1/-1;border-top:1px solid var(--line);display:grid;grid-template-columns:300px 1fr 300px;gap:24px;align-items:center;padding:0 16px;background:var(--bg)}
+.cur{display:flex;align-items:center;gap:12px;min-width:0}.cur .cover{width:48px}.cur div{min-width:0}.cur b{display:block;font-weight:550;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.cur span{font-size:12.5px;color:var(--t3)}
+.like{width:36px;height:36px;display:grid;place-items:center;color:var(--t3);flex:none}.like.on{color:var(--acc)}.like.pop{animation:pop .35s var(--ease)}
+@keyframes pop{40%{transform:scale(1.3)}}
+.mid{display:flex;align-items:center;gap:16px}
+.ctl{display:flex;align-items:center;gap:6px;color:var(--t2)}
+.ctl button{width:34px;height:34px;display:grid;place-items:center;border-radius:50%}.ctl button:hover{color:var(--t1)}
+.ctl .on{color:var(--acc)}
+.ctl .pp{width:40px;height:40px;background:var(--t1);color:#0d0d0c;margin:0 4px;transition:transform .1s}.ctl .pp:hover{color:#0d0d0c;transform:scale(1.05)}
+.wv{flex:1;height:32px;display:flex;align-items:center;gap:2px;cursor:pointer}
+.wv i{flex:1;border-radius:1px;background:#3a3a36;transition:background .2s}.wv i.p{background:var(--t1)}
+.wv:hover i.p{background:var(--acc)}
+.mid .m{color:var(--t3);width:36px}.mid .m.e{text-align:right}
+.rt{display:flex;justify-content:flex-end;align-items:center;gap:6px;color:var(--t2)}.rt button{width:34px;height:34px;display:grid;place-items:center}.rt button:hover{color:var(--t1)}.rt .on{color:var(--acc)}
+.vol{width:90px;height:3px;background:var(--s3);border-radius:2px;position:relative}.vol i{position:absolute;inset:0 30% 0 0;background:var(--t2);border-radius:2px}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style></head><body>
+<header class="tb">
+ <div class="logo"><svg width="20" height="20" viewBox="0 0 20 20"><circle cx="10" cy="10" r="7.5" fill="none" stroke="#efeee9" stroke-width="2.5" stroke-dasharray="38 9" transform="rotate(-60 10 10)"/></svg>rondo</div>
+ <button class="sf"><i data-i="search"></i>Search songs, artists, playlists<span class="m">⌘K</span></button>
+ <div class="seg"><button class="on">All</button><button>Music</button><button>Journeys</button><button>Following</button></div>
+ <div class="r"><button class="dotn" aria-label="Notifications, 2 new"><i data-i="bell"></i></button><button aria-label="Profile"><span class="av">M</span></button></div>
+</header>
+<aside class="side">
+ <nav class="nav"><button class="on"><i data-i="home"></i>Home</button><button><i data-i="journey"></i>Journeys</button><button><i data-i="lib"></i>Library</button></nav>
+ <div class="sh"><span class="cap">Playlists</span><button aria-label="New playlist"><i data-i="plus"></i></button></div>
+ <button class="li"><span class="liked"><svg class="ic f" viewBox="0 0 24 24" style="width:15px;height:15px"><path d="M12 20s-7.5-4.4-7.5-10A4.3 4.3 0 0 1 12 7.3 4.3 4.3 0 0 1 19.5 10c0 5.6-7.5 10-7.5 10z"/></svg></span><div><b>Liked songs</b><span>48 songs</span></div></button>
+ <button class="li on" id="pl-late"><span class="cover" data-art="night"></span><div><b>Late drive</b><span>23 songs</span></div><span class="eq"><i></i><i></i><i></i></span></button>
+ <button class="li"><span class="cover" data-art="blue"></span><div><b>Sunday, slow</b><span>17 songs</span></div></button>
+ <button class="li"><span class="cover" data-art="open"></span><div><b>Focus, no vocals</b><span>31 songs</span></div></button>
+ <div class="sh"><span class="cap">Following</span></div>
+ <button class="li"><span class="cover" data-art="cont" style="border-radius:50%"></span><div><b>Asha North</b><span>New EP</span></div><span class="new"></span></button>
+ <button class="li"><span class="cover" data-art="soft" style="border-radius:50%"></span><div><b>Mira Son</b><span>New single</span></div><span class="new"></span></button>
+ <button class="li"><span class="cover" data-art="night" style="border-radius:50%"></span><div><b>Kairo Vale</b><span>Artist</span></div></button>
+ <button class="li"><span class="cover" data-art="north" style="border-radius:50%"></span><div><b>Nia Vale</b><span>Artist</span></div></button>
+</aside>
+<main class="main">
+ <section><div class="hd"><h2>Recently played</h2><a>History</a></div>
+  <div class="cont">
+   <button class="cc" data-play="night" data-src="Late drive" data-pos="5" data-n="23" style="background:#17223a"><span class="cover" data-art="night"></span><div class="tx"><span class="cap">Playlist</span><b>Late drive</b><span class="sub">Night Transit</span><div class="pr"><div class="bar2"><i style="width:22%"></i></div><span class="m">5/23</span></div></div><span class="pbtn"><i data-i="play"></i></span></button>
+   <button class="cc" data-play="small" data-src="Hip-Hop Journey · Moni Gray" data-pos="1" data-n="14" style="background:#361515"><span class="cover" data-art="small"></span><div class="tx"><span class="cap">Journey</span><b>Moni Gray</b><span class="sub">Hip-Hop</span><div class="pr"><div class="bar2"><i style="width:43%"></i></div><span class="m">3/7</span></div></div><span class="pbtn"><i data-i="play"></i></span></button>
+   <button class="cc" data-play="silver" data-src="EP · Silver Weather" data-pos="3" data-n="5" style="background:#2a2c29"><span class="cover" data-art="silver"></span><div class="tx"><span class="cap">EP</span><b>Silver Weather</b><span class="sub">Asha North</span><div class="pr"><div class="bar2"><i style="width:60%"></i></div><span class="m">3/5</span></div></div><span class="pbtn"><i data-i="play"></i></span></button>
+  </div></section>
+ <section><div class="jr"><div class="top"><h3>Hip-Hop Journey</h3><span class="m">3 of 7 artists · 41 of 96 songs</span><div class="act"><button class="btn gh">Change genre</button><button class="btn pri" data-play="small" data-src="Hip-Hop Journey · Moni Gray" data-pos="1" data-n="14"><i data-i="play"></i>Continue with Moni Gray</button></div></div>
+  <div class="path"><span class="done-line"></span>
+   <div class="node d"><span class="cover" data-art="cont"></span><span class="chk"><i data-i="check"></i></span><b>Asha North</b><span class="m">12 songs</span></div>
+   <div class="node d"><span class="cover" data-art="margins"></span><span class="chk"><i data-i="check"></i></span><b>Dax Moreno</b><span class="m">9 songs</span></div>
+   <div class="node d"><span class="cover" data-art="night"></span><span class="chk"><i data-i="check"></i></span><b>Kairo Vale</b><span class="m">20 songs</span></div>
+   <div class="node c"><span class="cover" data-art="small"></span><b>Moni Gray</b><span class="m">Next · 14 songs</span></div>
+   <div class="node l"><span class="cover" data-art="north"></span><b>Nia Vale</b><span class="m">11 songs</span></div>
+   <div class="node l"><span class="cover" data-art="open"></span><b>Sora K</b><span class="m">16 songs</span></div>
+   <div class="node l"><span class="cover" data-art="first"></span><b>Theo June</b><span class="m">14 songs</span></div>
+  </div></div></section>
+ <section><div class="hd"><h2>New releases from artists you follow</h2><a>See all</a></div>
+  <div class="grid">
+   <button class="rel" data-play="silver"><div class="wrap"><span class="cover" data-art="silver"></span><span class="pbtn"><i data-i="play"></i></span></div><b>Silver Weather</b><span>Asha North</span><span class="m n">EP · 2d ago</span></button>
+   <button class="rel" data-play="soft"><div class="wrap"><span class="cover" data-art="soft"></span><span class="pbtn"><i data-i="play"></i></span></div><b>Soft Collision</b><span>Mira Son</span><span class="m n">Single · 5d ago</span></button>
+   <button class="rel" data-play="north"><div class="wrap"><span class="cover" data-art="north"></span><span class="pbtn"><i data-i="play"></i></span></div><b>North Window</b><span>Nia Vale</span><span class="m">Album · Sep 18</span></button>
+   <button class="rel" data-play="margins"><div class="wrap"><span class="cover" data-art="margins"></span><span class="pbtn"><i data-i="play"></i></span></div><b>Margins</b><span>Sora K</span><span class="m">EP · Sep 2</span></button>
+   <button class="rel" data-play="open"><div class="wrap"><span class="cover" data-art="open"></span><span class="pbtn"><i data-i="play"></i></span></div><b>Signal Memory</b><span>Vale &amp; Lio</span><span class="m">Album · Aug 21</span></button>
+   <button class="rel" data-play="first"><div class="wrap"><span class="cover" data-art="first"></span><span class="pbtn"><i data-i="play"></i></span></div><b>First Light</b><span>Theo June</span><span class="m">Single · Aug 9</span></button>
+  </div></section>
+</main>
+<aside class="np" id="np">
+ <div class="src"><span>From <b id="srcName">Late drive</b></span><span class="m" id="srcPos">05/23</span></div>
+ <span class="cover art" id="npArt" data-art="night"></span>
+ <h3 id="npTitle">Night Transit</h3>
+ <div class="who"><span id="npArtist">Kairo Vale, Mira Son</span><button class="fol on" id="fol">Following</button></div>
+ <div class="tags" id="npTags"></div>
+ <div class="ly"><span class="cap">Lyrics</span><p id="ly1"></p><p class="nx" id="ly2"></p></div>
+ <div class="un"><div class="cap"><span>Up next</span><span>Queue</span></div><div id="queue"></div></div>
+</aside>
+<footer class="bar">
+ <div class="cur"><span class="cover" id="barArt" data-art="night"></span><div><b id="barTitle">Night Transit</b><span id="barArtist">Kairo Vale, Mira Son</span></div><button class="like on" id="like" aria-label="Liked" aria-pressed="true"><svg class="ic f" viewBox="0 0 24 24"><path d="M12 20s-7.5-4.4-7.5-10A4.3 4.3 0 0 1 12 7.3 4.3 4.3 0 0 1 19.5 10c0 5.6-7.5 10-7.5 10z"/></svg></button></div>
+ <div class="mid"><div class="ctl"><button class="on" aria-label="Shuffle on"><i data-i="shuffle"></i></button><button aria-label="Previous" id="prev"><i data-i="prev"></i></button><button class="pp" id="pp" aria-label="Pause"><i data-i="pause"></i></button><button aria-label="Next" id="next"><i data-i="next"></i></button><button aria-label="Repeat"><i data-i="repeat"></i></button></div>
+  <span class="m" id="tNow">1:12</span><div class="wv" id="wv" role="slider" aria-label="Seek"></div><span class="m e" id="tEnd">3:08</span></div>
+ <div class="rt"><button class="on" aria-label="Lyrics"><i data-i="lyrics"></i></button><button aria-label="Queue"><i data-i="queue"></i></button><button aria-label="Devices"><i data-i="dev"></i></button><button aria-label="Volume"><i data-i="vol"></i></button><div class="vol"><i></i></div></div>
+</footer>
+<script src="covers.js"></script><script src="data.js"></script><script src="icons.js"></script>
+<script>
+const Q=['night','open','blue','small','silver','soft','first','north','margins'];
+const st={k:'night',t:72,on:true,idx:4,src:'Late drive',pos:5,n:23};
+const $=id=>document.getElementById(id);
+const N=120;$('wv').innerHTML=Array.from({length:N},(_,i)=>{const v=.25+.75*Math.abs(Math.sin(i*.37)*Math.cos(i*.11+1)+.25*Math.sin(i*1.7));return `<i style="height:${Math.max(12,Math.min(100,v*100))}%"></i>`}).join('');
+const bars=[...$('wv').children];
+const PLAY='<path d="M8 5.5v13a.8.8 0 0 0 1.2.7l10.4-6.5a.8.8 0 0 0 0-1.4L9.2 4.8A.8.8 0 0 0 8 5.5z"/>',PAUSE='<rect x="6.5" y="5" width="3.6" height="14" rx="1"/><rect x="13.9" y="5" width="3.6" height="14" rx="1"/>';
+function paint(){const s=SONGS[st.k];const p=st.t/s.d;bars.forEach((b,i)=>b.classList.toggle('p',i/N<p));$('tNow').textContent=fmt(st.t);$('tEnd').textContent=fmt(s.d);
+ const L=s.ly,li=Math.floor(st.t/7)%L.length;$('ly1').textContent=L[li];$('ly2').textContent=L.length>1?L[(li+1)%L.length]:'';
+ $('pp').innerHTML=`<svg class="ic f" viewBox="0 0 24 24">${st.on?PAUSE:PLAY}</svg>`;$('pp').setAttribute('aria-label',st.on?'Pause':'Play');document.body.style.setProperty('--spin',st.on?'running':'paused')}
+function load(k,anim=true){st.k=k;st.t=0;const s=SONGS[k];$('np').style.setProperty('--tone',s.tone);
+ ['npArt','barArt'].forEach(id=>{$(id).innerHTML=svg(k)});if(anim){$('npArt').classList.remove('swap');void $('npArt').offsetWidth;$('npArt').classList.add('swap')}
+ $('npTitle').textContent=$('barTitle').textContent=s.t;$('npArtist').textContent=$('barArtist').textContent=s.a;
+ $('npTags').innerHTML=`<span>${s.bpm} BPM</span><span>${s.key}</span><span>${s.g}</span>`;
+ st.idx=Q.indexOf(k);$('srcName').textContent=st.src;$('srcPos').textContent=String(st.pos).padStart(2,'0')+'/'+st.n;$('pl-late').classList.toggle('on',st.src==='Late drive');
+ $('queue').innerHTML=[1,2,3].map(o=>{const q=Q[(st.idx+o)%Q.length],z=SONGS[q];return `<button class="ui" data-play="${q}"><span class="m">${String(st.pos+o).padStart(2,'0')}</span><b>${z.t}</b><span class="m">${fmt(z.d)}</span></button>`}).join('');
+ document.querySelectorAll('.rel').forEach(r=>r.classList.toggle('on',r.dataset.play===k));paint()}
+document.addEventListener('click',e=>{const p=e.target.closest('[data-play]');if(!p)return;const d=p.dataset;if(d.src){st.src=d.src;st.pos=+d.pos;st.n=+d.n}else if(p.classList.contains('rel')){st.src=p.querySelector('.m').textContent.split(' · ')[0]+' · '+p.querySelector('b').textContent;st.pos=1;st.n=p.querySelector('.m').textContent.startsWith('Single')?1:p.querySelector('.m').textContent.startsWith('EP')?5:11}else{st.pos=Math.min(st.n,st.pos+([...p.parentNode.children].indexOf(p)+1))}load(d.play);st.on=true;paint()});
+$('pp').onclick=e=>{e.stopPropagation();st.on=!st.on;paint()};
+$('next').onclick=()=>{st.pos=st.pos%st.n+1;load(Q[(st.idx+1)%Q.length])};$('prev').onclick=()=>{if(st.t>3){st.t=0;paint()}else load(Q[(st.idx+Q.length-1)%Q.length])};
+$('wv').onclick=e=>{const r=$('wv').getBoundingClientRect();st.t=(e.clientX-r.left)/r.width*SONGS[st.k].d;paint()};
+$('like').onclick=()=>{const l=$('like');l.classList.toggle('on');l.setAttribute('aria-pressed',l.classList.contains('on'));l.classList.remove('pop');void l.offsetWidth;l.classList.add('pop')};
+$('fol').onclick=()=>{const f=$('fol');f.classList.toggle('on');f.textContent=f.classList.contains('on')?'Following':'Follow'};
+document.addEventListener('keydown',e=>{if(e.code==='Space'&&e.target===document.body){e.preventDefault();st.on=!st.on;paint()}});
+document.querySelectorAll('.seg button').forEach(b=>b.onclick=()=>{document.querySelectorAll('.seg button').forEach(x=>x.classList.toggle('on',x===b))});
+if(window.INIT){st.src='Hip-Hop Journey · Moni Gray';st.pos=1;st.n=14}load(window.INIT||'night',false);st.t=72;paint();
+setInterval(()=>{if(!st.on)return;st.t+=.25;if(st.t>=SONGS[st.k].d)load(Q[(st.idx+1)%Q.length]);else paint()},250);
+</script></body></html>
