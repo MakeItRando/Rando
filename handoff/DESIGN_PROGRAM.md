@@ -67,7 +67,11 @@ Owner: study A is "the right direction" but "feels kinda overused and AI… not 
 
 Required instead: neutral canvas with hairline structure; numbers and metadata as design material (track numbers, durations, counts, BPM/key, dates in mono); flat, intentional sleeves; real waveform scrubber; plain labels; one accent for live/now-playing state only. Every element must answer "what is it, what can I do". Reference feel: professional audio tools and well-made dev tools (precise, quiet, information-rich), not concept art.
 
-## Study D (2026-10-05) — current proposal (state-aware Home)
+## Home study E (2026-10-05) — current proposal
+
+Owner on C also said: audience is mostly teenagers; make it more advanced, engaging, interactive and systematic; perfect Home before any other page. E builds on D's binding state rule (D-055) and adds: Stage hero (sleeve + vinyl that slides out while playing), Journey CTA states (Start/Resume X → Pause/Resume + Open Journey), progress ring, source-bounded queues + queue drawer, ⌘K search palette, add-to-playlist with Undo/duplicate warning, On repeat (×plays), Moods, This week, animated filter, toggle-never-restart. Files: [`design/studies/2026-10-05-home-e/`](../design/studies/2026-10-05-home-e/README.md), spec [docs/specs/HOME.md](../docs/specs/HOME.md). Awaiting verdict (D-056). D (below) stays as the alternative without a bottom bar.
+
+## Study D (2026-10-05) — alternative (state-aware Home, no bottom bar)
 
 Owner on C: "way better… way impressive" but Journey action never changed while playing; some parts old/not advanced; some elements shouldn't be there. D makes every play control state-aware (Start/Resume/Pause, live progress ring), keeps "Open Journey" always available, gives each source its own truthful queue, and removes the bottom bar, filter chips, uppercase labels, pills and duplicate sections. Files: [`design/studies/2026-10-05-foundation-d/`](../design/studies/2026-10-05-foundation-d/README.md). Awaiting verdict (D-054).
 

@@ -1,0 +1,53 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Rondo — Home (study E)</title><link rel="stylesheet" href="style.css"></head>
+<body class="paused">
+<header class="tb">
+ <div class="logo"><svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="7.5" fill="none" stroke="#efeee9" stroke-width="2.5" stroke-dasharray="38 9" transform="rotate(-60 10 10)"/></svg>rondo</div>
+ <button class="sf" id="openPal"><i data-i="search"></i>Search songs, artists, playlists<span class="m">⌘K</span></button>
+ <div class="seg" id="seg" role="tablist"><span class="pill"></span><button class="on" data-f="all" role="tab">All</button><button data-f="music" role="tab">Music</button><button data-f="journeys" role="tab">Journeys</button><button data-f="following" role="tab">Following</button></div>
+ <div class="r"><button class="icb dotn" aria-label="Notifications, 2 new"><i data-i="bell"></i></button><button class="icb" aria-label="Profile"><span class="av">M</span></button></div>
+</header>
+<aside class="side">
+ <nav class="nav"><button class="on"><i data-i="home"></i>Home</button><button><i data-i="journey"></i>Journeys</button><button><i data-i="lib"></i>Library</button></nav>
+ <div class="sh"><span class="cap">Playlists</span><button class="icb" style="width:28px;height:28px" aria-label="New playlist"><i data-i="plus"></i></button></div>
+ <div id="pls"></div>
+ <div class="sh"><span class="cap">Following</span></div>
+ <button class="li" data-go="silver"><span class="cover" data-art="cont" style="border-radius:50%"></span><div><b>Asha North</b><span>New EP · Silver Weather</span></div><span class="new"></span></button>
+ <button class="li" data-go="soft"><span class="cover" data-art="soft" style="border-radius:50%"></span><div><b>Mira Son</b><span>New single</span></div><span class="new"></span></button>
+ <button class="li"><span class="cover" data-art="night" style="border-radius:50%"></span><div><b>Kairo Vale</b><span>Artist</span></div></button>
+ <button class="li"><span class="cover" data-art="north" style="border-radius:50%"></span><div><b>Nia Vale</b><span>Artist</span></div></button>
+</aside>
+<main class="main" id="main">
+ <div class="stage rise" id="stage">
+  <div class="sl"><div class="vinyl"><span class="lab" id="lab"></span></div><span class="cover" id="stArt"></span></div>
+  <div class="info"><span class="cap" id="stCap"></span><h1 id="stTitle"></h1>
+   <div class="art"><span id="stArtist"></span><button class="chip on" id="fol">Following</button></div>
+   <div class="lyr" id="stLyr"></div>
+   <div class="acts"><button class="bigpp" id="bigpp"></button><button class="icb like" id="like" aria-label="Like"><svg class="ic f" viewBox="0 0 24 24"><path d="M12 20s-7.5-4.4-7.5-10A4.3 4.3 0 0 1 12 7.3 4.3 4.3 0 0 1 19.5 10c0 5.6-7.5 10-7.5 10z"/></svg></button><button class="icb" id="addBtn" aria-label="Add to playlist"><i data-i="plus"></i></button><button class="icb" aria-label="Share"><i data-i="share"></i></button><button class="btn gh" id="goSrc"></button></div>
+  </div>
+  <div class="nxt" id="stNext"></div>
+  <div class="prog"><i id="stProg"></i></div>
+ </div>
+ <section class="row2 rise" data-f="all journeys" style="animation-delay:.08s">
+  <div class="jr"><div class="top"><h3>Hip-Hop Journey</h3><span class="m" id="jrStat"></span><div class="act" id="jrAct"></div></div>
+   <div class="path" id="path"><span class="dl"></span></div></div>
+  <div class="wk"><span class="cap">This week</span><div class="big">5<span>h</span> 12<span>m</span></div>
+   <div class="chart" id="chart"></div>
+   <dl><dt>Top artist</dt><dd>Kairo Vale</dd><dt>New artists found</dt><dd class="m">3</dd></dl></div>
+ </section>
+ <section class="rise" data-f="all music" style="animation-delay:.14s"><div class="hd"><h2>On repeat</h2><a>See all</a></div><div class="shelf" id="repeat"></div></section>
+ <section class="rise" data-f="all music" style="animation-delay:.2s"><div class="hd"><h2>Moods</h2></div><div class="moods" id="moods"></div></section>
+ <section class="rise" data-f="all following" style="animation-delay:.26s"><div class="hd"><h2>New from artists you follow</h2><a>See all</a></div><div class="shelf" id="rels"></div></section>
+</main>
+<footer class="bar">
+ <div class="cur"><span class="cover" id="barArt"></span><div><b id="barTitle"></b><span id="barArtist"></span></div></div>
+ <div class="mid"><div class="ctl"><button class="icb on" aria-label="Shuffle on"><i data-i="shuffle"></i></button><button class="icb" id="prev" aria-label="Previous"><i data-i="prev"></i></button><button class="pp" id="pp"></button><button class="icb" id="next" aria-label="Next"><i data-i="next"></i></button><button class="icb" aria-label="Repeat"><i data-i="repeat"></i></button></div>
+  <span class="m" id="tNow"></span><div class="wv" id="wv" role="slider" aria-label="Seek"></div><span class="m e" id="tEnd"></span></div>
+ <div class="rt"><button class="icb" aria-label="Lyrics"><i data-i="lyrics"></i></button><button class="icb" id="qBtn" aria-label="Queue"><i data-i="queue"></i></button><button class="icb" aria-label="Devices"><i data-i="dev"></i></button><button class="icb" aria-label="Volume"><i data-i="vol"></i></button><div class="vol"><i></i></div></div>
+</footer>
+<aside class="drawer" id="drawer" aria-label="Queue"><h3>Queue</h3><div class="src" id="dSrc"></div><div id="dList"></div></aside>
+<div class="pop" id="pop"></div>
+<div class="toast" id="toast"><span id="toastTx"></span><button id="toastBtn">Undo</button></div>
+<div class="scrim" id="scrim"></div>
+<div class="pal" id="pal" role="dialog" aria-label="Search"><div class="in"><i data-i="search"></i><input id="palIn" placeholder="Search songs, artists, playlists" autocomplete="off"><span class="m">esc</span></div><div class="res" id="palRes"></div><div class="ft"><span><span class="m">↑↓</span>move</span><span><span class="m">↵</span>play</span><span><span class="m">esc</span>close</span></div></div>
+<script src="covers.js"></script><script src="data.js"></script><script src="icons.js"></script><script src="app.js"></script>
+</body></html>
