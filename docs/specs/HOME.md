@@ -1,20 +1,25 @@
 # Spec: Home (draft from Home study E, 2026-10-05)
 
-Status: proposal (D-056); rules D-055 confirmed. Design first; implementation approach chosen after approval.
+Status: revision 2 (D-057; rev 1 = D-056); rules D-055 confirmed. Design first; implementation approach chosen after approval.
 
 ## Sections (top → bottom)
 
-1. **Stage** — the current or last session. Sleeve-coloured flat surface; sleeve + vinyl (slides out and spins only while playing; static under Reduced Motion); caption `Now playing|Paused · <source type> · <source name> · NN/NN`; title; artists + Follow; live lyric line or "Instrumental"; actions: Play/Pause, Like, Add to playlist, Share, source button; Up next (next 2 from the **same** source) or "End of <source>. Playback stops here."; progress line.
+1. **Stage** — the current or last session. Sleeve-coloured flat surface; sleeve + vinyl (slides out and spins only while playing; static under Reduced Motion); caption `Now playing|Paused · <source type> · <source name> · NN/NN`; title; artists + Follow; live lyric line or "Instrumental"; actions: Play/Pause, Like, Add to playlist, ⋯ song menu (Share lives here), source button; Up next (user queue first, then the **same** source) or "End of <source>. Playback stops here."; progress line.
 2. **Journey + This week** — Journey path (done ✓, current with progress ring, upcoming dimmed) and a local listening summary (minutes, 7-day bars, top artist, new artists found). No streaks or guilt mechanics.
 3. **On repeat** — most-replayed songs with ×count (Rondo tagline: find your next repeat).
 4. **Moods** — 6 colour tiles with sleeve stack; each is a finite source.
 5. **New from artists you follow** — release type + relative date; new = accent (D-046).
 
-Filter: All / Music (stage, On repeat, Moods) / Journeys (stage, Journey) / Following (stage, releases).
+Filter: All / Music (stage, On repeat, Moods) / Journeys (stage, Journey, **Your Journeys** genre cards with live CTA + progress, **Artists you finished** with Replay) / Following (stage, **Artists you follow** with NEW badge, releases). No filter view may be empty.
+
+## Theme
+
+Dark (default) and light. Toggle in top bar, stored locally, first run follows `prefers-color-scheme`. Same tokens, inverted neutrals; accent unchanged; the stage keeps its sleeve-coloured dark surface in both themes.
 
 ## State rules (binding)
 
-- One active **source** (playlist, Journey, release, mix, mood). Every play surface shows it; Up next and queue only contain that source's items.
+- One active **source** (playlist, Journey, release, mix, mood). Every play surface shows it. Queue = **Next in queue** (songs the user added via Play next / Add to queue; played first, then cleared) + **Next from <source>** (only that source's items).
+- Song menu (⋯ on stage, right-click / long-press on any song row or card): Play next, Add to queue, Add to playlist, Go to artist, Share. Queue actions show a toast with Undo.
 - Clicking the control of the source that is already active **toggles pause**; it never restarts.
 - Journey CTA: not in Journey → `Open Journey` + `Start/Resume <artist>`; in Journey playing → `Open Journey` + `Pause`; in Journey paused → `Open Journey` + `Resume`.
 - Current-artist node: ring = songs heard / artist's songs; overlay equaliser only while the Journey is playing.

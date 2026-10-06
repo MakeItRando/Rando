@@ -1,10 +1,10 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Rondo — Home (study E)</title><link rel="stylesheet" href="style.css"></head>
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Rondo — Home (study D)</title><link rel="stylesheet" href="style.css"></head>
 <body class="paused">
 <header class="tb">
- <div class="logo"><svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="7.5" fill="none" stroke="#efeee9" stroke-width="2.5" stroke-dasharray="38 9" transform="rotate(-60 10 10)"/></svg>rondo</div>
+ <div class="logo"><svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="7.5" fill="none" stroke="currentColor" stroke-width="2.5" stroke-dasharray="38 9" transform="rotate(-60 10 10)"/></svg>rondo</div>
  <button class="sf" id="openPal"><i data-i="search"></i>Search songs, artists, playlists<span class="m">⌘K</span></button>
  <div class="seg" id="seg" role="tablist"><span class="pill"></span><button class="on" data-f="all" role="tab">All</button><button data-f="music" role="tab">Music</button><button data-f="journeys" role="tab">Journeys</button><button data-f="following" role="tab">Following</button></div>
- <div class="r"><button class="icb dotn" aria-label="Notifications, 2 new"><i data-i="bell"></i></button><button class="icb" aria-label="Profile"><span class="av">M</span></button></div>
+ <div class="r"><button class="icb thm" id="thm" aria-label="Switch to light mode"></button><button class="icb dotn" aria-label="Notifications, 2 new"><i data-i="bell"></i></button><button class="icb" aria-label="Profile"><span class="av">M</span></button></div>
 </header>
 <aside class="side">
  <nav class="nav"><button class="on"><i data-i="home"></i>Home</button><button><i data-i="journey"></i>Journeys</button><button><i data-i="lib"></i>Library</button></nav>
@@ -22,7 +22,7 @@
   <div class="info"><span class="cap" id="stCap"></span><h1 id="stTitle"></h1>
    <div class="art"><span id="stArtist"></span><button class="chip on" id="fol">Following</button></div>
    <div class="lyr" id="stLyr"></div>
-   <div class="acts"><button class="bigpp" id="bigpp"></button><button class="icb like" id="like" aria-label="Like"><svg class="ic f" viewBox="0 0 24 24"><path d="M12 20s-7.5-4.4-7.5-10A4.3 4.3 0 0 1 12 7.3 4.3 4.3 0 0 1 19.5 10c0 5.6-7.5 10-7.5 10z"/></svg></button><button class="icb" id="addBtn" aria-label="Add to playlist"><i data-i="plus"></i></button><button class="icb" aria-label="Share"><i data-i="share"></i></button><button class="btn gh" id="goSrc"></button></div>
+   <div class="acts"><button class="bigpp" id="bigpp"></button><button class="icb like" id="like" aria-label="Like"><svg class="ic f" viewBox="0 0 24 24"><path d="M12 20s-7.5-4.4-7.5-10A4.3 4.3 0 0 1 12 7.3 4.3 4.3 0 0 1 19.5 10c0 5.6-7.5 10-7.5 10z"/></svg></button><button class="icb" id="addBtn" aria-label="Add to playlist"><i data-i="plus"></i></button><button class="icb" id="moreBtn" aria-label="More options"><i data-i="more"></i></button><button class="btn gh" id="goSrc"></button></div>
   </div>
   <div class="nxt" id="stNext"></div>
   <div class="prog"><i id="stProg"></i></div>
@@ -36,6 +36,9 @@
  </section>
  <section class="rise" data-f="all music" style="animation-delay:.14s"><div class="hd"><h2>On repeat</h2><a>See all</a></div><div class="shelf" id="repeat"></div></section>
  <section class="rise" data-f="all music" style="animation-delay:.2s"><div class="hd"><h2>Moods</h2></div><div class="moods" id="moods"></div></section>
+ <section class="rise hidden" data-f="journeys"><div class="hd"><h2>Your Journeys</h2><a>Browse genres</a></div><div class="gjs" id="gjs"></div></section>
+ <section class="rise hidden" data-f="journeys"><div class="hd"><h2>Artists you finished</h2></div><div class="fin" id="fin"></div></section>
+ <section class="rise hidden" data-f="following"><div class="hd"><h2>Artists you follow</h2><a>Manage</a></div><div class="fol-row" id="folrow"></div></section>
  <section class="rise" data-f="all following" style="animation-delay:.26s"><div class="hd"><h2>New from artists you follow</h2><a>See all</a></div><div class="shelf" id="rels"></div></section>
 </main>
 <footer class="bar">
