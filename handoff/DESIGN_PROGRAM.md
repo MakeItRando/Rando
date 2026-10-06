@@ -67,7 +67,13 @@ Owner: study A is "the right direction" but "feels kinda overused and AI… not 
 
 Required instead: neutral canvas with hairline structure; numbers and metadata as design material (track numbers, durations, counts, BPM/key, dates in mono); flat, intentional sleeves; real waveform scrubber; plain labels; one accent for live/now-playing state only. Every element must answer "what is it, what can I do". Reference feel: professional audio tools and well-made dev tools (precise, quiet, information-rich), not concept art.
 
-## Study C (2026-10-05) — current proposal (interactive)
+## Study D (2026-10-05) — current proposal (state-aware Home)
+
+Owner on C: "way better… way impressive" but Journey action never changed while playing; some parts old/not advanced; some elements shouldn't be there. D makes every play control state-aware (Start/Resume/Pause, live progress ring), keeps "Open Journey" always available, gives each source its own truthful queue, and removes the bottom bar, filter chips, uppercase labels, pills and duplicate sections. Files: [`design/studies/2026-10-05-foundation-d/`](../design/studies/2026-10-05-foundation-d/README.md). Awaiting verdict (D-054).
+
+**Binding rule from this feedback:** any control that starts playback must reflect the current state of its source (playing / paused / in progress / not started) everywhere it appears.
+
+## Study C (2026-10-05) — superseded by D
 
 Owner on B: right direction but not satisfying; wants more engaging, smooth, advanced, creative and unique, systematic, user-friendly, no AI wording. Files: [`design/studies/2026-10-05-foundation-c/`](../design/studies/2026-10-05-foundation-c/README.md). Keeps B's anti-slop system and adds: flat sleeve-colour surfaces, Journey artist path as the signature component, real interaction and motion (hover lift, sleeve swap, live lyric line, playing indicator, waveform seek), truthful source switching. Awaiting verdict (D-053).
 

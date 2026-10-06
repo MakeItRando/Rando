@@ -57,7 +57,9 @@ Statuses: **Confirmed** (non-negotiable), **Working** (testable experiment), **O
 | D-049 | Superseded by D-051 | Foundation study A: neutral graphite canvas, artwork-derived ambience, single coral accent, Geist type, Home + persistent Now Playing panel, "Playing from" source line everywhere. | Owner 2026-10-05: right direction, but colors and wording feel overused/AI slop. |
 | D-050 | Confirmed | No AI features in Rondo for now. Any later AI must solve a stated listener problem and make no unverifiable claims. | Owner 2026-10-05: "no ai for rando yet". |
 | D-051 | Superseded by D-053 (anti-slop rules still binding) | Study B "instrument" foundation: neutral hairline UI, mono metadata, flat sleeves, waveform scrubber, plain wording, single live-state accent. Anti-slop rules in DESIGN_PROGRAM.md are binding. | Awaiting owner verdict. |
-| D-053 | Proposal | Study C: B's system + sleeve-colour flat surfaces, Journey artist path signature, interactive motion, truthful source switching. | Awaiting owner verdict. |
+| D-054 | Proposal | Study D: state-aware play controls everywhere, Open Journey always available, per-source truthful queues, single player column (no bottom bar), clutter removed. | Awaiting owner verdict. |
+| D-055 | Confirmed | Every playback control reflects its source's live state (not started / in progress / playing / paused) on every surface; the Journey card always offers Open Journey. | Owner 2026-10-05 feedback on study C. |
+| D-053 | Superseded by D-054 | Study C: B's system + sleeve-colour flat surfaces, Journey artist path signature, interactive motion, truthful source switching. | Awaiting owner verdict. |
 | D-052 | Confirmed | Design placeholders must not look like AI imagery; use flat designed sleeves until real catalog art exists. | Owner 2026-10-05: "don't make it look like AI slop". |
 
 ## Writing rules
