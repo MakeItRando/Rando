@@ -1,6 +1,6 @@
 # Spec: Home (draft from Home study E, 2026-10-05)
 
-Status: revision 2 (D-057; rev 1 = D-056); rules D-055 confirmed. Design first; implementation approach chosen after approval.
+Status: complete, revision 3 (D-058; rev 2 = D-057, rev 1 = D-056). Next: Now Playing page and Journey page reuse these rules.; rules D-055 confirmed. Design first; implementation approach chosen after approval.
 
 ## Sections (top → bottom)
 
@@ -10,7 +10,29 @@ Status: revision 2 (D-057; rev 1 = D-056); rules D-055 confirmed. Design first; 
 4. **Moods** — 6 colour tiles with sleeve stack; each is a finite source.
 5. **New from artists you follow** — release type + relative date; new = accent (D-046).
 
-Filter: All / Music (stage, On repeat, Moods) / Journeys (stage, Journey, **Your Journeys** genre cards with live CTA + progress, **Artists you finished** with Replay) / Following (stage, **Artists you follow** with NEW badge, releases). No filter view may be empty.
+Filter: All / For you (stage, On repeat, Moods) / Journeys (stage, Journey, **Your Journeys** genre cards with live CTA + progress, **Artists you finished** with Replay) / Following (stage, **Artists you follow** with NEW badge, releases). No filter view may be empty.
+
+## Top bar and overlays
+
+- **Notifications** (bell, N): New / Earlier; release items have a live Play/Pause (D-055), recap → View, Journey milestone → Start. Mark all as read clears the dot.
+- **Profile menu** (avatar): Profile, Appearance Dark / Light / Auto (Auto follows the system), Keyboard shortcuts, Settings, Log out.
+- **Now Playing** (song title, sleeve, lyrics button, L): sleeve-coloured full view, title, artists, BPM / key / length, Like, Share lyric; synced lyrics (current line bright, past dim), click a line to seek; "Instrumental" state when there are no lyrics.
+- **Share card** (song menu → Share, Share lyric): Story 9:16 or Post 1:1, background Sleeve / Dark / Light, pick one lyric line or none; Save image, Copy link.
+- **Monthly recap** (This week → Your <month>; notification): 5 story cards (time + day calendar, top artists, song of the month, discoveries, your sound), auto-advance 5.2 s, arrows, Save my month. Local stats only, no streaks.
+- **Blend** (sidebar + → New Blend): invite a friend; daily-refreshing shared playlist. Needs accounts for both people (V2 backend).
+- **Keyboard shortcuts** (?): Space, ⇧→ / ⇧←, → / ← 5 s, S, R, M, ⌘K or /, L, Q, N, T, Esc.
+
+## Player bar
+
+Shuffle; Repeat cycles off → this source → this song (repeat loops the active source only, never expands it); sleep timer (Off, 15, 30, 45, 60 min, end of this song; countdown chip, pauses with a toast) and crossfade (Off, 3, 6, 12 s; albums/EPs always gapless); lyrics; queue; devices (honest single-device state); volume slider (drag, arrow keys) + mute.
+
+## See all destinations
+
+On repeat → expands to 12; New from artists you follow → Following filter; Browse genres → more genre Journeys; Manage → unfollow mode with Undo. No dead links.
+
+## Responsive
+
+≤1240 px: stage Up next hides, shelves show 5. ≤1020 px: sidebar collapses to icons, This week becomes a row, Now Playing shows lyrics only.
 
 ## Theme
 

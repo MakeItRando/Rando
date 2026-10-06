@@ -2,7 +2,7 @@
 
 **Reviewed:** 2026-10-04 (session 2). **Product:** Rondo. **Phase:** **design-first program** (D-048) — design every page before implementation approaches. Playback blockers B-001/B-002 still block any owner testing. **This round:** owner answers recorded (D-045 play-first, D-046 follow = both, D-047 playlists), design program + foundation study A added. No app code changed.
 
-Start with [DESIGN_PROGRAM.md](DESIGN_PROGRAM.md) for design work. Current proposal: Home study E rev 2 (2026-10-06, interactive, light + dark; D-057 on top of D-056; D-054 alternative), awaiting owner sign-off before moving to Now Playing / Journey page; anti-slop rules are binding. No AI features (D-050).
+Start with [DESIGN_PROGRAM.md](DESIGN_PROGRAM.md) for design work. Home is complete: study E rev 3 (2026-10-06, D-058; interactive, light + dark). Next design step: Now Playing page, then Journey page; anti-slop rules are binding. No AI features (D-050).
 
 ## Verdict
 

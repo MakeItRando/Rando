@@ -71,7 +71,9 @@ Required instead: neutral canvas with hairline structure; numbers and metadata a
 
 Owner on C also said: audience is mostly teenagers; make it more advanced, engaging, interactive and systematic; perfect Home before any other page. E builds on D's binding state rule (D-055) and adds: Stage hero (sleeve + vinyl that slides out while playing), Journey CTA states (Start/Resume X → Pause/Resume + Open Journey), progress ring, source-bounded queues + queue drawer, ⌘K search palette, add-to-playlist with Undo/duplicate warning, On repeat (×plays), Moods, This week, animated filter, toggle-never-restart. Files: [`design/studies/2026-10-05-home-e/`](../design/studies/2026-10-05-home-e/README.md), spec [docs/specs/HOME.md](../docs/specs/HOME.md). Awaiting verdict (D-056). D (below) stays as the alternative without a bottom bar.
 
-**Rev 2 (2026-10-06, D-057).** Owner: "way way better… so close". Added light mode (token swap, toggle + system default), filled Journeys filter (Your Journeys genre cards, Artists you finished) and Following filter (Artists you follow), song menu (Play next, Add to queue, Add to playlist, Go to artist, Share), user queue ahead of the source queue. Next once signed off: Now Playing page, then Journey page.
+**Rev 2 (2026-10-06, D-057).** Owner: "way way better… so close". Added light mode (token swap, toggle + system default), filled Journeys filter (Your Journeys genre cards, Artists you finished) and Following filter (Artists you follow), song menu (Play next, Add to queue, Add to playlist, Go to artist, Share), user queue ahead of the source queue. Owner confirmed rev 2.
+
+**Rev 3 — Home complete (2026-10-06, D-058).** Owner liked every suggestion and delegated the bar choice (bottom bar kept). Added Now Playing + synced lyrics, share cards, monthly recap, notifications, profile/appearance (Auto), shortcuts sheet, sleep timer + crossfade, repeat modes, volume/mute, devices, New playlist/Blend, working See all/Browse/Manage, "For you" filter, responsive collapse. Renders 10–18. Next: Now Playing page, then Journey page.
 
 ## Study D (2026-10-05) — alternative (state-aware Home, no bottom bar)
 
