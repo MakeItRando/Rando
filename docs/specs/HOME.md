@@ -5,7 +5,7 @@ Status: complete, revision 3 (D-058; rev 2 = D-057, rev 1 = D-056). Next: Now Pl
 ## Sections (top → bottom)
 
 1. **Stage** — the current or last session. Sleeve-coloured flat surface; sleeve + vinyl (slides out and spins only while playing; static under Reduced Motion); caption `Now playing|Paused · <source type> · <source name> · NN/NN`; title; artists + Follow; live lyric line or "Instrumental"; actions: Play/Pause, Like, Add to playlist, ⋯ song menu (Share lives here), source button; Up next (user queue first, then the **same** source) or "End of <source>. Playback stops here."; progress line.
-2. **Journey + This week** — Journey path (done ✓, current with progress ring, upcoming dimmed) and a local listening summary (minutes, 7-day bars, top artist, new artists found). No streaks or guilt mechanics.
+2. **Journey + This week** — Journey path (done ✓, current with progress ring, upcoming dimmed), footer with total songs heard / Journey songs (heard now in accent) and the next artist and a local listening summary (minutes, 7-day bars, top artist, new artists found, monthly recap entry). No streaks or guilt mechanics.
 3. **On repeat** — most-replayed songs with ×count (Rondo tagline: find your next repeat).
 4. **Moods** — 6 colour tiles with sleeve stack; each is a finite source.
 5. **New from artists you follow** — release type + relative date; new = accent (D-046).
