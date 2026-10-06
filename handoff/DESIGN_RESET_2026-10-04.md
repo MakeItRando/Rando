@@ -22,3 +22,7 @@ The owner also criticized the existing onboarding's low-effort copy, color treat
 6. Keep delight causal: a response to play, queue edits, saved moments, or opening Song Room; Reduced Motion receives an equally complete experience.
 
 For each approved refinement document surface/state, current problem, smallest change, acceptance criteria, screenshots, responsive/accessibility impact and rollback. See [AUDIT_2026-10-04.md](AUDIT_2026-10-04.md), [PRODUCT_MAP.md](PRODUCT_MAP.md) and [QUALITY_GATES.md](QUALITY_GATES.md).
+
+## Update — 2026-10-04 session 2
+
+The owner now explicitly asks for a more modern, engaging, systematic design across every page ("looks kinda old"). The "no wholesale redesign without explicit request" rule is satisfied by that request; see D-048 and [DESIGN_PROGRAM.md](DESIGN_PROGRAM.md). The Living Record rejection is unchanged.

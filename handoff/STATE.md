@@ -1,12 +1,14 @@
 # Current project state
 
-**Reviewed:** 2026-10-04. **Product:** Rondo. **Phase:** orientation complete; original experience refinement/quality gate. **This round:** documentation and conversation archive only, no app development.
+**Reviewed:** 2026-10-04 (session 2). **Product:** Rondo. **Phase:** **design-first program** (D-048) — design every page before implementation approaches. Playback blockers B-001/B-002 still block any owner testing. **This round:** owner answers recorded (D-045 play-first, D-046 follow = both, D-047 playlists), design program + foundation study A added. No app code changed.
+
+Start with [DESIGN_PROGRAM.md](DESIGN_PROGRAM.md) for design work.
 
 ## Verdict
 
 **Do not request acceptance testing or merge PR #5 yet.** Existing candidate automation passes, but fresh read-only probes reproduced wrong Global natural-end progression and one-result Search queue leakage. See [AUDIT_2026-10-04.md](AUDIT_2026-10-04.md). Earlier blanket test-ready language is superseded, not proof of full listening-session correctness.
 
-Original Rondo is the design foundation. Living Record study PR #9 is rejected and closed, never merged. See [DESIGN_RESET_2026-10-04.md](DESIGN_RESET_2026-10-04.md).
+Original Rondo's product model (Discover/Journeys/Song Room content, two playback sessions) is kept; its visual layer is being modernized under D-048. Living Record study PR #9 is rejected and closed, never merged. See [DESIGN_RESET_2026-10-04.md](DESIGN_RESET_2026-10-04.md).
 
 ## Exact evidence and branch boundary
 

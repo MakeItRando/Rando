@@ -4,6 +4,8 @@
 Build a distinctive, calm, accessible music product around **find → play → explore → keep**. Be truthful about what is implemented, authorized, tested, and approved. No generic generated-looking UI, invented metadata, fake charts, manipulative streaks, autoplay traps, or music-gating gimmicks.
 
 ## Startup checklist
+
+- Design phase (D-048): read `handoff/DESIGN_PROGRAM.md` before any UI work; never implement an unapproved study.
 Read [README.md](README.md), [handoff/STATE.md](handoff/STATE.md), [handoff/HANDOFF_REPORT.md](handoff/HANDOFF_REPORT.md), [handoff/DECISIONS.md](handoff/DECISIONS.md), [handoff/PRODUCT_MAP.md](handoff/PRODUCT_MAP.md), [handoff/PLAYBACK_CONTEXTS.md](handoff/PLAYBACK_CONTEXTS.md), [handoff/QUALITY_GATES.md](handoff/QUALITY_GATES.md), [handoff/ROADMAP.md](handoff/ROADMAP.md), and all applicable [docs/](docs/). Inspect current branch, PR #5, checks, and changes before planning. `agent.md` points here; do not implement from a pointer or screenshot alone.
 
 ## Live-state discipline

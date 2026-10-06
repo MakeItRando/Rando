@@ -50,10 +50,28 @@ Candidate passes existing automation but has reproduced uncovered blockers and i
 
 Before real ingestion, owner provides implementation-facing authorized source types, represented contracts/permissions, territories, delivery methods, metadata/credit obligations, reporting, corrections/takedowns, storage/playback limits, and provider/API restrictions. Do not paste secrets into chat or commit them.
 
-### 6. First-listen setup contract — ask before onboarding edits
+### 6. First-listen setup contract — RESOLVED (D-045)
+
+Owner: yes, play before setup at least through development/testing. Original question kept below for history.
+
+#### Original question
 
 May a listener play music from Discover before supplying email or choosing genres/artists, with account/taste setup offered when needed? This is a proposal to reduce friction, not a change already approved. Current implementation mandates setup; preserve it until the owner resolves the contract.
 
-### 7. Artist-follow meaning — ask before dependent features
+### 7. Artist-follow meaning — RESOLVED (D-046: both)
+
+#### Original question
 
 Does following an artist mean keeping them in Library, receiving new-release updates, or both? Current prototype only saves artists. Real following/subscriptions/notifications need a separately specified identity, privacy and delivery model. Do not imply a public social feed is approved.
+
+### 8. Study A verdict (2026-10-04 session 2)
+
+Does the foundation direction in DESIGN_PROGRAM.md (graphite canvas, art-driven color, coral accent, Geist, familiar layout) feel right? Which parts to keep, push further or drop?
+
+### 9. AI scope
+
+The owner's brief mentions "really capable AI". Which listener problems should AI solve in Rondo (e.g. playlist suggestions, "why this song", natural-language search, Journey guidance)? Roadmap still forbids a fake AI DJ or unverifiable AI claims.
+
+### 10. Placeholder artwork for studies
+
+May design studies use generated (AI) photographic cover art clearly marked as placeholders, or stay with code-drawn abstract covers until real catalog art exists?

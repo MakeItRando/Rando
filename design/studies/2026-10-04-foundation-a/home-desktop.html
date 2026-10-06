@@ -1,0 +1,146 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><title>Rondo — Home (design study)</title>
+<link rel="stylesheet" href="base.css"><style>
+body{height:900px;overflow:hidden;display:grid;grid-template-columns:248px 1fr 336px;grid-template-rows:1fr 84px;gap:8px;padding:8px}
+.panel{background:var(--s1);border-radius:var(--r-m);overflow:hidden}
+/* sidebar */
+.side{display:flex;flex-direction:column;padding:16px 12px}
+.brand{display:flex;align-items:center;gap:10px;padding:4px 8px 20px}
+.brand b{font-size:17px;font-weight:700;letter-spacing:-.02em}
+.nav a{display:flex;align-items:center;gap:14px;height:40px;padding:0 10px;border-radius:var(--r-s);color:var(--t2);font-weight:550;text-decoration:none}
+.nav a.on{color:var(--t1);background:var(--s2)}
+.sh{display:flex;justify-content:space-between;align-items:center;padding:22px 10px 8px;color:var(--t3);font-size:12px;font-weight:600}
+.sh button{width:28px;height:28px;border-radius:50%;display:grid;place-items:center;color:var(--t2)}
+.pl{display:flex;align-items:center;gap:12px;padding:6px 8px;border-radius:var(--r-s)}
+.pl .cover{width:40px;height:40px;border-radius:6px;flex:none}
+.pl div{min-width:0}.pl b{display:block;font-weight:550;font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.pl span{font-size:12px;color:var(--t3)}
+.pl.playing b{color:var(--brand)}
+.liked{width:40px;height:40px;border-radius:6px;background:linear-gradient(135deg,#ff6b4a,#c2185b);display:grid;place-items:center;flex:none}
+/* main */
+.main{position:relative;overflow:hidden}
+.amb{position:absolute;inset:0 0 auto 0;height:340px;background:radial-gradient(120% 90% at 20% 0%,rgba(255,61,139,.22),transparent 60%),radial-gradient(80% 80% at 80% 0%,rgba(45,226,230,.12),transparent 60%);pointer-events:none}
+.top{position:relative;display:flex;align-items:center;gap:12px;padding:16px 28px}
+.sf{flex:1;max-width:440px;height:44px;border-radius:99px;background:var(--s2);display:flex;align-items:center;gap:10px;padding:0 16px;color:var(--t3)}
+.sf kbd{margin-left:auto;font:500 12px Geist;color:var(--t3);border:1px solid var(--line2);border-radius:6px;padding:2px 6px}
+.av{width:36px;height:36px;border-radius:50%;background:#3b2a24;display:grid;place-items:center;font-weight:650;margin-left:auto}
+.iconbtn{width:40px;height:40px;border-radius:50%;display:grid;place-items:center;color:var(--t2);background:var(--s2)}
+.content{position:relative;padding:4px 28px 28px}
+.chips{display:flex;gap:8px;margin-bottom:18px}
+h1{font-size:30px;font-weight:700;letter-spacing:-.025em;margin-bottom:16px}
+.quick{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:24px}
+.q{display:flex;align-items:center;gap:12px;height:60px;background:rgba(255,255,255,.07);border-radius:var(--r-s);overflow:hidden;padding-right:12px;position:relative}
+.q .cover{width:60px;height:60px;border-radius:0;flex:none}
+.q b{font-weight:600;font-size:14px;line-height:1.25}.q span{display:block;font-size:12px;color:var(--t3);font-weight:450}
+.q .ring{margin-left:auto;flex:none}
+.row{display:flex;align-items:end;justify-content:space-between;margin-bottom:14px}
+.row a{font-size:13px;color:var(--t3);font-weight:550}
+.shelf{display:grid;grid-template-columns:repeat(6,1fr);gap:16px}
+.card b{display:block;margin-top:10px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.card span{font-size:13px;color:var(--t3)}
+.card .tag{display:inline-block;font-size:11px;font-weight:650;color:var(--brand);margin-top:10px;letter-spacing:.02em}
+.card .tag+b{margin-top:2px}
+/* journey feature */
+.jf{display:grid;grid-template-columns:1fr auto;gap:0;border-radius:var(--r-m);overflow:hidden;background:linear-gradient(110deg,#3a1406 0%,#1f0d08 55%,#141214 100%);margin-bottom:28px;position:relative}
+.jf .l{padding:22px 24px;display:flex;flex-direction:column}
+.jf .eyebrow{color:#ffb38f}
+.jf h2{font-size:24px;font-weight:700;letter-spacing:-.02em;margin:6px 0 4px}
+.jf p{color:var(--t2);font-size:13.5px;max-width:300px}
+.jf .act{margin-top:16px;display:flex;gap:10px;align-items:center}
+.jf .r{display:flex;align-items:center;gap:14px;padding-right:24px;justify-content:flex-end}
+.jf .r .cover{width:104px;height:104px;flex:none;box-shadow:0 12px 30px rgba(0,0,0,.45)}
+.jf .r .cover.done{opacity:.55}
+.jf .r .cover.next{width:132px;height:132px;outline:2px solid #ffb38f;outline-offset:3px}
+.jf .r .cover.lock{opacity:.3}
+.steps{display:flex;gap:4px;margin-top:10px}.steps i{width:22px;height:4px;border-radius:2px;background:rgba(255,255,255,.18)}.steps i.d{background:#ffb38f}
+/* now playing panel */
+.np{display:flex;flex-direction:column;padding:16px}
+.np .src{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+.np .src div{font-size:12px;color:var(--t3)}.np .src b{display:block;color:var(--t1);font-size:13.5px;font-weight:600}
+.np .big{border-radius:var(--r-m);box-shadow:0 18px 40px rgba(0,0,0,.5)}
+.np h3{font-size:22px;font-weight:700;letter-spacing:-.02em;margin-top:16px}
+.np .who{display:flex;align-items:center;justify-content:space-between;margin-top:2px;color:var(--t2)}
+.follow{height:30px;padding:0 12px;border-radius:99px;box-shadow:0 0 0 1px var(--line2) inset;font-size:12.5px;font-weight:600}
+.lyr{margin-top:16px;border-radius:var(--r-m);background:linear-gradient(160deg,#3a1a56,#1d1430);padding:14px 16px}
+.lyr .eyebrow{color:rgba(255,255,255,.7);display:flex;justify-content:space-between}
+.lyr p{font-size:17px;font-weight:650;letter-spacing:-.01em;line-height:1.35;margin-top:8px;color:rgba(255,255,255,.45)}
+.lyr p.now{color:#fff}
+.un{margin-top:16px}
+.un h4{font-size:13.5px;font-weight:600;display:flex;justify-content:space-between;margin-bottom:6px}.un h4 span{color:var(--t3);font-weight:500}
+.ti{display:flex;align-items:center;gap:12px;padding:6px 0}.ti .cover{width:40px;height:40px;flex:none;border-radius:6px}.ti b{display:block;font-size:13.5px;font-weight:550}.ti span{font-size:12px;color:var(--t3)}
+/* player */
+.bar{grid-column:1/-1;display:grid;grid-template-columns:1fr 1.25fr 1fr;align-items:center;padding:0 16px;background:var(--bg)}
+.cur{display:flex;align-items:center;gap:12px}.cur .cover{width:56px;height:56px;flex:none}
+.cur b{font-weight:600;display:block}.cur span{font-size:12.5px;color:var(--t3)}
+.cur .liked-ic{color:var(--brand);margin-left:8px}
+.ctl{display:flex;flex-direction:column;align-items:center;gap:6px}
+.ctl .btns{display:flex;align-items:center;gap:20px;color:var(--t2)}
+.ctl .pp{width:40px;height:40px;border-radius:50%;background:var(--t1);color:#0a0a0b;display:grid;place-items:center}
+.ctl .on{color:var(--brand);position:relative}
+.ctl .on:after{content:"";position:absolute;left:50%;bottom:-6px;width:4px;height:4px;margin-left:-2px;border-radius:50%;background:var(--brand)}
+.scrub{display:flex;align-items:center;gap:10px;width:100%;max-width:560px;font-size:11.5px;color:var(--t3)}
+.track{flex:1;height:4px;border-radius:2px;background:rgba(255,255,255,.16);position:relative}
+.track i{position:absolute;inset:0 62% 0 0;border-radius:2px;background:var(--t1)}
+.rt{display:flex;justify-content:flex-end;align-items:center;gap:16px;color:var(--t2)}
+.vol{width:96px;height:4px;border-radius:2px;background:rgba(255,255,255,.16);position:relative}.vol i{position:absolute;inset:0 30% 0 0;background:var(--t2);border-radius:2px}
+.rt .on{color:var(--brand)}
+</style></head><body>
+<aside class="panel side">
+ <div class="brand"><svg width="26" height="26" viewBox="0 0 26 26"><circle cx="13" cy="13" r="10" fill="none" stroke="#ff6b4a" stroke-width="3" stroke-dasharray="52 12" stroke-linecap="round" transform="rotate(-60 13 13)"/></svg><b>rondo</b></div>
+ <nav class="nav"><a class="on"><i data-i="home"></i>Home</a><a><i data-i="search"></i>Search</a><a><i data-i="journey"></i>Journeys</a><a><i data-i="lib"></i>Library</a></nav>
+ <div class="sh">Your playlists<button aria-label="New playlist"><i data-i="plus"></i></button></div>
+ <div class="pl"><div class="liked"><svg class="ic" viewBox="0 0 24 24" style="fill:#fff;stroke:none"><path d="M12 20s-7.5-4.4-7.5-10A4.3 4.3 0 0 1 12 7.3 4.3 4.3 0 0 1 19.5 10c0 5.6-7.5 10-7.5 10z"/></svg></div><div><b>Liked songs</b><span>48 songs</span></div></div>
+ <div class="pl playing"><span class="cover" data-art="night"></span><div><b>Late drive</b><span>Playlist · 23 songs</span></div></div>
+ <div class="pl"><span class="cover" data-art="blue"></span><div><b>Sunday, slow</b><span>Playlist · 17 songs</span></div></div>
+ <div class="pl"><span class="cover" data-art="open"></span><div><b>Focus, no vocals</b><span>Playlist · 31 songs</span></div></div>
+ <div class="sh">Following</div>
+ <div class="pl"><span class="cover" data-art="cont" style="border-radius:50%"></span><div><b>Asha North</b><span>New release · 2d</span></div></div>
+ <div class="pl"><span class="cover" data-art="night" style="border-radius:50%"></span><div><b>Kairo Vale</b><span>Artist</span></div></div>
+ <div class="pl"><span class="cover" data-art="soft" style="border-radius:50%"></span><div><b>Mira Son</b><span>Artist</span></div></div>
+</aside>
+<main class="panel main"><div class="amb"></div>
+ <div class="top"><div class="sf"><i data-i="search"></i>Songs, artists, playlists<kbd>⌘K</kbd></div><div class="iconbtn" style="margin-left:auto"><i data-i="bell"></i></div><div class="av" style="margin-left:0">M</div></div>
+ <div class="content">
+  <div class="chips"><span class="chip on">All</span><span class="chip">New releases</span><span class="chip">Journeys</span><span class="chip">Moods</span></div>
+  <h1>Good evening, Mikoto</h1>
+  <div class="quick">
+   <div class="q"><span class="cover" data-art="night"></span><div><b>Late drive</b><span>Your playlist</span></div></div>
+   <div class="q"><span class="cover" data-art="cont"></span><div><b>Hip-Hop Journey</b><span>Kairo Vale · 3 of 7</span></div></div>
+   <div class="q"><span class="cover" data-art="silver"></span><div><b>Silver Weather</b><span>Asha North · new</span></div></div>
+   <div class="q"><div class="liked" style="width:60px;height:60px;border-radius:0"><svg class="ic" viewBox="0 0 24 24" style="fill:#fff;stroke:none"><path d="M12 20s-7.5-4.4-7.5-10A4.3 4.3 0 0 1 12 7.3 4.3 4.3 0 0 1 19.5 10c0 5.6-7.5 10-7.5 10z"/></svg></div><div><b>Liked songs</b><span>48 songs</span></div></div>
+   <div class="q"><span class="cover" data-art="blue"></span><div><b>Sunday, slow</b><span>Your playlist</span></div></div>
+   <div class="q"><span class="cover" data-art="first"></span><div><b>First Light</b><span>Theo June</span></div></div>
+  </div>
+  <div class="jf">
+   <div class="l"><span class="eyebrow">Continue your Journey · Hip-Hop</span><h2>Next up: Moni Gray</h2><p>3 of 7 artists done. Moni Gray's <i>Small Hours</i> picks up where Kairo Vale left off.</p>
+    <div class="steps"><i class="d"></i><i class="d"></i><i class="d"></i><i></i><i></i><i></i><i></i></div>
+    <div class="act"><button class="btn pri"><i data-i="play"></i>Resume</button><button class="btn ghost">View Journey</button></div></div>
+   <div class="r"><span class="cover done" data-art="cont"></span><span class="cover next" data-art="small"></span><span class="cover lock" data-art="margins"></span></div>
+  </div>
+  <div class="row"><h2 class="h-sec">New from artists you follow</h2><a>Show all</a></div>
+  <div class="shelf">
+   <div class="card"><span class="cover" data-art="silver"></span><span class="tag">NEW · EP</span><b>Silver Weather</b><span>Asha North</span></div>
+   <div class="card"><span class="cover" data-art="soft"></span><span class="tag">NEW · SINGLE</span><b>Soft Collision</b><span>Mira Son</span></div>
+   <div class="card"><span class="cover" data-art="north"></span><b>North Window</b><span>Nia Vale</span></div>
+   <div class="card"><span class="cover" data-art="margins"></span><b>Margins</b><span>Sora K</span></div>
+   <div class="card"><span class="cover" data-art="open"></span><b>Signal Memory</b><span>Vale &amp; Lio</span></div>
+   <div class="card"><span class="cover" data-art="first"></span><b>First Light</b><span>Theo June</span></div>
+  </div>
+ </div>
+</main>
+<aside class="panel np">
+ <div class="src"><div>Playing from playlist<b>Late drive</b></div><button class="iconbtn" aria-label="More"><i data-i="more"></i></button></div>
+ <span class="cover big" data-art="night"></span>
+ <h3>Night Transit</h3>
+ <div class="who"><span>Kairo Vale, Mira Son</span><button class="follow">Following</button></div>
+ <div class="lyr"><div class="eyebrow"><span>Lyrics</span><span>Open</span></div><p class="now">Headlights fold into the rain</p><p>and the city hums in a minor key</p></div>
+ <div class="un"><h4>Up next <span>Late drive · 21 left</span></h4>
+  <div class="ti"><span class="cover" data-art="open"></span><div><b>Open Circuit</b><span>Vale &amp; Lio</span></div></div>
+  <div class="ti"><span class="cover" data-art="blue"></span><div><b>Blue Hour</b><span>Nia Vale</span></div></div></div>
+</aside>
+<footer class="bar">
+ <div class="cur"><span class="cover" data-art="night"></span><div><b>Night Transit</b><span>Kairo Vale, Mira Son</span></div><svg class="ic liked-ic" viewBox="0 0 24 24" style="fill:#ff6b4a;stroke:none"><path d="M12 20s-7.5-4.4-7.5-10A4.3 4.3 0 0 1 12 7.3 4.3 4.3 0 0 1 19.5 10c0 5.6-7.5 10-7.5 10z"/></svg></div>
+ <div class="ctl"><div class="btns"><span class="on"><i data-i="shuffle"></i></span><i data-i="prev"></i><span class="pp"><i data-i="pause"></i></span><i data-i="next"></i><i data-i="repeat"></i></div>
+  <div class="scrub num"><span>1:12</span><div class="track"><i></i></div><span>3:08</span></div></div>
+ <div class="rt"><span class="on"><i data-i="lyrics"></i></span><i data-i="queue"></i><i data-i="dev"></i><i data-i="vol"></i><div class="vol"><i></i></div></div>
+</footer>
+<script src="covers.js"></script><script src="icons.js"></script>
+</body></html>

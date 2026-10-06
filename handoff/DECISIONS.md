@@ -48,10 +48,13 @@ Statuses: **Confirmed** (non-negotiable), **Working** (testable experiment), **O
 
 
 | D-042 | Confirmed | Living Record study PR #9 is rejected, closed and unmerged; original Rondo is the sole design foundation. | Owner explicitly preferred original; current screenshot 05 and PR #9 record verdict. Do not revive or blend rejected concepts. |
-| D-043 | Confirmed | Improve actual components through small comparative changes, not wholesale concept-board resets. | Owner rejection plus contributor reset; preserve dark musical identity, art, navigation and Song Room. |
+| D-043 | Superseded by D-048 for the design phase | Improve actual components through small comparative changes, not wholesale concept-board resets. | Owner rejection plus contributor reset; preserve dark musical identity, art, navigation and Song Room. |
 | D-044 | Confirmed | This 2026-10-04 round is orientation, documentation and archive only; no application development or candidate merge. | Explicit current owner instruction. |
-| D-045 | Open | Permit first listening before account/taste setup, or retain required setup? | Proposed reduction in onboarding friction; current runtime mandates email, three genres/two artists. Needs owner answer. |
-| D-046 | Open | Does artist following mean a saved artist, or a release-update/follow feed? | Current code has saved artists; real subscriptions/notifications are not implemented or approved by this round. |
+| D-045 | Confirmed | Listeners can play before email/taste setup, at least for the whole development/testing period; setup is offered when useful. Revisit for launch. | Owner answer 2026-10-04 session 2: "yes, until we aren't done with development at least, because we need testing". |
+| D-046 | Confirmed | Following an artist means both: saved in Library and new-release updates. See docs/specs/FOLLOWING.md. | Owner answer 2026-10-04 session 2. |
+| D-047 | Confirmed | Listeners can create their own playlists (V1 scope). See docs/specs/PLAYLISTS.md. | Owner request 2026-10-04 session 2. |
+| D-048 | Confirmed | Design-first phase: design every page (systematic, page by page) to a modern standard before choosing implementation approaches. Wholesale visual modernization is allowed; D-042 (no Living Record) still holds. See handoff/DESIGN_PROGRAM.md. | Owner: v0.3.1 preview "fine but not that good", looks dated; "design it first then we will think about approaches". |
+| D-049 | Proposal | Foundation study A: neutral graphite canvas, artwork-derived ambience, single coral accent, Geist type, Home + persistent Now Playing panel, "Playing from" source line everywhere. | Awaiting owner verdict. |
 
 ## Writing rules
 

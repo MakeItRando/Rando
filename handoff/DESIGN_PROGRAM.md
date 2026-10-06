@@ -1,0 +1,67 @@
+# Rondo design program — design first, then build
+
+**Started:** 2026-10-04 (session 2). **Status:** active. **Owner direction:** design every surface first, page by page, then choose implementation approaches. Update this file whenever a page brief, study, verdict or token changes.
+
+## Why this program exists
+
+The owner reviewed the v0.3.1 preview and judged it "fine but not that good": it looks dated against current music apps and does not feel engaging or systematic enough. This is a new explicit owner request for a modern visual and interaction system. It **supersedes D-043's "small component changes only" limit** for this phase. It does **not** revive the rejected Living Record study (D-042 stands): no cream editorial reset, slogan typography, concept-board styling or forced terminology.
+
+## Honest critique of v0.3.x visuals (what to fix)
+
+| Problem | Evidence in v0.3.x | Direction |
+| --- | --- | --- |
+| Navy-tinted canvas everywhere makes every page look the same and slightly muddy | Discover, Genre, Song Room share one blue-black wash | Neutral graphite canvas; color comes from the artwork in context only |
+| Typography mixes heavy tight display, tiny uppercase labels and a serif | "Play something good." hero, `RONDO RIGHT NOW` eyebrows, Georgia in Song Room | One modern sans (Geist study), 5 sizes, sentence case, no letter-spaced micro labels |
+| Cover art is code-drawn with titles printed inside the art | `BLACKTOP STUDIES` text inside covers | Covers are pure imagery; the UI prints titles. Real catalog art later |
+| Home opens with a slogan, not with the listener's music | Hero copy + Surprise me before any content | Open on resume tiles, Journey progress and new releases from followed artists |
+| Too many bordered pills, outlines and small chrome | tags, chips, outlined buttons on every surface | Fewer containers; hierarchy by size, weight and spacing |
+| Playback context is not legible | B-001/B-002, unclear "what plays next" | "Playing from …" source line on every player surface; truthful Up next |
+| Desktop wastes the third column, mobile Now Playing is crowded | Song Room tabs + panel + waveform + volume all at once | Desktop: Home + persistent Now Playing panel. Mobile: art, title, scrub, 5 controls, lyrics sheet |
+| Two accent colors compete (coral and periwinkle/pink) | Discover coral, Song Room blue, artist pink | One brand coral for primary action/active state; artwork supplies ambience |
+
+## Principles (acceptance bar for every page)
+
+1. **Music first, within one second.** The first screen shows something the listener can play or resume.
+2. **One primary action per surface.** Everything else is visibly secondary.
+3. **Always say where the sound comes from.** "Playing from playlist Late drive" is on mini player, panel and Now Playing.
+4. **Color is earned from the artwork,** limited to ambient backgrounds and the lyric card. UI chrome stays neutral; coral marks the primary action and active state only.
+5. **Familiar patterns, Rondo details.** Users already know Spotify/Apple Music layouts. Don't make them relearn; differentiate through Journeys, follow updates, playlist intelligence and craft.
+6. **Motion is causal and short** (120–240 ms; shared-element art transition into Now Playing; progress, like and add-to-playlist feedback). Reduced Motion gets the full experience without movement.
+7. **Readable at real size:** 14px floor for secondary text, 44×44 targets, AA contrast, 320px safe.
+
+## Foundation tokens (study A, proposal)
+
+- Canvas `#0a0a0b`; surfaces `#121214` / `#1a1a1d` / `#242428`; hairlines 8% / 14% white.
+- Text 100% / 66% / 46% of `#f5f5f4`. Brand coral `#ff6b4a` (dark ink on coral).
+- Type: Geist (OFL) 400–700. Sizes 12 / 14 / 20 / 24–30 display. Sentence case. Tabular numerals for time.
+- Radius 8 (tiles, covers) / 12 (panels) / pill only for chips and buttons. Spacing 4·8·12·16·24·32.
+- Icons: 1.8px stroke, 24-grid, rounded joins; filled only for play/pause/liked.
+
+## Page-by-page order
+
+Each page goes through: **brief → study (real-size desktop + mobile renders in repo) → owner verdict → refine → locked spec in `docs/specs/` → build later**.
+
+| # | Surface | Status |
+| --- | --- | --- |
+| 0 | Foundation (tokens, type, icons, player bar, mini player) | Study A drafted |
+| 1 | Home (Discover) | Study A drafted |
+| 2 | Now Playing (desktop panel + mobile full screen) + Lyrics/Credits/About sheet | Study A drafted (replaces "Song Room" layout, keeps its content) |
+| 3 | Playlists (Library list, playlist page, create/add flow) | Study A drafted (playlist page) |
+| 4 | Artist page (follow, releases, Journey entry) | Not started |
+| 5 | Journeys (picker, Genre page, Artist Journey) | Not started |
+| 6 | Search (instant results, recents, empty/error) | Not started |
+| 7 | Library (playlists, liked, artists, albums, moments/notes) | Not started |
+| 8 | Release/album page | Not started |
+| 9 | Profile & settings | Not started |
+| 10 | First run (play-first, optional setup) | Not started; owner answer: play before setup during development |
+| 11 | Notifications/new releases from followed artists | Not started |
+
+## Study A (2026-10-04) — proposal, not approved
+
+Files: [`design/studies/2026-10-04-foundation-a/`](../design/studies/2026-10-04-foundation-a/README.md). Renders: Home desktop 1440×900, Now Playing mobile 390×844, Playlist mobile 390×844. Covers are code-drawn abstract placeholders for the study only (no text in art); they are not product assets. Awaiting owner verdict on: overall direction, Geist type, coral-only accent, layout of Home, Now Playing, playlist page.
+
+## Rules for contributors
+
+- Never merge a study into app code before the owner marks it approved here.
+- Keep every study's HTML and renders in the repo; rejected studies stay with a recorded reason.
+- Specs describe states: loading, empty, error, long text, offline/unavailable, reduced motion, 320 / 390 / 1440 widths.
