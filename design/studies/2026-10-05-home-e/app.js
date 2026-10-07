@@ -292,7 +292,7 @@ function tuR(){const q=tuMatch(),k=tuKey(),min=Math.round(q.reduce((a,x)=>a+S[x]
  <p class="mut">${q.length?(why?'Songs with '+why+'. ':'All '+q.length+' songs. ')+'Slowest first; the mix ends when the list ends.':'Nothing matches all three. Loosen one dial.'}</p>
  <button class="btn pri" id="tuPlay" ${q.length?'':'disabled'}>${ICON(live&&st.on?'pause':'play')}${live?(st.on?'Pause':'Resume'):'Play mix'}</button></div>`;
  $('tuPlay').onclick=()=>{if(!q.length)return;live?toggleSrc(k):startSrc(k,0)}}
-const gfSeed=()=>st.src.startsWith('gf_')?st.src.split('_').slice(2).join('_'):curK();
+let gfSeed=()=>st.src.startsWith('gf_')?st.src.split('_').slice(2).join('_'):curK();
 /* while a Go-from mix plays, its seed stays put so the card you pressed doesn't vanish */
 function gfR(){const k0=gfSeed(),s0=S[k0];XP.seed=k0;const others=POOL().filter(k=>k!==k0&&S[k].t!==s0.t);
  const tq=others.slice().sort((a,b)=>Math.abs(S[a].bpm-s0.bpm)-Math.abs(S[b].bpm-s0.bpm)).slice(0,6);const lo=Math.min(...tq.map(x=>S[x].bpm)),hi=Math.max(...tq.map(x=>S[x].bpm));
@@ -341,3 +341,75 @@ function setView(v){XP.view=v;document.body.classList.toggle('v-xp',v==='explore
  document.addEventListener('keydown',e=>{if(e.target.closest&&e.target.closest('input,textarea'))return;if(anyOpen&&anyOpen())return;if(e.key==='e'&&!e.metaKey&&!e.ctrlKey){setView(XP.view==='explore'?'home':'explore')}});}
 /* boot rev 5 */
 if(D.view==='explore'){if(D.tu)Object.assign(XP.tu,D.tu);setView('explore');if(D.scroll)setTimeout(()=>$('main').scrollTo({top:D.scroll,behavior:'instant'}),50)}
+
+/* ===== rev 6 (2026-10-07, D-067): search results page, Rabbit hole, Save a tune ===== */
+Object.assign(XP,{q:'',srch:false,flt:'all',recent:['Moni Gray','Silver Weather','lo-fi','Mira Son'],trail:[],pin:null,hole:[],saved:[]});
+const norm=x=>x.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9& ]/g,' ').replace(/\s+/g,' ').trim();
+function playSong(k){const q=Object.keys(SRC).find(s=>SRC[s].q.length>1&&SRC[s].q.includes(k)&&!SRC[s].journey&&!/Mood|Mix|Playlist|Tune/.test(SRC[s].type))||Object.keys(SRC).find(s=>SRC[s].q.includes(k)&&!/^(tu_|gf_|st_|rh_)/.test(s));startSrc(q,SRC[q].q.indexOf(k))}
+function sIndex(){const A={};Object.keys(S).forEach(k=>S[k].a.split(/, | & /).forEach(n=>{(A[n]=A[n]||[]).push(k)}));
+ return [...Object.entries(A).map(([n,ks])=>({g:'Artists',t:n,s:`Artist \u00b7 ${ks.length} song${ks.length>1?'s':''}`,art:S[ks[0]].art,artist:1})),
+  ...Object.keys(S).map(k=>({g:'Songs',k,t:S[k].t,s:S[k].a,art:S[k].art,d:S[k].d,x:S[k].genre||''})),
+  ...Object.keys(SRC).filter(k=>/Playlist|EP|Album|Single/.test(SRC[k].type)&&SRC[k].q.length&&!/^x_/.test(k)||/^(st_|rh_)/.test(k)).map(k=>({g:'Playlists',src:k,t:SRC[k].name,s:`${SRC[k].type} \u00b7 ${SRC[k].q.length} song${SRC[k].q.length>1?'s':''}`,art:SRC[k].art||S[SRC[k].q[0]].art})),
+  ...XG().map(([g,c,a,d,n,src])=>({g:'Genres',t:g,s:d?`Journey \u00b7 ${d} of ${n} artists`:`Journey \u00b7 ${n} artists`,c,art:a[0],gsrc:src}))]}
+function sFind(q){const n=norm(q);if(!n)return [];const w=n.split(' ');return sIndex().map(x=>{const t=norm(x.t),all=t+' '+norm(x.s)+' '+norm(x.x||'');if(!w.every(p=>all.includes(p)))return null;const sc=(t===n?0:t.startsWith(n)?1:t.split(' ').some(p=>p.startsWith(w[0]))?2:3)*10+{Artists:0,Genres:1,Playlists:2,Songs:3}[x.g];return {...x,sc}}).filter(Boolean).sort((a,b)=>a.sc-b.sc)}
+function sRemember(q){q=q.trim();if(!q)return;XP.recent=[q,...XP.recent.filter(r=>norm(r)!==norm(q))].slice(0,6);rcChips()}
+function sOpen(x){sRemember(XP.q);if(x.artist)return toast('Artist pages come in a later design step');if(x.g==='Genres')return x.gsrc?toggleSrc('journey'):toast(x.t+' Journey opens in the Journeys step');if(x.src)return toggleSrc(x.src);if(st.src&&SRC[st.src].q[st.i]===x.k&&!st.uqNow){st.on=!st.on;return render()}playSong(x.k)}
+function rcChips(){const r=document.querySelector('.xp-rc');if(r)r.innerHTML=`<span class="mut">Recent</span>${XP.recent.slice(0,4).map(q=>`<button class="chip2" data-rq="${q}">${q}</button>`).join('')}`}
+let SR=[];
+function sR(){const box=$('xpRes');document.body.classList.toggle('xp-searching',XP.srch);if(!XP.srch)return;const q=XP.q.trim();$('xpX').hidden=!q;
+ if(!q){box.innerHTML=`<div class="sr-sec"><div class="hd"><h2>Recent searches</h2>${XP.recent.length?'<a id="srClr">Clear all</a>':''}</div>${XP.recent.length?`<div class="sr-rec">${XP.recent.map(r=>`<div class="sr-ri"><button class="sr-rq" data-rq="${r}">${ICON('clock')}<span>${r}</span></button><button class="icb" data-rm="${r}" aria-label="Remove ${r}">${ICON('x')}</button></div>`).join('')}</div>`:'<p class="mut">Your searches show up here.</p>'}</div>
+  <div class="sr-sec"><div class="hd"><h2>Browse genres</h2></div><div class="sr-gs">${XG().map(([g,c])=>`<button class="sr-g" style="background:${c}" data-rq="${g}">${g}</button>`).join('')}</div></div>`;SR=[];return}
+ SR=sFind(q);const G=g=>SR.filter(x=>x.g===g),f=XP.flt;const cnt={all:SR.length,Songs:G('Songs').length,Artists:G('Artists').length,Playlists:G('Playlists').length,Genres:G('Genres').length};
+ const fl=`<div class="sr-f" role="tablist">${[['all','All'],['Songs','Songs'],['Artists','Artists'],['Playlists','Playlists & releases'],['Genres','Genres']].map(([v,l])=>`<button role="tab" class="${f===v?'on':''}" data-flt="${v}" ${cnt[v]||v==='all'?'':'disabled'}>${l}${v!=='all'&&cnt[v]?` <span class="m">${cnt[v]}</span>`:''}</button>`).join('')}</div>`;
+ if(!SR.length){const tips=['Moni Gray','Hip-Hop','Late drive','Asha North'];box.innerHTML=`<div class="sr-none"><h3>No results for \u201c${q.replace(/</g,'&lt;')}\u201d</h3><p class="mut">Check the spelling, or try fewer words. Search looks at songs, artists, playlists, releases and genres.</p><div class="sr-tips">${tips.map(t=>`<button class="chip2" data-rq="${t}">${t}</button>`).join('')}</div></div>`;return}
+ const row=(x,i)=>{const live=x.k?SRC[st.src].q[st.i]===x.k&&!st.uqNow:x.src?st.src===x.src:x.gsrc?!!SRC[st.src].journey:false;return `<button class="sr-row${live?' on':''}" data-si="${SR.indexOf(x)}"><span class="cover${x.artist?' r':''}">${svg(x.art)}${x.artist||x.g==='Genres'?'':`<span class="pb">${ICON(live&&st.on?'pause':'play')}</span>`}</span><div><b>${hl(x.t,q)}</b><span>${x.g==='Songs'?'Song \u00b7 ':''}${hl(x.s,q)}</span></div>${x.d?`<span class="m mut">${fmt(x.d)}</span>`:''}</button>`};
+ if(f!=='all'){box.innerHTML=fl+`<div class="sr-list">${G(f).map(row).join('')}</div>`;return}
+ const top=SR[0],tl=top.k?SRC[st.src].q[st.i]===top.k&&!st.uqNow:top.src?st.src===top.src:top.gsrc?!!SRC[st.src].journey:false;
+ box.innerHTML=fl+`<div class="sr-top"><div><div class="hd"><h2>Top result</h2></div><button class="sr-tc${tl?' on':''}" data-si="0" ${top.c?`style="--c:${top.c}"`:''}><span class="cover${top.artist?' r':''}">${svg(top.art)}</span><b>${top.t}</b><span class="mut">${top.g==='Songs'?'Song \u00b7 '+top.s:top.s}</span><span class="sr-tp">${ICON(tl&&st.on?'pause':top.artist?'right':'play')}</span></button></div>
+  <div>${G('Songs').length?`<div class="hd"><h2>Songs</h2>${G('Songs').length>4?`<a data-flt="Songs">All ${G('Songs').length}</a>`:''}</div><div class="sr-list">${G('Songs').slice(0,4).map(row).join('')}</div>`:''}</div></div>
+  ${['Artists','Playlists','Genres'].filter(g=>G(g).length&&!(G(g).length===1&&G(g)[0]===top)).map(g=>`<div class="sr-sec"><div class="hd"><h2>${g==='Playlists'?'Playlists & releases':g}</h2>${G(g).length>4?`<a data-flt="${g}">All ${G(g).length}</a>`:''}</div><div class="sr-list sr-grid">${G(g).filter(x=>x!==top).slice(0,4).map(row).join('')}</div></div>`).join('')}
+  <p class="mut sr-ft">Enter plays the top result \u00b7 Esc clears</p>`}
+const hl=(t,q)=>{const n=norm(q);if(!n)return t;const i=t.toLowerCase().indexOf(n);return i<0?t:t.slice(0,i)+'<mark>'+t.slice(i,i+n.length)+'</mark>'+t.slice(i+n.length)};
+function sEnter(on){XP.srch=on;if(!on){XP.q='';XP.flt='all';$('xpIn').value='';$('xpIn').blur()}sR()}
+{const h=document.querySelector('.xp-h');$('xpSearch').outerHTML=`<div class="xp-s" id="xpSearch">${ICON('search')}<input id="xpIn" type="search" placeholder="Artists, songs, genres, playlists" autocomplete="off" aria-label="Search" enterkeyhint="search"><button class="icb" id="xpX" aria-label="Clear search" hidden>${ICON('x')}</button><span class="m">\u2318K</span></div><button class="xp-cancel" id="xpCancel">Cancel</button>`;
+ const res=document.createElement('section');res.id='xpRes';res.className='xp-res';res.setAttribute('aria-live','polite');h.after(res);
+ const inp=$('xpIn');inp.onfocus=()=>{if(!XP.srch)sEnter(true)};inp.oninput=()=>{XP.q=inp.value;XP.flt='all';sR()};
+ inp.onkeydown=e=>{if(e.key==='Escape'){e.preventDefault();e.stopPropagation();if(XP.q){XP.q='';inp.value='';sR()}else sEnter(false)}if(e.key==='Enter'&&SR[0]){e.preventDefault();sOpen(SR[0]);sR()}};
+ $('xpX').onclick=()=>{XP.q='';inp.value='';inp.focus();sR()};$('xpCancel').onclick=()=>sEnter(false);
+ $('xp').addEventListener('click',e=>{const rq=e.target.closest('[data-rq]');if(rq){e.stopImmediatePropagation();XP.q=rq.dataset.rq;inp.value=XP.q;XP.flt='all';if(!XP.srch)XP.srch=true;sRemember(XP.q);sR();inp.focus();return}
+  const rm=e.target.closest('[data-rm]');if(rm){XP.recent=XP.recent.filter(r=>r!==rm.dataset.rm);rcChips();sR();return}
+  if(e.target.closest('#srClr')){const old=XP.recent;XP.recent=[];rcChips();sR();toast('Cleared recent searches','Undo',()=>{XP.recent=old;rcChips();sR();$('toast').classList.remove('open')});return}
+  const fl=e.target.closest('[data-flt]');if(fl){XP.flt=fl.dataset.flt;sR();return}
+  const si=e.target.closest('[data-si]');if(si){sOpen(SR[+si.dataset.si]);sR()}},true);
+ /* inside Explore, ⌘K and / focus this field instead of opening the palette */
+ addEventListener('keydown',e=>{if(XP.view!=='explore'||DG.open)return;if(((e.metaKey||e.ctrlKey)&&e.key.toLowerCase()==='k')||(e.key==='/'&&!e.target.closest('input,textarea'))){e.preventDefault();e.stopImmediatePropagation();inp.focus()}},true);
+ rcChips();
+ const _sv=setView;setView=function(v){if(v!=='explore'&&XP.srch)sEnter(false);_sv(v)}}
+
+/* -- Rabbit hole: hop from Go-from to Go-from; the trail is visible and can be saved -- */
+gfSeed=()=>XP.pin||(st.src.startsWith('gf_')?st.src.split('_').slice(2).join('_'):curK());
+let HOLE=null;
+function holeR(){const el=HOLE;if(!el)return;const k=curK(),seed=gfSeed();const canHop=st.src.startsWith('gf_')&&k!==seed&&!XP.trail.includes(k);
+ if(!XP.trail.length&&!canHop){el.innerHTML='';el.hidden=true;return}el.hidden=false;
+ el.innerHTML=`${XP.trail.length?`<div class="rh-t"><span class="rh-l">Rabbit hole</span><div class="rh-p">${XP.trail.map((t,i)=>`${i?`<i class="rh-a">${ICON('right')}</i>`:''}<button class="rh-n${t===seed?' on':''}" data-rh="${t}" title="Go from ${S[t].t}"><span class="cover">${svg(S[t].art)}</span>${S[t].t}</button>`).join('')}</div>
+  <span class="m mut">${XP.hole.length} song${XP.hole.length===1?'':'s'} played</span><button class="btn gh" id="rhSave" ${XP.hole.length>1?'':'disabled'}>${ICON('plus')}Save as playlist</button><button class="icb" id="rhEnd" aria-label="End rabbit hole">${ICON('x')}</button></div>`:''}
+  ${canHop?`<button class="rh-hop" id="rhHop"><span class="cover">${svg(S[k].art)}</span><span><b>Go from ${S[k].t} next</b><span class="mut">Now playing \u00b7 ${S[k].bpm} BPM \u00b7 ${S[k].key}. Hop deeper without stopping the music.</span></span>${ICON('right')}</button>`:''}`;
+ const hop=$('rhHop');if(hop)hop.onclick=()=>{if(!XP.trail.length)XP.trail.push(seed);XP.trail.push(k);XP.pin=k;gfR();holeR();xpStates()};
+ const sv=$('rhSave');if(sv)sv.onclick=()=>{const t=XP.trail;savePl('rh_'+Date.now(),'Rabbit hole: '+S[t[0]].t+' \u2192 '+S[t[t.length-1]].t,XP.hole.slice(),'Playlist','Rabbit hole \u00b7 '+XP.hole.length+' songs')};
+ const en=$('rhEnd');if(en)en.onclick=()=>{const o=[XP.trail,XP.pin,XP.hole];XP.trail=[];XP.pin=null;XP.hole=[];gfR();holeR();xpStates();toast('Rabbit hole ended','Undo',()=>{[XP.trail,XP.pin,XP.hole]=o;gfR();holeR();xpStates();$('toast').classList.remove('open')})}}
+document.addEventListener('click',e=>{const n=e.target.closest('[data-rh]');if(n){XP.pin=n.dataset.rh;gfR();holeR();xpStates()}});
+function savePl(k,name,q,type,sub){SRC[k]={type,name,art:S[q[0]].art,q};XP.saved.push({k,sub});sideSaved();toast(`Saved \u201c${name}\u201d to your playlists`,'Undo',()=>{XP.saved=XP.saved.filter(x=>x.k!==k);delete SRC[k];sideSaved();if(XP.view==='explore')tuR();$('toast').classList.remove('open')});if(XP.view==='explore')tuR()}
+function sideSaved(){document.querySelectorAll('.li.svd').forEach(e=>e.remove());let after=$('dugLi')||$('pls');XP.saved.forEach(({k,sub})=>{const s=SRC[k];if(!s)return;const el=document.createElement('button');el.className='li svd';el.dataset.src=k;el.innerHTML=`<span class="cover${s.type==='Tune'?' tune':''}">${svg(s.art)}${s.type==='Tune'?`<i class="tune-i">${ICON('sparkle')}</i>`:''}</span><div><b>${s.name}</b><span>${sub}</span></div><span class="eq"><i></i><i></i><i></i></span>`;after.after(el);after=el});render()}
+{const g=$('xpGo');const h=document.createElement('div');h.id='xpHole';h.className='rh';h.hidden=true;g.prepend(h);HOLE=h;
+ const _g=gfR;gfR=function(){_g();$('xpGo').prepend(HOLE);holeR()};
+ const _r6=render;render=function(){_r6();const k=curK();if(st.on&&st.src.startsWith('gf_')){if(!XP.trail.length){XP.trail=[gfSeed()];XP.hole=[gfSeed()]}if(!XP.hole.includes(k))XP.hole.push(k)}if(XP.view==='explore'){holeR();if(XP.srch)sR()}}}
+
+/* -- Save a tune: saved tunes are playlists that keep their dials (they update as songs are added) -- */
+{const _t=tuR;tuR=function(){_t();const all=['tempo','voice','feel'].every(d=>XP.tu[d]==='any'),sk='st_'+tuKey().slice(3),saved=XP.saved.some(x=>x.k===sk),q=tuMatch();
+ const b=document.createElement('button');b.className='btn gh';b.id='tuSave';b.innerHTML=saved?`${ICON('check')}Saved`:`${ICON('plus')}Save tune`;b.disabled=all||!q.length;b.title=all?'Set at least one dial to save a tune':'';
+ b.onclick=()=>{if(saved)return toast('This tune is already in your playlists');SRC[sk]={type:'Tune',name:tuName(),art:S[q[0]].art,q,dials:{...XP.tu}};savePl(sk,tuName(),q,'Tune','Tune \u00b7 '+q.length+' songs \u00b7 updates')};
+ const pl=$('tuPlay');const w=document.createElement('div');w.className='tu-bs';pl.before(w);w.append(b,pl);
+ const mine=XP.saved.filter(x=>SRC[x.k]&&SRC[x.k].type==='Tune');if(mine.length){const r=document.createElement('div');r.className='tu-mine';r.innerHTML=`<span class="mut">Your tunes</span>${mine.map(x=>`<button class="chip2${x.k===sk?' on':''}" data-tune="${x.k}">${SRC[x.k].name}</button>`).join('')}`;$('xpTune').querySelector('.tu-d').before(r)}}}
+$('xp').addEventListener('click',e=>{const t=e.target.closest('[data-tune]');if(t){const s=SRC[t.dataset.tune];const [,a,v,f]=t.dataset.tune.split('_');Object.assign(XP.tu,{tempo:a,voice:v,feel:f});tuR()}});
+/* boot rev 6 */
+if(D.view==='explore'){if(D.saveTune){Object.assign(XP.tu,D.saveTune);tuR();$('tuSave').click();$('toast').classList.remove('open')}if(D.hole){xpR()}if(D.q!==undefined){$('xpIn').focus();XP.q=D.q;$('xpIn').value=D.q;if(D.flt)XP.flt=D.flt;sR()}tuR();}

@@ -11,8 +11,8 @@ One file per page/feature. A spec is the contract a builder implements; the desi
 | 3 | Playlists | [PLAYLISTS.md](PLAYLISTS.md) | study A (superseded) | Product spec only |
 | 4 | Artist page | — | — | Not started |
 | 5 | Journeys (picker, genre, artist journey) | — (see ../../handoff/PRODUCT_MAP.md) | — | Not started |
-| 6 | Search | [EXPLORE.md](EXPLORE.md) (search lives in Explore) | ⌘K palette + Explore header in home-e | Palette done; full results page to do |
-| 6b | Explore | [EXPLORE.md](EXPLORE.md) | home-e rev 5 | Approved (D-066); search results page to do |
+| 6 | Search | [EXPLORE.md](EXPLORE.md) (search lives in Explore) | ⌘K palette + Explore header in home-e | Search page built (D-067) |
+| 6b | Explore | [EXPLORE.md](EXPLORE.md) | home-e rev 5–6 | Approved (D-066); search page, Rabbit hole, Save a tune built (D-067) |
 | 7 | Library | — | — | Not started |
 | 8 | Release / album | — | — | Not started |
 | 9 | Profile & settings | — | profile menu in home-e | Not started |

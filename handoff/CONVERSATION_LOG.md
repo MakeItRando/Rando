@@ -45,6 +45,7 @@
 - Session B part 2: Home rev 4 built (clean scrubber, Dig, phone layout, sentence case, scope tags), interaction test `check.mjs` PASS, 11 renders + animated walkthrough, pushed (D-065).
 - Owner: "thats perfect. before going to journey can we add the explore page or should we leave it because most of it is in home? idk if you have any ideas for explore tell me. continue on other stuff too." → D-065 confirmed; Explore designed as Home E rev 5 (D-066 proposal, docs/specs/EXPLORE.md): search, Dig card, Tune a mix, Go from <song>, Genres, Out this week, Most kept in Dig; phone tabs Home/Explore/Journeys/Library.
 - Owner: "1. yes you did good 2. yes — is explore done? do you have any other ideas to add? or what? i like it to be honest." → D-066 confirmed, Q16/Q17 answered; offered remaining work (search results page) and idea candidates (see STATE).
+- Owner: "yes i like that. but save other ideas in docs too." → D-067: build search page, Rabbit hole, Save a tune; Song of the day + Decades saved in PRODUCT_IDEAS § Explore backlog. Built as Home E rev 6 (renders 36–42, check.mjs PASS).
 
 ## Topics index (where each lives now)
 

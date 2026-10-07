@@ -86,6 +86,22 @@ Optional context such as focus, commute, or night can tune a temporary queue. Co
 - Add delightful micro-motion only for playback, focus, queue change, and context restoration; honor Reduced Motion.
 - Use real empty/loading/error/offline/unavailable states as branded moments rather than generic skeletons.
 
+## Explore backlog (owner asked to keep these, 2026-10-07)
+
+Approved for now (D-067, building): full search results page, Rabbit hole trail, Save a tune. Saved for later:
+
+### E1. Song of the day (V1-backend)
+One song everyone on Rondo gets the same day, shown at the top of Explore with how many people played/kept it today. Gives teens a shared thing to talk about. Picked by a person/editorial rule, not an algorithm; never repeats an artist within 30 days. Needs a backend and enough listeners.
+
+### E2. Decades / era dial (needs catalog metadata)
+A fourth Tune a mix dial: Any · 80s · 90s · 00s · 10s · Now. Requires a reliable release year per song; hide the dial until ≥ 90% of the catalog has one.
+
+### E3. Most kept in Dig (designed, hidden)
+In Explore already (D-066) but hidden until Rondo has ≥ 500 digs/week, so the percentages mean something.
+
+### E4. Friends' digs / charts (V2, not planned)
+What friends kept this week; global charts. Needs accounts and privacy controls; charts risk sameness, so low priority.
+
 ## Suggested order
 
 1. Validate separate playback sessions with the owner.
