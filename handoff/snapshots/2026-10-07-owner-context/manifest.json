@@ -115,5 +115,14 @@
     "mime": "image/png",
     "width": 1916,
     "height": 906
+  },
+  {
+    "file": "14-lost-session-stopped-by-usage-policy.svg",
+    "source": "Owner attachment, 2026-10-07 session B reply; shows session A ended 'Stopped by a usage policy' while encoding the walkthrough animation",
+    "originalBytes": 146680,
+    "originalSHA256": "3e9a849f141c85133dc27137a818b35255bd821b9735a1bc2fcbe2a90d7dcff1",
+    "mime": "image/png",
+    "width": 1919,
+    "height": 907
   }
 ]

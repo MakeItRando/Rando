@@ -68,6 +68,11 @@ Statuses: **Confirmed** (non-negotiable), **Working** (testable experiment), **O
 | D-057 | Confirmed | Home E revision 2: light mode (toggle, system default, stage stays dark), Journeys/Following filters never empty (Your Journeys, Artists you finished, Artists you follow), song menu with Play next/Add to queue, user queue ahead of source queue, Share moved into ⋯. | Owner 2026-10-06 on rev 1: "so close"; wants light mode; Journeys filter must not be empty. Confirmed 2026-10-06 ("awesome"). |
 | D-058 | Confirmed | Home complete (rev 3): Now Playing + synced lyrics, share cards, monthly recap, notifications, profile menu with Appearance Dark/Light/Auto, keyboard shortcuts, sleep timer + crossfade, repeat off/source/song (source-bounded), volume/mute, devices, New playlist / Blend, all See all links have destinations, filter "Music" → "For you", responsive collapse. Bottom player bar kept; D-054 no-bar layout not adopted. | Owner 2026-10-06: liked all suggestions; bar choice delegated; "complete the home page". |
 | D-059 | Confirmed | Every session pushes a checkpoint to `main` after each major step (docs/handoff first), not only at the end; a lost session must never take decisions or work with it. | 2026-10-07 session A built scrubber/Dig and died before pushing; nothing survived. |
+| D-060 | Confirmed | Home rev 4 scope: all REVIEW_2026-10-07 feedback — phone layout, clean thin scrubber, Dig, sentence-case labels, V1/V2 scope tags; contributor chooses details ("go as you like"). | Owner 2026-10-07: "i like all of those feedbacks". |
+| D-061 | Confirmed | Dig is in scope: daily finite stack of unheard songs, 15 s hook, Keep/Skip. | Owner 2026-10-07: "yes". |
+| D-062 | Confirmed | First product targets are a desktop app and a mobile app (native-feeling apps, not desktop-web-only). Design every page for desktop and phone. | Owner 2026-10-07: "desktop and mobile app first". Framework choice (e.g. Tauri/Electron + React Native/Expo, or one cross-platform stack) is decided when building. |
+| D-063 | Confirmed | Keep flat placeholder sleeves; real artist art arrives with the real catalog. No stock or AI art. | Owner 2026-10-07: "we can wait to add real artist". |
+| D-064 | Confirmed | Name reconfirmed: Rondo (D-030). | Owner 2026-10-07. |
 
 ## Writing rules
 

@@ -8,7 +8,7 @@
 - **The 2026-10-07 morning session was lost** (clean scrubber, Dig feature, walkthrough, docs overhaul never pushed). See [SESSION_2026-10-07.md](SESSION_2026-10-07.md). Redo as Home rev 4 after owner answers.
 - Owner feedback still open: bottom scrubber looks untidy; app feels "boring sometimes… not giving the vibe to explore".
 - Review findings: Home has no phone layout (teen audience = phone first); see [REVIEW_2026-10-07.md](REVIEW_2026-10-07.md).
-- Waiting on owner: [OPEN_QUESTIONS.md](OPEN_QUESTIONS.md) Q11–Q15.
+- Owner answered Q11–Q15 (D-060..D-064). **In progress: Home rev 4** (phone layout, clean scrubber, Dig, sentence-case labels) in `design/studies/2026-10-05-home-e/`.
 
 ## Next actions (in order)
 

@@ -92,3 +92,5 @@ Flat geometric sleeves read as "boring". Allowed alternatives (no AI): licensed 
 
 ### 15. Name check
 Docs say **Rondo** everywhere (D-030); the owner often writes "rando". Still Rondo?
+
+**Answered 2026-10-07:** Q11 all (D-060) · Q12 yes (D-061) · Q13 desktop + mobile apps first (D-062) · Q14 wait for real art (D-063) · Q15 Rondo (D-064). Owner also asked to finish the lost session A work.
