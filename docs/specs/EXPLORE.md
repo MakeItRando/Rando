@@ -1,6 +1,6 @@
 # Spec: Explore
 
-Status: **study, proposal D-066** (awaiting owner verdict). Built inside the Home E study (`design/studies/2026-10-05-home-e/`, rev 5) so it shares the real player, queue and state rules. Desktop + phone (D-062).
+Status: **owner-approved (D-066)**, core sections. Remaining: full search results page (typing in place, grouped results, no-results state); genre Journey pages come with the Journeys step. Built inside the Home E study (`design/studies/2026-10-05-home-e/`, rev 5) so it shares the real player, queue and state rules. Desktop + phone (D-062).
 
 ## Job
 
@@ -60,5 +60,6 @@ Explore tab opens Explore; no element overflows at 390 px and no sideways scroll
 
 ## Open questions
 
-- Keep Dig as its own phone tab (5 tabs) or inside Explore (4 tabs, proposed)?
-- Should Most kept in Dig show at all before Rondo has enough listeners? (Proposal: hide until ≥ 500 digs/week.)
+- ~~Dig tab~~ → inside Explore, 4 tabs (owner yes, D-066).
+- ~~Most kept before enough listeners~~ → hidden until ≥ 500 digs/week (owner yes). The study shows it so the design is visible.
+- Owner asked for more Explore ideas (2026-10-07); candidates listed in handoff/STATE.md, awaiting pick.

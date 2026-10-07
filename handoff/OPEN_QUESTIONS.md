@@ -99,3 +99,5 @@ Docs say **Rondo** everywhere (D-030); the owner often writes "rando". Still Ron
 
 - **Q16 — Dig tab:** keep Dig as its own phone tab (5 tabs: Home, Explore, Dig, Journeys, Library) or inside Explore (4 tabs, proposed in D-066)?
 - **Q17 — Explore verdict:** keep, change or drop Tune a mix, Go from, Most kept in Dig (docs/specs/EXPLORE.md).
+
+**Answered 2026-10-07:** Q16 four tabs, Dig inside Explore (D-066) · Q17 Explore approved; Most kept in Dig hidden until there are enough listeners (proposal: ≥ 500 digs/week).

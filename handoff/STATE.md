@@ -8,12 +8,13 @@
 - **The 2026-10-07 morning session was lost** (clean scrubber, Dig feature, walkthrough, docs overhaul never pushed). See [SESSION_2026-10-07.md](SESSION_2026-10-07.md). Its scrubber + Dig work was redone and pushed as Home rev 4.
 - Owner feedback (scrubber untidy; "boring… no vibe to explore") addressed in rev 4: clean scrubber, Dig, phone layout.
 - Review findings: Home has no phone layout (teen audience = phone first); see [REVIEW_2026-10-07.md](REVIEW_2026-10-07.md).
-- Owner answered Q11–Q15 (D-060..D-064). **Home rev 4 approved** (D-065, "thats perfect"). **Explore page proposed** (D-066, [EXPLORE.md](../docs/specs/EXPLORE.md)) — awaiting verdict. `check.mjs` PASS.
+- Owner answered Q11–Q15 (D-060..D-064). **Home rev 4 approved** (D-065, "thats perfect"). **Explore approved** (D-066, [EXPLORE.md](../docs/specs/EXPLORE.md)); 4 phone tabs; Most kept in Dig hidden until enough listeners.
+- Explore idea candidates offered to owner (awaiting pick): full search results page (recommended), Rabbit hole trail (hop Go from → Go from, save the trail as a playlist), Save a tune as a playlist, Song of the day (one pick for everyone, V1-backend), Decades/era dial (needs year metadata). `check.mjs` PASS.
 
 ## Next actions (in order)
 
 1. ~~Owner answers Q11–Q15~~ (D-060..D-064).
-2. ~~Home rev 4~~ approved (D-065). Owner verdict on Explore (D-066), incl. Dig tab vs inside Explore.
+2. ~~Home rev 4~~ approved (D-065). ~~Explore~~ approved (D-066). Owner picks extra Explore ideas → build; then Now Playing page.
 3. Now Playing page (desktop + phone) → Journey page → remaining pages (order in [DESIGN_PROGRAM.md](DESIGN_PROGRAM.md)).
 4. After all key pages are approved: choose the build approach, rebuild the app on the approved design, fix B-001/B-002/B-003 inside that rebuild, full quality gates, then ask the owner to test.
 

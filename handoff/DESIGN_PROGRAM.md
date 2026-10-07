@@ -46,7 +46,7 @@ Each page goes through: **brief → study (real-size desktop + mobile renders in
 | 0 | Foundation (tokens, type, icons, player bar, mini player) | Settled through studies B → E (Home E style.css is the reference) |
 | 1 | Home (Discover) desktop | **Rev 4 approved (D-065)** |
 | 1b | Home phone | **Approved in rev 4 (D-065)** |
-| 1c | Explore (search + discovery past your rotation) | **Proposal D-066** in Home E rev 5; spec docs/specs/EXPLORE.md |
+| 1c | Explore (search + discovery past your rotation) | **Approved (D-066)** in Home E rev 5; search results page to do; spec docs/specs/EXPLORE.md |
 | 2 | Now Playing (desktop panel + mobile full screen) + Lyrics/Credits/About sheet | Overlay exists in Home E; full page next |
 | 3 | Playlists (Library list, playlist page, create/add flow) | Study A only (superseded); spec in docs/specs/PLAYLISTS.md |
 | 4 | Artist page (follow, releases, Journey entry) | Not started |
