@@ -102,6 +102,17 @@ In Explore already (D-066) but hidden until Rondo has ≥ 500 digs/week, so the 
 ### E4. Friends' digs / charts (V2, not planned)
 What friends kept this week; global charts. Needs accounts and privacy controls; charts risk sameness, so low priority.
 
+## Journey ideas (2026-10-07, session B part 6)
+
+Building now (D-069): Genre page with a real **map** (stations A→Z, rings, done/now/next/upcoming), **Artist Journey** (identity, releases newest→oldest, track states), **artist boundary** card ("You finished X · Meet Y" — next artist never autoplays, D-014; skipping ahead is allowed, no locks), **Meet the artist** 15 s hook before starting, **stamps** for finished artists (keepsake, not streaks), **Detours** (featured artists outside the Journey; don't count toward progress), **Pace** chosen when starting a genre (Essentials 5 per artist / Full discography), Change genre picker with accurate counts and per-genre progress, Play top mix (global session, never touches Journey progress, D-038).
+
+Saved for later:
+- **J1 Passport / share a stamp** — all stamps across genres in Profile, share card per stamp.
+- **J2 Genre finish recap** — story cards when a genre is done (artists, hours, your pick per artist).
+- **J3 Journey picks** — auto playlist of songs you liked during a Journey.
+- **J4 Era checkpoints** — releases/eras as named checkpoints on long discographies (needs label metadata).
+- **J5 Friends on the same Journey** (V2, accounts) — see who's on which artist, no rankings.
+
 ## Suggested order
 
 1. Validate separate playback sessions with the owner.

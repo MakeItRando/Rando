@@ -1,4 +1,4 @@
-// Interaction check for Home study E rev 4 + Explore (rev 5). Run from a folder with playwright installed:
+// Interaction check for Home study E rev 4 + Explore (rev 5) … Journeys (rev 8). Run from a folder with playwright installed:
 //   CHROMIUM=$(which chromium) node design/studies/2026-10-05-home-e/check.mjs
 // Fails (exit 1) on any runtime error or broken rule.
 import { chromium } from 'playwright';
@@ -92,6 +92,46 @@ const bx = await p.$eval('#npSk', e => { const r = e.getBoundingClientRect(); re
 if (Math.abs(await p.evaluate(() => st.t / cur().d) - .75) > .05) fail('phone scrubber must seek');
 const npo = await p.evaluate(() => $('np').scrollWidth > $('np').clientWidth + 1); if (npo) fail('phone Now Playing must not scroll sideways');
 await p.click('#npX'); await p.waitForTimeout(300); if (await p.evaluate(() => document.body.classList.contains('np-open'))) fail('close must leave Now Playing');
-await p.close(); await b.close();
-console.log(errs.length ? 'FAIL\n' + errs.join('\n') : 'PASS: scrubber, Dig flow, Undo, end-of-stack, Play Dug, source end stops, phone chrome, Explore tab + overflow, Dig from Explore, Tune a mix, Go from, Rabbit hole, Save tune, search page, Now Playing (tabs, Up next, queue remove/Undo, credits, phone controls)');
+await p.close();
+// rev 8: Journeys (D-069)
+p = await pg({ width: 1440, height: 900 });
+await p.click('.side .nav [data-nav=journeys]'); await p.waitForTimeout(300);
+if (!(await p.evaluate(() => document.body.classList.contains('v-jv') && !!document.querySelector('#jv .jmap') && getComputedStyle($('jv')).display !== 'none'))) fail('Journeys nav must open the genre page with the map');
+await p.click('.jsta[data-jart="3"]'); await p.waitForTimeout(200);
+if (!(await p.evaluate(() => JV.ai === 3 && !!document.querySelector('.jah')))) fail('map station must open the Artist Journey');
+await p.click('.jah [data-jpl="3"]'); await p.waitForTimeout(200);
+if (!(await p.evaluate(() => st.src === 'journey' && st.on && curK() === 'm1'))) fail('Start must play the artist Journey from the first unheard song');
+await p.evaluate(() => { ['m2', 'm3', 'm4'].forEach(k => st.jHeard.add(k)); startSrc('journey', 4); st.t = cur().d - .3; }); await p.waitForTimeout(700);
+await p.evaluate(() => { st.t = cur().d - .3; }); await p.waitForTimeout(800);
+const fin = await p.evaluate(() => { const G = JR.G['Hip-Hop']; return [st.on, st.src, jDone(G, G.A[3]), !!G.A[3].stamp, /stamp collected/.test($('toast').textContent), SRC.journey.q.includes(curK())]; });
+if (fin[0] || fin[1] !== 'journey' || !fin[5]) fail('end of an artist must stop, never autoplay the next artist: ' + JSON.stringify(fin));
+if (!fin[3] || !fin[4]) fail('finishing an artist must give a stamp + toast: ' + JSON.stringify(fin));
+await p.close();
+p = await pg({ width: 1440, height: 900 });
+await p.evaluate(() => setView('journeys'));
+const h0 = await p.evaluate(() => st.jHeard.size);
+await p.click('#jv [data-skip="4"]'); await p.waitForTimeout(150);
+if (!(await p.evaluate(() => JR.G['Hip-Hop'].cur === 4))) fail('Skip ahead must move the current artist');
+await p.click('#toastBtn'); await p.waitForTimeout(150);
+if (!(await p.evaluate(h => JR.G['Hip-Hop'].cur === 3 && st.jHeard.size === h, h0))) fail('Undo skip must restore, progress kept');
+await p.click('#jv .jh [data-src^="top_"]'); await p.waitForTimeout(300);
+if (!(await p.evaluate(h => st.src.startsWith('top_') && st.jHeard.size === h && JR.G['Hip-Hop'].cur === 3, h0))) fail('Play top mix must not change Journey progress (D-038)');
+await p.click('#jv .jh-a [data-jnav=picker]'); await p.waitForTimeout(250);
+await p.click('.pk-t[data-pk="Jazz"]'); await p.click('[data-pace="ess"]'); await p.click('#pkGo'); await p.waitForTimeout(250);
+if (!(await p.evaluate(h => JV.g === 'Jazz' && JR.G.Jazz.pace === 'ess' && JR.active === 'Jazz' && st.jHeard.size === h && JR.G.Jazz.A.every(a => jPace(JR.G.Jazz, a).length <= 5), h0))) fail('Change genre must switch Journey, apply pace, erase nothing');
+await p.click('#jv [data-meet="1"]'); await p.waitForTimeout(300);
+if (!(await p.evaluate(() => $('modal').classList.contains('meetm') && !st.on))) fail('Meet must open the 15 s hook and pause main playback');
+await p.click('#mtGo'); await p.waitForTimeout(250);
+if (!(await p.evaluate(() => st.src === jKey('Jazz', 1) && st.on && JR.G.Jazz.cur === 1))) fail('Start from Meet must make that artist current and play');
+await p.fill('#jIn', 'zzzz'); await p.waitForTimeout(150);
+if (!(await p.evaluate(() => /Nothing in the Jazz Journey/.test($('jv').textContent)))) fail('Journey search must show an honest no-results state');
+await p.close();
+p = await pg({ width: 390, height: 844 });
+await p.click('.tabs [data-tab=Journeys]'); await p.waitForTimeout(300);
+if (!(await p.evaluate(() => document.body.classList.contains('v-jv') && document.querySelector('.tabs .on').dataset.tab === 'Journeys'))) fail('Journeys tab must open Journeys');
+for (const ai of [null, 3]) { await p.evaluate(a => setView('journeys', { ai: a ?? undefined }), ai); await p.waitForTimeout(200);
+  const o = await p.evaluate(() => document.documentElement.scrollWidth > innerWidth || $('main').scrollWidth > $('main').clientWidth + 1); if (o) fail('Journeys must not scroll sideways at 390px (ai=' + ai + ')'); }
+await p.close();
+await b.close();
+console.log(errs.length ? 'FAIL\n' + errs.join('\n') : 'PASS: Journeys (map, artist page, end stops + stamp, skip/undo, top mix, picker + pace, Meet, search, phone), scrubber, Dig flow, Undo, end-of-stack, Play Dug, source end stops, phone chrome, Explore tab + overflow, Dig from Explore, Tune a mix, Go from, Rabbit hole, Save tune, search page, Now Playing (tabs, Up next, queue remove/Undo, credits, phone controls)');
 process.exit(errs.length ? 1 : 0);

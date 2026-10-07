@@ -45,7 +45,9 @@
 - Session B part 2: Home rev 4 built (clean scrubber, Dig, phone layout, sentence case, scope tags), interaction test `check.mjs` PASS, 11 renders + animated walkthrough, pushed (D-065).
 - Owner: "thats perfect. before going to journey can we add the explore page or should we leave it because most of it is in home? idk if you have any ideas for explore tell me. continue on other stuff too." → D-065 confirmed; Explore designed as Home E rev 5 (D-066 proposal, docs/specs/EXPLORE.md): search, Dig card, Tune a mix, Go from <song>, Genres, Out this week, Most kept in Dig; phone tabs Home/Explore/Journeys/Library.
 - Owner: "1. yes you did good 2. yes — is explore done? do you have any other ideas to add? or what? i like it to be honest." → D-066 confirmed, Q16/Q17 answered; offered remaining work (search results page) and idea candidates (see STATE).
-- Owner: "yes i like that. but save other ideas in docs too." → D-067: build search page, Rabbit hole, Save a tune; Song of the day + Decades saved in PRODUCT_IDEAS § Explore backlog.
+- Owner: "yes i like that. but save other ideas in docs too." → D-067: build search page, Rabbit hole, Save a tune; Song of the day + Decades saved in PRODUCT_IDEAS § Explore backlog. Built as Home E rev 6 (renders 36–42, check.mjs PASS).
+- Owner: "yes, with the final touches. after that we will go to journey desgining." → Now Playing page built (D-068, Home E rev 7, renders 43–48, check.mjs PASS). Next: Journeys.
+- Owner: "fantastic, its perfect for now, we can do the cahnges later as we use it, but for now its the best. continue on journey now, what ideas do we have, im exited." → D-068 confirmed; Journeys started (D-069). Journeys built as Home E rev 8 (genre page + map, Artist Journey, boundary, Meet, stamps, Detours, pace, Change genre) — proposal awaiting verdict; spec docs/specs/JOURNEYS.md.
 
 ## Topics index (where each lives now)
 
