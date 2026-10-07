@@ -1,20 +1,20 @@
 # Current project state
 
-**Updated:** 2026-10-07 (session B, recovery + review; docs only). **Product:** Rondo. **Phase:** design-first program (D-048). **Last owner-approved design:** Home rev 3 (D-058), desktop.
+**Updated:** 2026-10-07 (session B part 2: Home rev 4 built and pushed). **Product:** Rondo. **Phase:** design-first program (D-048). **Last owner-approved design:** Home rev 3 (D-058), desktop.
 
 ## Right now
 
-- `main` = canonical docs + design studies + stable v0.3.0 app runtime. Latest design work: [Home E rev 3](../design/studies/2026-10-05-home-e/README.md) — try it at https://makeitrando.github.io/Rando/design/studies/2026-10-05-home-e/home.html
-- **The 2026-10-07 morning session was lost** (clean scrubber, Dig feature, walkthrough, docs overhaul never pushed). See [SESSION_2026-10-07.md](SESSION_2026-10-07.md). Redo as Home rev 4 after owner answers.
-- Owner feedback still open: bottom scrubber looks untidy; app feels "boring sometimes… not giving the vibe to explore".
+- `main` = canonical docs + design studies + stable v0.3.0 app runtime. Latest design work: [Home E rev 4 proposal (D-065)](../design/studies/2026-10-05-home-e/README.md) — try it at https://makeitrando.github.io/Rando/design/studies/2026-10-05-home-e/home.html
+- **The 2026-10-07 morning session was lost** (clean scrubber, Dig feature, walkthrough, docs overhaul never pushed). See [SESSION_2026-10-07.md](SESSION_2026-10-07.md). Its scrubber + Dig work was redone and pushed as Home rev 4.
+- Owner feedback (scrubber untidy; "boring… no vibe to explore") addressed in rev 4: clean scrubber, Dig, phone layout.
 - Review findings: Home has no phone layout (teen audience = phone first); see [REVIEW_2026-10-07.md](REVIEW_2026-10-07.md).
-- Owner answered Q11–Q15 (D-060..D-064). **In progress: Home rev 4** (phone layout, clean scrubber, Dig, sentence-case labels) in `design/studies/2026-10-05-home-e/`.
+- Owner answered Q11–Q15 (D-060..D-064). **Home rev 4 done** (phone layout, clean scrubber, Dig, sentence-case labels, scope tags) — D-065, awaiting owner verdict. `check.mjs` PASS.
 
 ## Next actions (in order)
 
-1. Owner answers Q11–Q15.
-2. Home rev 4 study: phone layout, clean scrubber, Dig, more varied placeholder sleeves; owner verdict.
-3. Now Playing page → Journey page → remaining pages (order in [DESIGN_PROGRAM.md](DESIGN_PROGRAM.md)).
+1. ~~Owner answers Q11–Q15~~ (D-060..D-064).
+2. Owner verdict on Home rev 4 (D-065); apply changes.
+3. Now Playing page (desktop + phone) → Journey page → remaining pages (order in [DESIGN_PROGRAM.md](DESIGN_PROGRAM.md)).
 4. After all key pages are approved: choose the build approach, rebuild the app on the approved design, fix B-001/B-002/B-003 inside that rebuild, full quality gates, then ask the owner to test.
 
 ## App candidate (unchanged since 2026-10-04)

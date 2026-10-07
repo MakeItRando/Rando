@@ -42,6 +42,7 @@
 ### 2026-10-07 — session A (lost) and session B (this recovery)
 - Session A: owner said Home is mostly done but the **bottom progress bar looks untidy ("big ass lines")** and the app **"looks boring sometimes [...] not giving the vibe to explore"**; asked for full specs, agent guide, handoff folder, report. Agent built a clean scrubber and **Dig** (daily 10 unheard songs, 15-second hook, keep/skip) but the session died before pushing (screenshot 13). Nothing survived.
 - Session B: recovery + review, docs only. Owner reply: "1. id say go as you like, but i like all of those feedbacks 2. yes 3. desktop and mobile app first 4. yes we can wait to add real artist, we are mostly done with designing, it wil take few more times and pages to do. 5. Rondo / also can you continue the last session work too, i dont think its done." Screenshot 14 shows session A was "Stopped by a usage policy" while encoding the walkthrough. → D-060..D-064; Home rev 4 started. See [SESSION_2026-10-07.md](SESSION_2026-10-07.md) and [REVIEW_2026-10-07.md](REVIEW_2026-10-07.md).
+- Session B part 2: Home rev 4 built (clean scrubber, Dig, phone layout, sentence case, scope tags), interaction test `check.mjs` PASS, 11 renders + animated walkthrough, pushed (D-065, awaiting verdict).
 
 ## Topics index (where each lives now)
 

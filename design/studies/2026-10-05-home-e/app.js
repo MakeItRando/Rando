@@ -205,3 +205,71 @@ if(D.uq){st.uq=D.uq.slice();render()}if(D.filter)document.querySelector(`.seg [d
 if(D.scroll)setTimeout(()=>{$('main').style.scrollBehavior='auto';$('main').scrollTop=D.scroll},50);
 volUI();repUI();sleepUI();
 if(D.np)npOpen();if(D.share)shareOpen(D.share);if(D.recap){recapOpen();rcI=D.recap-1;rcR()}if(D.ntf)$('bell').click();if(D.keys)keysOpen();if(D.prof)setTimeout(()=>$('prof').click(),60);if(D.blend)blendOpen();if(D.tm){if(D.sleep)X.sleep=D.sleep;sleepUI();setTimeout(()=>tmPop(),60)}if(D.repAll)$('repAll').click();if(D.moreG)$('browseG').click();if(D.edit)$('manageF').click();if(D.newPl)setTimeout(()=>$('newPl').click(),60);
+/* ===== rev 4 (2026-10-07, D-060..D-063): clean scrubber, Dig, phone layout ===== */
+/* -- scrubber: thin line + thumb, grows on hover/drag, time bubble while dragging -- */
+$('wv').className='sk';$('wv').innerHTML='<span class="sk-t"><i class="sk-f"></i><i class="sk-h"></i></span><span class="sk-b m"></span>';
+$('wv').tabIndex=0;$('wv').setAttribute('aria-valuemin',0);
+function skSync(){const s=cur(),p=Math.min(1,st.t/s.d);$('wv').style.setProperty('--p',p);$('wv').setAttribute('aria-valuemax',Math.round(s.d));$('wv').setAttribute('aria-valuenow',Math.round(st.t));$('wv').setAttribute('aria-valuetext',fmt(st.t)+' of '+fmt(s.d));document.documentElement.style.setProperty('--prog',p)}
+{const _t4=tick;tick=function(){_t4();skSync()}}
+function skAt(x,commit){const r=$('wv').getBoundingClientRect(),p=Math.max(0,Math.min(1,(x-r.left)/r.width));$('wv').style.setProperty('--h',p);$('wv').querySelector('.sk-b').textContent=fmt(p*cur().d);if(commit){st.t=p*cur().d;tick()}return p}
+$('wv').onclick=null;
+$('wv').onpointermove=e=>{if(!$('wv').classList.contains('drag'))skAt(e.clientX,false)};
+$('wv').onpointerdown=e=>{e.preventDefault();$('wv').classList.add('drag');skAt(e.clientX,true);const mv=ev=>skAt(ev.clientX,true),up=()=>{$('wv').classList.remove('drag');removeEventListener('pointermove',mv);removeEventListener('pointerup',up)};addEventListener('pointermove',mv);addEventListener('pointerup',up)};
+$('wv').onkeydown=e=>{const d=cur().d;if(e.key==='ArrowRight'){st.t=Math.min(d-1,st.t+5);tick();e.preventDefault();e.stopPropagation()}if(e.key==='ArrowLeft'){st.t=Math.max(0,st.t-5);tick();e.preventDefault();e.stopPropagation()}};
+
+/* -- Dig: a finite daily stack of songs you have never played. 15 s hook, Keep or Skip. -- */
+Object.assign(C,{d1:['#2b2f5e','#f0c94a','sun'],d2:['#0f3b36','#e8e2d4','stripes'],d3:['#e9e4d8','#2b2f5e','bars'],d4:['#6b2a4a','#f1e6d2','arc'],d5:['#1a1a1a','#d9d2b6','grid'],d6:['#c9a227','#141414','square'],d7:['#33405a','#ff8a5b','dots'],d8:['#efeae0','#7a1f3a','half'],d9:['#3c2a20','#e6dcc4','line'],d10:['#204a3a','#efeee9','circle-off']});
+Object.assign(TONE,{d1:'#232650',d2:'#0e2f2b',d3:'#2a2d48',d4:'#4a1f35',d5:'#1c1c1a',d6:'#3d3210',d7:'#29344a',d8:'#4a1828',d9:'#33241b',d10:'#183a2e'});
+const DIG=[['Paper Planes, Low','Juno Reyes','Indie pop',112,'B maj',196,'Folded every word you said'],['Static Bloom','Okay Kyoto','Alt R&B',94,'D min',214,'Static on the line, still you'],['Fourth Floor','Lio Marsh','Hip-Hop',90,'G min',187,'Fourth floor, window cracked'],['Velvet Arcade','Saya Bloom','Electronic',122,'F maj',232,null],['Gravel','Theo Kane','Alt rock',138,'E min',201,'Gravel in my voice tonight'],['Honey, Late','Mara Oke','Soul',84,'A\u266d maj',224,'Honey, it\u2019s late, stay'],['Satellite Kid','Nu Basin','Hip-Hop',96,'C min',178,'Satellite kid on a rooftop'],['Glasshouse','Wren & Ivy','Indie folk',104,'D maj',209,'We built a glasshouse anyway'],['Rust Belt Radio','Cal Moreno','Country',118,'G maj',197,'Rust belt radio, one bar left'],['Undertow','Pale Coast','Dream pop',76,'B min',243,'Pulled under, didn\u2019t mind']];
+DIG.forEach(([t,a,g,bpm,key,d,ly],i)=>{S['dg'+i]={t,a,ar:a,art:'d'+(i+1),d,bpm,key,genre:g,hook:Math.round(d*.32),ly:ly?[ly]:null}});
+SRC.dug={type:'Playlist',name:'Dug',art:'d1',q:[]};SRC.digfull={type:'Dig',name:'Today\u2019s dig',art:'d1',q:DIG.map((_,i)=>'dg'+i)};
+const DG={i:0,kept:[],skipped:[],t:0,on:false,open:false,wasOn:false,from:null,HOOK:15};
+function digHomeR(){const left=DIG.length-DG.i,done=left===0,k=DG.kept.length;const nx=DIG.slice(DG.i,DG.i+3);
+ $('digHome').innerHTML=`<div class="dgh-l"><div class="dgh-t"><h2>Dig</h2><span class="m">${pad(Math.min(DG.i+1,DIG.length))}/${DIG.length}</span></div><p>${done?`Done for today. You kept ${k} of ${DIG.length}. A new stack arrives tomorrow.`:DG.i?`${left} songs left in today\u2019s stack · ${k} kept`:'10 songs you have never played. Hear the hook, keep what hits.'}</p>
+ <div class="dgh-a">${done?(k?`<button class="btn pri" id="digPlayDug">${ICON('play')}Play Dug</button>`:''):`<button class="btn pri" id="digGo">${ICON('play')}${DG.i?'Continue digging':'Start digging'}</button>`}<span class="dgh-k">${DIG.map((_,j)=>`<i class="${DG.kept.includes(j)?'k':DG.skipped.includes(j)?'s':''}"></i>`).join('')}</span></div></div>
+ <div class="dgh-s">${(done?DG.kept.slice(-3).map(j=>'d'+(j+1)):nx.map((_,j)=>'d'+(DG.i+j+1))).reverse().map((a,j,arr)=>`<span class="cover" style="--o:${arr.length-1-j}">${svg(a)}</span>`).join('')}</div>`;
+ const g=$('digGo');if(g)g.onclick=digOpen;const p=$('digPlayDug');if(p)p.onclick=()=>startSrc('dug',0);}
+function dugSide(){let el=$('dugLi');if(!DG.kept.length){if(el)el.remove();return}if(!el){el=document.createElement('button');el.className='li';el.id='dugLi';el.dataset.src='dug';$('pls').after(el)}
+ el.innerHTML=`<span class="cover">${svg('d'+(DG.kept[0]+1))}</span><div><b>Dug</b><span>${DG.kept.length} song${DG.kept.length>1?'s':''} · from Dig</span></div><span class="eq"><i></i><i></i><i></i></span>`}
+function tabOn(t){document.querySelectorAll('.tabs [data-tab]').forEach(b=>b.classList.toggle('on',b.dataset.tab===t))}
+function digOpen(){DG.open=true;tabOn('Dig');DG.wasOn=st.on;DG.from=curK();if(st.on){st.on=false;render()}$('dig').classList.add('open');document.body.classList.add('digging');digR();digPlay(true)}
+function digClose(){DG.open=false;tabOn('Home');DG.on=false;$('dig').classList.remove('open');document.body.classList.remove('digging');digHomeR();if(DG.wasOn)toast('Paused '+S[DG.from].t+' while you dug','Resume',()=>{st.on=true;render();$('toast').classList.remove('open')})}
+function digPlay(reset){if(DG.i>=DIG.length)return;if(reset)DG.t=0;if(DG.t>=DG.HOOK)DG.t=0;DG.on=true;digSync()}
+function digCard(i,pos){const s=S['dg'+i];return `<div class="dgc" data-pos="${pos}" style="--tone:${TONE[s.art]}"><span class="cover">${svg(s.art)}</span><div class="dgc-i"><b>${s.t}</b><span>${s.a}</span><div class="tags m"><span>${s.genre}</span><span>${s.bpm} BPM</span><span>${s.key}</span></div></div><span class="dgc-st dgc-keep">Keep</span><span class="dgc-st dgc-skip">Skip</span></div>`}
+function digR(){const b=$('digBody');if(DG.i>=DIG.length){b.innerHTML=`<div class="dg-end"><h3>Done for today</h3><p>You kept ${DG.kept.length} of ${DIG.length}. They are in <b>Dug</b> in your playlists. A new stack arrives tomorrow.</p><div class="dg-endl">${DG.kept.map(j=>{const s=S['dg'+j];return `<div class="dq"><span class="cover">${svg(s.art)}</span><div><b>${s.t}</b><span>${s.a} · ${s.genre}</span></div><span class="m">${fmt(s.d)}</span></div>`}).join('')||'<p class="mut">Nothing kept today. Tomorrow\u2019s stack is different.</p>'}</div><div class="dg-acts">${DG.kept.length?`<button class="btn pri" id="dgPlayDug">${ICON('play')}Play Dug</button>`:''}<button class="btn gh" id="dgDone">Close</button></div></div>`;
+  const p=$('dgPlayDug');if(p)p.onclick=()=>{DG.wasOn=false;digClose();startSrc('dug',0)};$('dgDone').onclick=digClose;$('digCount').textContent=`${DIG.length}/${DIG.length}`;digSeg();return}
+ b.innerHTML=`<div class="dg-stack">${[2,1].filter(o=>DG.i+o<DIG.length).map(o=>digCard(DG.i+o,o)).join('')}${digCard(DG.i,0)}</div>
+ <div class="dg-hook"><button class="dg-pp" id="dgPP" aria-label="Play hook"><svg class="dg-ring" viewBox="0 0 64 64"><circle cx="32" cy="32" r="30" class="bg"/><circle cx="32" cy="32" r="30" class="fg" id="dgRing"/></svg><span id="dgPPi"></span></button><div><b id="dgHookTx"></b><span class="m" id="dgHookT"></span></div><button class="lnk" id="dgFull">Play full song</button></div>
+ <div class="dg-acts"><button class="dg-b skip" id="dgSkip" aria-label="Skip (left arrow)">${ICON('x')}<span>Skip</span><kbd class="m">\u2190</kbd></button><button class="dg-b keep" id="dgKeep" aria-label="Keep (right arrow)">${ICON('heart').replace('class="ic"','class="ic f"')}<span>Keep</span><kbd class="m">\u2192</kbd></button></div>`;
+ $('digCount').textContent=`${pad(DG.i+1)}/${DIG.length}`;digSeg();
+ $('dgPP').onclick=()=>{DG.on?(DG.on=false,digSync()):digPlay(false)};$('dgSkip').onclick=()=>digDecide(false);$('dgKeep').onclick=()=>digDecide(true);
+ $('dgFull').onclick=()=>{const i=DG.i;DG.wasOn=false;digClose();startSrc('digfull',i)};
+ digDrag(b.querySelector('.dgc[data-pos="0"]'));digSync()}
+function digSeg(){$('digSeg').innerHTML=DIG.map((_,j)=>`<i class="${DG.kept.includes(j)?'k':DG.skipped.includes(j)?'s':j===DG.i?'a':''}"></i>`).join('')}
+function digSync(){if(DG.i>=DIG.length)return;const s=S['dg'+DG.i],p=DG.t/DG.HOOK;const r=$('dgRing');if(!r)return;r.style.strokeDashoffset=188.5*(1-p);$('dgPPi').innerHTML=ICON(DG.on?'pause':'play');$('dgPP').setAttribute('aria-label',DG.on?'Pause hook':'Play hook');
+ $('dgHookTx').textContent=DG.t>=DG.HOOK?'Hook ended · tap to replay':DG.on?'Playing the hook':'Hook paused';$('dgHookT').textContent=`Hook ${fmt(s.hook)}\u2013${fmt(s.hook+DG.HOOK)} \u00b7 ${Math.ceil(DG.HOOK-DG.t)}s left`;document.getElementById('dig').classList.toggle('live',DG.on)}
+setInterval(()=>{if(!DG.open||!DG.on)return;DG.t+=.25;if(DG.t>=DG.HOOK){DG.t=DG.HOOK;DG.on=false}digSync()},250);
+function digDecide(keep){if(DG.i>=DIG.length)return;const card=$('digBody').querySelector('.dgc[data-pos="0"]');if(card){card.classList.add(keep?'out-r':'out-l')}
+ const i=DG.i;(keep?DG.kept:DG.skipped).push(i);if(keep){SRC.dug.q.push('dg'+i);dugSide()}
+ toast(keep?`Kept ${S['dg'+i].t} · added to Dug`:`Skipped ${S['dg'+i].t}`,'Undo',()=>{(keep?DG.kept:DG.skipped).pop();if(keep){SRC.dug.q.pop();dugSide()}DG.i=i;if(DG.open)digR(),digPlay(true);else digHomeR();$('toast').classList.remove('open')});
+ setTimeout(()=>{DG.i++;digR();digPlay(true);digHomeR()},matchMedia('(prefers-reduced-motion: reduce)').matches?0:260)}
+function digDrag(card){if(!card)return;let x0=null,dx=0;card.onpointerdown=e=>{if(e.target.closest('button'))return;x0=e.clientX;dx=0;card.setPointerCapture(e.pointerId);card.classList.add('drag')};
+ card.onpointermove=e=>{if(x0===null)return;dx=e.clientX-x0;card.style.transform=`translateX(${dx}px) rotate(${dx/22}deg)`;card.style.setProperty('--kv',Math.max(0,Math.min(1,dx/110)));card.style.setProperty('--sv',Math.max(0,Math.min(1,-dx/110)))};
+ card.onpointerup=card.onpointercancel=()=>{if(x0===null)return;x0=null;card.classList.remove('drag');if(Math.abs(dx)>90){card.style.transform='';digDecide(dx>0)}else{card.style.transform='';card.style.setProperty('--kv',0);card.style.setProperty('--sv',0)}}}
+{const dg=document.createElement('section');dg.className='dig';dg.id='dig';dg.setAttribute('role','dialog');dg.setAttribute('aria-label','Dig');dg.innerHTML=`<div class="dg-top"><div><h3>Dig</h3><span class="mut">Today\u2019s stack · songs you have never played</span></div><span class="m" id="digCount"></span><button class="icb" id="digX" aria-label="Close Dig">${ICON('x')}</button></div><div class="dg-seg" id="digSeg"></div><div id="digBody"></div><p class="dg-note">Hooks are 15 seconds. Your music is paused while you dig.</p>`;document.body.appendChild(dg);$('digX').onclick=digClose;
+ const home=document.createElement('section');home.className='rise dgh';home.id='digHome';home.dataset.f='all music';home.style.animationDelay='.11s';document.querySelector('.row2').after(home)}
+document.addEventListener('keydown',e=>{if(!DG.open)return;if(e.key==='Escape'){digClose();e.stopImmediatePropagation();e.preventDefault()}else if(e.key==='ArrowLeft'){digDecide(false);e.stopImmediatePropagation();e.preventDefault()}else if(e.key==='ArrowRight'){digDecide(true);e.stopImmediatePropagation();e.preventDefault()}else if(e.code==='Space'){$('dgPP')&&$('dgPP').click();e.stopImmediatePropagation();e.preventDefault()}},true);
+/* playing anything from outside Dig closes it truthfully */
+{const _ss=startSrc;startSrc=function(k,i){if(DG.open){DG.wasOn=false;digClose()}_ss(k,i)}}
+
+/* -- phone layout (<=640px): bottom tabs, mini player, filter row inside Home -- */
+{const tabs=document.createElement('nav');tabs.className='tabs';tabs.setAttribute('aria-label','Main');tabs.innerHTML=[['home','Home',1],['journey','Journeys'],['sparkle','Dig'],['lib','Library']].map(([i,t,on])=>`<button class="${on?'on':''}" data-tab="${t}">${ICON(i)}<span>${t}</span></button>`).join('');document.body.appendChild(tabs);
+ tabs.onclick=e=>{const b=e.target.closest('[data-tab]');if(!b)return;const t=b.dataset.tab;if(t==='Dig')return digOpen();if(t==='Home'){if(DG.open)digClose();if($('np').classList.contains('open'))npClose();$('main').scrollTo({top:0});return}toast(t+' is designed in a later step')};
+ const mq=matchMedia('(max-width:640px)');const seg=$('seg'),tb=document.querySelector('.tb');function place(){if(mq.matches){$('main').prepend(seg)}else{tb.insertBefore(seg,tb.querySelector('.r'))}movePill(seg.querySelector('.on'))}mq.addEventListener('change',place);place();
+ document.querySelector('.bar .cur').addEventListener('click',()=>{if(mq.matches)npOpen()});}
+
+/* follow chip reflects the current artist (Dig songs are new artists) */
+{const _r4=render;render=function(){_r4();const f=$('fol'),nw=curK().startsWith('dg');if(f.dataset.k!==curK()){f.dataset.k=curK();f.classList.toggle('on',!nw);f.textContent=nw?'Follow':'Following'}}}
+/* boot rev 4 */
+digHomeR();skSync();
+if(D.dig){if(D.digI){for(let j=0;j<D.digI;j++){(D.digKeep||[]).includes(j)?(DG.kept.push(j),SRC.dug.q.push('dg'+j)):DG.skipped.push(j)}DG.i=D.digI;dugSide();digHomeR()}if(D.dig!=='home'){digOpen();if(D.digT){DG.t=D.digT;DG.on=D.digOn??true;digSync()}}}

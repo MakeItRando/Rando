@@ -5,8 +5,8 @@ One file per page/feature. A spec is the contract a builder implements; the desi
 | # | Surface | Spec | Design study | Status |
 | --- | --- | --- | --- | --- |
 | 0 | Foundation (tokens, type, icons, player) | [../../handoff/DESIGN_PROGRAM.md](../../handoff/DESIGN_PROGRAM.md) | studies B → E | Settled in Home E |
-| 1 | Home (desktop) | [HOME.md](HOME.md) | [home-e](../../design/studies/2026-10-05-home-e/README.md) | Rev 3 complete (D-058); rev 4 pending |
-| 1b | Home (phone) | HOME.md § Phone (to write) | — | Not designed |
+| 1 | Home (desktop) | [HOME.md](HOME.md) | [home-e](../../design/studies/2026-10-05-home-e/README.md) | Rev 4 proposal (D-065), awaiting verdict; rev 3 approved (D-058) |
+| 1b | Home (phone) | [HOME.md § Phone](HOME.md) | home-e rev 4 (≤640 px) | Rev 4 proposal (D-065) |
 | 2 | Now Playing + lyrics/credits/queue | — | overlay inside home-e | Next |
 | 3 | Playlists | [PLAYLISTS.md](PLAYLISTS.md) | study A (superseded) | Product spec only |
 | 4 | Artist page | — | — | Not started |
@@ -17,7 +17,7 @@ One file per page/feature. A spec is the contract a builder implements; the desi
 | 9 | Profile & settings | — | profile menu in home-e | Not started |
 | 10 | First run (play first, setup optional, D-045) | ../ONBOARDING.md | — | Not started |
 | 11 | Following + notifications | [FOLLOWING.md](FOLLOWING.md) | bell panel in home-e | Product spec only |
-| 12 | Dig (proposal) | — | lost 2026-10-07, redo | Proposal (OPEN_QUESTIONS Q12) |
+| 12 | Dig | [HOME.md § Dig](HOME.md) | home-e rev 4 | In scope (D-061); rev 4 proposal (D-065) |
 
 ## Template (copy for a new page)
 

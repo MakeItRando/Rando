@@ -1,17 +1,17 @@
 # Spec: Home (draft from Home study E, 2026-10-05)
 
-Status: desktop **complete, revision 3** (D-058; rev 2 = D-057, rev 1 = D-056; state rules D-055). Phone layout not designed. Rev 4 pending (below). Implementation approach is chosen after all key pages are approved.
+Status: **revision 4 proposal** (D-065, awaiting owner verdict) — desktop + phone. Rev 3 = desktop complete (D-058; rev 2 = D-057, rev 1 = D-056; state rules D-055). Targets: desktop app + mobile app (D-062); every rule below applies to both unless a section says otherwise. Implementation approach is chosen after all key pages are approved.
 
 Try it: https://makeitrando.github.io/Rando/design/studies/2026-10-05-home-e/home.html
 
-## Open for rev 4 (owner feedback 2026-10-07 + review)
+## Rev 4 changes (owner feedback 2026-10-07, D-060..D-063) — done in the study
 
-- **Scrubber:** owner finds the bar of ~200 waveform lines untidy. Proposal: 3 px line + thumb (6 px on hover/drag, time bubble); waveform only in Now Playing or as a faint strip on hover.
-- **"Boring / no vibe to explore":** add Dig (daily 10 unheard songs, 15 s hook, Keep/Skip, finite), more varied placeholder sleeves, a daily-changing row.
-- **Phone layout:** bottom tabs (Home, Journeys, Dig, Library), mini player with 2 px progress, full-screen Now Playing, horizontal Journey path. At 390 px rev 3 currently overlaps.
-- **Labels:** replace UPPERCASE letter-spaced micro labels with sentence case.
-- **Scope tags:** mark each feature V1-local / V1-backend / V2 (Blend, devices, recap sync, share links need accounts).
-- The lost 2026-10-07 session implemented scrubber + Dig but never pushed (handoff/SESSION_2026-10-07.md).
+- **Scrubber** (player bar + mini player): 3 px line, played part in text colour (accent on hover/drag), line grows to 5 px on hover; thumb 12 px + time bubble only on hover/drag; click or drag seeks; ←/→ ±5 s when focused; `role=slider` with aria-valuenow/valuetext. No waveform in the bar (waveform may return later in Now Playing only).
+- **Dig** (new, D-061) — see § Dig.
+- **Phone layout** — see § Phone.
+- **Labels:** sentence case everywhere; no UPPERCASE letter-spaced micro labels.
+- **Scope tags** on every feature (§ Scope).
+- Sleeves stay flat placeholders (D-063); 10 new Dig sleeves add variety.
 
 ## Sections (top → bottom)
 
@@ -19,9 +19,36 @@ Try it: https://makeitrando.github.io/Rando/design/studies/2026-10-05-home-e/hom
 2. **Journey + This week** — Journey path (done ✓, current with progress ring, upcoming dimmed), footer with total songs heard / Journey songs (heard now in accent) and the next artist and a local listening summary (minutes, 7-day bars, top artist, new artists found, monthly recap entry). No streaks or guilt mechanics.
 3. **On repeat** — most-replayed songs with ×count (Rondo tagline: find your next repeat).
 4. **Moods** — 6 colour tiles with sleeve stack; each is a finite source.
-5. **New from artists you follow** — release type + relative date; new = accent (D-046).
+5. **Dig band** (after Journey + This week): "Dig · 10 songs you've never heard", sleeve fan, count left today, Start/Continue digging; after finishing: "Done for today · N dug" + Play Dug.
+6. **New from artists you follow** — release type + relative date; new = accent (D-046).
 
 Filter: All / For you (stage, On repeat, Moods) / Journeys (stage, Journey, **Your Journeys** genre cards with live CTA + progress, **Artists you finished** with Replay) / Following (stage, **Artists you follow** with NEW badge, releases). No filter view may be empty.
+
+## Dig (V1-local, D-061)
+
+- Daily finite stack of **10 songs the listener has never played** (V1: from the local catalog; V1-backend: from catalog by genre/followed-artist similarity). No infinite feed.
+- Card: sleeve, title, artist, genre/BPM line, 15 s **hook** (starts at the song's hook timestamp) with a progress ring; the hook plays once, then waits for Keep or Skip.
+- Actions: **Keep** (button, →, swipe right) adds to the **Dug** playlist; **Skip** (button, ←, swipe left); Space pauses the hook; Undo toast for the last action; Play full song (source = Dig); Follow artist; Esc / back closes.
+- Opening Dig **pauses** main playback; closing offers "Resume <song>" (toast). Dig never changes the main queue.
+- End: "Done for today. You kept N of 10. A new stack arrives tomorrow." + Play Dug. No streaks, no guilt copy.
+- States: not started, in progress (n/10), done; empty catalog → "Nothing new to dig today" + Browse genres (spec only; not drawn in the study yet).
+
+## Phone (≤640 px; the mobile app's base layout)
+
+- **Bottom tabs:** Home, Journeys, Dig, Library (icon + label, 56 px + safe area). Search via top bar icon; profile/bell in the top bar.
+- **Mini player** above the tabs: sleeve, title/artist, play/pause, 2 px progress line; tap opens full-screen **Now Playing** (sleeve, title, scrubber, 5 controls, lyrics below). Swipe down/back closes.
+- Filter (All / For you / Journeys / Following) is a scrollable row inside the page, not the top bar. Stage stacks: sleeve, caption, title, actions; Up next hidden.
+- Journey path scrolls horizontally; shelves are horizontal scroll rows; This week becomes a compact card.
+- Dig on phone is full screen; the mini player hides while digging.
+- Touch targets ≥44 px; no horizontal page overflow at 320–640 px (tested at 390 px). Theme toggle lives in the profile menu on phone.
+
+## Scope
+
+| Feature | Scope |
+| --- | --- |
+| Stage, Journey, On repeat, Moods, queue, ⌘K search, song menu, lyrics, sleep timer, crossfade, repeat, themes, shortcuts, Dig (local catalog) | V1-local |
+| Following/new releases, notifications, monthly recap sync, share links, Dig from full catalog | V1-backend |
+| Blend, devices/handoff, social profile | V2 (accounts) |
 
 ## Top bar and overlays
 
@@ -43,7 +70,7 @@ On repeat → expands to 12; New from artists you follow → Following filter; B
 
 ## Responsive
 
-≤1240 px: stage Up next hides, shelves show 5. ≤1020 px: sidebar collapses to icons, This week becomes a row, Now Playing shows lyrics only.
+≤1240 px: stage Up next hides, shelves show 5. ≤1020 px: sidebar collapses to icons, This week becomes a row, Now Playing shows lyrics only. ≤640 px: phone layout (§ Phone).
 
 ## Theme
 
