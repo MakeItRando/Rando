@@ -1,6 +1,6 @@
 # Spec: Home (draft from Home study E, 2026-10-05)
 
-Status: **revision 4 proposal** (D-065, awaiting owner verdict) — desktop + phone. Rev 3 = desktop complete (D-058; rev 2 = D-057, rev 1 = D-056; state rules D-055). Targets: desktop app + mobile app (D-062); every rule below applies to both unless a section says otherwise. Implementation approach is chosen after all key pages are approved.
+Status: **revision 4 approved** (D-065, owner: "thats perfect") — desktop + phone. Rev 3 = desktop complete (D-058; rev 2 = D-057, rev 1 = D-056; state rules D-055). Targets: desktop app + mobile app (D-062); every rule below applies to both unless a section says otherwise. Implementation approach is chosen after all key pages are approved.
 
 Try it: https://makeitrando.github.io/Rando/design/studies/2026-10-05-home-e/home.html
 
@@ -35,7 +35,7 @@ Filter: All / For you (stage, On repeat, Moods) / Journeys (stage, Journey, **Yo
 
 ## Phone (≤640 px; the mobile app's base layout)
 
-- **Bottom tabs:** Home, Journeys, Dig, Library (icon + label, 56 px + safe area). Search via top bar icon; profile/bell in the top bar.
+- **Bottom tabs** (icon + label, 56 px + safe area): rev 4 had Home, Journeys, Dig, Library; the Explore proposal (D-066) makes them Home, Explore, Journeys, Library with Dig inside Explore — see [EXPLORE.md](EXPLORE.md). Search via top bar icon or Explore; profile/bell in the top bar.
 - **Mini player** above the tabs: sleeve, title/artist, play/pause, 2 px progress line; tap opens full-screen **Now Playing** (sleeve, title, scrubber, 5 controls, lyrics below). Swipe down/back closes.
 - Filter (All / For you / Journeys / Following) is a scrollable row inside the page, not the top bar. Stage stacks: sleeve, caption, title, actions; Up next hidden.
 - Journey path scrolls horizontally; shelves are horizontal scroll rows; This week becomes a compact card.

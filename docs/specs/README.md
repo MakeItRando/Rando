@@ -5,19 +5,20 @@ One file per page/feature. A spec is the contract a builder implements; the desi
 | # | Surface | Spec | Design study | Status |
 | --- | --- | --- | --- | --- |
 | 0 | Foundation (tokens, type, icons, player) | [../../handoff/DESIGN_PROGRAM.md](../../handoff/DESIGN_PROGRAM.md) | studies B → E | Settled in Home E |
-| 1 | Home (desktop) | [HOME.md](HOME.md) | [home-e](../../design/studies/2026-10-05-home-e/README.md) | Rev 4 proposal (D-065), awaiting verdict; rev 3 approved (D-058) |
-| 1b | Home (phone) | [HOME.md § Phone](HOME.md) | home-e rev 4 (≤640 px) | Rev 4 proposal (D-065) |
+| 1 | Home (desktop) | [HOME.md](HOME.md) | [home-e](../../design/studies/2026-10-05-home-e/README.md) | Rev 4 approved (D-065) |
+| 1b | Home (phone) | [HOME.md § Phone](HOME.md) | home-e rev 4 (≤640 px) | Rev 4 approved (D-065) |
 | 2 | Now Playing + lyrics/credits/queue | — | overlay inside home-e | Next |
 | 3 | Playlists | [PLAYLISTS.md](PLAYLISTS.md) | study A (superseded) | Product spec only |
 | 4 | Artist page | — | — | Not started |
 | 5 | Journeys (picker, genre, artist journey) | — (see ../../handoff/PRODUCT_MAP.md) | — | Not started |
-| 6 | Search | — | ⌘K palette in home-e | Not started |
+| 6 | Search | [EXPLORE.md](EXPLORE.md) (search lives in Explore) | ⌘K palette + Explore header in home-e | Part of Explore proposal |
+| 6b | Explore | [EXPLORE.md](EXPLORE.md) | home-e rev 5 | Proposal (D-066) |
 | 7 | Library | — | — | Not started |
 | 8 | Release / album | — | — | Not started |
 | 9 | Profile & settings | — | profile menu in home-e | Not started |
 | 10 | First run (play first, setup optional, D-045) | ../ONBOARDING.md | — | Not started |
 | 11 | Following + notifications | [FOLLOWING.md](FOLLOWING.md) | bell panel in home-e | Product spec only |
-| 12 | Dig | [HOME.md § Dig](HOME.md) | home-e rev 4 | In scope (D-061); rev 4 proposal (D-065) |
+| 12 | Dig | [HOME.md § Dig](HOME.md) | home-e rev 4 | Approved (D-061, D-065) |
 
 ## Template (copy for a new page)
 

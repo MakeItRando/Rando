@@ -1,4 +1,4 @@
-// Interaction check for Home study E rev 4. Run from a folder with playwright installed:
+// Interaction check for Home study E rev 4 + Explore (rev 5). Run from a folder with playwright installed:
 //   CHROMIUM=$(which chromium) node design/studies/2026-10-05-home-e/check.mjs
 // Fails (exit 1) on any runtime error or broken rule.
 import { chromium } from 'playwright';
@@ -26,8 +26,30 @@ await p.close();
 p = await pg({ width: 390, height: 844 });
 const over = await p.evaluate(() => [...document.querySelectorAll('.tb *, .bar *, .tabs *')].filter(e => { const r = e.getBoundingClientRect(); return r.width && r.right > innerWidth + 1 && getComputedStyle(e).display !== 'none'; }).length);
 if (over) fail(over + ' phone chrome elements overflow at 390px');
-await p.click('.tabs [data-tab=Dig]'); await p.waitForTimeout(400);
-if (!(await p.evaluate(() => DG.open && document.querySelector('.tabs .on').dataset.tab === 'Dig'))) fail('Dig tab must open Dig');
+await p.click('.tabs [data-tab=Explore]'); await p.waitForTimeout(400);
+if (!(await p.evaluate(() => XP.view === 'explore' && document.querySelector('.tabs .on').dataset.tab === 'Explore'))) fail('Explore tab must open Explore');
+const xo = await p.evaluate(() => [...document.querySelectorAll('#xp *')].filter(e => { const r = e.getBoundingClientRect(); return r.width && r.right > innerWidth + 1 && !e.closest('.xp-rc, .xg') && getComputedStyle(e).display !== 'none'; }).length);
+if (xo) fail(xo + ' Explore elements overflow at 390px');
+if (await p.evaluate(() => $('main').scrollWidth > $('main').clientWidth + 1)) fail('Explore must not scroll sideways at 390px');
+await p.click('#xdGo'); await p.waitForTimeout(400);
+if (!(await p.evaluate(() => DG.open))) fail('Dig must open from Explore');
+await p.click('#digX'); await p.waitForTimeout(400);
+if (!(await p.evaluate(() => !DG.open && document.querySelector('.tabs .on').dataset.tab === 'Explore'))) fail('closing Dig must return to Explore');
+await p.close();
+p = await pg({ width: 1440, height: 900 });
+await p.click('.side [data-nav=explore]'); await p.waitForTimeout(300);
+await p.click('[data-tu="tempo:slow"]'); await p.click('[data-tu="feel:dark"]');
+if (!(await p.evaluate(() => tuMatch().every(k => S[k].bpm < 95 && /min/.test(S[k].key))))) fail('Tune a mix must only include matching songs');
+await p.click('#tuPlay'); await p.waitForTimeout(200);
+if (!(await p.evaluate(() => st.src === 'tu_slow_any_dark' && st.on))) fail('Play mix must play the tuned source');
+await p.click('#tuPlay'); if (await p.evaluate(() => st.on)) fail('Play mix on the live tune must pause, not restart');
+const empty = await p.evaluate(() => { for (const a of ['slow','mid','fast']) for (const v of ['vox','inst']) for (const f of ['bright','dark']) { Object.assign(XP.tu, { tempo: a, voice: v, feel: f }); if (!tuMatch().length) return [a, v, f]; } return null; });
+if (empty) { for (const [d, v] of [['tempo', empty[0]], ['voice', empty[1]], ['feel', empty[2]]]) await p.click(`[data-tu="${d}:${v}"]`); }
+if (empty && !(await p.evaluate(() => tuMatch().length === 0 && document.getElementById('tuPlay').disabled))) fail('an empty tune must disable Play');
+const seed = await p.evaluate(() => XP.seed); await p.click('.gfc'); await p.waitForTimeout(200);
+if (!(await p.evaluate(s => st.src.startsWith('gf_t_') && XP.seed === s && document.querySelector('.gfc').classList.contains('on'), seed))) fail('Go from must play and keep its seed while playing');
+await p.evaluate(() => { st.i = SRC[st.src].q.length - 1; st.t = cur().d - .3; }); await p.waitForTimeout(700);
+if (await p.evaluate(() => st.on)) fail('a Go-from mix must stop at its end');
 await p.close(); await b.close();
-console.log(errs.length ? 'FAIL\n' + errs.join('\n') : 'PASS: scrubber, Dig flow, Undo, end-of-stack, Play Dug, source end stops, phone chrome, Dig tab');
+console.log(errs.length ? 'FAIL\n' + errs.join('\n') : 'PASS: scrubber, Dig flow, Undo, end-of-stack, Play Dug, source end stops, phone chrome, Explore tab + overflow, Dig from Explore, Tune a mix, Go from');
 process.exit(errs.length ? 1 : 0);

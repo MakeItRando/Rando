@@ -1,6 +1,6 @@
 # Home study E — interactive (2026-10-05)
 
-**Status:** revision 4 proposal (D-065, awaiting owner verdict) on top of rev 3 (D-058). Owner on rev 3 (2026-10-07): bottom scrubber looks untidy; Home "boring sometimes… not giving the vibe to explore"; then approved all review feedback (D-060), Dig (D-061), desktop + mobile apps first (D-062). Rev 3: Home complete (D-058). Owner on rev 2: liked every suggestion, light mode "awesome", bottom bar left to us (kept). Rev 2 (D-057): Owner on rev 1: "way way better… so close"; keep the Journeys filter but don't leave it empty; add light mode.
+**Status:** rev 4 approved (D-065, "thats perfect"); **rev 5 adds the Explore page** (D-066 proposal, awaiting verdict; spec [EXPLORE.md](../../../docs/specs/EXPLORE.md)). Rev 3 (D-058). Owner on rev 3 (2026-10-07): bottom scrubber looks untidy; Home "boring sometimes… not giving the vibe to explore"; then approved all review feedback (D-060), Dig (D-061), desktop + mobile apps first (D-062). Rev 3: Home complete (D-058). Owner on rev 2: liked every suggestion, light mode "awesome", bottom bar left to us (kept). Rev 2 (D-057): Owner on rev 1: "way way better… so close"; keep the Journeys filter but don't leave it empty; add light mode.
 
 Previous: Owner on C: "way better… but we can do way better; some places feel old; Journey button must change when it's playing and offer Open Journey; make it more advanced, engaging, interactive, correct and systematic; audience mostly teenagers; Home first."
 
@@ -9,6 +9,8 @@ Previous: Owner on C: "way better… but we can do way better; some places feel 
 **Test it:** `CHROMIUM=$(which chromium) node design/studies/2026-10-05-home-e/check.mjs` from a folder with `playwright` installed (exit 0 = PASS: scrubber seek, Dig open/pause, Keep order, Undo, end of stack, Play Dug, natural source end stops, no phone overflow at 390 px, Dig tab).
 
 ![Rev 4 walkthrough (animated)](renders/walkthrough-rev4.svg)
+
+New in rev 5 — **Explore** (sidebar, phone tab, or press **E**): big search + Recent chips · Dig card · **Tune a mix**: set Tempo / Voice / Feel and the count, sleeves and reason update live; Play mix plays a finite "Tuned" source (press again = pause) · **Go from <current song>**: same tempo, same keys, featured artist — computed from the song you're hearing, stays put while you play one · Genres (each a Journey) · Out this week (all releases, Following tag) · Most kept in Dig across Rondo. Phone tabs are now Home / Explore / Journeys / Library (Dig lives in Explore and on Home).
 
 New in rev 4: the bottom progress is a **clean 3 px line** — hover or drag shows a thumb and a time bubble; arrow keys seek ±5 s; it is an ARIA slider · **Dig** band on Home → open the stack of 10 unheard songs; each plays a 15 s hook (ring), **Keep** (→ / swipe right) or **Skip** (← / swipe left), Space pauses the hook, Esc leaves; Undo toast; main playback pauses while digging and offers Resume; the stack ends ("Done for today") → Play Dug, kept songs land in the **Dug** playlist; "Play full song" plays it with Dig as the source · Dig artists show **Follow** · all micro labels are sentence case · **phone layout (≤640 px):** bottom tabs Home / Journeys / Dig / Library, mini player with 2 px progress that opens full-screen Now Playing, filter moves into the page, no overlaps at 390 px.
 
@@ -49,5 +51,11 @@ New in rev 2: sun/moon button (top right) = light mode, remembered, follows syst
 | ![](renders/27-phone-now-playing.svg) | Rev 4: phone Now Playing + lyrics |
 | ![](renders/28-phone-light-home.svg) | Rev 4: phone Home, light |
 | ![](renders/29-phone-trio.svg) | Rev 4: phone Home / Dig / Now Playing side by side |
+| ![](renders/30-explore.svg) | Rev 5: Explore — search, Dig, Tune a mix, Go from |
+| ![](renders/31-explore-genres.svg) | Rev 5: Explore — Go from + Genres |
+| ![](renders/32-explore-releases-kept.svg) | Rev 5: Out this week + Most kept in Dig |
+| ![](renders/33-explore-tuned-playing.svg) | Rev 5: Tuned mix Slow · Dark playing (Pause, accent border) |
+| ![](renders/34-explore-light.svg) | Rev 5: Explore, light |
+| ![](renders/35-phone-explore-trio.svg) | Rev 5: phone Explore, top → bottom |
 
 All counts come from `data.js`; sleeves are code-drawn placeholders, not product assets (real art arrives with the catalog, D-063). Dig songs and artists are fictional. See [docs/specs/HOME.md](../../../docs/specs/HOME.md).

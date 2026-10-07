@@ -273,3 +273,71 @@ document.addEventListener('keydown',e=>{if(!DG.open)return;if(e.key==='Escape'){
 /* boot rev 4 */
 digHomeR();skSync();
 if(D.dig){if(D.digI){for(let j=0;j<D.digI;j++){(D.digKeep||[]).includes(j)?(DG.kept.push(j),SRC.dug.q.push('dg'+j)):DG.skipped.push(j)}DG.i=D.digI;dugSide();digHomeR()}if(D.dig!=='home'){digOpen();if(D.digT){DG.t=D.digT;DG.on=D.digOn??true;digSync()}}}
+
+/* ===== rev 5 (2026-10-07, D-066 proposal): Explore page. Home = your music; Explore = everything past it. ===== */
+/* Rules: every row is a finite source; every "because" line is computed from real metadata (tempo, key, credits) — no guessing. */
+const XP={view:'home',tu:{tempo:'any',voice:'any',feel:'any'},seed:null};
+const POOL=()=>Object.keys(S);
+const isMin=k=>/min/.test(S[k].key||'');
+const TU_OPT={tempo:[['any','Any'],['slow','Slow'],['mid','Mid'],['fast','Fast']],voice:[['any','Any'],['vox','Vocals'],['inst','No vocals']],feel:[['any','Any'],['bright','Bright'],['dark','Dark']]};
+const TU_LBL={tempo:'Tempo',voice:'Voice',feel:'Feel'},TU_HINT={slow:'under 95 BPM',mid:'95\u2013120 BPM',fast:'over 120 BPM',vox:'has lyrics',inst:'instrumental',bright:'major keys',dark:'minor keys'};
+function tuMatch(){const t=XP.tu;return POOL().filter(k=>{const s=S[k];if(t.tempo==='slow'&&!(s.bpm<95))return false;if(t.tempo==='mid'&&!(s.bpm>=95&&s.bpm<=120))return false;if(t.tempo==='fast'&&!(s.bpm>120))return false;if(t.voice==='vox'&&!s.ly)return false;if(t.voice==='inst'&&s.ly)return false;if(t.feel==='bright'&&isMin(k))return false;if(t.feel==='dark'&&!isMin(k))return false;return true}).sort((a,b)=>S[a].bpm-S[b].bpm)}
+function tuKey(){const t=XP.tu;return 'tu_'+t.tempo+'_'+t.voice+'_'+t.feel}
+function tuName(){const t=XP.tu,p=['tempo','voice','feel'].filter(d=>t[d]!=='any').map(d=>TU_OPT[d].find(o=>o[0]===t[d])[1]);return p.length?p.join(' \u00b7 '):'Everything'}
+function tuR(){const q=tuMatch(),k=tuKey(),min=Math.round(q.reduce((a,x)=>a+S[x].d,0)/60),live=st.src===k,why=['tempo','voice','feel'].filter(d=>XP.tu[d]!=='any').map(d=>TU_HINT[XP.tu[d]]).join(', ');
+ if(q.length)SRC[k]={type:'Mix',name:'Tuned: '+tuName(),art:S[q[0]].art,q};
+ $('xpTune').classList.toggle('live',live);$('xpTune').innerHTML=`<div class="xp-ch"><h2>Tune a mix</h2><span class="m">${live?(st.on?'playing \u00b7 ':'paused \u00b7 '):''}${q.length} song${q.length===1?'':'s'}${q.length?' \u00b7 '+min+' min':''}</span></div>
+ <div class="tu-d">${Object.keys(TU_OPT).map(d=>`<div class="tu-r"><span>${TU_LBL[d]}</span><div class="tu-s" role="radiogroup" aria-label="${TU_LBL[d]}">${TU_OPT[d].map(([v,l])=>`<button role="radio" aria-checked="${XP.tu[d]===v}" class="${XP.tu[d]===v?'on':''}" data-tu="${d}:${v}">${l}</button>`).join('')}</div></div>`).join('')}</div>
+ <div class="tu-f"><div class="tu-st">${q.slice(0,7).map(x=>`<span class="cover">${svg(S[x].art)}</span>`).join('')}${q.length>7?`<span class="tu-more m">+${q.length-7}</span>`:''}</div>
+ <p class="mut">${q.length?(why?'Songs with '+why+'. ':'All '+q.length+' songs. ')+'Slowest first; the mix ends when the list ends.':'Nothing matches all three. Loosen one dial.'}</p>
+ <button class="btn pri" id="tuPlay" ${q.length?'':'disabled'}>${ICON(live&&st.on?'pause':'play')}${live?(st.on?'Pause':'Resume'):'Play mix'}</button></div>`;
+ $('tuPlay').onclick=()=>{if(!q.length)return;live?toggleSrc(k):startSrc(k,0)}}
+const gfSeed=()=>st.src.startsWith('gf_')?st.src.split('_').slice(2).join('_'):curK();
+/* while a Go-from mix plays, its seed stays put so the card you pressed doesn't vanish */
+function gfR(){const k0=gfSeed(),s0=S[k0];XP.seed=k0;const others=POOL().filter(k=>k!==k0&&S[k].t!==s0.t);
+ const tq=others.slice().sort((a,b)=>Math.abs(S[a].bpm-s0.bpm)-Math.abs(S[b].bpm-s0.bpm)).slice(0,6);const lo=Math.min(...tq.map(x=>S[x].bpm)),hi=Math.max(...tq.map(x=>S[x].bpm));
+ const kq=others.filter(k=>isMin(k)===isMin(k0)).sort((a,b)=>(S[b].key===s0.key)-(S[a].key===s0.key)||Math.abs(S[a].bpm-s0.bpm)-Math.abs(S[b].bpm-s0.bpm)).slice(0,8);const same=kq.filter(k=>S[k].key===s0.key).length;
+ const co=s0.a.split(/, /).filter(n=>n!==s0.ar);const cq=co.length?others.filter(k=>co.some(n=>S[k].a.includes(n))):others.filter(k=>S[k].ar===s0.ar);
+ const cards=[['t',`Same tempo`,`${tq.length} songs at ${lo===hi?lo:lo+'\u2013'+hi} BPM, closest to ${s0.bpm} first`,tq],['k',`Same ${isMin(k0)?'dark':'bright'} keys`,`${kq.length} songs in ${isMin(k0)?'minor':'major'} keys${same?`, ${same} in ${s0.key}`:''}`,kq],['c',co.length?`More with ${co[0]}`:`More from ${s0.ar}`,co.length?`${co[0]} is credited on ${s0.t}`:`${cq.length} more song${cq.length===1?'':'s'} by ${s0.ar}`,cq]].filter(c=>c[3].length);
+ cards.forEach(([id,n,_,q])=>{const key='gf_'+id+'_'+k0;if(st.src!==key)SRC[key]={type:'Mix',name:n+' \u00b7 from '+s0.t,art:S[q[0]].art,q}});
+ $('xpGo').innerHTML=`<div class="hd"><h2>Go from <span class="xp-seed">${s0.t}</span></h2><span class="m mut">${s0.bpm} BPM \u00b7 ${s0.key} \u00b7 ${s0.a}</span></div><div class="gf">${cards.map(([id,n,why,q])=>`<button class="gfc" data-xs="gf_${id}_${k0}"><span class="gf-stk">${q.slice(0,3).map(x=>`<span class="cover">${svg(S[x].art)}</span>`).join('')}</span><div><b>${n}</b><span>${why}</span></div><span class="pb">${ICON('play')}</span></button>`).join('')}</div>`}
+const XG=()=>X.moreG?GJ:GJ.concat(GX);
+function xgR(){const inJ=!!SRC[st.src].journey;$('xpG').innerHTML=XG().map(([g,c,a,d,n,src])=>`<button class="xg${src&&inJ&&st.on?' live':''}" style="background:${c}" ${src?'data-xs="journey"':`data-soon="${g} Journey"`}><span class="xg-stk">${a.slice(0,3).map(x=>`<span class="cover">${svg(x)}</span>`).join('')}</span><b>${g}</b><span class="xg-m">${d?`${d} of ${n} artists`:`${n} artists \u00b7 Journey`}</span>${d?`<span class="bar3"><i style="width:${d/n*100}%"></i></span>`:''}<span class="xg-c">${src?(inJ?(st.on?'Pause':'Resume'):'Resume'):'Start'}</span></button>`).join('')}
+Object.assign(SRC,{x_static:{type:'Single',name:'Static Bloom',art:'d2',q:['dg1']},x_sat:{type:'Single',name:'Satellite Kid',art:'d7',q:['dg6']},x_glass:{type:'EP',name:'Glasshouse',art:'d8',q:['dg7','dg9']}});
+const XREL=[['x_static','Single \u00b7 Today',0],['silver','EP \u00b7 2d ago',1],['x_sat','Single \u00b7 3d ago',0],['soft','Single \u00b7 5d ago',1],['x_glass','EP \u00b7 6d ago',0]];
+const XKEPT=[[5,71],[7,64],[0,58],[9,55],[6,49]];
+function xlR(){$('xpRel').innerHTML=XREL.map(([k,m,f])=>{const s=SRC[k];return `<button class="xl" data-xs="${k}"><span class="cover">${svg(s.art)}<span class="pb">${ICON('play')}</span></span><div><b>${s.name}</b><span>${S[s.q[0]].a}</span></div><span class="m xl-m">${m}</span>${f?'<span class="xl-f">Following</span>':''}</button>`}).join('');
+ $('xpKept').innerHTML=XKEPT.map(([i,p],n)=>{const s=S['dg'+i];return `<button class="xl xk" data-xk="${i}"><span class="xk-n m">${n+1}</span><span class="cover">${svg(s.art)}<span class="pb">${ICON('play')}</span></span><div><b>${s.t}</b><span>${s.a} \u00b7 ${s.genre}</span></div><span class="xk-p"><span class="bar3"><i style="width:${p}%"></i></span><span class="m">${p}% kept</span></span></button>`}).join('')}
+function xdR(){const left=DIG.length-DG.i,k=DG.kept.length,done=!left;$('xpDig').innerHTML=`<div class="xp-ch"><h2>Dig</h2><span class="m">${done?'done':DG.i?`${DG.i}/${DIG.length}`:'new today'}</span></div><p class="mut">${done?`You kept ${k} of ${DIG.length}. A new stack arrives tomorrow.`:`${left} songs you have never played. 15 seconds each. Keep what hits.`}</p>
+ <div class="xd-fan">${(done?DG.kept.slice(-3).map(j=>'d'+(j+1)):[0,1,2].filter(j=>DG.i+j<DIG.length).map(j=>'d'+(DG.i+j+1))).reverse().map((a,j,arr)=>`<span class="cover" style="--o:${arr.length-1-j}">${svg(a)}</span>`).join('')}</div>
+ <div class="xd-a">${done?(k?`<button class="btn pri" id="xdDug">${ICON('play')}Play Dug</button>`:''):`<button class="btn pri" id="xdGo">${ICON('play')}${DG.i?'Continue digging':'Start digging'}</button>`}<span class="dgh-k">${DIG.map((_,j)=>`<i class="${DG.kept.includes(j)?'k':DG.skipped.includes(j)?'s':''}"></i>`).join('')}</span></div>`;
+ const g=$('xdGo');if(g)g.onclick=digOpen;const d=$('xdDug');if(d)d.onclick=()=>startSrc('dug',0)}
+function xpStates(){document.querySelectorAll('#xp [data-xs]').forEach(e=>{const on=st.src===e.dataset.xs;e.classList.toggle('on',on);const pb=e.querySelector('.pb');if(pb)pb.innerHTML=ICON(on&&st.on?'pause':'play')});
+ document.querySelectorAll('#xp [data-xk]').forEach(e=>{const on=st.src==='digfull'&&st.i===+e.dataset.xk;e.classList.toggle('on',on);e.querySelector('.pb').innerHTML=ICON(on&&st.on?'pause':'play')})}
+function xpR(){if(!$('xp'))return;tuR();gfR();xgR();xlR();xdR();xpStates()}
+{const x=document.createElement('div');x.id='xp';x.className='xp';x.setAttribute('aria-label','Explore');
+ x.innerHTML=`<div class="xp-h"><h1>Explore</h1><button class="xp-s" id="xpSearch">${ICON('search')}<span>Artists, songs, genres, playlists</span><span class="m">\u2318K</span></button>
+ <div class="xp-rc"><span class="mut">Recent</span>${['Moni Gray','Silver Weather','lo-fi','Mira Son'].map(r=>`<button class="chip2" data-rq="${r}">${r}</button>`).join('')}</div></div>
+ <div class="xp-top"><section class="xp-card xp-dig" id="xpDig"></section><section class="xp-card xp-tune" id="xpTune"></section></div>
+ <section class="xp-go" id="xpGo"></section>
+ <section><div class="hd"><h2>Genres</h2><span class="mut">Each genre is a Journey, artist by artist</span></div><div class="xg-g" id="xpG"></div></section>
+ <div class="xp-two"><section><div class="hd"><h2>Out this week</h2><span class="mut">New releases, followed or not</span></div><div class="xls" id="xpRel"></div></section>
+ <section><div class="hd"><h2>Most kept in Dig</h2><span class="mut">Across Rondo \u00b7 this week</span></div><div class="xls" id="xpKept"></div></section></div>`;
+ $('main').appendChild(x);
+ x.addEventListener('click',e=>{const tu=e.target.closest('[data-tu]');if(tu){const [d,v]=tu.dataset.tu.split(':');XP.tu[d]=v;tuR();return}
+  const xs=e.target.closest('[data-xs]');if(xs){e.stopPropagation();const k=xs.dataset.xs;st.src===k?toggleSrc(k):startSrc(k,0);return}
+  const xk=e.target.closest('[data-xk]');if(xk){e.stopPropagation();startSrc('digfull',+xk.dataset.xk);return}
+  const rq=e.target.closest('[data-rq]');if(rq){palOpen();$('palIn').value=rq.dataset.rq;palRender();return}});
+ $('xpSearch').onclick=palOpen;}
+function setView(v){XP.view=v;document.body.classList.toggle('v-xp',v==='explore');document.querySelectorAll('.side .nav button').forEach(b=>b.classList.toggle('on',b.dataset.nav===v));tabOn(v==='explore'?'Explore':'Home');if(v==='explore')xpR();$('main').scrollTo({top:0,behavior:'instant'})}
+{const nav=document.querySelector('.side .nav');nav.innerHTML=[['home','Home','home'],['explore','Explore','explore'],['journey','Journeys','journeys'],['lib','Library','library']].map(([i,t,v])=>`<button data-nav="${v}" class="${v==='home'?'on':''}">${ICON(i)}${t}</button>`).join('');
+ nav.onclick=e=>{const b=e.target.closest('[data-nav]');if(!b)return;const v=b.dataset.nav;if(v==='home'||v==='explore'){if(DG.open)digClose();setView(v)}else toast(b.textContent+' is designed in a later step')};
+ const tabs=document.querySelector('.tabs');tabs.innerHTML=[['home','Home'],['explore','Explore'],['journey','Journeys'],['lib','Library']].map(([i,t])=>`<button class="${t==='Home'?'on':''}" data-tab="${t}">${ICON(i)}<span>${t}</span></button>`).join('');
+ tabs.onclick=e=>{const b=e.target.closest('[data-tab]');if(!b)return;const t=b.dataset.tab;if(DG.open)digClose();if($('np').classList.contains('open'))npClose();if(t==='Home'||t==='Explore')return setView(t.toLowerCase());toast(t+' is designed in a later step')};
+ const _dc=digClose;digClose=function(){_dc();tabOn(XP.view==='explore'?'Explore':'Home');if(XP.view==='explore')xdR()};$('digX').onclick=()=>digClose();
+ const _dt=tabOn;tabOn=function(t){_dt(t==='Dig'?(XP.view==='explore'?'Explore':'Home'):t)};
+ const _dh=digHomeR;digHomeR=function(){_dh();if(XP.view==='explore'&&$('xpDig'))xdR()};
+ const _r5=render;render=function(){_r5();if(XP.view!=='explore')return;if(XP.seed!==gfSeed())gfR();tuR();xgR();xpStates()};
+ document.addEventListener('keydown',e=>{if(e.target.closest&&e.target.closest('input,textarea'))return;if(anyOpen&&anyOpen())return;if(e.key==='e'&&!e.metaKey&&!e.ctrlKey){setView(XP.view==='explore'?'home':'explore')}});}
+/* boot rev 5 */
+if(D.view==='explore'){if(D.tu)Object.assign(XP.tu,D.tu);setView('explore');if(D.scroll)setTimeout(()=>$('main').scrollTo({top:D.scroll,behavior:'instant'}),50)}

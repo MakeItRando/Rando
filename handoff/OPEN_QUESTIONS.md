@@ -94,3 +94,8 @@ Flat geometric sleeves read as "boring". Allowed alternatives (no AI): licensed 
 Docs say **Rondo** everywhere (D-030); the owner often writes "rando". Still Rondo?
 
 **Answered 2026-10-07:** Q11 all (D-060) · Q12 yes (D-061) · Q13 desktop + mobile apps first (D-062) · Q14 wait for real art (D-063) · Q15 Rondo (D-064). Owner also asked to finish the lost session A work.
+
+## Questions opened 2026-10-07 (session B part 3, Explore)
+
+- **Q16 — Dig tab:** keep Dig as its own phone tab (5 tabs: Home, Explore, Dig, Journeys, Library) or inside Explore (4 tabs, proposed in D-066)?
+- **Q17 — Explore verdict:** keep, change or drop Tune a mix, Go from, Most kept in Dig (docs/specs/EXPLORE.md).
