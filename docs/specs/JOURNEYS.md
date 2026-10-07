@@ -1,6 +1,6 @@
 # Spec: Journeys
 
-Status: **study, proposal D-069** (awaiting owner verdict). Built in Home E rev 8 (`design/studies/2026-10-05-home-e/`, end of `app.js`/`style.css`). Desktop + phone (D-062). Follows D-008 (picker only with no active Journey or after Change genre), D-014 (A→Z, release order, explicit artist boundary) and D-038 (other playback never touches Journey state).
+Status: **approved, D-069** (owner 2026-10-07: "yes i like that, the stamp idea is good"). Built in Home E rev 8 (`design/studies/2026-10-05-home-e/`, end of `app.js`/`style.css`). Desktop + phone (D-062). Follows D-008 (picker only with no active Journey or after Change genre), D-014 (A→Z, release order, explicit artist boundary) and D-038 (other playback never touches Journey state).
 
 ## Job
 

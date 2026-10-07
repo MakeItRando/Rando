@@ -113,6 +113,19 @@ Saved for later:
 - **J4 Era checkpoints** — releases/eras as named checkpoints on long discographies (needs label metadata).
 - **J5 Friends on the same Journey** (V2, accounts) — see who's on which artist, no rankings.
 
+More Journey ideas (2026-10-07, after D-069 approval; owner likes stamps). All facts from metadata/plays, no guessing (D-050):
+- **J6 Stamp back** — flip a stamp: dates started/finished, songs heard, first and last song, your most-played song of that artist, liked count.
+- **J7 Stamp editions** — Essentials stamp vs Full-discography stamp (different edge); a bigger **genre seal** when every artist in a genre is done.
+- **J8 Note on a stamp** — one private line per artist ("the 2nd EP is the one").
+- **J9 Connections on the map** — thin lines between artists who featured on each other's songs (from credits); tap a line → those songs.
+- **J10 Producer / label Journeys** — a Journey through one producer's credits or one label's roster (ties to Credits → Play their credits).
+- **J11 Year view** — map sorted by first release year instead of A→Z (view only; progress order stays A→Z, D-014).
+- **J12 Halfway moment** — small ring mark at 50 % of an artist; quiet toast, no confetti.
+- **J13 Your own Journey** — pick 3–10 artists yourself, same map/stamps/boundary rules.
+- **J14 Hook replay game** — after finishing an artist, 5 random 5 s hooks from their songs, tap the title; optional, no scores shared.
+- **J15 Not for me** — mark an artist as skipped for good; map shows it honestly (grey, "skipped"), genre counts adjust.
+- **J16 Download next artist** (V1-backend) — keep the current + next artist offline.
+
 ## Suggested order
 
 1. Validate separate playback sessions with the owner.
