@@ -7,7 +7,7 @@ One file per page/feature. A spec is the contract a builder implements; the desi
 | 0 | Foundation (tokens, type, icons, player) | [../../handoff/DESIGN_PROGRAM.md](../../handoff/DESIGN_PROGRAM.md) | studies B → E | Settled in Home E |
 | 1 | Home (desktop) | [HOME.md](HOME.md) | [home-e](../../design/studies/2026-10-05-home-e/README.md) | Rev 4 approved (D-065) |
 | 1b | Home (phone) | [HOME.md § Phone](HOME.md) | home-e rev 4 (≤640 px) | Rev 4 approved (D-065) |
-| 2 | Now Playing + lyrics/credits/queue | — | overlay inside home-e | Next |
+| 2 | Now Playing + lyrics/credits/queue | [NOW_PLAYING.md](NOW_PLAYING.md) | home-e rev 7 | Proposal (D-068) |
 | 3 | Playlists | [PLAYLISTS.md](PLAYLISTS.md) | study A (superseded) | Product spec only |
 | 4 | Artist page | — | — | Not started |
 | 5 | Journeys (picker, genre, artist journey) | — (see ../../handoff/PRODUCT_MAP.md) | — | Not started |

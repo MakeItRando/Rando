@@ -1,6 +1,6 @@
 # Home study E — interactive (2026-10-05)
 
-**Status:** rev 4 approved (D-065, "thats perfect"); **rev 5 adds the Explore page** (approved, D-066), **rev 6 adds search page, Rabbit hole, Save a tune** (D-067; spec [EXPLORE.md](../../../docs/specs/EXPLORE.md)). Rev 3 (D-058). Owner on rev 3 (2026-10-07): bottom scrubber looks untidy; Home "boring sometimes… not giving the vibe to explore"; then approved all review feedback (D-060), Dig (D-061), desktop + mobile apps first (D-062). Rev 3: Home complete (D-058). Owner on rev 2: liked every suggestion, light mode "awesome", bottom bar left to us (kept). Rev 2 (D-057): Owner on rev 1: "way way better… so close"; keep the Journeys filter but don't leave it empty; add light mode.
+**Status:** rev 4 approved (D-065, "thats perfect"); **rev 5 adds the Explore page** (approved, D-066), **rev 6 adds search page, Rabbit hole, Save a tune** (D-067), **rev 7 adds the Now Playing page** (D-068 proposal, [NOW_PLAYING.md](../../../docs/specs/NOW_PLAYING.md); spec [EXPLORE.md](../../../docs/specs/EXPLORE.md)). Rev 3 (D-058). Owner on rev 3 (2026-10-07): bottom scrubber looks untidy; Home "boring sometimes… not giving the vibe to explore"; then approved all review feedback (D-060), Dig (D-061), desktop + mobile apps first (D-062). Rev 3: Home complete (D-058). Owner on rev 2: liked every suggestion, light mode "awesome", bottom bar left to us (kept). Rev 2 (D-057): Owner on rev 1: "way way better… so close"; keep the Journeys filter but don't leave it empty; add light mode.
 
 Previous: Owner on C: "way better… but we can do way better; some places feel old; Journey button must change when it's playing and offer Open Journey; make it more advanced, engaging, interactive, correct and systematic; audience mostly teenagers; Home first."
 
@@ -9,6 +9,8 @@ Previous: Owner on C: "way better… but we can do way better; some places feel 
 **Test it:** `CHROMIUM=$(which chromium) node design/studies/2026-10-05-home-e/check.mjs` from a folder with `playwright` installed (exit 0 = PASS: scrubber seek, Dig open/pause, Keep order, Undo, end of stack, Play Dug, natural source end stops, no phone overflow at 390 px, Dig tab).
 
 ![Rev 4 walkthrough (animated)](renders/walkthrough-rev4.svg)
+
+New in rev 7 — **Now Playing page**: press **L** or click the song → Lyrics / Up next / Credits / About tabs (keys 1–4) · Up next: your queue (remove, Clear, Undo) then the same source, with an honest end · Credits: Play their credits · About: Go from this song · instrumentals show an Instrumental state · on phone tap the mini player → full screen with its own scrubber and controls, swipe down to close.
 
 New in rev 6: click the Explore search field (or ⌘K / / inside Explore) → **search page**: Recent searches (remove, Clear all + Undo), Browse genres; type → filter chips, Top result, Songs, Artists, Playlists & releases, Genres; Enter plays the top result; Esc clears, Esc again leaves; try "qwzx" for the no-results state · play a **Go from** mix → when the next song plays, **Go from <song> next** hops deeper; the **Rabbit hole** trail shows each stop, **Save as playlist** keeps every song you played · **Save tune** next to Play mix → saved tunes appear in Playlists and as "Your tunes" chips.
 
@@ -66,5 +68,11 @@ New in rev 2: sun/moon button (top right) = light mode, remembered, follows syst
 | ![](renders/40-rabbit-hole.svg) | Rev 6: Rabbit hole trail + Go from <song> next |
 | ![](renders/41-save-tune.svg) | Rev 6: saved tune Slow · Dark (sidebar + Your tunes) |
 | ![](renders/42-phone-search-hole.svg) | Rev 6: phone search, results, Rabbit hole |
+| ![](renders/43-np-lyrics.svg) | Rev 7: Now Playing — Lyrics |
+| ![](renders/44-np-up-next.svg) | Rev 7: Up next — your queue + same source + end note |
+| ![](renders/45-np-credits.svg) | Rev 7: Credits with Play their credits |
+| ![](renders/46-np-about.svg) | Rev 7: About + Go from this song |
+| ![](renders/47-np-light-instrumental.svg) | Rev 7: Instrumental state (light theme; page keeps its sleeve colour) |
+| ![](renders/48-phone-np-trio.svg) | Rev 7: phone Now Playing — controls, lyrics, Up next |
 
 All counts come from `data.js`; sleeves are code-drawn placeholders, not product assets (real art arrives with the catalog, D-063). Dig songs and artists are fictional. See [docs/specs/HOME.md](../../../docs/specs/HOME.md).

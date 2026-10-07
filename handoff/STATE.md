@@ -1,6 +1,6 @@
 # Current project state
 
-**Updated:** 2026-10-07 (session B part 3: Home rev 4 approved; Explore page proposed). **Product:** Rondo. **Phase:** design-first program (D-048). **Last owner-approved design:** Home rev 3 (D-058), desktop.
+**Updated:** 2026-10-07 (session B part 5: Explore additions built; Now Playing page proposed). **Product:** Rondo. **Phase:** design-first program (D-048). **Last owner-approved design:** Home rev 3 (D-058), desktop.
 
 ## Right now
 
@@ -14,8 +14,8 @@
 ## Next actions (in order)
 
 1. ~~Owner answers Q11–Q15~~ (D-060..D-064).
-2. ~~Home rev 4~~ approved (D-065). ~~Explore~~ approved (D-066). ~~Explore additions~~ built (D-067). Next: Now Playing page (desktop + phone, with its own controls on phone).
-3. Now Playing page (desktop + phone) → Journey page → remaining pages (order in [DESIGN_PROGRAM.md](DESIGN_PROGRAM.md)).
+2. ~~Home rev 4~~ approved (D-065). ~~Explore~~ approved (D-066). ~~Explore additions~~ built (D-067). **Now Playing page built** (D-068, Home E rev 7, [NOW_PLAYING.md](../docs/specs/NOW_PLAYING.md)) — awaiting verdict. Next: **Journeys** (owner: "after that we will go to journey designing").
+3. ~~Now Playing page~~ (D-068) → **Journey pages** (picker, genre, artist journey; desktop + phone) → remaining pages (order in [DESIGN_PROGRAM.md](DESIGN_PROGRAM.md)).
 4. After all key pages are approved: choose the build approach, rebuild the app on the approved design, fix B-001/B-002/B-003 inside that rebuild, full quality gates, then ask the owner to test.
 
 ## App candidate (unchanged since 2026-10-04)
