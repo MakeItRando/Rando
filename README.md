@@ -5,19 +5,17 @@
 ## Read this before working
 
 1. [AGENTS.md](AGENTS.md) and [agent.md](agent.md)
-2. [handoff/STATE.md](handoff/STATE.md) and [handoff/HANDOFF_REPORT.md](handoff/HANDOFF_REPORT.md)
+2. [handoff/STATE.md](handoff/STATE.md), [handoff/CONVERSATION_LOG.md](handoff/CONVERSATION_LOG.md) and [handoff/HANDOFF_REPORT.md](handoff/HANDOFF_REPORT.md)
 3. [handoff/DECISIONS.md](handoff/DECISIONS.md), [handoff/PRODUCT_MAP.md](handoff/PRODUCT_MAP.md), [handoff/PLAYBACK_CONTEXTS.md](handoff/PLAYBACK_CONTEXTS.md)
 4. [handoff/QUALITY_GATES.md](handoff/QUALITY_GATES.md), [handoff/SNAPSHOTS.md](handoff/SNAPSHOTS.md), [handoff/ROADMAP.md](handoff/ROADMAP.md), and [docs/](docs/)
 
 Recheck live refs, CI, and PR status; this README is a dated checkpoint, not a substitute for GitHub. Every meaningful product, code, decision, test, design, or branch change must update relevant docs and the handoff in the same session.
 
-## Checkpoint (2026-10-04)
+## Checkpoint (2026-10-07)
 
-Canonical docs and conversation archive live on main; the stable runtime remains v0.3.0. Audited pre-session main: `c656489`. Candidate PR #5 remains draft/unmerged at `d9bc54f`; CI `37125854133`, evidence `d1635f5`, preview `74272e6` align. Fresh candidate install/audit/static/unit/build/13-browser checks pass; 18 automated captures report zero failures. Published Git HTML bytes match local rebuild.
+**Phase: design-first.** Home desktop is approved (study E rev 3, D-058) — [try it](https://makeitrando.github.io/Rando/design/studies/2026-10-05-home-e/home.html). Next: Home rev 4 (phone layout, clean scrubber, Dig), then Now Playing and Journeys. The 2026-10-07 morning session's work was lost before pushing; see [handoff/SESSION_2026-10-07.md](handoff/SESSION_2026-10-07.md). Full chat history: [handoff/CONVERSATION_LOG.md](handoff/CONVERSATION_LOG.md).
 
-**Acceptance readiness is blocked:** natural Global playback end advances through the wrong artist queue, and one-result Search silently broadens its queue. Main still has one high Playwright advisory. No application code changed this round. Read [current audit](handoff/AUDIT_2026-10-04.md) before development or test requests.
-
-**Original Rondo remains the design foundation.** [PR #9](https://github.com/MakeItRando/Rando/pull/9) is closed/rejected; never merge or revive the Living Record study. See [design reset](handoff/DESIGN_RESET_2026-10-04.md) and [current-session record](handoff/SESSION_2026-10-04.md). Candidate acceptance and real-system work remain separate future gates.
+App runtime on `main` is still v0.3.0. Candidate PR #5 (v0.3.2) is draft with open playback bugs B-001/B-002; main has a Playwright advisory (B-003). These get fixed when the app is rebuilt on the approved design. [PR #9](https://github.com/MakeItRando/Rando/pull/9) (Living Record) is rejected — never revive it.
 
 ## Product map
 

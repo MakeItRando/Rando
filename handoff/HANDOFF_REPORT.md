@@ -1,12 +1,14 @@
 # Rondo project handoff report
 
-**As of 2026-10-04:** this is a continuity report, not a release certificate. Read [STATE.md](STATE.md) first, then [AUDIT_2026-10-04.md](AUDIT_2026-10-04.md), and verify live GitHub state.
+**As of 2026-10-07:** this is a continuity report, not a release certificate. Read [STATE.md](STATE.md) first, then [AUDIT_2026-10-04.md](AUDIT_2026-10-04.md), and verify live GitHub state.
 
-## Immediate verdict for the next contributor
+## Immediate verdict for the next contributor (2026-10-07)
 
-**No application development this round. Orientation and documentation are complete; acceptance readiness is blocked.** Existing candidate `d9bc54f` passes its suites but natural Global audio endings and single-result Search queues violate the source/session contract. See [AUDIT_2026-10-04.md](AUDIT_2026-10-04.md) for B-001/B-002 and exact probes. Main's high Playwright advisory also remains. Do not invite owner testing or merge until fixes and expanded exact-head QA are complete.
+**We are designing, not building.** The owner approved Home desktop (study E rev 3, D-058) after five study rounds (A → E). The next job is Home rev 4 — phone layout, clean scrubber, Dig, livelier placeholders — after the owner answers [OPEN_QUESTIONS.md](OPEN_QUESTIONS.md) Q11–Q15, then Now Playing and Journeys. Read [CONVERSATION_LOG.md](CONVERSATION_LOG.md) to absorb the owner's taste: every verdict is quoted there. Read [REVIEW_2026-10-07.md](REVIEW_2026-10-07.md) for the current honest critique and ranked ideas.
 
-The Living Record direction was explicitly rejected; PR #9 is closed and unmerged. Original Rondo is the only approved design foundation. [DESIGN_RESET_2026-10-04.md](DESIGN_RESET_2026-10-04.md) explains what not to revive. Keep the dark musical atmosphere and refine real components, not generated boards.
+The 2026-10-07 morning session built a clean scrubber and Dig but died before pushing — nothing survived ([SESSION_2026-10-07.md](SESSION_2026-10-07.md)). Push checkpoints (D-059).
+
+The older app candidate (PR #5, v0.3.2) is unchanged: existing suites pass, but B-001/B-002 block acceptance; main has B-003. It will be rebuilt on the approved design; the playback contracts below still apply. The Living Record direction (PR #9) is rejected forever.
 
 ## Purpose and point of view
 

@@ -70,3 +70,7 @@ Date and author; branch and exact candidate SHA; artifact URL/blob/bytes; page/s
 All five supplied PNG payloads are now preserved losslessly inside [SVG wrappers](snapshots/2026-10-04-owner-context/) with original byte hashes/dimensions/provenance. These show engineering checkpoints, onboarding criticism, the Living Record proposal and its final rejection; they are not current app QA or a full transcript. The rejection controls future design work.
 
 Fresh candidate automation captured 18 states with no automated failures/runtime errors; existing exact archived contact sheet plus full-size About/mobile Discover were reviewed for orientation. This is not a new full-size 18/18 or accessibility sign-off. B-001/B-002 behavioral probes independently block readiness despite passing screenshots/suites. See [AUDIT_2026-10-04.md](AUDIT_2026-10-04.md). No videos or original concept-package files were supplied this round.
+
+## Owner conversation archive — 2026-10-07
+
+13 screenshots covering 2026-10-04 → 2026-10-07 (orientation, owner answers, studies A → E rev 3 verdicts, and the lost 2026-10-07 session) are in [snapshots/2026-10-07-owner-context/](snapshots/2026-10-07-owner-context/README.md), lossless SVG wrappers with SHA-256 manifest. Use `scripts/archive-screenshot.py` for future owner screenshots. Conversation text is summarized in [CONVERSATION_LOG.md](CONVERSATION_LOG.md). Design-study renders live with each study under `design/studies/`.

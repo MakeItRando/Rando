@@ -1,6 +1,17 @@
 # Spec: Home (draft from Home study E, 2026-10-05)
 
-Status: complete, revision 3 (D-058; rev 2 = D-057, rev 1 = D-056). Next: Now Playing page and Journey page reuse these rules.; rules D-055 confirmed. Design first; implementation approach chosen after approval.
+Status: desktop **complete, revision 3** (D-058; rev 2 = D-057, rev 1 = D-056; state rules D-055). Phone layout not designed. Rev 4 pending (below). Implementation approach is chosen after all key pages are approved.
+
+Try it: https://makeitrando.github.io/Rando/design/studies/2026-10-05-home-e/home.html
+
+## Open for rev 4 (owner feedback 2026-10-07 + review)
+
+- **Scrubber:** owner finds the bar of ~200 waveform lines untidy. Proposal: 3 px line + thumb (6 px on hover/drag, time bubble); waveform only in Now Playing or as a faint strip on hover.
+- **"Boring / no vibe to explore":** add Dig (daily 10 unheard songs, 15 s hook, Keep/Skip, finite), more varied placeholder sleeves, a daily-changing row.
+- **Phone layout:** bottom tabs (Home, Journeys, Dig, Library), mini player with 2 px progress, full-screen Now Playing, horizontal Journey path. At 390 px rev 3 currently overlaps.
+- **Labels:** replace UPPERCASE letter-spaced micro labels with sentence case.
+- **Scope tags:** mark each feature V1-local / V1-backend / V2 (Blend, devices, recap sync, share links need accounts).
+- The lost 2026-10-07 session implemented scrubber + Dig but never pushed (handoff/SESSION_2026-10-07.md).
 
 ## Sections (top → bottom)
 

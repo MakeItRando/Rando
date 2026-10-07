@@ -1,6 +1,6 @@
 # Rondo design program — design first, then build
 
-**Started:** 2026-10-04 (session 2). **Status:** active. **Owner direction:** design every surface first, page by page, then choose implementation approaches. Update this file whenever a page brief, study, verdict or token changes.
+**Started:** 2026-10-06 (folder names say 10-04/05; see handoff/SESSION_2026-10-07.md). **Status:** active — Home desktop done, Home rev 4 + phone next. **Owner direction:** design every surface first, page by page, then choose implementation approaches. Update this file whenever a page brief, study, verdict or token changes.
 
 ## Why this program exists
 
@@ -43,18 +43,19 @@ Each page goes through: **brief → study (real-size desktop + mobile renders in
 
 | # | Surface | Status |
 | --- | --- | --- |
-| 0 | Foundation (tokens, type, icons, player bar, mini player) | Study A drafted |
-| 1 | Home (Discover) | Study A drafted |
-| 2 | Now Playing (desktop panel + mobile full screen) + Lyrics/Credits/About sheet | Study A drafted (replaces "Song Room" layout, keeps its content) |
-| 3 | Playlists (Library list, playlist page, create/add flow) | Study A drafted (playlist page) |
+| 0 | Foundation (tokens, type, icons, player bar, mini player) | Settled through studies B → E (Home E style.css is the reference) |
+| 1 | Home (Discover) desktop | **Rev 3 complete (D-058)**; rev 4 pending (phone, scrubber, Dig — OPEN_QUESTIONS Q11–Q12) |
+| 1b | Home phone | Not designed — highest priority gap (REVIEW_2026-10-07) |
+| 2 | Now Playing (desktop panel + mobile full screen) + Lyrics/Credits/About sheet | Overlay exists in Home E; full page next |
+| 3 | Playlists (Library list, playlist page, create/add flow) | Study A only (superseded); spec in docs/specs/PLAYLISTS.md |
 | 4 | Artist page (follow, releases, Journey entry) | Not started |
 | 5 | Journeys (picker, Genre page, Artist Journey) | Not started |
-| 6 | Search (instant results, recents, empty/error) | Not started |
+| 6 | Search (instant results, recents, empty/error) | ⌘K palette in Home E; page not started |
 | 7 | Library (playlists, liked, artists, albums, moments/notes) | Not started |
 | 8 | Release/album page | Not started |
-| 9 | Profile & settings | Not started |
-| 10 | First run (play-first, optional setup) | Not started; owner answer: play before setup during development |
-| 11 | Notifications/new releases from followed artists | Not started |
+| 9 | Profile & settings | Profile menu in Home E; page not started |
+| 10 | First run (play-first, optional setup) | Not started; D-045 play before setup |
+| 11 | Notifications/new releases from followed artists | Panel in Home E; spec docs/specs/FOLLOWING.md |
 
 ## Anti-slop rules (owner verdict on study A, 2026-10-05)
 
@@ -67,7 +68,11 @@ Owner: study A is "the right direction" but "feels kinda overused and AI… not 
 
 Required instead: neutral canvas with hairline structure; numbers and metadata as design material (track numbers, durations, counts, BPM/key, dates in mono); flat, intentional sleeves; real waveform scrubber; plain labels; one accent for live/now-playing state only. Every element must answer "what is it, what can I do". Reference feel: professional audio tools and well-made dev tools (precise, quiet, information-rich), not concept art.
 
-## Home study E (2026-10-05) — current proposal
+## Owner feedback 2026-10-07 (open)
+
+Owner: bottom progress bar "looking kinda untidy with those big ass lines"; app "looks boring sometimes… not giving the vibe to explore it and engaging (maybe because we havent added real songs yet)". Reviewer also found no phone layout and UPPERCASE micro labels that break principle 3 of the type rules. Proposed fixes: REVIEW_2026-10-07.md §3–4.
+
+## Home study E (2026-10-06) — approved through rev 3
 
 Owner on C also said: audience is mostly teenagers; make it more advanced, engaging, interactive and systematic; perfect Home before any other page. E builds on D's binding state rule (D-055) and adds: Stage hero (sleeve + vinyl that slides out while playing), Journey CTA states (Start/Resume X → Pause/Resume + Open Journey), progress ring, source-bounded queues + queue drawer, ⌘K search palette, add-to-playlist with Undo/duplicate warning, On repeat (×plays), Moods, This week, animated filter, toggle-never-restart. Files: [`design/studies/2026-10-05-home-e/`](../design/studies/2026-10-05-home-e/README.md), spec [docs/specs/HOME.md](../docs/specs/HOME.md). Awaiting verdict (D-056). D (below) stays as the alternative without a bottom bar.
 

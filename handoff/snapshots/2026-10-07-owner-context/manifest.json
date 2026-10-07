@@ -1,0 +1,119 @@
+[
+  {
+    "file": "01-orientation-continuity-findings.svg",
+    "source": "Owner attachment, 2026-10-07 request; capture of the 2026-10-04..07 Notion chat 'Rando repo handoff review'; conversation history, not app QA",
+    "originalBytes": 181390,
+    "originalSHA256": "66a2fd88bf6440a22aec599fd9b0be5e231c4e7618d764b3a4531415490d2405",
+    "mime": "image/png",
+    "width": 1918,
+    "height": 909
+  },
+  {
+    "file": "02-orientation-continuity-findings-duplicate.svg",
+    "source": "Owner attachment, 2026-10-07 request; capture of the 2026-10-04..07 Notion chat 'Rando repo handoff review'; conversation history, not app QA (near-duplicate of 01 with a green capture line)",
+    "originalBytes": 182260,
+    "originalSHA256": "06452fb1df0937b2909d6df4e2191bf7917464b5422d0f7d3c2c6073b5b968b5",
+    "mime": "image/png",
+    "width": 1918,
+    "height": 909
+  },
+  {
+    "file": "03-assessment-audit-two-questions.svg",
+    "source": "Owner attachment, 2026-10-07 request; capture of the 2026-10-04..07 Notion chat 'Rando repo handoff review'; conversation history, not app QA",
+    "originalBytes": 185536,
+    "originalSHA256": "97e4b8dfdf51aaad6b440a429da49ea045a4e96bc02aef329fe1db73e3dbed5e",
+    "mime": "image/png",
+    "width": 1917,
+    "height": 908
+  },
+  {
+    "file": "04-owner-answers-design-first-request.svg",
+    "source": "Owner attachment, 2026-10-07 request; capture of the 2026-10-04..07 Notion chat 'Rando repo handoff review'; conversation history, not app QA",
+    "originalBytes": 182747,
+    "originalSHA256": "3195984a927a7e39663fe10c176fab4b4dfab970c38b09b647a9dd1723196152",
+    "mime": "image/png",
+    "width": 1919,
+    "height": 910
+  },
+  {
+    "file": "05-study-a-first-three-screens.svg",
+    "source": "Owner attachment, 2026-10-07 request; capture of the 2026-10-04..07 Notion chat 'Rando repo handoff review'; conversation history, not app QA",
+    "originalBytes": 250571,
+    "originalSHA256": "e30dd925f01f31c9b1468785a1cb25ab2f98501af662bc82f5047b111ca2e97a",
+    "mime": "image/png",
+    "width": 1916,
+    "height": 914
+  },
+  {
+    "file": "06-study-a-verdict-ai-slop-study-b.svg",
+    "source": "Owner attachment, 2026-10-07 request; capture of the 2026-10-04..07 Notion chat 'Rando repo handoff review'; conversation history, not app QA",
+    "originalBytes": 151177,
+    "originalSHA256": "6607c3da02ad9676fbc962addfddc50ef7180d8c751afc1cb61cd7ff3e108a69",
+    "mime": "image/png",
+    "width": 1919,
+    "height": 916
+  },
+  {
+    "file": "07-study-b-changes-owner-not-satisfied.svg",
+    "source": "Owner attachment, 2026-10-07 request; capture of the 2026-10-04..07 Notion chat 'Rando repo handoff review'; conversation history, not app QA",
+    "originalBytes": 189434,
+    "originalSHA256": "5343b0a0b82afa4767da1f532c22996651438440e17680f4669d01bb42c033a3",
+    "mime": "image/png",
+    "width": 1919,
+    "height": 910
+  },
+  {
+    "file": "08-study-c-interactive-journey-path.svg",
+    "source": "Owner attachment, 2026-10-07 request; capture of the 2026-10-04..07 Notion chat 'Rando repo handoff review'; conversation history, not app QA",
+    "originalBytes": 179256,
+    "originalSHA256": "c3fff6ef2be6ec8a060cf3d97ce6001a27f3e118058fc2fe3033b31d6c2d4df1",
+    "mime": "image/png",
+    "width": 1919,
+    "height": 918
+  },
+  {
+    "file": "09-study-c-verdict-home-e-rev1.svg",
+    "source": "Owner attachment, 2026-10-07 request; capture of the 2026-10-04..07 Notion chat 'Rando repo handoff review'; conversation history, not app QA",
+    "originalBytes": 155119,
+    "originalSHA256": "41307caa3232adf9a009c8e50e010cdfb6a8cca274633f352360c694d462da5d",
+    "mime": "image/png",
+    "width": 1905,
+    "height": 912
+  },
+  {
+    "file": "10-home-e-rev1-whats-new.svg",
+    "source": "Owner attachment, 2026-10-07 request; capture of the 2026-10-04..07 Notion chat 'Rando repo handoff review'; conversation history, not app QA",
+    "originalBytes": 166953,
+    "originalSHA256": "621fb1c28ca55211bd191abc0547922d8cec0f259008290f456ec38d961e34a2",
+    "mime": "image/png",
+    "width": 1919,
+    "height": 907
+  },
+  {
+    "file": "11-home-e-verdict-rev2-light-mode.svg",
+    "source": "Owner attachment, 2026-10-07 request; capture of the 2026-10-04..07 Notion chat 'Rando repo handoff review'; conversation history, not app QA",
+    "originalBytes": 179344,
+    "originalSHA256": "df90ab6d588448f31f97e7154a75aa70fd240280dcfc9835b29566310707ad7b",
+    "mime": "image/png",
+    "width": 1919,
+    "height": 912
+  },
+  {
+    "file": "12-home-rev3-complete.svg",
+    "source": "Owner attachment, 2026-10-07 request; capture of the 2026-10-04..07 Notion chat 'Rando repo handoff review'; conversation history, not app QA",
+    "originalBytes": 158621,
+    "originalSHA256": "2ede50db78c5556ef1451086a807e64c8478bb6b29386ce110e4e84d24841719",
+    "mime": "image/png",
+    "width": 1917,
+    "height": 902
+  },
+  {
+    "file": "13-lost-session-2026-10-07-scrubber-dig.svg",
+    "source": "Owner attachment, 2026-10-07 request; capture of the 2026-10-04..07 Notion chat 'Rando repo handoff review'; conversation history, not app QA; this session errored before pushing (see SESSION_2026-10-07.md)",
+    "originalBytes": 161220,
+    "originalSHA256": "1c821eed5c12adee0e9308eacd3cc49fff9403cdc9a65ad8d512fb6951a488de",
+    "mime": "image/png",
+    "width": 1916,
+    "height": 906
+  }
+]

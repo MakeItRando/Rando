@@ -2,13 +2,14 @@
 
 This folder is the canonical continuity package. It should let another contributor resume without private chat history, while distinguishing known decisions from reconstructed screenshot notes, tested results from untested claims, and prototype from production.
 
-## Current checkpoint
+## Current checkpoint (2026-10-07)
 
-2026-10-04 orientation/docs round completed with no app development. PR #5 remains draft/unmerged at `d9bc54f`; existing checks pass but B-001/B-002 probes block acceptance readiness. Main still has a high Playwright advisory. Original Rondo is the foundation; rejected Living Record PR #9 is closed. Read [STATE.md](STATE.md), [AUDIT_2026-10-04.md](AUDIT_2026-10-04.md), [DESIGN_RESET_2026-10-04.md](DESIGN_RESET_2026-10-04.md) and [SESSION_2026-10-04.md](SESSION_2026-10-04.md) first. Five original screenshot payloads are archived under [snapshots/2026-10-04-owner-context/](snapshots/2026-10-04-owner-context/).
+Design-first phase. Home desktop approved (rev 3, D-058); Home rev 4 + phone next. The 2026-10-07 morning session was lost before pushing ([SESSION_2026-10-07.md](SESSION_2026-10-07.md)). App candidate PR #5 unchanged with B-001/B-002 open. All owner screenshots up to 2026-10-07 are archived under [snapshots/](snapshots/).
 
 ## Reading order
 
 1. [STATE.md](STATE.md): exact current refs, quality gaps, next action.
+1b. [CONVERSATION_LOG.md](CONVERSATION_LOG.md): every session and owner quote in order; [REVIEW_2026-10-07.md](REVIEW_2026-10-07.md): latest audit, critique and ideas; [DESIGN_PROGRAM.md](DESIGN_PROGRAM.md): design process and anti-slop rules.
 2. [HANDOFF_REPORT.md](HANDOFF_REPORT.md): project philosophy, implementation truth, prior-context limits, handover path.
 3. [DECISIONS.md](DECISIONS.md), [OPEN_QUESTIONS.md](OPEN_QUESTIONS.md): confirmed vs unresolved owner choices.
 4. [PRODUCT_MAP.md](PRODUCT_MAP.md), [PLAYBACK_CONTEXTS.md](PLAYBACK_CONTEXTS.md), [PRODUCT_IDEAS.md](PRODUCT_IDEAS.md): page contracts, dual-session behavior, proposals.

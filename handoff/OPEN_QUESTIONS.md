@@ -1,6 +1,6 @@
 # Product-owner decisions and remaining questions
 
-**Last updated:** 2026-10-04
+**Last updated:** 2026-10-07. New questions for the owner: **Q11–Q15** (bottom of file).
 
 Existing v0.3.2 suites are green, but newly reproduced playback/source-queue defects block acceptance readiness. These questions do not authorize merge or production implementation. Resolve each before its dependent phase.
 
@@ -75,3 +75,20 @@ The owner's brief mentions "really capable AI". Which listener problems should A
 ### 10. Placeholder artwork — RESOLVED (D-052: no AI-looking art; flat sleeves)
 
 May design studies use generated (AI) photographic cover art clearly marked as placeholders, or stay with code-drawn abstract covers until real catalog art exists?
+
+## Questions opened 2026-10-07 (session B)
+
+### 11. Home rev 4 scope
+Owner said the bottom scrubber looks untidy and the app feels boring/not explorable. Proposal: Home rev 4 = (a) phone layout, (b) clean thin scrubber (waveform only in Now Playing / on hover), (c) Dig, (d) more varied placeholder sleeves, (e) sentence-case labels instead of UPPERCASE micro labels. Approve all, or which?
+
+### 12. Dig
+The lost session built "Dig" (daily stack of 10 unheard songs, 15-second hook, Keep/Skip) but the owner never saw it. Redo it as a proposal for Home (and a phone tab)?
+
+### 13. Platform priority
+Teens are phone-first. Is the first real product a phone-friendly web app (PWA, installable), native iOS/Android, or desktop web first? This decides how we design the next pages. (Related to Q3.)
+
+### 14. Placeholder art
+Flat geometric sleeves read as "boring". Allowed alternatives (no AI): licensed stock photos (e.g. Unsplash licence) or hand-designed type/texture sleeves? Or wait for real artist art?
+
+### 15. Name check
+Docs say **Rondo** everywhere (D-030); the owner often writes "rando". Still Rondo?

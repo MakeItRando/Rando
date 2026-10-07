@@ -1,10 +1,25 @@
 # Current project state
 
-**Reviewed:** 2026-10-04 (session 2). **Product:** Rondo. **Phase:** **design-first program** (D-048) — design every page before implementation approaches. Playback blockers B-001/B-002 still block any owner testing. **This round:** owner answers recorded (D-045 play-first, D-046 follow = both, D-047 playlists), design program + foundation study A added. No app code changed.
+**Updated:** 2026-10-07 (session B, recovery + review; docs only). **Product:** Rondo. **Phase:** design-first program (D-048). **Last owner-approved design:** Home rev 3 (D-058), desktop.
 
-Start with [DESIGN_PROGRAM.md](DESIGN_PROGRAM.md) for design work. Home is complete: study E rev 3 (2026-10-06, D-058; interactive, light + dark). Next design step: Now Playing page, then Journey page; anti-slop rules are binding. No AI features (D-050).
+## Right now
 
-## Verdict
+- `main` = canonical docs + design studies + stable v0.3.0 app runtime. Latest design work: [Home E rev 3](../design/studies/2026-10-05-home-e/README.md) — try it at https://makeitrando.github.io/Rando/design/studies/2026-10-05-home-e/home.html
+- **The 2026-10-07 morning session was lost** (clean scrubber, Dig feature, walkthrough, docs overhaul never pushed). See [SESSION_2026-10-07.md](SESSION_2026-10-07.md). Redo as Home rev 4 after owner answers.
+- Owner feedback still open: bottom scrubber looks untidy; app feels "boring sometimes… not giving the vibe to explore".
+- Review findings: Home has no phone layout (teen audience = phone first); see [REVIEW_2026-10-07.md](REVIEW_2026-10-07.md).
+- Waiting on owner: [OPEN_QUESTIONS.md](OPEN_QUESTIONS.md) Q11–Q15.
+
+## Next actions (in order)
+
+1. Owner answers Q11–Q15.
+2. Home rev 4 study: phone layout, clean scrubber, Dig, more varied placeholder sleeves; owner verdict.
+3. Now Playing page → Journey page → remaining pages (order in [DESIGN_PROGRAM.md](DESIGN_PROGRAM.md)).
+4. After all key pages are approved: choose the build approach, rebuild the app on the approved design, fix B-001/B-002/B-003 inside that rebuild, full quality gates, then ask the owner to test.
+
+## App candidate (unchanged since 2026-10-04)
+
+### Verdict
 
 **Do not request acceptance testing or merge PR #5 yet.** Existing candidate automation passes, but fresh read-only probes reproduced wrong Global natural-end progression and one-result Search queue leakage. See [AUDIT_2026-10-04.md](AUDIT_2026-10-04.md). Earlier blanket test-ready language is superseded, not proof of full listening-session correctness.
 
