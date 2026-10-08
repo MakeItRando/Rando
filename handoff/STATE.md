@@ -14,7 +14,7 @@
 ## Next actions (in order)
 
 1. ~~Owner answers Q11–Q15~~ (D-060..D-064).
-2. ~~Home rev 4~~ approved (D-065). ~~Explore~~ approved (D-066). ~~Explore additions~~ built (D-067). **Now Playing approved** (D-068, "perfect for now; changes later as we use it"). **Journeys built** as Home E rev 8 (D-069 proposal, docs/specs/JOURNEYS.md, check.mjs PASS) — **approved** ("yes i like that, the stamp idea is good"). Next: owner picks which Journey ideas (J1–J16, PRODUCT_IDEAS) to add.
+2. ~~Home rev 4~~ approved (D-065). ~~Explore~~ approved (D-066). ~~Explore additions~~ built (D-067). **Now Playing approved** (D-068, "perfect for now; changes later as we use it"). **Journeys built** as Home E rev 8 (D-069 proposal, docs/specs/JOURNEYS.md, check.mjs PASS) — **approved** ("yes i like that, the stamp idea is good"). **Stamps, passport, share cards built** (Home E rev 9, D-070, docs/specs/STAMPS_PASSPORT.md); all J1–J16 / E1–E8 approved as direction, the rest specced for later. Owner: further changes after real users give feedback. Next: owner review of rev 9, then the next page in DESIGN_PROGRAM.
 3. ~~Now Playing page~~ (D-068) → **Journey pages** (picker, genre, artist journey; desktop + phone) → remaining pages (order in [DESIGN_PROGRAM.md](DESIGN_PROGRAM.md)).
 4. After all key pages are approved: choose the build approach, rebuild the app on the approved design, fix B-001/B-002/B-003 inside that rebuild, full quality gates, then ask the owner to test.
 

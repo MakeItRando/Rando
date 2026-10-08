@@ -132,6 +132,29 @@ if (!(await p.evaluate(() => document.body.classList.contains('v-jv') && documen
 for (const ai of [null, 3]) { await p.evaluate(a => setView('journeys', { ai: a ?? undefined }), ai); await p.waitForTimeout(200);
   const o = await p.evaluate(() => document.documentElement.scrollWidth > innerWidth || $('main').scrollWidth > $('main').clientWidth + 1); if (o) fail('Journeys must not scroll sideways at 390px (ai=' + ai + ')'); }
 await p.close();
+
+// rev 9: stamps, passport, share (D-070)
+p = await pg({ width: 1440, height: 900 });
+await p.evaluate(() => setView('journeys'));
+await p.click('#jv .jstamps [data-stamp="Hip-Hop|0"]'); await p.waitForTimeout(250);
+if (!(await p.evaluate(() => $('modal').classList.contains('stampm') && /Early ear/.test($('modal').textContent) && /No\. 1,284/.test($('modal').textContent) && /New since you finished/.test($('modal').textContent)))) fail('stamp must open with early ear, collector number and new songs');
+await p.click('#smFlip'); if (!(await p.evaluate(() => $('smF').classList.contains('flip') && /Most played/.test($('smF').textContent)))) fail('Flip must show the back of the stamp');
+await p.fill('#smNote', 'test note'); if (!(await p.evaluate(() => JR.notes['Hip-Hop|0'] === 'test note'))) fail('note must save');
+await p.click('#smPin'); if (!(await p.evaluate(() => !JR.pins.includes('Hip-Hop|0')))) fail('Pinned must unpin');
+await p.click('#smPin'); if (!(await p.evaluate(() => JR.pins.includes('Hip-Hop|0') && JR.pins.length <= 3))) fail('pin must re-pin, max 3');
+await p.click('#smShare'); await p.waitForTimeout(150);
+if (!(await p.evaluate(() => $('modal').classList.contains('sharecard') && /I finished Asha North/.test($('modal').textContent) && !/2 new/.test(document.querySelector('.sc-in').innerText)))) fail('share card must show the stamp (no private new-song badge)');
+await p.click('[data-fmt="square"]'); if (!(await p.evaluate(() => !!document.querySelector('.sc-pv.square')))) fail('Square format must switch');
+await p.keyboard.press('Escape'); await p.waitForTimeout(200);
+await p.click('#jv [data-pp]'); await p.waitForTimeout(250);
+if (!(await p.evaluate(() => JV.pp && /Your passport/.test($('jv').textContent) && document.querySelectorAll('#jv .pp-pins > *').length === 3 && !!document.querySelector('#jv .pp-seals [data-seal="Lo-fi"]')))) fail('passport must show 3 pins and the Lo-fi seal');
+await p.click('#jv .pp-seals [data-jg="Jazz"]'); await p.waitForTimeout(200);
+if (!(await p.evaluate(() => !JV.pp && JV.g === 'Jazz'))) fail('empty seal must open that genre');
+await p.close();
+p = await pg({ width: 390, height: 844 });
+await p.evaluate(() => setView('journeys', { pp: true })); await p.waitForTimeout(200);
+if (await p.evaluate(() => document.documentElement.scrollWidth > innerWidth || $('main').scrollWidth > $('main').clientWidth + 1)) fail('phone passport must not scroll sideways');
+await p.close();
 await b.close();
-console.log(errs.length ? 'FAIL\n' + errs.join('\n') : 'PASS: Journeys (map, artist page, end stops + stamp, skip/undo, top mix, picker + pace, Meet, search, phone), scrubber, Dig flow, Undo, end-of-stack, Play Dug, source end stops, phone chrome, Explore tab + overflow, Dig from Explore, Tune a mix, Go from, Rabbit hole, Save tune, search page, Now Playing (tabs, Up next, queue remove/Undo, credits, phone controls)');
+console.log(errs.length ? 'FAIL\n' + errs.join('\n') : 'PASS: Stamps + passport + share, Journeys (map, artist page, end stops + stamp, skip/undo, top mix, picker + pace, Meet, search, phone), scrubber, Dig flow, Undo, end-of-stack, Play Dug, source end stops, phone chrome, Explore tab + overflow, Dig from Explore, Tune a mix, Go from, Rabbit hole, Save tune, search page, Now Playing (tabs, Up next, queue remove/Undo, credits, phone controls)');
 process.exit(errs.length ? 1 : 0);

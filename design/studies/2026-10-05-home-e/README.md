@@ -1,6 +1,6 @@
 # Home study E — interactive (2026-10-05)
 
-**Status:** rev 4 approved (D-065, "thats perfect"); **rev 5 adds the Explore page** (approved, D-066), **rev 6 adds search page, Rabbit hole, Save a tune** (D-067), **rev 7 adds the Now Playing page** (approved, D-068, [NOW_PLAYING.md](../../../docs/specs/NOW_PLAYING.md)), **rev 8 adds Journeys** (D-069 proposal, [JOURNEYS.md](../../../docs/specs/JOURNEYS.md); spec [EXPLORE.md](../../../docs/specs/EXPLORE.md)). Rev 3 (D-058). Owner on rev 3 (2026-10-07): bottom scrubber looks untidy; Home "boring sometimes… not giving the vibe to explore"; then approved all review feedback (D-060), Dig (D-061), desktop + mobile apps first (D-062). Rev 3: Home complete (D-058). Owner on rev 2: liked every suggestion, light mode "awesome", bottom bar left to us (kept). Rev 2 (D-057): Owner on rev 1: "way way better… so close"; keep the Journeys filter but don't leave it empty; add light mode.
+**Status:** rev 4 approved (D-065, "thats perfect"); **rev 5 adds the Explore page** (approved, D-066), **rev 6 adds search page, Rabbit hole, Save a tune** (D-067), **rev 7 adds the Now Playing page** (approved, D-068, [NOW_PLAYING.md](../../../docs/specs/NOW_PLAYING.md)), **rev 8 adds Journeys** (approved, D-069, [JOURNEYS.md](../../../docs/specs/JOURNEYS.md)), **rev 9 adds stamps, passport, share cards** (D-070, [STAMPS_PASSPORT.md](../../../docs/specs/STAMPS_PASSPORT.md); spec [EXPLORE.md](../../../docs/specs/EXPLORE.md)). Rev 3 (D-058). Owner on rev 3 (2026-10-07): bottom scrubber looks untidy; Home "boring sometimes… not giving the vibe to explore"; then approved all review feedback (D-060), Dig (D-061), desktop + mobile apps first (D-062). Rev 3: Home complete (D-058). Owner on rev 2: liked every suggestion, light mode "awesome", bottom bar left to us (kept). Rev 2 (D-057): Owner on rev 1: "way way better… so close"; keep the Journeys filter but don't leave it empty; add light mode.
 
 Previous: Owner on C: "way better… but we can do way better; some places feel old; Journey button must change when it's playing and offer Open Journey; make it more advanced, engaging, interactive, correct and systematic; audience mostly teenagers; Home first."
 
@@ -9,6 +9,8 @@ Previous: Owner on C: "way better… but we can do way better; some places feel 
 **Test it:** `CHROMIUM=$(which chromium) node design/studies/2026-10-05-home-e/check.mjs` from a folder with `playwright` installed (exit 0 = PASS: scrubber seek, Dig open/pause, Keep order, Undo, end of stack, Play Dug, natural source end stops, no phone overflow at 390 px, Dig tab).
 
 ![Rev 4 walkthrough (animated)](renders/walkthrough-rev4.svg)
+
+New in rev 9 — **Stamps & passport**: tap any stamp → flip for the back (dates, first/last/most-played song), Early ear (listeners when you finished → now), collector number, new songs since, private note, Share (story / square card) and Pin · Open passport (in Your stamps) → pinned 3, genre seals, all stamps · rings show a halfway dot · Journey of the week card on the genre page. Lo-fi is pre-finished to show the genre seal; all counts are placeholders.
 
 New in rev 8 — **Journeys**: Journeys in the sidebar or phone tab → genre page with a map of artists A→Z (rings = songs heard) · tap a station → Artist Journey (releases newest first, ✓ heard, Detours) · Start/Resume plays only that artist and stops at the end with a stamp — the next artist never autoplays · Meet <next> plays a 15 s hook · Skip ahead (Undo keeps progress) · Change genre picker (arrow keys; pace Essentials / Full for new genres) · Search inside the Journey · Play top mix doesn't touch progress. Non-Hip-Hop artists and songs are generated placeholders.
 
@@ -85,5 +87,13 @@ New in rev 2: sun/moon button (top right) = light mode, remembered, follows syst
 | ![](renders/55-journeys-search.svg) | Rev 8: search inside the Hip-Hop Journey |
 | ![](renders/56-journeys-genre-light.svg) | Rev 8: genre page, light |
 | ![](renders/57-journeys-phone.svg) | Rev 8: phone: genre map, artist page, picker |
+| ![](renders/58-stamp-front.svg) | Rev 9: stamp sheet — early ear, collector number, new since, note |
+| ![](renders/59-stamp-back.svg) | Rev 9: flipped: back of the stamp |
+| ![](renders/60-passport.svg) | Rev 9: passport — pinned, genre seals, stamps |
+| ![](renders/61-share-stamp.svg) | Rev 9: share card, story 9:16 |
+| ![](renders/62-share-passport.svg) | Rev 9: passport share card |
+| ![](renders/63-genre-seal-essentials.svg) | Rev 9: finished genre (Lo-fi, Essentials edition) with seal |
+| ![](renders/64-journey-of-the-week.svg) | Rev 9: Journey of the week card |
+| ![](renders/65-phone-passport-stamp-share.svg) | Rev 9: phone: passport, stamp sheet, share |
 
 All counts come from `data.js`; sleeves are code-drawn placeholders, not product assets (real art arrives with the catalog, D-063). Dig songs and artists are fictional. See [docs/specs/HOME.md](../../../docs/specs/HOME.md).
