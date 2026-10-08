@@ -1055,3 +1055,6 @@ button.jst:hover{transform:rotate(0) translateY(-3px)}
 .sc-pins{margin:18px 0 16px}.sc-pins .jst .cover{width:46px}.sc-pins .jst-t{font-size:10.5px}
 .jwk-c .xg-stk{top:22px}
 @media (max-width:1020px){.pp-pins .jst.big,.sm-fr .jst.big,.sc-st .jst.big{display:flex}}
+.sm-fr .jst.big{display:flex!important;flex-direction:column;align-items:center;justify-content:center!important}
+.sm-fr .jst.big .jst-d{margin-top:2px}
+.sm-bn{margin-top:14px;padding-top:12px;border-top:1px dashed var(--line2);font-size:12.5px;color:var(--t2);font-style:italic}
