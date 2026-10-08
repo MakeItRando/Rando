@@ -16,7 +16,7 @@ Make finishing an artist feel worth it and worth showing: a keepsake with real f
 
 ## Stamp sheet
 
-- Left: the stamp; **Flip** (or tap the stamp) shows the **back (J6):** Started, Finished, Songs (heard of total), **Took** (days from first to last song), **Listening time** (including replays), Most played (× plays), Liked, and your note. Only personal facts: first/last song were removed (owner 2026-10-07) because Journey order is fixed — artists A→Z, each artist's releases newest → oldest, songs in official order — so they'd be the same for everyone.
+- Left: the stamp; **Flip** (or tap the stamp) shows the **back (J6):** Started, Finished, Songs (heard of total), **Took** (days from first to last song), **Listening time** (including replays), Most played (× plays), Liked, and your note (empty → "+ Add a note", focuses the note field). Only personal facts: first/last song were removed (owner 2026-10-07) because Journey order is fixed — artists A→Z, each artist's releases newest → oldest, songs in official order — so they'd be the same for everyone.
 - Right: genre + station, artist, edition · date.
   - **Early ear (E1):** monthly listeners when you finished → now, growth ×, bar. Rule: under **100K** when you finished and **≥5×** since. Otherwise the box shows "When you finished … Now …" without the badge.
   - **Collector number (E2):** "You were the 1,284th person to finish Asha." Counts everyone who finished that artist (any edition).

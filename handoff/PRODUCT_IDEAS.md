@@ -137,6 +137,21 @@ Engagement ideas — "worth coming back for / worth showing off" (2026-10-07, ow
 - **E8 Ring widget** — phone home-screen/lock-screen widget with your current artist ring and Resume.
 - Avoid: streaks, hour-based leaderboards (pressure on a teen audience, rewards idle/looping playback).
 
+Hook & ease ideas — "feels like Spotify's song radio, but honest" (2026-10-07, owner: make it more hooked and user friendly; small features and arrangement matter). Proposals, not decided. Rules kept: no autoplay traps (D-019), sources end honestly (D-055), facts only (D-050).
+- **H1 Song radio** — "Start radio" on any song: 50 songs from real signals (same tempo ±6 BPM, compatible key, same genre/mood tags, shared credits, and once we have users "kept together in Dig / saved together"). Header says why ("same tempo · kept together"). Ends with H2, never silently.
+- **H2 Keep going card** — when any source ends: three one-tap choices (Radio from the last song · next Journey artist · Dig), 8 s visible, no auto-start. Answers "music stopped" without an autoplay trap.
+- **H3 Your mixes** — 4–6 mixes grouped from your own likes/plays by genre + tempo ("Your Hip-Hop · slow"), refresh weekly, named by the grouping, not by a mood guess.
+- **H4 New for you (Friday)** — new releases from followed artists + artists you finished (ties to living stamps). Finite.
+- **H5 On repeat / Rewind** — most played last 30 days; songs you played a lot months ago and stopped.
+- **H6 Pick up where you left off** — first row on open: last source with exact position, one tap.
+- **H7 Smart queue suggestions** — at the bottom of Up next / a playlist: "Add similar" with 5 songs from H1 signals; user taps to add.
+- **H8 Playlist extender** — on your playlists: "Add 10 that fit" (same signals), preview before adding, Undo.
+- **H9 Phone gestures** — swipe a row right = add to queue, left = like; long-press = 10 s preview; haptics on like/stamp.
+- **H10 Lyrics card share** — select 1–4 lines → share card (same system as stamp cards).
+- **H11 Crossfade + gapless + volume levelling** defaults on; Crossfade already in settings.
+- **H12 Listen together** (V2) — friends join your session, shared queue.
+Already in the design: Go from, Rabbit hole, Tune a mix, Dig, Blend, On repeat, Sleep timer, Crossfade, Journeys + stamps.
+
 ## Suggested order
 
 1. Validate separate playback sessions with the owner.
