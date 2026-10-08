@@ -1199,3 +1199,21 @@ button.jst:hover{transform:rotate(0) translateY(-3px)}
  .av-abg{grid-template-columns:1fr;padding:16px}
  .av-s .pv-fh{flex-wrap:wrap}
 }
+/* rev 12.1 Artist final touches */
+.av-st{position:sticky;top:-20px;height:0;z-index:20;margin:0 -28px}
+.av-stb{display:flex;align-items:center;gap:12px;height:60px;padding:0 28px;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid var(--line);opacity:0;transform:translateY(-8px);pointer-events:none;transition:opacity .18s var(--ease),transform .22s var(--ease)}
+.av-stb .cover{width:34px;border-radius:50%}.av-stb b{font-size:16px;font-weight:700;flex:1}.av-stb .av-pp{width:36px;height:36px}
+#av.stk .av-stb{opacity:1;transform:none;pointer-events:auto}
+#av .pv-a .icb.on{color:var(--acc)}
+.av-nfm{display:flex;align-items:center;gap:12px;margin-top:14px;padding:12px 14px;border-radius:10px;border:1px dashed var(--line2);color:var(--t2);font-size:13px}.av-nfm b{color:var(--t1)}.av-nfm span{flex:1}.av-nfm .ic{width:16px;height:16px}.av-nfm .lnk{font-weight:600;color:var(--t1)}
+.av-y{display:flex;flex-direction:column;gap:12px;padding:14px;border-radius:12px;background:var(--s1);border:1px solid var(--line)}
+.av-yn{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.av-yn div{display:flex;flex-direction:column}.av-yn b{font-size:20px;color:var(--t1)}.av-yn span{font-size:12px;color:var(--t3)}
+.av-y .btn{align-self:flex-start;height:34px;background:var(--s2)}.av-y .btn .ic{width:16px;height:16px;fill:currentColor}
+.av-rc .nb{right:8px;top:8px;left:auto}
+@media (max-width:640px){
+ .av-st{top:-4px;margin:0 -14px}.av-stb{padding:0 14px;height:54px}
+ #av .pv-a{gap:6px}#av .pv-a .lb{display:none}#av #avRd{width:40px;padding:0;justify-content:center}
+ .av-nfm{align-items:flex-start}
+}
+.av-rc .nb{position:absolute;background:var(--acc);color:#0d0d0c;font:600 10px "Geist Mono",GeistMono,monospace;padding:2px 6px;border-radius:4px}
+@media (max-width:640px){.av-b{margin-top:18px;gap:18px}.av-pop .pv-fh{margin-bottom:6px}}

@@ -11,7 +11,7 @@ Motion and polish are deferred to one pass on the real apps (D-073): see [../MOT
 | 1b | Home (phone) | [HOME.md § Phone](HOME.md) | home-e rev 4 (≤640 px) | Rev 4 approved (D-065) |
 | 2 | Now Playing + lyrics/credits/queue | [NOW_PLAYING.md](NOW_PLAYING.md) | home-e rev 7 | Approved (D-068) |
 | 3 | Playlists (page) + Radio page | [PLAYLISTS.md](PLAYLISTS.md), [FEATURE_PLAN.md § Radio](FEATURE_PLAN.md) | home-e rev 11 | Proposed (D-072) |
-| 4 | Artist page | [ARTIST.md](ARTIST.md) | home-e rev 12 | Proposed (D-074) |
+| 4 | Artist page | [ARTIST.md](ARTIST.md) | home-e rev 12–12.1 | Approved (D-074); final touches D-075 |
 | 5 | Journeys (picker, genre, artist journey) | [JOURNEYS.md](JOURNEYS.md) | home-e rev 8 | Approved (D-069) |
 | 5b | Stamps, passport, share cards (Journey engagement) | [STAMPS_PASSPORT.md](STAMPS_PASSPORT.md) | home-e rev 9 | Approved direction (D-070) |
 | 5c | Feature plan (where every idea lives) + listening flow (radio, Keep going, Pick up, Add similar) | [FEATURE_PLAN.md](FEATURE_PLAN.md) | home-e rev 10 | Proposed (D-071) |

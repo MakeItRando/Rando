@@ -153,6 +153,20 @@ Hook & ease ideas — "feels like Spotify's song radio, but honest" (2026-10-07,
 Status (D-071, 2026-10-07): owner likes all; arranged in [docs/specs/FEATURE_PLAN.md](../docs/specs/FEATURE_PLAN.md). **Built (Home E rev 10):** H1 radio, H2 Keep going, H6 Pick up (merged into the Stage), H7 Add similar. **Specced V1.1:** H3 (replaces Moods), H4 (inside This week), H5 (toggle on On repeat), H8, H9, H10, H11. **V2:** H12 (merged into one Friends feature with J5/E7).
 Already in the design: Go from, Rabbit hole, Tune a mix, Dig, Blend, On repeat, Sleep timer, Crossfade, Journeys + stamps.
 
+## Artist page ideas (2026-10-07, after D-074). Built: A1–A4. Others saved with scope.
+
+- **A1 You and <artist>** — heard / liked / in your playlists, Play your liked songs. *Built (rev 12.1).*
+- **A2 Not for me** (J15) — leave an artist out of radio and suggestions, Undo, Journey untouched. *Built.*
+- **A3 Release alerts bell** per followed artist. *Built.*
+- **A4 Heard progress + NEW on releases.** *Built.*
+- **A5 Artist pick** — the artist pins one song/release with a short note ("start here"). Needs artist tools. *V2.*
+- **A6 Coming soon / pre-save** — upcoming release with date; one tap to get it in your library on release day. Needs label data. *V1.1 backend.*
+- **A7 Timeline view** of releases (years as a line, ties to Journey map "Years" J11). *V1.1.*
+- **A8 Live / tour dates** near you. *V2, partner data.*
+- **A9 Artist-made playlists** ("what Kairo is listening to"). *V2, artist tools.*
+- **A10 First listen** — "you first played Kairo on Aug 31 with Night Transit" in the You card, once play history exists. *V1 backend.*
+- Avoid: follower counts as status, "top fan" leaderboards (teen audience, pressure).
+
 ## Suggested order
 
 1. Validate separate playback sessions with the owner.

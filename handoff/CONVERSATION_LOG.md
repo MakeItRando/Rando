@@ -51,6 +51,7 @@
 - Owner: "yes i like that, the stamp idea is good" → D-069; then approved J/E ideas (D-070, rev 9 stamps/passport). Asked for more hook/ease ideas → H1–H12. Owner: "i like all of them (H, J, E)… i dont want to overcrowd… manage and arrange them" → D-071 proposal: docs/specs/FEATURE_PLAN.md (one home per feature, budgets, merges, parked) + Home E rev 10 listening flow (Song radio, Keep going, Pick up in Stage, Add similar), renders 66–71, check.mjs PASS.
 - Owner on rev 10: "dont say what radio is picking like 50 song with same producer maybe bec we should shock them, and curious with it no? … the playlist ui not that good, and i dont like with radio ui too." → D-072 proposal: reasons removed; Radio page with face-down cards (peek, Show all, New spin); new Playlist page with Add songs that fit. Home E rev 11, renders 72–76.
 - Owner: "thats way better but we can do way better… wait for now bc its just html prototype no? animations… later?" → agreed (D-073): prototype = structure/flow; polish pass on the real apps; docs/MOTION.md written. Owner: "yes thats what i thought, go it." → Artist page built (D-074 proposal, Home E rev 12, docs/specs/ARTIST.md).
+- Owner: "yes that nice, i like that, do the final touches, arrangemengs, finish ups, ideas and stuff." → D-074 confirmed; rev 12.1 final touches (D-075 proposal) + Artist ideas A1–A10.
 
 ## Topics index (where each lives now)
 
