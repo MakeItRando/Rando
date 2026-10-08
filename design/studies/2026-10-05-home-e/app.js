@@ -646,3 +646,47 @@ function ppR(){const el=$('jv'),P=ppStats(),Gs=Object.values(JR.G);
 /* boot rev 9 */
 if(D.view==='journeys'){if(D.pp)setView('journeys',{pp:true});else jvR();if(D.stamp)stampOpen(D.stamp);if(D.flip)setTimeout(()=>$('smF')&&$('smF').classList.add('flip'),50);if(D.jshare)jShareOpen(D.jshare);if(D.jscroll)setTimeout(()=>$('main').scrollTo({top:D.jscroll,behavior:'instant'}),80)}
 else jBuild();
+/* ===== rev 10 (2026-10-07, D-071): listening flow — Song radio (H1), Keep going card (H2), Pick up where you left off (H6), Add similar in Up next (H7). Finite, explained, never autoplays (D-019, D-050) ===== */
+const genOf=k=>S[k].genre||GEN[S[k].art]||'';
+function radioPicks(k0,n,excl=[]){const s0=S[k0],g0=genOf(k0),cr0=credits(k0),names0=new Set([...cr0.prod,...cr0.write]);
+ return POOL().filter(k=>k!==k0&&!excl.includes(k)&&S[k].t!==s0.t).map(k=>{const s=S[k],why=[];let sc=0;const db=Math.abs(s.bpm-s0.bpm);
+  if(db<=6){sc+=3;why.push('same tempo')}else if(db<=12)sc+=1.5;
+  if(s.key===s0.key){sc+=2.5;why.push('same key')}else if(isMin(k)===isMin(k0))sc+=1;
+  if(g0&&genOf(k)===g0){sc+=2;why.push('same genre')}
+  const c=credits(k);const sh=[...c.prod,...c.write].find(x=>names0.has(x));if(sh){sc+=2;why.push('same producer')}
+  if(s.a.split(/, /).some(x=>s0.a.includes(x))&&s.ar!==s0.ar){sc+=1.5;why.push('featured artist')}
+  if(DG&&SRC.dug&&SRC.dug.q.includes(k)&&SRC.dug.q.includes(k0)){sc+=2;why.push('kept together in Dig')}
+  return {k,sc:sc-(s.ar===s0.ar?1.2:0)+(hsh(k+k0)%100)/1000,why}}).sort((a,b)=>b.sc-a.sc).slice(0,n)}
+function radioSrc(k0){const id='rd_'+k0;if(!SRC[id]){const p=radioPicks(k0,49),cnt={};p.forEach(x=>x.why.forEach(w=>cnt[w]=(cnt[w]||0)+1));const top=Object.entries(cnt).sort((a,b)=>b[1]-a[1]).slice(0,3).map(x=>x[0]);
+  SRC[id]={type:'Radio',name:'Radio \u00b7 '+S[k0].t,art:S[k0].art,q:[k0,...p.map(x=>x.k)],why:top,whyK:Object.fromEntries(p.map(x=>[x.k,x.why]))}}return id}
+function startRadio(k){const id=radioSrc(k);startSrc(id,0);toast(`Radio from ${S[k].t} \u00b7 ${SRC[id].q.length} songs \u00b7 ${SRC[id].why.join(', ')}`);kgClose()}
+/* song menu: Start radio */
+{const _menu=menu;menu=function(k,x,y){_menu(k,x,y);const p=$('pop');const b=p.querySelector('[data-mn="queue"]');if(b&&!p.querySelector('[data-mn="radio"]'))b.insertAdjacentHTML('afterend',`<button data-mn="radio" data-mk="${k}">${ICON('sparkle')}Start radio<span class="k">${SRC[radioSrc(k)].q.length} songs</span></button>`)};
+ document.addEventListener('click',e=>{const m=e.target.closest('[data-mn="radio"]');if(m){e.stopPropagation();$('pop').classList.remove('open');startRadio(m.dataset.mk)}},true)}
+/* Now Playing: About gets Start radio; Up next gets Add similar (H7) + radio "why" line */
+{const _np10=npPanel;npPanel=function(){let h=_np10();const k=curK(),src=SRC[st.src];
+ if(X.npTab==='about'&&!/data-rd=/.test(h))h=h.replace(/(<button[^>]*data-gfx[^>]*>)/,`<button class="btn gh" data-rd="${k}">${ICON('sparkle')}Start radio</button>$1`).replace(/<\/div>\s*$/,m=>/data-rd=/.test(h)?m:m);
+ if(X.npTab==='about'&&!/data-rd=/.test(h))h=h.replace(/<\/div>$/,`<div class="np-rd"><button class="btn gh" data-rd="${k}">${ICON('sparkle')}Start radio</button><span class="mut">50 songs that fit ${S[k].t}: tempo, key, genre, credits.</span></div></div>`);
+ if(X.npTab==='next'){const inQ=new Set([...src.q,...st.uq]);const sim=radioPicks(k,80).filter(x=>!inQ.has(x.k)).slice(0,5);
+  const why=src.type==='Radio'&&src.why?`<div class="np-why">${ICON('sparkle')}<span>Radio picks songs with <b>${src.why.join(', ')}</b> as ${src.name.replace('Radio \u00b7 ','')}. It ends after ${src.q.length} songs.</span></div>`:'';
+  h=h.replace('<div class="npp">','<div class="npp">'+why).replace(/<\/div>$/,`<div class="npq-h np-sim-h"><span>Add similar</span><span class="m">tap + to add to your queue</span></div>${sim.map(x=>`<div class="npq-w np-sim"><div class="npq"><span class="m"></span><span class="cover">${svg(S[x.k].art)}</span><div><b>${S[x.k].t}</b><span>${S[x.k].a} \u00b7 ${x.why[0]||'similar'}</span></div><span class="m">${fmt(S[x.k].d)}</span></div><button class="icb" data-sim="${x.k}" aria-label="Add ${S[x.k].t} to queue">${ICON('plus')}</button></div>`).join('')}</div>`)}
+ return h};
+ $('np').addEventListener('click',e=>{const r=e.target.closest('[data-rd]');if(r){e.stopPropagation();startRadio(r.dataset.rd);return}const a=e.target.closest('[data-sim]');if(a){e.stopPropagation();const k=a.dataset.sim;st.uq.push(k);render();$('npP').innerHTML=npPanel();toast(`Added ${S[k].t} to your queue`,'Undo',()=>{const i=st.uq.lastIndexOf(k);if(i>=0)st.uq.splice(i,1);render();$('npP').innerHTML=npPanel();$('toast').classList.remove('open')})}},true)}
+/* H2 Keep going: when a source ends (not a Journey — that has its own boundary), offer three one-tap choices. Nothing starts by itself. */
+const kg=document.createElement('div');kg.id='kg';kg.className='kgo';kg.setAttribute('role','dialog');kg.setAttribute('aria-label','Keep going');document.body.appendChild(kg);
+function kgClose(){kg.classList.remove('open')}
+function kgOpen(){const k=curK(),src=SRC[st.src];jBuild();const G=JR.G[JR.active],ai=Math.min(G.cur,G.A.length-1),a=G.A[ai],js=jState(G.g,ai);const left=typeof DG==='object'&&DG.cards?Math.max(0,DG.cards.length-DG.i):10-(DG.i||0);
+ kg.innerHTML=`<div class="kg-h"><div><b>That\u2019s the end of ${src.name}</b><span class="mut">Keep going?</span></div><button class="icb" id="kgX" aria-label="Close">${ICON('x')}</button></div>
+ <div class="kg-o"><button class="kg-c" id="kgR"><span class="cover">${svg(S[k].art)}</span><div><b>Radio from ${S[k].t}</b><span>${SRC[radioSrc(k)].q.length} songs \u00b7 ${SRC[radioSrc(k)].why.slice(0,2).join(', ')}</span></div></button>
+ <button class="kg-c" id="kgJ"><span class="cover r">${svg(a.art)}</span><div><b>${js.done?'Open':js.h?'Resume':'Continue'} ${G.g} Journey</b><span>${a.n} \u00b7 ${js.h} of ${js.tot} heard</span></div></button>
+ <button class="kg-c" id="kgD"><span class="kg-dg">${ICON('explore')}</span><div><b>Dig</b><span>${left>0?left+' new songs left today':'Done for today'}</span></div></button></div>`;
+ kg.classList.add('open');$('kgX').onclick=kgClose;$('kgR').onclick=()=>startRadio(k);$('kgJ').onclick=()=>{kgClose();if(js.done)setView('journeys',{g:G.g});else{jPlay(G.g,ai);if(XP.view==='journeys')jvR()}};$('kgD').onclick=()=>{kgClose();const b=$('digGo');b?b.click():toast('Dig opens from Home')}}
+{const _r10=render;let was=false;render=function(){_r10();const src=SRC[st.src];const end=ended&&!st.on&&src&&!src.journey;if(end&&!was)kgOpen();if(!end&&kg.classList.contains('open')&&st.on)kgClose();was=end}}
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&kg.classList.contains('open')){kgClose()}});
+/* H6 Pick up where you left off: on a cold open the last source is paused at its exact spot; one tap resumes */
+function puR(){const c=$('stCap');if(!c)return;if(X.cold&&!st.on){const src=SRC[st.src];c.innerHTML=`<span><span class="pu-k">Pick up where you left off</span> \u00b7 ${X.coldAgo} \u00b7 ${src.name} \u00b7 ${fmt(st.t)} in</span>`;$('bigpp').setAttribute('aria-label','Resume '+cur().t)}}
+{const _r10b=render;render=function(){_r10b();if(X.cold&&st.on)X.cold=false;puR()}}
+/* boot rev 10 */
+if(D.cold){X.cold=true;X.coldAgo=D.coldAgo||'yesterday, 11:42 pm';st.on=false;render()}
+if(D.radio){startRadio(D.radio);if(D.radioOff){st.on=false;render()}}
+if(D.kg){st.i=SRC[st.src].q.length-1;st.t=cur().d;st.on=false;ended=true;render()}

@@ -11,6 +11,8 @@
 - Owner answered Q11–Q15 (D-060..D-064). **Home rev 4 approved** (D-065, "thats perfect"). **Explore approved** (D-066, [EXPLORE.md](../docs/specs/EXPLORE.md)); 4 phone tabs; Most kept in Dig hidden until enough listeners.
 - **Built (D-067, Home E rev 6):** search results page, Rabbit hole, Save a tune — awaiting owner look. `check.mjs` PASS. Saved for later in PRODUCT_IDEAS § Explore backlog: Song of the day, Decades dial. Original candidates: full search results page (recommended), Rabbit hole trail (hop Go from → Go from, save the trail as a playlist), Save a tune as a playlist, Song of the day (one pick for everyone, V1-backend), Decades/era dial (needs year metadata). `check.mjs` PASS.
 
+- **Rev 10 (D-071 proposal, 2026-10-07):** [FEATURE_PLAN.md](../docs/specs/FEATURE_PLAN.md) arranges all H/J/E ideas without overcrowding; built Song radio, Keep going, Pick up (in the Stage), Add similar. `check.mjs` PASS. Awaiting owner verdict; next: V1.1 items from the plan (Rewind toggle, Your mixes, New for you, Add songs that fit, Journey map views) or remaining pages (Artist, Library, Release, Playlists, Profile).
+
 ## Next actions (in order)
 
 1. ~~Owner answers Q11–Q15~~ (D-060..D-064).

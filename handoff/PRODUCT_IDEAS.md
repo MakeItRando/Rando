@@ -150,6 +150,7 @@ Hook & ease ideas — "feels like Spotify's song radio, but honest" (2026-10-07,
 - **H10 Lyrics card share** — select 1–4 lines → share card (same system as stamp cards).
 - **H11 Crossfade + gapless + volume levelling** defaults on; Crossfade already in settings.
 - **H12 Listen together** (V2) — friends join your session, shared queue.
+Status (D-071, 2026-10-07): owner likes all; arranged in [docs/specs/FEATURE_PLAN.md](../docs/specs/FEATURE_PLAN.md). **Built (Home E rev 10):** H1 radio, H2 Keep going, H6 Pick up (merged into the Stage), H7 Add similar. **Specced V1.1:** H3 (replaces Moods), H4 (inside This week), H5 (toggle on On repeat), H8, H9, H10, H11. **V2:** H12 (merged into one Friends feature with J5/E7).
 Already in the design: Go from, Rabbit hole, Tune a mix, Dig, Blend, On repeat, Sleep timer, Crossfade, Journeys + stamps.
 
 ## Suggested order

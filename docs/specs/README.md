@@ -12,6 +12,7 @@ One file per page/feature. A spec is the contract a builder implements; the desi
 | 4 | Artist page | — | — | Not started |
 | 5 | Journeys (picker, genre, artist journey) | [JOURNEYS.md](JOURNEYS.md) | home-e rev 8 | Approved (D-069) |
 | 5b | Stamps, passport, share cards (Journey engagement) | [STAMPS_PASSPORT.md](STAMPS_PASSPORT.md) | home-e rev 9 | Approved direction (D-070) |
+| 5c | Feature plan (where every idea lives) + listening flow (radio, Keep going, Pick up, Add similar) | [FEATURE_PLAN.md](FEATURE_PLAN.md) | home-e rev 10 | Proposed (D-071) |
 | 6 | Search | [EXPLORE.md](EXPLORE.md) (search lives in Explore) | ⌘K palette + Explore header in home-e | Search page built (D-067) |
 | 6b | Explore | [EXPLORE.md](EXPLORE.md) | home-e rev 5–6 | Approved (D-066); search page, Rabbit hole, Save a tune built (D-067) |
 | 7 | Library | — | — | Not started |
