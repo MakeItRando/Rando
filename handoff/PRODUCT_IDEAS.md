@@ -126,6 +126,17 @@ More Journey ideas (2026-10-07, after D-069 approval; owner likes stamps). All f
 - **J15 Not for me** — mark an artist as skipped for good; map shows it honestly (grey, "skipped"), genre counts adjust.
 - **J16 Download next artist** (V1-backend) — keep the current + next artist offline.
 
+Engagement ideas — "worth coming back for / worth showing off" (2026-10-07, owner: "way engaging… maybe thats on fame"). Owner liked J6–J16 ("yes i like all those ideas"). Proposals, not decided:
+- **E1 Early ear** — stamp records the artist's monthly listeners when you finished ("Finished when Nia had 8,214 listeners"); if they grow, the stamp shows "You were early · now 1.2M". Real bragging right, factual.
+- **E2 Collector number** — "You're the 1,284th person to finish Moni Gray" on the stamp. Lower = rarer.
+- **E3 Share cards + public passport** — story-sized cards (stamp, genre seal, early ear) for Instagram/TikTok; profile link with 3 pinned stamps.
+- **E4 Journey of the week** — one short editorial Journey (3 artists) for everyone; live "people on it now"; finishers get that week's stamp. An event, not a streak; flag: mild FOMO.
+- **E5 Artist voice** (V1-backend, needs artists) — 20 s recorded intro on Meet, and a real thank-you note when you finish everything.
+- **E6 Living stamps** — a finished stamp lights up when the artist releases something new ("1 new song"); one tap to finish again. Practical reason to return.
+- **E7 Friends' passports** (V2) — see friends' stamps and who's on which artist; start a Journey together. No rankings by hours.
+- **E8 Ring widget** — phone home-screen/lock-screen widget with your current artist ring and Resume.
+- Avoid: streaks, hour-based leaderboards (pressure on a teen audience, rewards idle/looping playback).
+
 ## Suggested order
 
 1. Validate separate playback sessions with the owner.
