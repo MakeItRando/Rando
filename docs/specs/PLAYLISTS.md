@@ -25,3 +25,14 @@
 ## Acceptance
 
 Create/add/reorder/remove/delete with keyboard and touch; Undo works; playback context and natural end follow playlist; 320/390/1440 layouts; empty state ("Add songs from anywhere with +"); long names truncate; screen-reader announcements for add/remove/move.
+
+## Playlist page — Home E rev 11 (D-072 proposal, 2026-10-07)
+
+Owner: "the playlist ui not that good". There was no playlist page (sidebar rows only toggled play; "Go to playlist" did nothing). Now:
+
+- **Open:** sidebar playlist rows and Stage "Go to playlist" open the page. Opening never changes playback.
+- **Header:** tinted by the cover tone; cover = 2×2 mosaic of the first four different sleeves (Liked songs = heart tile); "Playlist · by mikoto", title, songs · total time; actions: Play / Pause (state-aware, D-055), Shuffle, Share, ⋯ (rename, edit, delete — later).
+- **Track list:** # (eq when playing, play icon on hover) · sleeve · title + artist · tempo · key · liked heart · time · ⋯ on hover (song menu). Row click plays from that song in this playlist; the playing row is highlighted.
+- **Add songs that fit (H8):** 5 songs scored from the playlist's own songs (same signals as radio), Add with Undo, Refresh for the next 5. No reasons shown. Not on Liked songs.
+- **Phone:** Back link, stacked header (cover ≈ half the width), compact rows (sleeve, title, heart, ⋯).
+- Later: drag to reorder, edit details, collaborative playlists (V2).

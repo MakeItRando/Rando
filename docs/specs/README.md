@@ -8,7 +8,7 @@ One file per page/feature. A spec is the contract a builder implements; the desi
 | 1 | Home (desktop) | [HOME.md](HOME.md) | [home-e](../../design/studies/2026-10-05-home-e/README.md) | Rev 4 approved (D-065) |
 | 1b | Home (phone) | [HOME.md § Phone](HOME.md) | home-e rev 4 (≤640 px) | Rev 4 approved (D-065) |
 | 2 | Now Playing + lyrics/credits/queue | [NOW_PLAYING.md](NOW_PLAYING.md) | home-e rev 7 | Approved (D-068) |
-| 3 | Playlists | [PLAYLISTS.md](PLAYLISTS.md) | study A (superseded) | Product spec only |
+| 3 | Playlists (page) + Radio page | [PLAYLISTS.md](PLAYLISTS.md), [FEATURE_PLAN.md § Radio](FEATURE_PLAN.md) | home-e rev 11 | Proposed (D-072) |
 | 4 | Artist page | — | — | Not started |
 | 5 | Journeys (picker, genre, artist journey) | [JOURNEYS.md](JOURNEYS.md) | home-e rev 8 | Approved (D-069) |
 | 5b | Stamps, passport, share cards (Journey engagement) | [STAMPS_PASSPORT.md](STAMPS_PASSPORT.md) | home-e rev 9 | Approved direction (D-070) |

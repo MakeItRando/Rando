@@ -13,6 +13,8 @@
 
 - **Rev 10 (D-071 proposal, 2026-10-07):** [FEATURE_PLAN.md](../docs/specs/FEATURE_PLAN.md) arranges all H/J/E ideas without overcrowding; built Song radio, Keep going, Pick up (in the Stage), Add similar. `check.mjs` PASS. Awaiting owner verdict; next: V1.1 items from the plan (Rewind toggle, Your mixes, New for you, Add songs that fit, Journey map views) or remaining pages (Artist, Library, Release, Playlists, Profile).
 
+- **Rev 11 (D-072 proposal):** Playlist page + Radio page (face-down surprise cards), radio reasons removed. Awaiting owner verdict.
+
 ## Next actions (in order)
 
 1. ~~Owner answers Q11–Q15~~ (D-060..D-064).

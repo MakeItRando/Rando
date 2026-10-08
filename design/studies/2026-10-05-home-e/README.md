@@ -1,6 +1,6 @@
 # Home study E — interactive (2026-10-05)
 
-**Status:** rev 4 approved (D-065, "thats perfect"); **rev 5 adds the Explore page** (approved, D-066), **rev 6 adds search page, Rabbit hole, Save a tune** (D-067), **rev 7 adds the Now Playing page** (approved, D-068, [NOW_PLAYING.md](../../../docs/specs/NOW_PLAYING.md)), **rev 8 adds Journeys** (approved, D-069, [JOURNEYS.md](../../../docs/specs/JOURNEYS.md)), **rev 9 adds stamps, passport, share cards** (D-070, [STAMPS_PASSPORT.md](../../../docs/specs/STAMPS_PASSPORT.md)), **rev 10 adds the listening flow** (D-071 proposal, [FEATURE_PLAN.md](../../../docs/specs/FEATURE_PLAN.md); spec [EXPLORE.md](../../../docs/specs/EXPLORE.md)). Rev 3 (D-058). Owner on rev 3 (2026-10-07): bottom scrubber looks untidy; Home "boring sometimes… not giving the vibe to explore"; then approved all review feedback (D-060), Dig (D-061), desktop + mobile apps first (D-062). Rev 3: Home complete (D-058). Owner on rev 2: liked every suggestion, light mode "awesome", bottom bar left to us (kept). Rev 2 (D-057): Owner on rev 1: "way way better… so close"; keep the Journeys filter but don't leave it empty; add light mode.
+**Status:** rev 4 approved (D-065, "thats perfect"); **rev 5 adds the Explore page** (approved, D-066), **rev 6 adds search page, Rabbit hole, Save a tune** (D-067), **rev 7 adds the Now Playing page** (approved, D-068, [NOW_PLAYING.md](../../../docs/specs/NOW_PLAYING.md)), **rev 8 adds Journeys** (approved, D-069, [JOURNEYS.md](../../../docs/specs/JOURNEYS.md)), **rev 9 adds stamps, passport, share cards** (D-070, [STAMPS_PASSPORT.md](../../../docs/specs/STAMPS_PASSPORT.md)), **rev 11 adds the Playlist page + Radio page** (D-072 proposal), **rev 10 adds the listening flow** (D-071 proposal, [FEATURE_PLAN.md](../../../docs/specs/FEATURE_PLAN.md); spec [EXPLORE.md](../../../docs/specs/EXPLORE.md)). Rev 3 (D-058). Owner on rev 3 (2026-10-07): bottom scrubber looks untidy; Home "boring sometimes… not giving the vibe to explore"; then approved all review feedback (D-060), Dig (D-061), desktop + mobile apps first (D-062). Rev 3: Home complete (D-058). Owner on rev 2: liked every suggestion, light mode "awesome", bottom bar left to us (kept). Rev 2 (D-057): Owner on rev 1: "way way better… so close"; keep the Journeys filter but don't leave it empty; add light mode.
 
 Previous: Owner on C: "way better… but we can do way better; some places feel old; Journey button must change when it's playing and offer Open Journey; make it more advanced, engaging, interactive, correct and systematic; audience mostly teenagers; Home first."
 
@@ -9,6 +9,8 @@ Previous: Owner on C: "way better… but we can do way better; some places feel 
 **Test it:** `CHROMIUM=$(which chromium) node design/studies/2026-10-05-home-e/check.mjs` from a folder with `playwright` installed (exit 0 = PASS: scrubber seek, Dig open/pause, Keep order, Undo, end of stack, Play Dug, natural source end stops, no phone overflow at 390 px, Dig tab).
 
 ![Rev 4 walkthrough (animated)](renders/walkthrough-rev4.svg)
+
+New in rev 11 — **Playlist page**: click a playlist in the sidebar (or Go to playlist) → header, track list, Add songs that fit. **Radio page**: start a radio, then Go to radio (or the toast's Open) → vinyl hero, New spin, Save as playlist, and 50 cards: Now/Next face up, the rest face down until they play — tap to peek, Show all. Radio no longer says why it picked songs. Demo hooks: `pv:'late'`, `pv:1,radio:'night'`, `peek:[…]`, `pvShow`.
 
 New in rev 10 — **Listening flow**: song ⋯ menu or Now Playing → About → **Start radio** (50 songs; Up next says why and that it ends) · end of a playlist/radio → **Keep going** card (Radio / Continue Journey / Dig — nothing starts by itself) · cold open → Stage says **Pick up where you left off** · Up next ends with **Add similar** (+, Undo). Demo hooks: `cold`, `radio:'night'`, `radioOff`, `kg`.
 
@@ -99,9 +101,14 @@ New in rev 2: sun/moon button (top right) = light mode, remembered, follows syst
 | ![](renders/65-phone-passport-stamp-share.svg) | Rev 9: phone: passport, stamp sheet, share |
 | ![](renders/66-pick-up-stage.svg) | Rev 10: cold open — Stage says Pick up where you left off |
 | ![](renders/67-keep-going.svg) | Rev 10: Keep going card when a playlist ends (no autostart) |
-| ![](renders/68-radio-up-next.svg) | Rev 10: radio Up next with factual reasons, ends after 50 |
+| ![](renders/68-radio-up-next.svg) | Rev 10: radio Up next with reasons (superseded by rev 11: reasons removed, picks stay face down) |
 | ![](renders/69-add-similar.svg) | Rev 10: end of radio + Add similar |
 | ![](renders/70-menu-start-radio.svg) | Rev 10: song menu Start radio |
 | ![](renders/71-phone-listening-flow.svg) | Rev 10: phone: Pick up, Keep going, Add similar |
+| ![](renders/72-playlist-page.svg) | Rev 11: Playlist page |
+| ![](renders/73-playlist-fit.svg) | Rev 11: Add songs that fit |
+| ![](renders/74-radio-page.svg) | Rev 11: Radio page — face-down cards, peeked card, New spin |
+| ![](renders/75-radio-up-next.svg) | Rev 11: radio Up next — Next + face-down block, no reasons |
+| ![](renders/76-phone-playlist-radio.svg) | Rev 11: phone: Playlist, Radio, Up next |
 
 All counts come from `data.js`; sleeves are code-drawn placeholders, not product assets (real art arrives with the catalog, D-063). Dig songs and artists are fictional. See [docs/specs/HOME.md](../../../docs/specs/HOME.md).

@@ -50,6 +50,7 @@ Covers ideas H1–H12, J1–J16, E1–E8 (handoff/PRODUCT_IDEAS.md) plus what is
 ## Radio rules (H1)
 
 - 50 songs including the seed song first; then it ends (D-055: sources end honestly) and Keep going appears.
-- Scored from facts only: tempo within ±6 BPM, same key / same mode, same genre, shared producer or writer, featured artist, kept together in your Dig. The top three reasons are shown in Up next ("Radio picks songs with same tempo, same key, same genre as … It ends after 50 songs.").
-- Each Add similar row shows its first reason.
+- Scored from facts only: tempo within ±6 BPM, same key / same mode, same genre, shared producer or writer, featured artist, kept together in your Dig.
+- **Reasons are not shown** (owner 2026-10-07, D-072: "dont say what radio is picking… we should shock them, and curious"). The picks are a surprise: on the Radio page and in Up next only Now and Next are face up; the rest are face down and turn over as they play. Tap a card to peek; **Show all** turns everything over for people who want to plan. **New spin** re-picks the songs not yet played (Undo). Radio name: "<song> radio". No claim is made, so D-050 still holds.
+- Add similar shows title and artist only.
 - Playing radio never changes Journey progress (D-038).
