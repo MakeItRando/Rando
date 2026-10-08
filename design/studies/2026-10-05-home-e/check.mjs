@@ -227,6 +227,37 @@ for (const go of [() => setView('src', { id: 'late' }), () => { startRadio('nigh
 }
 await p.click('#pv [data-pvback]'); if (await p.evaluate(() => XP.view === 'src')) fail('phone Back must leave the page');
 await p.close();
+// rev 12: Artist page
+p = await pg({ width: 1440, height: 900 });
+await p.evaluate(() => { const k = curK(); menu(k, 300, 300); }); await p.click('#pop [data-mn="artist"]'); await p.waitForTimeout(200);
+const av0 = await p.evaluate(() => [XP.view, AV.n, st.src, document.querySelectorAll('#av .av-pop .pv-r').length, /monthly listeners/.test($('av').textContent), !!document.querySelector('#av [data-avj]')]);
+if (!(av0[0] === 'artist' && av0[1] === 'Kairo Vale' && av0[2] === 'late' && av0[3] === 5 && av0[4] && av0[5])) fail('Go to artist must open the Artist page (5 popular, Journey card) without changing playback: ' + JSON.stringify(av0));
+await p.click('#avPP'); await p.waitForTimeout(150);
+if (!(await p.evaluate(() => st.src === 'ap_KairoVale' && st.on && SRC[st.src].q.length <= 10))) fail('artist Play must play their popular songs');
+await p.click('#avPP'); if (await p.evaluate(() => st.on)) fail('artist Play must pause when playing');
+await p.click('#avMore'); if ((await p.evaluate(() => document.querySelectorAll('#av .av-pop .pv-r').length)) !== 10) fail('Show more must show 10');
+await p.click('#avFol'); if (await p.evaluate(() => FOL.has('Kairo Vale'))) fail('Following must unfollow');
+await p.click('#toastBtn'); if (!(await p.evaluate(() => FOL.has('Kairo Vale')))) fail('Unfollow Undo must restore');
+const r0 = await p.evaluate(() => document.querySelector('#av [data-avr]').dataset.avr);
+await p.click('#av .av-g [data-avr]'); await p.waitForTimeout(150);
+if (!(await p.evaluate(r => st.src === r && st.on, r0))) fail('release card must play the release');
+await p.click('[data-avf="EP"]'); if (await p.evaluate(() => [...document.querySelectorAll('#av .av-g [data-avr] > span:last-child')].some(e => !/EP$/.test(e.textContent)))) fail('EP filter must show only EPs');
+await p.click('#avRd'); await p.waitForTimeout(150);
+if (!(await p.evaluate(() => st.src === 'rda_KairoVale' && SRC[st.src].name === 'Kairo Vale radio' && SRC[st.src].q.length <= 50))) fail('Artist radio must start a finite artist radio');
+await p.click('#av [data-avn]'); await p.waitForTimeout(150);
+if (await p.evaluate(() => AV.n === 'Kairo Vale' || XP.view !== 'artist')) fail('similar artist must open their page');
+await p.click('#av [data-avj]'); await p.waitForTimeout(200);
+if (!(await p.evaluate(() => XP.view === 'journeys' && JV.ai !== null && !!$('jArt')))) fail('Journey card must open the Artist Journey, which links back');
+await p.click('#jArt'); await p.waitForTimeout(150);
+if (!(await p.evaluate(() => XP.view === 'artist'))) fail('Artist page link from the Artist Journey must work');
+await p.evaluate(() => { palOpen(); $('palIn').value = 'Asha'; palRender(); }); await p.waitForTimeout(100);
+await p.evaluate(() => { const i = res.findIndex(x => x.artist); palGo(i); }); await p.waitForTimeout(150);
+if (!(await p.evaluate(() => XP.view === 'artist' && AV.n === 'Asha North'))) fail('search artist result must open the Artist page');
+await p.close();
+p = await pg({ width: 390, height: 844 });
+await p.evaluate(() => artOpen('Asha North')); await p.waitForTimeout(200);
+if (await p.evaluate(() => document.documentElement.scrollWidth > innerWidth || $('main').scrollWidth > $('main').clientWidth + 1)) fail('phone Artist page must not scroll sideways');
+await p.close();
 await b.close();
-console.log(errs.length ? 'FAIL\n' + errs.join('\n') : 'PASS: Playlist page (open, row play, pause, Add songs that fit/Undo, phone), Radio page (face down, peek, play, New spin/Undo, Show all, Save), Listening flow (Start radio, radio surprise + finite, Add similar/Undo, Keep going no-autostart/Esc/Radio, Journey end no card, Pick up resume, phone), Stamps + passport + share, Journeys (map, artist page, end stops + stamp, skip/undo, top mix, picker + pace, Meet, search, phone), scrubber, Dig flow, Undo, end-of-stack, Play Dug, source end stops, phone chrome, Explore tab + overflow, Dig from Explore, Tune a mix, Go from, Rabbit hole, Save tune, search page, Now Playing (tabs, Up next, queue remove/Undo, credits, phone controls)');
+console.log(errs.length ? 'FAIL\n' + errs.join('\n') : 'PASS: Artist page (open from menu/search/Journey, play/pause, more, follow/Undo, releases + filter, artist radio, similar, Journey both ways, phone), Playlist page (open, row play, pause, Add songs that fit/Undo, phone), Radio page (face down, peek, play, New spin/Undo, Show all, Save), Listening flow (Start radio, radio surprise + finite, Add similar/Undo, Keep going no-autostart/Esc/Radio, Journey end no card, Pick up resume, phone), Stamps + passport + share, Journeys (map, artist page, end stops + stamp, skip/undo, top mix, picker + pace, Meet, search, phone), scrubber, Dig flow, Undo, end-of-stack, Play Dug, source end stops, phone chrome, Explore tab + overflow, Dig from Explore, Tune a mix, Go from, Rabbit hole, Save tune, search page, Now Playing (tabs, Up next, queue remove/Undo, credits, phone controls)');
 process.exit(errs.length ? 1 : 0);

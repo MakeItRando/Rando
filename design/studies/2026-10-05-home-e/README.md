@@ -1,6 +1,6 @@
 # Home study E — interactive (2026-10-05)
 
-**Status:** rev 4 approved (D-065, "thats perfect"); **rev 5 adds the Explore page** (approved, D-066), **rev 6 adds search page, Rabbit hole, Save a tune** (D-067), **rev 7 adds the Now Playing page** (approved, D-068, [NOW_PLAYING.md](../../../docs/specs/NOW_PLAYING.md)), **rev 8 adds Journeys** (approved, D-069, [JOURNEYS.md](../../../docs/specs/JOURNEYS.md)), **rev 9 adds stamps, passport, share cards** (D-070, [STAMPS_PASSPORT.md](../../../docs/specs/STAMPS_PASSPORT.md)), **rev 11 adds the Playlist page + Radio page** (D-072 proposal), **rev 10 adds the listening flow** (D-071 proposal, [FEATURE_PLAN.md](../../../docs/specs/FEATURE_PLAN.md); spec [EXPLORE.md](../../../docs/specs/EXPLORE.md)). Rev 3 (D-058). Owner on rev 3 (2026-10-07): bottom scrubber looks untidy; Home "boring sometimes… not giving the vibe to explore"; then approved all review feedback (D-060), Dig (D-061), desktop + mobile apps first (D-062). Rev 3: Home complete (D-058). Owner on rev 2: liked every suggestion, light mode "awesome", bottom bar left to us (kept). Rev 2 (D-057): Owner on rev 1: "way way better… so close"; keep the Journeys filter but don't leave it empty; add light mode.
+**Status:** rev 4 approved (D-065, "thats perfect"); **rev 5 adds the Explore page** (approved, D-066), **rev 6 adds search page, Rabbit hole, Save a tune** (D-067), **rev 7 adds the Now Playing page** (approved, D-068, [NOW_PLAYING.md](../../../docs/specs/NOW_PLAYING.md)), **rev 8 adds Journeys** (approved, D-069, [JOURNEYS.md](../../../docs/specs/JOURNEYS.md)), **rev 9 adds stamps, passport, share cards** (D-070, [STAMPS_PASSPORT.md](../../../docs/specs/STAMPS_PASSPORT.md)), **rev 12 adds the Artist page** (D-074 proposal, [ARTIST.md](../../../docs/specs/ARTIST.md)), **rev 11 adds the Playlist page + Radio page** (D-072 proposal), **rev 10 adds the listening flow** (D-071 proposal, [FEATURE_PLAN.md](../../../docs/specs/FEATURE_PLAN.md); spec [EXPLORE.md](../../../docs/specs/EXPLORE.md)). Rev 3 (D-058). Owner on rev 3 (2026-10-07): bottom scrubber looks untidy; Home "boring sometimes… not giving the vibe to explore"; then approved all review feedback (D-060), Dig (D-061), desktop + mobile apps first (D-062). Rev 3: Home complete (D-058). Owner on rev 2: liked every suggestion, light mode "awesome", bottom bar left to us (kept). Rev 2 (D-057): Owner on rev 1: "way way better… so close"; keep the Journeys filter but don't leave it empty; add light mode.
 
 Previous: Owner on C: "way better… but we can do way better; some places feel old; Journey button must change when it's playing and offer Open Journey; make it more advanced, engaging, interactive, correct and systematic; audience mostly teenagers; Home first."
 
@@ -9,6 +9,8 @@ Previous: Owner on C: "way better… but we can do way better; some places feel 
 **Test it:** `CHROMIUM=$(which chromium) node design/studies/2026-10-05-home-e/check.mjs` from a folder with `playwright` installed (exit 0 = PASS: scrubber seek, Dig open/pause, Keep order, Undo, end of stack, Play Dug, natural source end stops, no phone overflow at 390 px, Dig tab).
 
 ![Rev 4 walkthrough (animated)](renders/walkthrough-rev4.svg)
+
+New in rev 12 — **Artist page**: song ⋯ → Go to artist, an artist name in Now Playing or on the Stage, search, or a Following row → header (Play, Follow, Artist radio), Popular, Latest release, Your Journey card ↔ Artist Journey ("Artist page" chip), Releases + filter, More in genre, About + Worked with. Demo hook: `artist:'Kairo Vale'`. Motion/polish waits for the real apps ([MOTION.md](../../../docs/MOTION.md)).
 
 New in rev 11 — **Playlist page**: click a playlist in the sidebar (or Go to playlist) → header, track list, Add songs that fit. **Radio page**: start a radio, then Go to radio (or the toast's Open) → vinyl hero, New spin, Save as playlist, and 50 cards: Now/Next face up, the rest face down until they play — tap to peek, Show all. Radio no longer says why it picked songs. Demo hooks: `pv:'late'`, `pv:1,radio:'night'`, `peek:[…]`, `pvShow`.
 
@@ -110,5 +112,8 @@ New in rev 2: sun/moon button (top right) = light mode, remembered, follows syst
 | ![](renders/74-radio-page.svg) | Rev 11: Radio page — face-down cards, peeked card, New spin |
 | ![](renders/75-radio-up-next.svg) | Rev 11: radio Up next — Next + face-down block, no reasons |
 | ![](renders/76-phone-playlist-radio.svg) | Rev 11: phone: Playlist, Radio, Up next |
+| ![](renders/77-artist-page.svg) | Rev 12: Artist page — header, Popular, Latest release, Your Journey |
+| ![](renders/78-artist-releases-about.svg) | Rev 12: Releases, More in Hip-Hop, About + Worked with |
+| ![](renders/79-phone-artist.svg) | Rev 12: phone Artist page |
 
 All counts come from `data.js`; sleeves are code-drawn placeholders, not product assets (real art arrives with the catalog, D-063). Dig songs and artists are fictional. See [docs/specs/HOME.md](../../../docs/specs/HOME.md).

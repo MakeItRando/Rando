@@ -741,3 +741,72 @@ pvEl.addEventListener('keydown',e=>{if((e.key==='Enter'||e.key===' ')&&e.target.
 /* boot rev 11 */
 if(D.pv){if(D.radio)PV.id=st.src;setView('src',{id:D.radio?st.src:D.pv});if(D.peek){D.peek.forEach(i=>PV.peek.add(i));pvR()}if(D.pvShow){PV.show=true;pvR()}}
 {const _sr11=startRadio;startRadio=function(k){if(!PV.id||PV.id!=='rd_'+k){PV.show=false;PV.peek=new Set()}_sr11(k)}}
+/* ===== rev 12 (2026-10-07, D-073): Artist page. Where you listen to an artist (Popular, releases, radio, follow); the Artist Journey stays the A→Z path and is linked both ways. ===== */
+const FOL=new Set(['Asha North','Mira Son','Kairo Vale','Nia Vale','Moni Gray','Theo June','Dax Moreno']);
+const AV={n:null,f:'all',more:false};
+const avEl=document.createElement('div');avEl.id='av';avEl.className='pv';$('main').appendChild(avEl);
+const slug=n=>n.replace(/\W/g,'');
+const kfmt=v=>v>=1e6?(v/1e6).toFixed(1).replace(/\.0$/,'')+'M':v>=1e3?Math.round(v/1e3)+'K':String(v);
+const plays=k=>{let h=hsh('pl'+k);h=Math.imul(h^(h>>>13),2654435761)>>>0;return (S[k].gen?2000:900000)+h%2400000};
+function aData(n){jBuild();let J=null;for(const g in JR.G){const G=JR.G[g],ai=G.A.findIndex(a=>a.n===n);if(ai>=0&&(!J||g===JR.active))J={g,ai,a:G.A[ai],G}}
+ const own=Object.keys(S).filter(k=>S[k].ar===n),feat=Object.keys(S).filter(k=>S[k].ar!==n&&S[k].a.split(/, | & /).includes(n));
+ const songs=[...new Set([...own,...(J?J.a.ks:[])])];if(!songs.length)return null;
+ const rels=[];Object.keys(SRC).forEach(id=>{const s=SRC[id];if(/^(EP|Album|Single)$/.test(s.type)&&s.q.length&&S[s.q[0]].ar===n)rels.push({id,t:s.name,type:s.type,year:2025,art:s.art,q:s.q,isNew:id==='silver'||id==='soft'})});
+ if(J)J.a.rels.forEach((r,i)=>{if(rels.some(x=>x.t===r.t))return;const id='rl_'+slug(n)+i;SRC[id]=SRC[id]||{type:r.type,name:r.t,art:J.a.art,q:r.q};rels.push({id,t:r.t,type:r.type,year:r.year,art:J.a.art,q:r.q})});
+ rels.sort((a,b)=>b.year-a.year);
+ const pop=songs.slice().sort((a,b)=>plays(b)-plays(a));const art=(J&&J.a.art)||S[songs[0]].art;
+ const pid='ap_'+slug(n);SRC[pid]={type:'Artist',name:n+' \u00b7 Popular',art,q:pop.slice(0,10),artist:n};
+ const sd=J&&STD[J.g+'|'+J.ai];const lis=sd?sd.now:20000+hsh('ml'+n)%1900000;
+ const g=(J&&J.g)||genOf(songs[0])||'';
+ const work=[...new Set(songs.flatMap(k=>{const c=credits(k);return [...c.prod,...c.write]}).filter(x=>x!==n))].slice(0,4);
+ const sim=J?J.G.A.filter(a=>a.n!==n).map(a=>({n:a.n,art:a.art})).slice(0,6):[];
+ return {n,J,songs,feat,rels,pop,art,pid,lis,g,work,sim}}
+function aJourney(d){if(!d.J)return '';const {g,ai,a}=d.J,s=jState(g,ai);return `<button class="av-j" data-avj><span class="av-jr" style="--p:${s.tot?s.h/s.tot:0}"><span class="cover r">${svg(a.art)}</span></span><div><span class="cap">${g} Journey \u00b7 ${ai+1} of ${d.J.G.A.length}</span><b>${s.done?'Finished \u00b7 stamp collected':s.h?`${s.h} of ${s.tot} songs heard`:'Not started yet'}</b><span class="mut">${s.done?'See your stamp':s.h?'Continue where you stopped':'Start at their newest release'}</span></div>${ICON('right')}</button>`}
+function avR(){if(XP.view!=='artist')return;const d=aData(AV.n);if(!d){avEl.innerHTML='';return}const y=$('main').scrollTop;const on=st.src===d.pid,pl=on&&st.on,f=FOL.has(d.n);
+ const pop=d.pop.slice(0,AV.more?10:5),row=(k,i)=>{const nowR=curK()===k&&!!st.on;return `<div class="pv-r av-r${curK()===k?' on':''}" role="button" tabindex="0" data-avp="${k}"><span class="pv-n m">${nowR?'<span class="eq"><i></i><i></i><i></i></span>':`<span class="nn">${i+1}</span><span class="pi">${ICON('play')}</span>`}</span><span class="cover">${svg(S[k].art)}</span><span class="pv-t"><b>${S[k].t}</b><span>${S[k].a}</span></span><span class="pv-m m">${kfmt(plays(k))} plays</span><span class="pv-lk">${st.liked.has(k)?ICON('heart').replace('class="ic"','class="ic f"'):''}</span><span class="pv-d m">${fmt(S[k].d)}</span><button class="icb pv-mo" data-pvm="${k}" aria-label="More for ${S[k].t}">${ICON('more')}</button></div>`};
+ const types=['all',...['Album','EP','Single'].filter(t=>d.rels.some(r=>r.type===t))];const rels=d.rels.filter(r=>AV.f==='all'||r.type===AV.f);const latest=d.rels[0];
+ const relC=r=>{const live=st.src===r.id;return `<button class="av-rc${live?' on':''}" data-avr="${r.id}" aria-label="Play ${r.t}"><span class="cw"><span class="cover">${svg(r.art)}</span><span class="av-pp">${ICON(live&&st.on?'pause':'play')}</span></span><b>${r.t}</b><span>${r.year} \u00b7 ${r.type}</span></button>`};
+ avEl.innerHTML=`<button class="pv-bk" data-pvback>${ICON('left')}Back</button>
+ <header class="pv-h av-h" style="--pvt:${tone(d.art)}"><div class="av-ph"><span class="cover r">${svg(d.art)}</span></div><div class="pv-i"><span class="cap">Artist${d.g?' \u00b7 '+d.g:''}${d.J?' \u00b7 '+d.J.a.origin:''}</span><h1>${d.n}</h1><p class="mut">${kfmt(d.lis)} monthly listeners \u00b7 ${d.songs.length} song${d.songs.length===1?'':'s'} \u00b7 ${d.rels.length} release${d.rels.length===1?'':'s'}</p>
+ <div class="pv-a"><button class="bigpp pv-pp" id="avPP" aria-label="${pl?'Pause':on?'Resume':'Play'} ${d.n}">${ICON(pl?'pause':'play')}</button><button class="btn gh${f?' on':''}" id="avFol">${f?ICON('check')+'Following':ICON('plus')+'Follow'}</button><button class="btn gh" id="avRd">${ICON('radio')}Artist radio</button><button class="icb" id="avShare" aria-label="Share">${ICON('share')}</button></div></div></header>
+ <div class="av-b"><section class="av-pop"><div class="pv-fh"><h3>Popular</h3></div>${pop.map(row).join('')}${d.pop.length>5?`<button class="lnk av-more" id="avMore">${AV.more?'Show less':'Show '+(Math.min(10,d.pop.length)-5)+' more'}</button>`:''}</section>
+ <aside class="av-side">${latest?`<div class="av-lt"><span class="cap">${latest.isNew?'New':'Latest'} release</span><button class="av-ltc" data-avr="${latest.id}"><span class="cover">${svg(latest.art)}</span><div><b>${latest.t}</b><span>${latest.type} \u00b7 ${latest.year} \u00b7 ${latest.q.length} song${latest.q.length===1?'':'s'}</span></div><span class="av-pp s">${ICON(st.src===latest.id&&st.on?'pause':'play')}</span></button></div>`:''}${aJourney(d)}</aside></div>
+ <section class="av-s"><div class="pv-fh"><h3>Releases</h3>${types.length>2?`<div class="sg2" role="radiogroup" aria-label="Release type">${types.map(t=>`<button class="${AV.f===t?'on':''}" role="radio" aria-checked="${AV.f===t}" data-avf="${t}">${t==='all'?'All':t+'s'}</button>`).join('')}</div>`:''}</div><div class="av-g">${rels.map(relC).join('')}</div></section>
+ ${d.feat.length?`<section class="av-s"><div class="pv-fh"><h3>Appears on</h3></div><div class="av-g">${d.feat.slice(0,6).map(k=>`<button class="av-rc" data-avp="${k}"><span class="cw"><span class="cover">${svg(S[k].art)}</span><span class="av-pp">${ICON('play')}</span></span><b>${S[k].t}</b><span>${S[k].ar}</span></button>`).join('')}</div></section>`:''}
+ ${d.sim.length?`<section class="av-s"><div class="pv-fh"><div><h3>More in ${d.g}</h3><span class="mut">Same Journey, A to Z</span></div><button class="btn gh" data-avg="${d.g}">Open ${d.g} Journey</button></div><div class="av-sim">${d.sim.map(a=>`<button class="av-a" data-avn="${a.n}"><span class="cover r">${svg(a.art)}</span><b>${a.n}</b><span>${FOL.has(a.n)?'Following':'Artist'}</span></button>`).join('')}</div></section>`:''}
+ <section class="av-s av-ab"><div class="pv-fh"><h3>About</h3></div><div class="av-abg"><p>${d.J?d.J.a.bio:'The artist\u2019s own bio arrives with the real catalog.'}</p><dl>${d.J?`<dt>From</dt><dd>${d.J.a.origin}</dd><dt>Active</dt><dd>${d.J.a.years}</dd>`:''}${d.work.length?`<dt>Worked with</dt><dd class="av-w">${d.work.map(w=>`<button class="chip" data-avc="${w}">${w}</button>`).join('')}</dd>`:''}</dl></div></section>`;
+ $('main').scrollTop=y}
+function artOpen(n){if(!aData(n))return toast('No songs from '+n+' in the catalog yet');setView('artist',{n})}
+{const _sv12=setView;setView=function(v,o){document.body.classList.remove('v-av');if(v==='artist'){if(XP.srch)sEnter(false);if(DG.open)digClose();if($('np').classList.contains('open'))npClose();if($('pal').classList.contains('open'))palClose();document.body.classList.remove('v-xp','v-jv','v-pv');document.body.classList.add('v-av');XP.view='artist';if(AV.n!==o.n){AV.f='all';AV.more=false}AV.n=o.n;document.querySelectorAll('.side .nav button').forEach(b=>b.classList.remove('on'));document.querySelectorAll('.side .li.sel').forEach(b=>b.classList.remove('sel'));avR();$('main').scrollTo({top:0,behavior:'instant'});return}_sv12(v,o)}}
+{const _r12=render;render=function(){_r12();if(XP.view==='artist'){const sig=st.src+st.i+st.on+(st.uqNow||'');if(avEl.dataset.sig!==sig){avEl.dataset.sig=sig;avR()}}}}
+/* entry points */
+palGo=(f=>function(i){const x=res[i];if(x&&x.artist){palClose();return artOpen(x.t)}return f(i)})(palGo);
+sOpen=(f=>function(x){if(x&&x.artist){sRemember(XP.q);return artOpen(x.t)}return f(x)})(sOpen);
+document.addEventListener('click',e=>{let x;
+ if(x=e.target.closest('[data-mn="artist"]')){e.stopImmediatePropagation();$('pop').classList.remove('open');return artOpen(S[x.dataset.mk].ar)}
+ if(x=e.target.closest('[data-art-n]')){e.stopImmediatePropagation();return artOpen(x.dataset.artN)}
+ if(x=e.target.closest('#stArtist')){e.stopImmediatePropagation();return artOpen(cur().ar)}
+ if(x=e.target.closest('#folrow .fa[data-soon], .side .li:not([data-src])')){const n=(x.dataset.soon||(x.querySelector('b')||{}).textContent||'').trim();if(aData(n)){e.stopImmediatePropagation();return artOpen(n)}}
+ if(x=e.target.closest('[data-avartist]')){e.stopImmediatePropagation();return artOpen(x.dataset.avartist)}
+ if(x=e.target.closest('#goSrc')){const src=SRC[st.src];if(src.type==='Artist'){e.stopImmediatePropagation();return artOpen(src.artist)}}},true);
+/* Artist Journey links back to the Artist page */
+jaR=(f=>function(){const r=f.apply(this,arguments);const b=$('jFol'),G=JR.G[JV.g],a=G&&G.A[JV.ai];if(b&&a&&!$('jArt'))b.insertAdjacentHTML('afterend',`<button class="chip" id="jArt" data-avartist="${a.n}">Artist page</button>`);return r})(jaR);
+avEl.addEventListener('click',e=>{const t=e.target;let x;const d=aData(AV.n);if(!d)return;
+ if(t.closest('[data-pvback]'))return setView('home');
+ if(x=t.closest('[data-pvm]')){e.stopPropagation();const r=x.getBoundingClientRect();return menu(x.dataset.pvm,r.left-200,r.bottom+4)}
+ if(t.closest('#avPP')){if(st.src===d.pid){st.on=!st.on;render()}else startSrc(d.pid,0);return avR()}
+ if(t.closest('#avFol')){const f=!FOL.has(d.n);f?FOL.add(d.n):FOL.delete(d.n);avR();return toast(f?`Following ${d.n} \u00b7 new releases show in This week`:`Unfollowed ${d.n}`,'Undo',()=>{f?FOL.delete(d.n):FOL.add(d.n);avR();$('toast').classList.remove('open')})}
+ if(t.closest('#avRd')){const id=radioSrc(d.pop[0]),aid='rda_'+slug(d.n);SRC[aid]={...SRC[id],name:d.n+' radio',q:SRC[id].q.slice()};PV.show=false;PV.peek=new Set();startSrc(aid,0);return toast(`${d.n} radio \u00b7 ${SRC[aid].q.length} songs`,'Open',()=>{$('toast').classList.remove('open');setView('src',{id:aid})})}
+ if(t.closest('#avShare'))return toast('Link to '+d.n+' copied');
+ if(t.closest('#avMore')){AV.more=!AV.more;return avR()}
+ if(x=t.closest('[data-avf]')){AV.f=x.dataset.avf;return avR()}
+ if(x=t.closest('[data-avr]')){const id=x.dataset.avr;if(st.src===id){st.on=!st.on;render()}else startSrc(id,0);return avR()}
+ if(x=t.closest('[data-avp]')){const k=x.dataset.avp,i=SRC[d.pid].q.indexOf(k);if(curK()===k){st.on=!st.on;render()}else if(i>=0)startSrc(d.pid,i);else playSong(k);return avR()}
+ if(x=t.closest('[data-avn]'))return artOpen(x.dataset.avn);
+ if(x=t.closest('[data-avg]'))return setView('journeys',{g:x.dataset.avg});
+ if(t.closest('[data-avj]')){const {g,ai}=d.J;return setView('journeys',{g,ai})}
+ if(x=t.closest('[data-avc]')){const n=x.dataset.avc,ks=byCredit(n),key='cr_'+slug(n);SRC[key]={type:'Credits',name:'Credits: '+n,art:S[ks[0]].art,q:ks};startSrc(key,0);return toast(`Playing ${ks.length} songs ${n} worked on`)}});
+avEl.addEventListener('keydown',e=>{if((e.key==='Enter'||e.key===' ')&&e.target.matches('[data-avp]')){e.preventDefault();e.target.click()}});
+/* radio page title uses the source name (song radio or artist radio) */
+rdR=(f=>function(id){const h=f(id),s=SRC[id];return h.replace(/<h1>[^<]*<\/h1>/,`<h1>${s.name}</h1>`)})(rdR);
+if(D.artist)setView('artist',{n:D.artist});
