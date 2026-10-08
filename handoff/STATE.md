@@ -15,7 +15,7 @@
 
 - **Rev 11 (D-072 proposal):** Playlist page + Radio page (face-down surprise cards), radio reasons removed. Awaiting owner verdict.
 
-- **D-073:** polish/motion deferred to the real apps ([MOTION.md](../docs/MOTION.md)). **Rev 12 Artist page approved (D-074)**; rev 12.1 final touches (D-075 proposal). Next pages: Release, Library, Profile/Settings, First run.
+- **D-073:** polish/motion deferred to the real apps ([MOTION.md](../docs/MOTION.md)). **Rev 12 Artist page approved (D-074)**; rev 12.1 final touches (D-075 confirmed). **Rev 13 Release page (D-076 proposal).** Next: Library, Profile/Settings, First run. Next pages: Release, Library, Profile/Settings, First run.
 
 ## Next actions (in order)
 

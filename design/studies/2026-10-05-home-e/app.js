@@ -827,5 +827,51 @@ document.addEventListener('click',e=>{const m=e.target.closest('[data-avm]');if(
  if(a==='link')return toast('Link to '+d.n+' copied');
  if(a==='nfm'){const on=!NFM.has(d.n);on?NFM.add(d.n):NFM.delete(d.n);avR();if(on)toast(`${d.n} is left out of radio and suggestions`,'Undo',()=>{NFM.delete(d.n);avR();$('toast').classList.remove('open')})}},true);
 $('main').addEventListener('scroll',()=>{if(XP.view!=='artist')return;const h=avEl.querySelector('.av-h');if(h)avEl.classList.toggle('stk',h.getBoundingClientRect().bottom<120)},{passive:true});
-/* boot rev 12 */
+/* ===== rev 13 (2026-10-07, D-076): Release page (Album / EP / Single). Feels like the back of a record sleeve: cover with the record sliding out while it plays, Side A / Side B, credits per song, liner notes. Plays in order (albums are made front to back). ===== */
+const LIB=new Set(['north']),RV={id:null,open:null};
+const rvEl=document.createElement('div');rvEl.id='rv';rvEl.className='pv';$('main').appendChild(rvEl);
+const relYear=id=>{for(const n in AVY)if(AVY[n][id])return AVY[n][id];return 2025};const AVY={};
+function relInfo(id){const s=SRC[id];if(!s||!/^(Album|EP|Single)$/.test(s.type))return null;const k0=s.q[0],ar=S[k0].ar;const d=aData(ar);const r=d&&d.rels.find(x=>x.id===id);
+ const year=r?r.year:2025,c=s.q.map(credits),uniq=a=>[...new Set(a.flat())];return {id,s,ar,d,year,isNew:!!(r&&r.isNew),label:c[0].label,prod:uniq(c.map(x=>x.prod)),write:uniq(c.map(x=>x.write)),mix:uniq(c.map(x=>x.mix)),heard:s.q.filter(k=>st.jHeard.has(k)).length}}
+function rvR(){if(XP.view!=='release')return;const R=relInfo(RV.id);if(!R){rvEl.innerHTML='';return}const {s,ar,d}=R,y=$('main').scrollTop,live=st.src===R.id,pl=live&&st.on,saved=LIB.has(R.id),q=s.q,n=q.length;
+ const side=n>=7?Math.ceil(n/2):0;
+ const row=(k,i)=>{const now=live&&st.i===i&&!st.uqNow,c=credits(k),ft=S[k].a.split(/, /).filter(x=>x!==ar),h=st.jHeard.has(k),op=RV.open===k;return `${side&&(i===0||i===side)?`<div class="rlp-side m">Side ${i<side?'A':'B'}</div>`:''}<div class="rlp-tw${op?' op':''}"><div class="rlp-t${now?' on':''}" role="button" tabindex="0" data-rlt="${i}"><span class="rlp-n m">${now&&st.on?'<span class="eq"><i></i><i></i><i></i></span>':String(i+1).padStart(2,'0')}</span><span class="rlp-ti"><b>${S[k].t}</b>${ft.length?`<span>feat. ${ft.join(', ')}</span>`:''}</span>${h?`<span class="rlp-hd" title="Heard">${ICON('check')}</span>`:'<span></span>'}<span class="m rlp-d">${fmt(S[k].d)}</span><button class="icb rlp-cr" data-rlc="${k}" aria-expanded="${op}" aria-label="Credits for ${S[k].t}">${ICON('down')}</button><button class="icb pv-mo" data-pvm="${k}" aria-label="More for ${S[k].t}">${ICON('more')}</button></div>${op?`<div class="rlp-c"><div><span class="cap">Written by</span>${c.write.join(', ')}</div><div><span class="cap">Produced by</span>${c.prod.join(', ')}</div><div><span class="cap">Mixed by</span>${c.mix.join(', ')}</div><div><span class="cap">Tempo \u00b7 key</span>${S[k].bpm} BPM \u00b7 ${S[k].key}</div></div>`:''}</div>`};
+ const more=d?d.rels.filter(r=>r.id!==R.id):[];
+ const jr=d&&d.J?jState(d.J.g,d.J.ai):null;
+ rvEl.innerHTML=`<button class="pv-bk" data-pvback>${ICON('left')}Back</button>
+ <header class="rlp-h" style="--pvt:${tone(s.art)}"><div class="rlp-cv${live?' out':''}${pl?' spin':''}"><span class="rlp-vin"><span class="rlp-lb">${svg(s.art)}</span></span><span class="cover">${svg(s.art)}</span></div>
+ <div class="rlp-i"><span class="cap">${R.isNew?'<span class="rlp-new">New</span>':''}${s.type} \u00b7 ${R.year}</span><h1>${s.name}</h1><button class="rlp-ar" data-avartist="${ar}"><span class="cover r">${svg(d?d.art:s.art)}</span>${ar}</button><p class="mut">${n} song${n===1?'':'s'} \u00b7 ${pvDur(q)} \u00b7 ${R.label}</p>
+ <div class="pv-a"><button class="bigpp pv-pp" id="rvPP" aria-label="${pl?'Pause':live?'Resume':'Play'} ${s.name}">${ICON(pl?'pause':'play')}</button><button class="btn gh${saved?' on':''}" id="rvSave">${saved?ICON('check')+'In your library':ICON('plus')+'Save'}</button><button class="icb" id="rvOpt" aria-label="More options for ${s.name}">${ICON('more')}</button></div>
+ <div class="rlp-meta">${n>1?`<span class="rlp-ord">${ICON('right')}Plays in order, front to back</span>`:''}${R.heard?`<span class="rlp-hp"><i style="--p:${R.heard/n}"></i>${R.heard===n?'You\u2019ve heard every song':`${R.heard} of ${n} heard`}</span>`:''}${jr?`<button class="rlp-jc" data-rlj>${ICON('journey')}${d.J.g} Journey \u00b7 ${jr.done?'stamp collected':jr.h?jr.h+' of '+jr.tot+' heard':'not started'}</button>`:''}</div></div></header>
+ <section class="rlp-l">${q.map(row).join('')}<div class="rlp-end m">${R.year} \u00b7 ${n} song${n===1?'':'s'} \u00b7 ${pvDur(q)}</div></section>
+ <section class="rlp-ln"><div class="pv-fh"><h3>Liner notes</h3></div><dl><dt>Released</dt><dd>${R.year}${R.isNew?' \u00b7 this week':''}</dd><dt>Label</dt><dd>${R.label}</dd><dt>Written by</dt><dd>${R.write.join(', ')}</dd><dt>Produced by</dt><dd class="av-w">${R.prod.map(w=>`<button class="chip" data-rlcr="${w}">${w}</button>`).join('')}</dd><dt>Mixed by</dt><dd>${R.mix.join(', ')}</dd></dl><p class="m rlp-p">\u2117 ${R.year} ${R.label}</p></section>
+ ${more.length?`<section class="av-s"><div class="pv-fh"><h3>More from ${ar}</h3><button class="btn gh" data-avartist="${ar}">Go to artist</button></div><div class="av-g">${more.map(r=>`<button class="av-rc${st.src===r.id?' on':''}" data-rlo="${r.id}"><span class="cw"><span class="cover">${svg(r.art)}</span><span class="av-pp" data-rlpp="${r.id}">${ICON(st.src===r.id&&st.on?'pause':'play')}</span></span><b>${r.t}</b><span>${r.year} \u00b7 ${r.type}</span></button>`).join('')}</div></section>`:''}`;
+ $('main').scrollTop=y}
+function relOpen(id){if(!relInfo(id))return toast('This release page comes later');setView('release',{id})}
+{const _sv13=setView;setView=function(v,o){document.body.classList.remove('v-rv');if(v==='release'){if(XP.srch)sEnter(false);if(DG.open)digClose();if($('np').classList.contains('open'))npClose();document.body.classList.remove('v-xp','v-jv','v-pv','v-av');document.body.classList.add('v-rv');XP.view='release';if(RV.id!==o.id)RV.open=null;RV.id=o.id;document.querySelectorAll('.side .nav button').forEach(b=>b.classList.remove('on'));document.querySelectorAll('.side .li.sel').forEach(b=>b.classList.remove('sel'));rvR();$('main').scrollTo({top:0,behavior:'instant'});return}_sv13(v,o)}}
+{const _r13=render;render=function(){_r13();if(XP.view==='release'){const sig=st.src+st.i+st.on+(st.uqNow||'');if(rvEl.dataset.sig!==sig){rvEl.dataset.sig=sig;rvR()}}}}
+/* entry points: artist page release cards open the release (the round play button still plays); Stage "Go to album/ep/single" */
+document.addEventListener('click',e=>{let x;
+ if(x=e.target.closest('#av [data-avr]')){if(!e.target.closest('.av-pp')){e.stopImmediatePropagation();return relOpen(x.dataset.avr)}}
+ if(x=e.target.closest('#goSrc')){const src=SRC[st.src];if(/^(Album|EP|Single)$/.test(src.type)){e.stopImmediatePropagation();return relOpen(st.src)}}},true);
+rvEl.addEventListener('click',e=>{const t=e.target;let x;const R=relInfo(RV.id);if(!R)return;const id=R.id;
+ if(t.closest('[data-pvback]'))return history.length&&AV.n?setView('artist',{n:AV.n}):setView('home');
+ if(x=t.closest('[data-pvm]')){e.stopPropagation();const r=x.getBoundingClientRect();return menu(x.dataset.pvm,r.left-200,r.bottom+4)}
+ if(x=t.closest('[data-rlc]')){const k=x.dataset.rlc;RV.open=RV.open===k?null:k;return rvR()}
+ if(t.closest('#rvPP')){if(st.src===id){st.on=!st.on;render()}else{if(X.shuf)$('shuf').click();startSrc(id,0)}return rvR()}
+ if(t.closest('#rvSave')){const on=!LIB.has(id);on?LIB.add(id):LIB.delete(id);rvR();return toast(on?`Saved ${R.s.name} to your library`:`Removed ${R.s.name} from your library`,'Undo',()=>{on?LIB.delete(id):LIB.add(id);rvR();$('toast').classList.remove('open')})}
+ if(x=t.closest('#rvOpt')){e.stopPropagation();const r=x.getBoundingClientRect(),p=$('pop');p.style.width='';p.style.left=Math.min(r.left,innerWidth-260)+'px';p.style.top=(r.bottom+6)+'px';p.innerHTML=`<div class="cap">${R.s.name}</div><button data-rvm="radio">${ICON('radio')}Start radio</button><button data-rvm="queue">${ICON('queue')}Add to queue</button><button data-rvm="artist">${ICON('user')}Go to artist</button><button data-rvm="share">${ICON('share')}Share</button>`;p.classList.add('open');return}
+ if(t.closest('[data-rlj]')){const {g,ai}=R.d.J;return setView('journeys',{g,ai})}
+ if(x=t.closest('[data-rlcr]')){const n=x.dataset.rlcr,ks=byCredit(n),key='cr_'+slug(n);SRC[key]={type:'Credits',name:'Credits: '+n,art:S[ks[0]].art,q:ks};startSrc(key,0);return toast(`Playing ${ks.length} songs ${n} worked on`)}
+ if(x=t.closest('[data-rlpp]')){e.stopPropagation();const r=x.dataset.rlpp;if(st.src===r){st.on=!st.on;render()}else startSrc(r,0);return rvR()}
+ if(x=t.closest('[data-rlo]'))return relOpen(x.dataset.rlo);
+ if(x=t.closest('[data-rlt]')){const i=+x.dataset.rlt;if(st.src===id&&st.i===i&&!st.uqNow){st.on=!st.on;render()}else startSrc(id,i);rvR()}});
+rvEl.addEventListener('keydown',e=>{if((e.key==='Enter'||e.key===' ')&&e.target.matches('[data-rlt]')){e.preventDefault();e.target.click()}});
+document.addEventListener('click',e=>{const m=e.target.closest('[data-rvm]');if(!m)return;e.stopPropagation();$('pop').classList.remove('open');const R=relInfo(RV.id),a=m.dataset.rvm;
+ if(a==='radio')return startRadio(R.s.q[0]);
+ if(a==='queue'){st.uq.push(...R.s.q);render();return toast(`Added ${R.s.q.length} songs to your queue`,'Undo',()=>{st.uq.splice(st.uq.length-R.s.q.length);render();$('toast').classList.remove('open')})}
+ if(a==='artist')return artOpen(R.ar);
+ if(a==='share')return toast('Share card for '+R.s.name+' comes with the share system')},true);
+/* boot */
 if(D.artist)setView('artist',{n:D.artist});
+if(D.release)setView('release',{id:D.release});
