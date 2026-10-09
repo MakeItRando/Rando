@@ -889,6 +889,9 @@ document.addEventListener('click',e=>{let x;
  if(x=e.target.closest('[data-sbj]')){return document.querySelector('.side .nav [data-nav=journeys]').click()}
  if(x=e.target.closest('[data-sbf]')){const n=x.dataset.sbf;SEEN.add(n);sbSigF='';artOpen(n);return sbR()}});
 document.addEventListener('keydown',e=>{if((e.key==='Enter'||e.key===' ')&&e.target.matches&&e.target.matches('[data-sbj]')){e.preventDefault();e.target.click()}});
+/* rev 14.1: collapse sidebar, remembered */
+{const set=m=>{document.body.classList.toggle('sb-mini',m);const b=$('sbT');if(b){const l=m?'Expand sidebar':'Collapse sidebar';b.setAttribute('aria-label',l);b.title=l}try{localStorage.setItem('rondo-sb',m?'mini':'full')}catch(e){}};
+ let m=false;try{m=localStorage.getItem('rondo-sb')==='mini'}catch(e){}set(m);$('sbT').onclick=()=>set(!document.body.classList.contains('sb-mini'))}
 /* rev 14: Now Playing — no empty Lyrics dead end; About becomes "this song and you" (D-079) */
 function npAbout(){const k=curK(),s=S[k],src=SRC[st.src],plays=REPEAT_COUNT[k]||0,lk=st.liked.has(k),g=s.genre||GEN[s.art]||'\u2014';
  const pls=Object.keys(st.pl).filter(p=>st.pl[p].includes(k)).map(p=>SRC[p]&&SRC[p].name).filter(Boolean);

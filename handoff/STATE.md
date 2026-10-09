@@ -15,7 +15,7 @@
 
 - **Rev 11 (D-072 proposal):** Playlist page + Radio page (face-down surprise cards), radio reasons removed. Awaiting owner verdict.
 
-- **D-073:** polish/motion deferred to the real apps ([MOTION.md](../docs/MOTION.md)). **Rev 12 Artist page approved (D-074)**; rev 12.1 final touches (D-075 confirmed). **Rev 13 Release page approved (D-076); D-077 clarity rule (every feature, easy to understand); rev 13.1 credits → song menu. Rev 14: sidebar with character (D-078) + numbers out of sight / Now Playing About (D-079), both proposals.** Next: Library, Profile/Settings, First run. Next pages: Release, Library, Profile/Settings, First run.
+- **D-073:** polish/motion deferred to the real apps ([MOTION.md](../docs/MOTION.md)). **Rev 12 Artist page approved (D-074)**; rev 12.1 final touches (D-075 confirmed). **Rev 13 Release page approved (D-076); D-077 clarity rule (every feature, easy to understand); rev 13.1 credits → song menu. Rev 14–14.1: sidebar with character (D-078 confirmed: Journey card, Following 3-wide rings, list playlists, collapse button) + numbers out of sight / Now Playing About (D-079 proposal).** Next: Library, Profile/Settings, First run. Next pages: Release, Library, Profile/Settings, First run.
 
 ## Next actions (in order)
 
