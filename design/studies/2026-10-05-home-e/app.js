@@ -908,6 +908,31 @@ function npAbout(){const k=curK(),s=S[k],src=SRC[st.src],plays=REPEAT_COUNT[k]||
 document.addEventListener('click',e=>{let x;
  if(x=e.target.closest('[data-nprel]')){const id=x.dataset.nprel;npClose();return relOpen(id)}
  if(x=e.target.closest('[data-npj]')){npClose();return document.querySelector('.side .nav [data-nav=journeys]').click()}});
+/* rev 14.2: sidebar progress line, Recently played, drop to add (D-080) */
+const REC=['north','soft'].filter(k=>SRC[k]);let recLast=null,recSig='';
+const SIDE_KEYS=()=>[...document.querySelectorAll('#pls .li[data-src], #dugLi, .li.svd')].map(e=>e.dataset.src);
+function recR(){const el=$('sbRec');if(!el)return;if(st.src!==recLast){if(recLast&&SRC[recLast]&&!/Journey/.test(SRC[recLast].type)&&!SRC[recLast].journey){const i=REC.indexOf(recLast);if(i>=0)REC.splice(i,1);REC.unshift(recLast)}recLast=st.src}
+ const side=SIDE_KEYS(),list=REC.filter(k=>k!==st.src&&!side.includes(k)&&SRC[k]).slice(0,2),sig=list.join();if(sig===recSig)return;recSig=sig;
+ el.innerHTML=list.length?`<div class="sh"><span class="cap">Recently played</span></div>`+list.map(k=>{const s=SRC[k],ar=s.q[0]&&S[s.q[0]]?S[s.q[0]].ar:'';return `<button class="li" data-rec="${k}"><span class="cover">${svg(s.art)}</span><div><b>${s.name.replace(/ \u00b7 Popular$/,'')}</b><span>${s.type}${/Album|EP|Single/.test(s.type)&&ar?' \u00b7 '+ar:''}</span></div></button>`}).join(''):''}
+function sbProg(){document.querySelectorAll('.side .li.sbp').forEach(e=>{if(e.dataset.src!==st.src)e.classList.remove('sbp')});const r=document.querySelector(`#pls .li[data-src="${st.src}"], #dugLi[data-src="${st.src}"], .li.svd[data-src="${st.src}"]`);if(!r||st.uqNow)return;const q=SRC[st.src].q,d=cur().d||1;r.classList.add('sbp');r.style.setProperty('--p',Math.min(1,(st.i+st.t/d)/q.length).toFixed(4))}
+{const _r142=render;render=function(){_r142();recR();sbProg()}}
+document.addEventListener('click',e=>{const x=e.target.closest('[data-rec]');if(!x)return;e.stopImmediatePropagation();const k=x.dataset.rec,s=SRC[k];if(/^(Album|EP|Single)$/.test(s.type)&&relInfo(k))return relOpen(k);if(/Playlist|Radio/.test(s.type))return setView('src',{id:k});if(s.type==='Artist'&&s.artist)return artOpen(s.artist);toggleSrc(k)},true);
+/* drop to add */
+const DRAG_SEL='.it,.qi,.dq,.npq,.pv-r,.av-r,.rlp-t,#barArt,.bar .cur';
+function dragKeys(el){if(el.matches('#barArt,.bar .cur'))return [curK()];if(el.dataset.k)return [el.dataset.k];if(el.dataset.avp)return [el.dataset.avp];
+ if(el.dataset.pvi!==undefined&&PV.id&&SRC[PV.id])return [SRC[PV.id].q[+el.dataset.pvi]];if(el.dataset.rlt!==undefined&&RV.id&&SRC[RV.id])return [SRC[RV.id].q[+el.dataset.rlt]];
+ if(el.dataset.src&&SRC[el.dataset.src]){const s=SRC[el.dataset.src];return el.dataset.i!==undefined&&!/^(Album|EP|Single|Playlist|Radio)$/.test(s.type)?[s.q[+el.dataset.i||0]]:s.q.slice()}return []}
+let DRAG=null;
+document.addEventListener('mouseover',e=>{const el=e.target.closest&&e.target.closest(DRAG_SEL);if(el&&!el.draggable)el.draggable=true});
+document.addEventListener('dragstart',e=>{const el=e.target.closest&&e.target.closest(DRAG_SEL);if(!el)return;const ks=dragKeys(el).filter(k=>S[k]);if(!ks.length)return;DRAG=ks;e.dataTransfer.effectAllowed='copy';e.dataTransfer.setData('text/plain',ks.map(k=>S[k].t).join(', '));document.body.classList.add('dragging');
+ const g=document.createElement('div');g.className='dz-ghost';g.textContent=ks.length>1?`${ks.length} songs`:S[ks[0]].t;document.body.appendChild(g);e.dataTransfer.setDragImage(g,12,16);setTimeout(()=>g.remove(),0)});
+document.addEventListener('dragend',()=>{DRAG=null;document.body.classList.remove('dragging');document.querySelectorAll('.side .li.drop').forEach(x=>x.classList.remove('drop'))});
+const dropTarget=e=>{const li=e.target.closest&&e.target.closest('#pls .li[data-src]');return li&&(li.dataset.src==='liked'||st.pl[li.dataset.src])?li:null};
+document.addEventListener('dragover',e=>{if(!DRAG)return;const li=dropTarget(e);document.querySelectorAll('.side .li.drop').forEach(x=>{if(x!==li)x.classList.remove('drop')});if(li){e.preventDefault();e.dataTransfer.dropEffect='copy';li.classList.add('drop')}});
+function dropAdd(k,ks){if(k==='liked'){const nw=ks.filter(x=>!st.liked.has(x));nw.forEach(x=>st.liked.add(x));buildSide();render();return toast(nw.length?`Added ${nw.length>1?nw.length+' songs':S[nw[0]].t} to Liked songs`:'Already in Liked songs',nw.length?'Undo':null,nw.length?()=>{nw.forEach(x=>st.liked.delete(x));buildSide();render();$('toast').classList.remove('open')}:null)}
+ const p=st.pl[k],nw=ks.filter(x=>!p.includes(x));if(!nw.length)return toast(`Already in ${SRC[k].name}`);p.push(...nw);buildSide();render();
+ toast(`Added ${nw.length>1?nw.length+' songs':S[nw[0]].t} to ${SRC[k].name}`,'Undo',()=>{p.splice(p.length-nw.length,nw.length);buildSide();render();$('toast').classList.remove('open')})}
+document.addEventListener('drop',e=>{if(!DRAG)return;const li=dropTarget(e);if(!li)return;e.preventDefault();const ks=DRAG;DRAG=null;document.body.classList.remove('dragging');li.classList.remove('drop');dropAdd(li.dataset.src,ks)});
 /* boot */
 if(D.artist)setView('artist',{n:D.artist});
 if(D.release)setView('release',{id:D.release});

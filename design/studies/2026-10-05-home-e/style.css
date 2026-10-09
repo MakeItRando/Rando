@@ -1332,3 +1332,18 @@ body.sb-mini #sbJ{padding:10px 0 0}body.sb-mini .sbj{padding:6px;background:none
 body.sb-mini .sbj.live .sbj-c .cover{outline:2px solid var(--acc);outline-offset:2px}
 body.sb-mini .sbf{grid-auto-flow:row;grid-auto-columns:auto;justify-items:center;overflow:visible;padding:8px 0}body.sb-mini .sbf-r{width:46px;height:46px}body.sb-mini .sbf-n{display:none}
 @media (max-width:1020px){.sbt{display:none}}
+
+/* rev 14.2: sidebar dividers, progress line, Recently played, drop to add (D-080) */
+.side .nav{padding-bottom:12px;border-bottom:1px solid var(--line);margin:0 2px}
+.side .sh{border-top:1px solid var(--line);margin:16px 6px 0;padding:14px 4px 6px}
+.side #sbJ+.sh{margin-top:16px}
+.side .li.sbp{position:relative}
+.side .li.sbp::after{content:"";position:absolute;left:8px;right:8px;bottom:2px;height:2px;border-radius:2px;background:linear-gradient(90deg,var(--acc) calc(var(--p,0)*100%),color-mix(in srgb,var(--t1) 12%,transparent) 0)}
+body.dragging #pls .li[data-src]{outline:1.5px dashed color-mix(in srgb,var(--t1) 30%,transparent);outline-offset:-2px}
+body.dragging #pls .li[data-src]::before{content:"Drop to add";position:absolute;right:10px;font-size:11px;color:var(--t3)}
+body.dragging #pls .li{position:relative}
+.side .li.drop{background:color-mix(in srgb,var(--acc) 18%,transparent)!important;outline:1.5px solid var(--acc)!important}
+.side .li.drop::before{color:var(--acc)!important}
+.dz-ghost{position:fixed;top:-100px;left:0;padding:7px 12px;border-radius:999px;background:var(--acc);color:#fff;font:600 13px Geist,system-ui,sans-serif;white-space:nowrap}
+body.sb-mini .side .sh{display:none}body.sb-mini .side .nav{border-bottom:0}
+@media (max-width:1020px){.side .li.sbp::after{left:14px;right:14px}body.dragging #pls .li[data-src]::before{display:none}}
