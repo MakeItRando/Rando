@@ -71,3 +71,4 @@
 | Tests and quality bar | [QUALITY_GATES.md](QUALITY_GATES.md) |
 | Screenshots / media | [SNAPSHOTS.md](SNAPSHOTS.md), [snapshots/](snapshots/) |
 - Owner: "umm yeah, just dont overdo stuff, that make the things confusing, we gotta add every features and it should be easy to understand too, but i like the stuff you added." → D-076 confirmed; D-077 clarity rule; rev 13.1 moved song credits into the ⋯ menu.
+- Owner: app feels "boring and old fashioned" after 4 days; main pages look good, but Playlist page, other sub-pages and the sidebar feel boring and "not perfect yet"; wants it unique, creative, better than other apps; unsure if it just needs real-app polish. → Logged as design debt (STATE.md); recommended a focused character pass on the weak pages before Library, rather than waiting for polish.

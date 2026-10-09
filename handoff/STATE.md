@@ -64,3 +64,6 @@ The source-level Song Room metadata/desktop-mode/SVG/320px/query-first/canonical
 Fictional 8 artists, 15 releases, 39 tracks, four playable genres and six original 32-second demo recordings; other tracks can be simulated timelines. Browser-local profile/saves/notes/progress are not accounts or cloud sync. No real ingestion, backend, production search, territory enforcement or payments. V1 excludes payments.
 
 Update this state, affected page/architecture specs, decisions, QA/media index, roadmap and handoff report in the same session as every meaningful change. Label proposal, implementation, automated pass, manual review, owner acceptance, merge and post-merge verification separately. Preserve history and exact SHAs; never convert green checks into a promise of perfection.
+
+## Design debt (owner, 2026-10-07)
+- Main pages (Home, Explore, Journeys) look good. **Playlist page, Radio/other sub-pages and the sidebar feel boring / old-fashioned** and need a character pass to reach main-page level — not only motion polish. Must stay simple (D-077).
