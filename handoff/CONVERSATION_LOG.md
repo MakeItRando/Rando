@@ -70,3 +70,4 @@
 | Ideas backlog | [PRODUCT_IDEAS.md](PRODUCT_IDEAS.md), [REVIEW_2026-10-07.md](REVIEW_2026-10-07.md) |
 | Tests and quality bar | [QUALITY_GATES.md](QUALITY_GATES.md) |
 | Screenshots / media | [SNAPSHOTS.md](SNAPSHOTS.md), [snapshots/](snapshots/) |
+- Owner: "umm yeah, just dont overdo stuff, that make the things confusing, we gotta add every features and it should be easy to understand too, but i like the stuff you added." → D-076 confirmed; D-077 clarity rule; rev 13.1 moved song credits into the ⋯ menu.

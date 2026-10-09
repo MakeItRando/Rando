@@ -282,7 +282,7 @@ if (!(await p.evaluate(r => XP.view === 'release' && RV.id === r && st.src === '
 await p.click('#rvPP'); await p.waitForTimeout(100);
 if (!(await p.evaluate(r => st.src === r && st.i === 0 && st.on && !X.shuf && $('rv').querySelector('.rlp-cv.out'), rid))) fail('release Play must play in order from song 1 and slide the record out');
 await p.click('#rv [data-rlt="3"]'); if (!(await p.evaluate(() => st.i === 3))) fail('track row must play that track');
-await p.click('#rv [data-rlc]'); if (!(await p.evaluate(() => /Produced by/.test(document.querySelector('#rv .rlp-c').textContent)))) fail('credits chevron must expand song credits');
+await p.click('#rv .pv-mo'); await p.click('#pop [data-rlmc]'); if (!(await p.evaluate(() => /Produced by/.test(document.querySelector('#rv .rlp-c').textContent)))) fail('Show credits in the song menu must expand song credits');
 await p.click('#rvSave'); if (!(await p.evaluate(r => LIB.has(r), rid))) fail('Save must add to library');
 await p.click('#toastBtn'); if (await p.evaluate(r => LIB.has(r), rid)) fail('Save Undo must remove');
 await p.click('#rvOpt'); await p.click('#pop [data-rvm="queue"]'); if ((await p.evaluate(r => st.uq.length === SRC[r].q.length, rid)) !== true) fail('Add to queue must queue every song');
