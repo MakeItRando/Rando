@@ -1377,3 +1377,27 @@ body.sb-mini .side .li.sbp::after{left:12px;right:12px}
 .npnote{display:block;width:100%;text-align:left;padding:14px 16px;border-radius:14px;background:rgba(239,238,233,.07);border:1px dashed rgba(239,238,233,.22)}
 .npnote:hover{background:rgba(239,238,233,.12)}.npnote .cap{display:block;margin-bottom:4px}.npnote q{font-size:16px;font-style:italic;quotes:"\201C" "\201D"}
 .npnote.add{display:flex;align-items:center;gap:8px;opacity:.75;font-size:13.5px}.npnote.add .ic{width:15px;height:15px}
+
+/* rev 15: Moments (D-082) */
+.bar .cur{position:relative}.mom-b{flex:none;width:32px;height:32px;color:var(--t3);margin-left:4px}
+.mom-b:hover{color:var(--t1)}.mom-b.on{color:var(--acc)}
+.mom-b.mpop{animation:momPop .5s var(--ease)}
+@keyframes momPop{0%{transform:scale(1)}30%{transform:scale(1.35) rotate(20deg);color:var(--acc)}100%{transform:scale(1)}}
+#wv{position:relative}
+.mml{position:absolute;inset:0;pointer-events:none}
+.mmk{position:absolute;top:50%;height:8px;transform:translateY(-50%);border-radius:4px;background:color-mix(in srgb,var(--acc) 45%,transparent);box-shadow:inset 0 0 0 1px var(--acc)}
+.sk-t .mmk{height:9px}
+.mom-sec .hd{display:flex;align-items:center;justify-content:space-between}
+.mmr{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.mmc{display:flex;align-items:center;gap:12px;padding:10px;border-radius:12px;background:var(--s1);cursor:pointer;transition:background .15s}
+.mmc:hover{background:var(--s2)}.mmc>div{min-width:0;flex:1}
+.mmc .cover{position:relative;width:56px}.mmc-p{position:absolute;inset:0;display:grid;place-items:center;background:rgba(0,0,0,.35);opacity:0;transition:opacity .15s}.mmc:hover .mmc-p{opacity:1}.mmc-p .ic{width:18px;height:18px;color:#fff}
+.mmc b{display:block;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.mmc span{display:block;font-size:12.5px;color:var(--t3)}
+.mmc-r{display:flex!important;align-items:center;gap:5px;color:var(--acc)!important;margin-top:3px}.mmc-r .ic{width:12px;height:12px}
+.mmc-s{opacity:.6}.mmc:hover .mmc-s{opacity:1}
+.mm-hint{font-size:12.5px;margin-top:10px}
+.npmm{padding:14px 16px;border-radius:14px;background:rgba(239,238,233,.07);border:1px solid rgba(239,238,233,.1)}
+.npmm .cap{display:block;margin-bottom:8px}.npmm-l{display:flex;flex-wrap:wrap;gap:8px}.npmm-l .chip .ic{width:12px;height:12px}
+@media (max-width:1020px){.mmr{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:640px){.mmr{grid-template-columns:1fr}.mmr>:nth-child(n+4){display:none}}
+.mm-hint .ic,.npmm .mut .ic{width:13px;height:13px;vertical-align:-2px;color:var(--acc)}

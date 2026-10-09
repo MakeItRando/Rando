@@ -958,7 +958,39 @@ document.addEventListener('click',e=>{let x;const p=$('pop');
  if(x=e.target.closest('[data-snd]')){e.stopPropagation();const k=p.dataset.nk,o=NOTES[k];delete NOTES[k];p.classList.remove('open');if($('np').classList.contains('open'))npBuild();return toast('Note removed','Undo',()=>{NOTES[k]=o;if($('np').classList.contains('open'))npBuild();$('toast').classList.remove('open')})}
  if(e.target.closest('.snote'))e.stopPropagation()},true);
 {const _na=npAbout;npAbout=function(){const k=curK(),h=_na(),n=NOTES[k];const note=n?`<button class="npnote" data-snote="${k}"><span class="cap">Your note</span><q>${n.replace(/</g,'&lt;')}</q></button>`:`<button class="npnote add" data-snote="${k}">${ICON('plus')}Add a private note to this song</button>`;const i=h.indexOf('<dl class="npd">');return i<0?h:h.slice(0,i)+note+h.slice(i)}}
+/* rev 15: Moments (I1, D-082) — tap ✦ at the best part; saves 30 s: 10 s before the tap, 20 s after */
+const MOM=[{k:'night',s:82,e:112,seed:1},{k:'blue',s:41,e:71,seed:1}].filter(m=>S[m.k]);
+const MOM_PRE=10,MOM_POST=20;
+function momOf(k){return MOM.filter(m=>m.k===k)}
+function momRange(m){return fmt(m.s)+'\u2013'+fmt(m.e)}
+function momSave(){const k=curK(),s=S[k];if(!s)return;const d=s.d,t=st.t;let a=Math.max(0,t-MOM_PRE),b=Math.min(d,a+MOM_PRE+MOM_POST);if(b-a<MOM_PRE+MOM_POST)a=Math.max(0,b-(MOM_PRE+MOM_POST));a=Math.round(a);b=Math.round(b);
+ const dup=momOf(k).find(m=>Math.abs(m.s-a)<12);const btn=$('momBtn');if(btn){btn.classList.remove('mpop');void btn.offsetWidth;btn.classList.add('mpop')}
+ if(dup)return toast(`Already saved \u00b7 ${momRange(dup)}`);const m={k,s:a,e:b};MOM.unshift(m);momUI();
+ toast(`Moment saved \u00b7 ${s.t} ${momRange(m)}`,'Undo',()=>{const i=MOM.indexOf(m);if(i>=0)MOM.splice(i,1);momUI();$('toast').classList.remove('open')})}
+function momSrc(){SRC.moments={type:'Moments',name:'Your moments',art:MOM.length?S[MOM[0].k].art:'night',q:MOM.map(m=>m.k),clips:MOM.map(m=>({s:m.s,e:m.e}))};return 'moments'}
+function momPlay(i){momSrc();momLastI=-1;startSrc('moments',i||0)}
+let momLastI=-1;
+setInterval(()=>{if(st.src!=='moments'||st.uqNow){momLastI=-1;return}const c=SRC.moments&&SRC.moments.clips[st.i];if(!c)return;if(st.i!==momLastI){momLastI=st.i;st.t=c.s;tick();return}if(st.on&&st.t>=c.e){if(st.i<SRC.moments.q.length-1){st.i++;st.t=0;onTrack(true)}else{st.on=false;st.t=c.e;render();toast('That\u2019s all your moments')}}},120);
+function momMarks(){const k=curK(),s=S[k];if(!s)return '';return momOf(k).map(m=>`<span class="mmk" style="left:${m.s/s.d*100}%;width:${(m.e-m.s)/s.d*100}%" title="Moment ${momRange(m)}"></span>`).join('')}
+let momSig='';
+function momUI(){const k=curK();const sig=k+'|'+MOM.map(m=>m.k+m.s).join();
+ const wv=$('wv');if(wv){let l=$('mmL');if(!l){l=document.createElement('div');l.id='mmL';l.className='mml';wv.appendChild(l)}if(l.dataset.sig!==sig){l.dataset.sig=sig;l.innerHTML=momMarks()}}
+ const b=$('momBtn');if(b)b.classList.toggle('on',momOf(k).length>0);
+ const nt=document.querySelector('#np .sk-t');if(nt){let l=nt.querySelector('.mml');if(!l){l=document.createElement('div');l.className='mml';nt.appendChild(l)}if(l.dataset.sig!==sig){l.dataset.sig=sig;l.innerHTML=momMarks()}}
+ if(sig===momSig)return;momSig=sig;
+ const sec=$('momSec');if(sec)sec.innerHTML=MOM.length?`<div class="hd"><h2>Your moments</h2><button class="btn gh sm" data-mmall>${ICON('play')}Play all \u00b7 ${MOM.length}</button></div><div class="mmr">${MOM.slice(0,6).map((m,i)=>`<div class="mmc" role="button" tabindex="0" data-mmi="${i}" title="Play ${S[m.k].t} from ${fmt(m.s)}"><span class="cover">${svg(S[m.k].art)}<i class="mmc-p">${ICON('play')}</i></span><div><b>${S[m.k].t}</b><span>${S[m.k].ar}</span><span class="m mmc-r">${ICON('sparkle')}${momRange(m)}</span></div><button class="icb mmc-s" data-mmsh="${i}" aria-label="Share this moment">${ICON('share')}</button></div>`).join('')}</div><p class="mut mm-hint">Tap ${ICON('sparkle')} in the player (or press M) at the best part of a song. Rondo keeps 30 seconds: 10 before, 20 after.</p>`:''}
+{const _r15=render;render=function(){_r15();momUI()}}
+$('momBtn').onclick=e=>{e.stopPropagation();momSave()};
+document.addEventListener('keydown',e=>{if(e.key!=='m'&&e.key!=='M')return;if(e.metaKey||e.ctrlKey||e.altKey)return;const t=e.target;if(t&&(t.tagName==='INPUT'||t.tagName==='TEXTAREA'||t.isContentEditable))return;if($('pal').classList.contains('open'))return;e.preventDefault();momSave()});
+document.addEventListener('click',e=>{let x;
+ if(x=e.target.closest('[data-mmsh]')){e.stopPropagation();const m=MOM[+x.dataset.mmsh];return toast(`Link copied \u00b7 plays ${S[m.k].t} from ${fmt(m.s)}`)}
+ if(x=e.target.closest('[data-mmi]')){e.stopPropagation();return momPlay(+x.dataset.mmi)}
+ if(x=e.target.closest('[data-mmall]')){e.stopPropagation();return momPlay(0)}
+ if(x=e.target.closest('[data-mmgo]')){e.stopPropagation();const [k,s]=x.dataset.mmgo.split('|');if(curK()===k){st.t=+s;st.on=true;tick();render()}return}
+ if(x=e.target.closest('[data-npmom]')){e.stopPropagation();momSave();if($('np').classList.contains('open'))npBuild();return}},true);
+{const _nb=npBuild;npBuild=function(){_nb();const a=$('np').querySelector('.npa');if(a&&!a.querySelector('[data-npmom]'))a.insertAdjacentHTML('beforeend',`<button class="btn gh mom-np" data-npmom title="Save this moment · M">${ICON('sparkle')}Save moment</button>`);momSig='';momUI()}}
+{const _na2=npAbout;npAbout=function(){const k=curK(),h=_na2(),ms=momOf(k);const blk=`<div class="npmm"><span class="cap">Your moments in this song</span>${ms.length?`<div class="npmm-l">${ms.map(m=>`<button class="chip" data-mmgo="${k}|${m.s}">${ICON('play')}${momRange(m)}</button>`).join('')}</div>`:`<span class="mut">None yet — tap ${ICON('sparkle')} in the player at the best part.</span>`}</div>`;const i=h.indexOf('<dl class="npd">');return i<0?h:h.slice(0,i)+blk+h.slice(i)}}
 /* boot */
 if(D.artist)setView('artist',{n:D.artist});
 if(D.release)setView('release',{id:D.release});
-sbR();recR();sbProg();sbTop();
+sbR();recR();sbProg();sbTop();momUI();
