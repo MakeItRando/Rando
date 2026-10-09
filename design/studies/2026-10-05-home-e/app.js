@@ -880,9 +880,10 @@ const SEEN=new Set();let sbSigJ='',sbSigF='';
 function sbDots(q,i,live){return `<div class="sbj-d">${q.map((x,j)=>`<i class="${st.jHeard.has(x)?'h':''}${live&&j===i?' now':''}"></i>`).join('')}</div>`}
 function sbR(){const g=JR.active,G=JR.G[g];
  if(G&&$('sbJ')){const ai=G.cur,a=G.A[ai],s=jState(g,ai),ks=jPace(G,a),sig=[g,ai,s.h,s.live,s.on,st.i,G.pace].join('|');
-  if(sig!==sbSigJ){sbSigJ=sig;$('sbJ').innerHTML=`<div class="sbj${s.live?' live':''}" role="button" tabindex="0" data-sbj aria-label="Open Journeys" style="--tone:${TONE[a.art]||'#2a2a2a'}"><div class="sbj-t"><span class="sbj-c"><span class="cover r">${svg(a.art)}</span></span><div><span class="cap">${g} Journey</span><b>${a.n}</b><span class="sbj-s">${s.done?'Finished \u00b7 stamp collected':s.h?`${s.h} of ${s.tot} heard`:'Not started yet'}</span></div><button class="sbj-p" data-sbjp aria-label="${s.label}">${ICON(s.icon)}</button></div>${sbDots(ks,ks.indexOf(curK()),s.live)}</div>`}}
+  if(sig!==sbSigJ){sbSigJ=sig;$('sbJ').innerHTML=`<div class="sbj${s.live?' live':''}" role="button" tabindex="0" data-sbj aria-label="Open Journeys" style="--tone:${TONE[a.art]||'#2a2a2a'}"><div class="sbj-t"><span class="sbj-c"><span class="cover r">${svg(a.art)}</span></span><div><span class="cap">${g} Journey</span><b>${a.n}</b><span class="sbj-s">${s.done?'Finished \u00b7 stamp collected':s.h?`${s.h} of ${s.tot} heard`:'Not started yet'}</span></div><button class="sbj-p" data-sbjp aria-label="${s.label}">${ICON(s.icon)}</button></div>${sbDots(ks,ks.indexOf(curK()),s.live)}${s.live?'<span class="sbjp"></span>':''}</div>`}
+  const bar=$('sbJ').querySelector('.sbjp');if(bar){const i=Math.max(0,ks.indexOf(curK()));bar.style.setProperty('--p',Math.min(1,(i+st.t/(cur().d||1))/ks.length).toFixed(4))}}
  const ca=S[curK()]?S[curK()].ar:'',sigF=[...FOL].join()+'|'+[...SEEN].join()+'|'+ca+st.on;
- if(sigF!==sbSigF&&$('sbF')){sbSigF=sigF;$('sbF').innerHTML=[...FOL].map(n=>{const d=aData(n);if(!d)return '';const nw=d.rels.some(r=>r.isNew)&&!SEEN.has(n),pl=ca===n&&st.on;return `<button class="sbf-a${nw?' nw':''}${pl?' pl':''}" data-sbf="${n}" title="${n}${nw?' \u00b7 new music':''}" aria-label="${n}${nw?', new music':''}"><span class="sbf-r"><span class="cover r">${svg(d.art)}</span>${pl?'<span class="eq"><i></i><i></i><i></i></span>':''}</span><span class="sbf-n">${n.split(' ')[0]}</span></button>`}).join('')}}
+ if(sigF!==sbSigF&&$('sbF')){sbSigF=sigF;$('sbF').innerHTML=[...FOL].map(n=>{const d=aData(n);if(!d)return '';const nw=d.rels.some(r=>r.isNew)&&!SEEN.has(n),pl=ca===n&&st.on;return `<button class="sbf-a${nw?' nw':''}${pl?' pl':''}" data-sbf="${n}" title="${n}${nw?' \u00b7 new music':''}" aria-label="${n}${nw?', new music':''}"><span class="sbf-r"><span class="cover r">${svg(d.art)}</span>${pl?'<span class="eq"><i></i><i></i><i></i></span>':''}</span><span class="sbf-n">${n.split(' ')[0]}</span></button>`}).join('')+(FOL.size>3?`<button class="sbmore" data-sbmore aria-label="Show all ${FOL.size} artists you follow">+${FOL.size-3}</button>`:'')}}
 {const _r14=render;render=function(){_r14();sbR()}}
 document.addEventListener('click',e=>{let x;
  if(x=e.target.closest('[data-sbjp]')){e.stopPropagation();const G=JR.G[JR.active];return jPlay(JR.active,G.cur)}
@@ -917,6 +918,12 @@ function recR(){const el=$('sbRec');if(!el)return;if(st.src!==recLast){if(recLas
 function sbProg(){document.querySelectorAll('.side .li.sbp').forEach(e=>{if(e.dataset.src!==st.src)e.classList.remove('sbp')});const r=document.querySelector(`#pls .li[data-src="${st.src}"], #dugLi[data-src="${st.src}"], .li.svd[data-src="${st.src}"]`);if(!r||st.uqNow)return;const q=SRC[st.src].q,d=cur().d||1;r.classList.add('sbp');r.style.setProperty('--p',Math.min(1,(st.i+st.t/d)/q.length).toFixed(4))}
 {const _r142=render;render=function(){_r142();recR();sbProg()}}
 document.addEventListener('click',e=>{const x=e.target.closest('[data-rec]');if(!x)return;e.stopImmediatePropagation();const k=x.dataset.rec,s=SRC[k];if(/^(Album|EP|Single)$/.test(s.type)&&relInfo(k))return relOpen(k);if(/Playlist|Radio/.test(s.type))return setView('src',{id:k});if(s.type==='Artist'&&s.artist)return artOpen(s.artist);toggleSrc(k)},true);
+/* rev 14.3: +N opens the sidebar; dragging over a collapsed sidebar opens it until the drag ends */
+document.addEventListener('click',e=>{if(e.target.closest('[data-sbmore]')){e.stopPropagation();$('sbT').click()}});
+let sbAuto=false;
+document.addEventListener('dragenter',e=>{if(DRAG&&document.body.classList.contains('sb-mini')&&e.target.closest&&e.target.closest('.side')){sbAuto=true;document.body.classList.remove('sb-mini')}});
+document.addEventListener('dragend',()=>{if(sbAuto){sbAuto=false;document.body.classList.add('sb-mini')}});
+document.addEventListener('drop',()=>{if(sbAuto)setTimeout(()=>{if(sbAuto){sbAuto=false;document.body.classList.add('sb-mini')}},600)});
 /* drop to add */
 const DRAG_SEL='.it,.qi,.dq,.npq,.pv-r,.av-r,.rlp-t,#barArt,.bar .cur';
 function dragKeys(el){if(el.matches('#barArt,.bar .cur'))return [curK()];if(el.dataset.k)return [el.dataset.k];if(el.dataset.avp)return [el.dataset.avp];

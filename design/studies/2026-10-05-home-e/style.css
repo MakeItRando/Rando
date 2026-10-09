@@ -1347,3 +1347,20 @@ body.dragging #pls .li{position:relative}
 .dz-ghost{position:fixed;top:-100px;left:0;padding:7px 12px;border-radius:999px;background:var(--acc);color:#fff;font:600 13px Geist,system-ui,sans-serif;white-space:nowrap}
 body.sb-mini .side .sh{display:none}body.sb-mini .side .nav{border-bottom:0}
 @media (max-width:1020px){.side .li.sbp::after{left:14px;right:14px}body.dragging #pls .li[data-src]::before{display:none}}
+
+/* rev 14.3: Journey progress line, collapsed rail = same items as open + strong dividers */
+.sbj{position:relative}
+.sbjp{position:absolute;left:12px;right:12px;bottom:6px;height:2px;border-radius:2px;background:linear-gradient(90deg,var(--acc) calc(var(--p,0)*100%),color-mix(in srgb,var(--t1) 14%,transparent) 0)}
+.sbmore{display:none}
+body.sb-mini .sbf-a:nth-child(n+4){display:none}
+body.sb-mini .sbmore{display:grid;place-items:center;width:46px;height:30px;border-radius:15px;background:var(--s1);color:var(--t2);font-size:12px;font-weight:600}
+body.sb-mini .sbmore:hover{background:var(--s2);color:var(--t1)}
+body.sb-mini .side{scrollbar-width:none}body.sb-mini .side::-webkit-scrollbar{display:none}
+body.sb-mini .side .nav{border-bottom:2px solid var(--line);padding-bottom:10px;margin:0 6px}
+body.sb-mini .side .sh{display:block;height:0;padding:0;margin:10px 8px;border-top:2px solid var(--line);overflow:hidden}
+body.sb-mini .side .sh>*{display:none}
+body.sb-mini #sbJ{padding:10px 0 4px}
+body.sb-mini .sbjp{left:8px;right:8px;bottom:0}
+body.sb-mini .side .li.sbp::after{left:12px;right:12px}
+@media (max-width:1020px){.side .nav{border-bottom:2px solid var(--line);padding-bottom:10px;margin:0 6px}.side .sh{display:block!important;height:0;padding:0;margin:10px 8px;border-top:2px solid var(--line);overflow:hidden}.side .sh>*{display:none}.sbf-a:nth-child(n+4){display:none}.sbmore{display:grid;place-items:center;width:46px;height:30px;border-radius:15px;background:var(--s1);color:var(--t2);font-size:12px;font-weight:600}.sbjp{left:8px;right:8px;bottom:0}}
+.sbj.live{padding-bottom:18px}body.sb-mini .sbj.live{padding-bottom:8px}

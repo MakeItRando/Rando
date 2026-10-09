@@ -17,6 +17,11 @@ Get back to what you care about in one click, and show at a glance what is alive
 4e. **Dividers** — thin lines between nav, Journey card, Following, Recently played and Playlists.
 5. **Collapse button** — top right of the sidebar column (in the top bar, next to the logo). Collapses to the 72 px rail (icons, Journey cover, artist photos, playlist covers) and expands back; remembered between visits. Hidden when the window is already narrow (rail is forced ≤1020 px).
 
+6. **Rev 14.3 (owner feedback):**
+   - Live Journey card gets the same thin progress line as the playing playlist (position in the artist's songs + current song time).
+   - **Collapsed rail shows the same things as the open sidebar:** 3 artists max + a "+N" bubble (opens the sidebar), strong 2 px dividers between nav / Journey / Following / Recently played / Playlists, no scrollbar.
+   - **Dragging a song over the collapsed sidebar opens it**; it closes again when the drag ends (dropped or cancelled).
+
 ## States
 - Nothing followed: Following section hidden (V1 build). Journey not started: "Not started yet", empty dots. Journey finished: "Finished · stamp collected".
 - Narrow window (≤1020 px, 72 px rail): covers only; playing item and live Journey get an orange outline.
