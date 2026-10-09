@@ -13,6 +13,11 @@ Keep the best part of a song — the drop, the line, the chorus — and get back
 - **Play all** plays only the moments, back to back, then stops honestly ("That's all your moments", D-055).
 - **Share** a moment → link that starts the song at the moment (V1 backend; prototype shows the toast).
 
+## Rev 15.1 — removing + Artist page
+- **Remove:** while the song plays inside a saved moment, ✦ fills in ("Remove this moment"); tapping it removes that moment (Undo). Now Playing button reads "Remove moment" there. The playing range on the seek bar brightens.
+- **×** on each Home moment card and on each range chip in Now Playing → About removes it (Undo).
+- **Artist page:** the "You and …" card shows "✦ N moments from …" with **Play your moments** — plays only that artist's moments, then stops (like Deep cuts).
+
 ## Scope / data
 Moment = { songId, start, end, createdAt }. V1 local; sync + share links V1 backend. Prototype seeds two study moments so the row is visible.
 
@@ -20,4 +25,4 @@ Moment = { songId, start, end, createdAt }. V1 local; sync + share links V1 back
 No public "most-saved moment" counts as status (teen audience). No AI picking moments (D-050).
 
 ## Acceptance tests
-✦ saves 10 s before / 20 s after; no duplicate at the same spot; M key; Undo; Play all starts at the first moment and jumps to the next one when a moment ends.
+✦ saves 10 s before / 20 s after; no duplicate at the same spot; M key; Undo; Play all starts at the first moment and jumps to the next one when a moment ends. Rev 15.1: ✦ fills inside a moment and tapping removes it (Undo); Home × removes; Artist Play your moments plays only that artist's moments.

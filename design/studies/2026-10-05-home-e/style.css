@@ -1402,3 +1402,11 @@ body.sb-mini .side .li.sbp::after{left:12px;right:12px}
 @media (max-width:640px){.mmr{grid-template-columns:1fr}.mmr>:nth-child(n+4){display:none}}
 .mm-hint .ic,.npmm .mut .ic{width:13px;height:13px;vertical-align:-2px;color:var(--acc)}
 .npy-n b span{font-size:inherit!important;opacity:1!important}
+
+/* rev 15.1 */
+.mom-b.in{color:var(--acc)}.mom-b.in svg{fill:currentColor}
+.mom-np.in{border-color:var(--acc);color:var(--acc)}.mom-np.in svg{fill:currentColor}
+.mmk.now{background:var(--acc)}
+.mmch{display:inline-flex;align-items:center;gap:2px}.mmch-x{width:26px;height:26px;opacity:.55}.mmch-x:hover{opacity:1}.mmch-x .ic{width:13px;height:13px}
+.av-mm{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-top:12px;padding-top:12px;border-top:1px solid var(--line)}
+.av-mm-h{display:flex;align-items:center;gap:6px;min-width:0}.av-mm-h .ic{width:15px;height:15px;color:var(--acc);fill:currentColor}.av-mm-h .mut{font-size:12.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
