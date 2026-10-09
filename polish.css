@@ -1,0 +1,83 @@
+/*
+ * Rondo craft pass (v0.3.3 candidate)
+ *
+ * Loaded last in the portable build and selector-weighted with `html[data-theme]`
+ * so it also wins in dev, where experience.css and route-pages.css are appended at
+ * runtime by discoveryHub.js. Every block names the defect it fixes. When the CSS
+ * is consolidated, fold these rules into their owning files and delete this one.
+ */
+
+/* 1. Light appearance: surfaces that hard-coded light-on-dark colours. */
+html[data-theme="light"] .music-search {
+  border-color: rgba(20, 18, 16, .16);
+  background: #fffefb;
+  box-shadow: 0 1px 0 rgba(20, 18, 16, .03);
+}
+html[data-theme="light"] .music-search svg { color: rgba(25, 24, 23, .52); }
+html[data-theme="light"] .music-search input { color: #191817; }
+html[data-theme="light"] .music-search input::placeholder { color: rgba(25, 24, 23, .48); }
+html[data-theme="light"] .music-search:focus-within { border-color: rgba(var(--genre-rgb), .7); }
+html[data-theme="light"] .music-card,
+html[data-theme="light"] .genre-song,
+html[data-theme="light"] .sound-results > header button { color: #191817; }
+html[data-theme="light"] .music-card-art { background: #ece7dd; }
+html[data-theme="light"] .music-card-art::after { border-color: rgba(20, 18, 16, .1); }
+html[data-theme="light"] .music-hidden { background: #f4f0e8; }
+html[data-theme="light"] .genre-song { border-bottom-color: rgba(20, 18, 16, .09); }
+html[data-theme="light"] .genre-song-list { border-top-color: rgba(20, 18, 16, .14); }
+html[data-theme="light"] .genre-song-number,
+html[data-theme="light"] .genre-song-style,
+html[data-theme="light"] .genre-song time,
+html[data-theme="light"] .genre-song-name small,
+html[data-theme="light"] .music-search-results > header,
+html[data-theme="light"] .journey-genre-results > header,
+html[data-theme="light"] .journey-genre-copy > button,
+html[data-theme="light"] .journey-genre-actions .text-action { color: rgba(25, 24, 23, .56); }
+html[data-theme="light"] .sound-results > header button { border-color: rgba(20, 18, 16, .14); }
+
+/* 2. Genre home art stack: covers must be opaque so back titles never bleed through. */
+html[data-theme] .journey-genre-art > span {
+  isolation: isolate;
+  opacity: 1;
+  background: #0d0f14;
+}
+html[data-theme="light"] .journey-genre-art > span { background: #ece7dd; }
+html[data-theme] .journey-genre-art img { position: relative; opacity: 1; mix-blend-mode: normal; }
+
+/* 3. Song Room controls: SVG icons share one optical centre. */
+html[data-theme] .song-room-control-buttons button {
+  display: inline-grid;
+  place-items: center;
+  padding: 0;
+  line-height: 0;
+}
+html[data-theme] .song-room-control-buttons svg { display: block; flex: 0 0 auto; }
+html[data-theme] .song-room-control-buttons #fullPlay svg { width: 22px; height: 22px; }
+
+/* 4. Song Room queue: the active inset bar no longer clips the index number. */
+html[data-theme] .song-room-queue-list button { padding-left: 10px; }
+
+/* 5. Catalog-mode label is Journey vocabulary; hide it elsewhere instead of confusing Discover. */
+html[data-theme] body:not([data-view="journeys"]) .transport-meta > #transportMode { visibility: hidden; }
+
+/* 6. Compact Discover: first playable song reaches the first screen. */
+@media (max-width: 760px) {
+  html[data-theme] .discover-home-head {
+    min-height: 0;
+    padding: 24px 18px 20px;
+    gap: 16px;
+  }
+  html[data-theme] .discover-home-head p { margin-top: 10px; font-size: 14px; }
+  html[data-theme] .discover-home-head > button { min-height: 46px; }
+  html[data-theme] .discover-search { margin-top: 14px; }
+  html[data-theme] .music-search { height: 50px; }
+  /* 16px stops iOS Safari from zooming the page when the field is focused. */
+  html[data-theme] .music-search input { font-size: 16px; text-overflow: ellipsis; }
+  html[data-theme] .music-featured { padding-top: 26px; }
+  html[data-theme] .music-featured > header { margin-bottom: 16px; }
+  html[data-theme] .artist-actions { margin-top: 12px; }
+}
+@media (max-width: 390px) {
+  html[data-theme] .discover-home-head h1 { font-size: 38px; line-height: .94; }
+  html[data-theme] .discover-home-head > button { min-height: 44px; }
+}
