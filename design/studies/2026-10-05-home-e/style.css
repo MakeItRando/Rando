@@ -1401,3 +1401,4 @@ body.sb-mini .side .li.sbp::after{left:12px;right:12px}
 @media (max-width:1020px){.mmr{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media (max-width:640px){.mmr{grid-template-columns:1fr}.mmr>:nth-child(n+4){display:none}}
 .mm-hint .ic,.npmm .mut .ic{width:13px;height:13px;vertical-align:-2px;color:var(--acc)}
+.npy-n b span{font-size:inherit!important;opacity:1!important}
