@@ -294,6 +294,21 @@ p = await pg({ width: 390, height: 844 });
 await p.evaluate(() => relOpen('silver')); await p.waitForTimeout(200);
 if (await p.evaluate(() => document.documentElement.scrollWidth > innerWidth || $('main').scrollWidth > $('main').clientWidth + 1)) fail('phone Release page must not scroll sideways');
 await p.close();
+// rev 14: sidebar + Now Playing About (D-078, D-079)
+p = await pg({ width: 1440, height: 900 });
+await p.click('#sbJ [data-sbjp]'); await p.waitForTimeout(100);
+if (!(await p.evaluate(() => { const G = JR.G[JR.active]; return jState(JR.active, G.cur).live && st.on && !!document.querySelector('#sbJ .sbj.live'); }))) fail('sidebar Journey Play must start the Journey');
+await p.click('#sbJ [data-sbjp]'); if (await p.evaluate(() => st.on)) fail('sidebar Journey Play must pause when live');
+if (!(await p.evaluate(() => !!document.querySelector('#sbF .sbf-a.nw[data-sbf="Asha North"]')))) fail('followed artist with new music must have a ring');
+await p.click('#sbF [data-sbf="Asha North"]'); await p.waitForTimeout(100);
+if (!(await p.evaluate(() => XP.view === 'artist' && !document.querySelector('#sbF .sbf-a.nw[data-sbf="Asha North"]')))) fail('opening a ringed artist must open the Artist page and clear the ring');
+await p.click('#sbJ [data-sbj]'); if (!(await p.evaluate(() => XP.view === 'journeys'))) fail('Journey card must open Journeys');
+await p.evaluate(() => { startSrc('late', 0); });
+if (!(await p.evaluate(() => !!document.querySelector('#shelf .li.on[data-src=late]')))) fail('playing playlist tile must be marked on in the shelf');
+await p.evaluate(() => { const k = Object.keys(S).find(x => !S[x].ly && SRC.late.q.includes(x)) ; if (k) startSrc('late', SRC.late.q.indexOf(k)); X.npTab = 'lyrics'; npOpen(); npBuild(); });
+if (await p.evaluate(() => !cur().ly || cur().gen)) { if (!(await p.evaluate(() => !!document.querySelector('.npab2') && !!document.querySelector('.npt .npt-off')))) fail('song without lyrics must open About, with Lyrics greyed out'); }
+if (await p.evaluate(() => /\d+ BPM/.test(document.body.innerText))) fail('BPM numbers must not show in the main views');
+await p.close();
 await b.close();
-console.log(errs.length ? 'FAIL\n' + errs.join('\n') : 'PASS: Release page (open from artist, in-order play + record out, track play, credits, Save/Undo, queue, More from, artist link, phone), Artist final touches (sticky bar, bell, Not for me + Undo, You and, liked), Artist page (open from menu/search/Journey, play/pause, more, follow/Undo, releases + filter, artist radio, similar, Journey both ways, phone), Playlist page (open, row play, pause, Add songs that fit/Undo, phone), Radio page (face down, peek, play, New spin/Undo, Show all, Save), Listening flow (Start radio, radio surprise + finite, Add similar/Undo, Keep going no-autostart/Esc/Radio, Journey end no card, Pick up resume, phone), Stamps + passport + share, Journeys (map, artist page, end stops + stamp, skip/undo, top mix, picker + pace, Meet, search, phone), scrubber, Dig flow, Undo, end-of-stack, Play Dug, source end stops, phone chrome, Explore tab + overflow, Dig from Explore, Tune a mix, Go from, Rabbit hole, Save tune, search page, Now Playing (tabs, Up next, queue remove/Undo, credits, phone controls)');
+console.log(errs.length ? 'FAIL\n' + errs.join('\n') : 'PASS: Sidebar (Journey card play/pause/open, Following ring clears, shelf on), Now Playing no-lyrics About, no BPM, Release page (open from artist, in-order play + record out, track play, credits, Save/Undo, queue, More from, artist link, phone), Artist final touches (sticky bar, bell, Not for me + Undo, You and, liked), Artist page (open from menu/search/Journey, play/pause, more, follow/Undo, releases + filter, artist radio, similar, Journey both ways, phone), Playlist page (open, row play, pause, Add songs that fit/Undo, phone), Radio page (face down, peek, play, New spin/Undo, Show all, Save), Listening flow (Start radio, radio surprise + finite, Add similar/Undo, Keep going no-autostart/Esc/Radio, Journey end no card, Pick up resume, phone), Stamps + passport + share, Journeys (map, artist page, end stops + stamp, skip/undo, top mix, picker + pace, Meet, search, phone), scrubber, Dig flow, Undo, end-of-stack, Play Dug, source end stops, phone chrome, Explore tab + overflow, Dig from Explore, Tune a mix, Go from, Rabbit hole, Save tune, search page, Now Playing (tabs, Up next, queue remove/Undo, credits, phone controls)');
 process.exit(errs.length ? 1 : 0);

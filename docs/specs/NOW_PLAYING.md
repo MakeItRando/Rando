@@ -40,3 +40,8 @@ V1-local: all of it. Credits counts across the whole catalog and Devices = V1-ba
 ## Acceptance tests (in `check.mjs`)
 
 L opens with tabs; Up next lists only the active source after the user queue and the end note; remove from queue + Undo; Credits → Play their credits plays that person's songs; Esc closes; phone: full screen with own controls, bar hidden, play toggles, scrubber seeks, no sideways scroll, close works.
+
+## Rev 14 (D-079): no dead ends, numbers out of sight
+- **No empty Lyrics screen.** If a song has no lyrics (instrumental or not in the catalog yet), the Lyrics tab is greyed out and the page opens on **About** instead; it switches back to Lyrics for the next song that has them.
+- **About = this song and you:** Journey stop card (when playing from a Journey: "Stop 3 of 6" + dots, tap → Journeys), "From the album/EP" card (tap → Release page), **You and this song** (plays or "New · first listen", liked, in how many of your playlists + their names), then Genre · Pace · Length, Go from this song, Share.
+- **BPM and key are gone from the main view.** Header chips show only length + "on repeat". Pace is a word (Laid back / Steady / High energy); the numbers stay in data and power Go from, Tune a mix, radio and Journey flow behind the scenes.

@@ -22,6 +22,7 @@ Motion and polish are deferred to one pass on the real apps (D-073): see [../MOT
 | 9 | Profile & settings | — | profile menu in home-e | Not started |
 | 10 | First run (play first, setup optional, D-045) | ../ONBOARDING.md | — | Not started |
 | 11 | Following + notifications | [FOLLOWING.md](FOLLOWING.md) | bell panel in home-e | Product spec only |
+| 13 | Sidebar (desktop) | [SIDEBAR.md](SIDEBAR.md) | home-e rev 14 | Proposed (D-078) |
 | 12 | Dig | [HOME.md § Dig](HOME.md) | home-e rev 4 | Approved (D-061, D-065) |
 
 ## Template (copy for a new page)
