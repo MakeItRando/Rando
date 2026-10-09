@@ -1364,3 +1364,16 @@ body.sb-mini .sbjp{left:8px;right:8px;bottom:0}
 body.sb-mini .side .li.sbp::after{left:12px;right:12px}
 @media (max-width:1020px){.side .nav{border-bottom:2px solid var(--line);padding-bottom:10px;margin:0 6px}.side .sh{display:block!important;height:0;padding:0;margin:10px 8px;border-top:2px solid var(--line);overflow:hidden}.side .sh>*{display:none}.sbf-a:nth-child(n+4){display:none}.sbmore{display:grid;place-items:center;width:46px;height:30px;border-radius:15px;background:var(--s1);color:var(--t2);font-size:12px;font-weight:600}.sbjp{left:8px;right:8px;bottom:0}}
 .sbj.live{padding-bottom:18px}body.sb-mini .sbj.live{padding-bottom:8px}
+
+/* rev 14.4: playing rises to top, Deep cuts, Song notes (D-081) */
+.plw{display:flex;flex-direction:column}#pls{display:contents}
+.plw .li.playtop{order:-1;animation:sbUp .35s var(--ease)}
+@keyframes sbUp{from{transform:translateY(14px);opacity:.4}to{transform:none;opacity:1}}
+.sbf-a{transition:transform .3s var(--ease)}
+.av-yb{margin-top:10px;display:flex;flex-wrap:wrap;gap:8px}
+.snote{padding:4px 8px 8px;width:300px}.snote textarea{width:100%;resize:none;border-radius:8px;border:1px solid var(--line);background:var(--s1);color:var(--t1);font:inherit;padding:8px 10px}
+.snote textarea:focus{outline:2px solid var(--acc);outline-offset:-1px}
+.snote-a{display:flex;align-items:center;gap:8px;margin-top:8px}.snote-a .m{margin-right:auto;font-size:11px}
+.npnote{display:block;width:100%;text-align:left;padding:14px 16px;border-radius:14px;background:rgba(239,238,233,.07);border:1px dashed rgba(239,238,233,.22)}
+.npnote:hover{background:rgba(239,238,233,.12)}.npnote .cap{display:block;margin-bottom:4px}.npnote q{font-size:16px;font-style:italic;quotes:"\201C" "\201D"}
+.npnote.add{display:flex;align-items:center;gap:8px;opacity:.75;font-size:13.5px}.npnote.add .ic{width:15px;height:15px}

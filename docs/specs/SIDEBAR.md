@@ -22,6 +22,8 @@ Get back to what you care about in one click, and show at a glance what is alive
    - **Collapsed rail shows the same things as the open sidebar:** 3 artists max + a "+N" bubble (opens the sidebar), strong 2 px dividers between nav / Journey / Following / Recently played / Playlists, no scrollbar.
    - **Dragging a song over the collapsed sidebar opens it**; it closes again when the drag ends (dropped or cancelled).
 
+7. **Rev 14.4 — playing rises to the top (D-081):** the playlist that's playing moves to the top of Playlists (short slide-up), and the artist playing moves to the front of Following, so both stay visible even in the collapsed rail. Order returns to normal when something else plays.
+
 ## States
 - Nothing followed: Following section hidden (V1 build). Journey not started: "Not started yet", empty dots. Journey finished: "Finished · stamp collected".
 - Narrow window (≤1020 px, 72 px rail): covers only; playing item and live Journey get an orange outline.

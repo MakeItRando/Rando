@@ -34,3 +34,6 @@ Back link, stacked header (photo ≈ half width), compact rows, side column move
 ## Later
 
 Release page, artist pick / pinned message from the artist, tour dates (V2), verified artist tools (V2), "Not for me" on the Journey (J15) also reachable from ⋯.
+
+## Rev 14.4 (I3): Deep cuts
+"Play deep cuts · N you haven't heard" in the You and <artist> card: plays the artist's songs you've never played, least popular first, as a finite Mix (ends honestly, D-055). Shown even before you've heard the artist ("You haven't heard Nia yet").
