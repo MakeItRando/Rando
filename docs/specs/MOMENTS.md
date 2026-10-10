@@ -14,7 +14,7 @@ Keep the best part of a song — the drop, the line, the chorus — and get back
 - **Share** a moment → link that starts the song at the moment (V1 backend; prototype shows the toast).
 
 ## Rev 15.1 — removing + Artist page
-- **Remove:** while the song plays inside a saved moment, ✦ fills in ("Remove this moment"); tapping it removes that moment (Undo). Now Playing button reads "Remove moment" there.
+- **Remove (rev 15.2, owner):** the player never changes look when playing enters or leaves a moment (no filled ✦, no brighter range). Tapping ✦ inside a saved moment changes nothing and says "Already saved · 1:22–1:52" with a **Remove** button (then Undo).
 - **×** on each Home moment card and on each range chip in Now Playing → About removes it (Undo).
 - **Artist page:** the "You and …" card shows "✦ N moments from …" with **Play your moments** — plays only that artist's moments, then stops (like Deep cuts).
 
@@ -28,4 +28,4 @@ Moment = { songId, start, end, createdAt }. V1 local; sync + share links V1 back
 No public "most-saved moment" counts as status (teen audience). No AI picking moments (D-050).
 
 ## Acceptance tests
-✦ saves 10 s before / 20 s after; no duplicate at the same spot; M key; Undo; Play all starts at the first moment and jumps to the next one when a moment ends. Rev 15.1: ✦ fills inside a moment and tapping removes it (Undo); Home × removes; Artist Play your moments plays only that artist's moments.
+✦ saves 10 s before / 20 s after; no duplicate at the same spot; M key; Undo; Play all starts at the first moment and jumps to the next one when a moment ends. Rev 15.2: ✦ looks the same inside a moment; tapping there shows Already saved · Remove (Undo); Home × removes; Artist Play your moments plays only that artist's moments.

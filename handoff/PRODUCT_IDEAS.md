@@ -182,6 +182,18 @@ Built in rev 14.2: progress line on the playing playlist, Recently played (2 row
 - **I8 Song notes** *(built rev 14.4: song ⋯ menu → Add a note, 140 chars, private; shows in Now Playing → About)* — a private note on any song ("summer 2026, bus home"); shows in About → "You and this song". *V1 local.*
 - Avoid: streaks, "you'll lose your progress", public listening counts as status (D-019, teen audience).
 
+## New batch (2026-10-09, after rev 15.2) — shown to owner, not approved yet
+- **N1 Blind listen** — a discovery round: 5 songs play with cover and name hidden; tap ♥ or skip, names reveal after. Judge the song, not the hype. *Prototype-able.*
+- **N2 Tap a lyric line to jump** — tap any line in Lyrics, the song jumps there. *Prototype-able.*
+- **N3 Sleep timer "end of this song"** — stops cleanly after the song/side, never mid-line. *Prototype-able.*
+- **N4 Side A / Side B playlists** — split a playlist into two sides with a little pause between (pairs with Mixtapes). *Prototype-able.*
+- **N5 Moment reel** — your best 3–5 moments stitched into one shareable 60–90 s card. *Share card system, V1.*
+- **N6 Room mode** — one tap: big cover + big lyrics for a TV/laptop at a hangout; guests see what's playing. *Real app.*
+- **N7 Quiet hours** — no Rondo notifications at night by default (teen audience). *Settings, V1.*
+- **N8 First heard** — "You first heard this on Aug 31" in About and on stamps. *V1 backend (play history).*
+- **N9 Your month (any time)** — a plain page: what you played most this month, new artists, moments. Open whenever; no year-end hype, no streaks. *V1.*
+- **N10 Swap a song** — send one song to a friend, they send one back; that's it. *V2 (accounts).*
+
 ## Suggested order
 
 1. Validate separate playback sessions with the owner.

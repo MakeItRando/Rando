@@ -80,3 +80,4 @@
 - Owner: "i dont see the moment button on the player" (it was only planned); moment length "like 30 sec? 10 sec from before and 20 sec later?"; "make other things better". → Rev 15 Moments built with that rule (D-082 proposal).
 - Owner: how do you remove a moment? — when playing inside one, ✦ should look filled and clicking removes it; moments should show on the Artist page like Deep cuts. → Rev 15.1.
 - Owner: "why does the player becomes fill up when it reached the moment thats bad" → Rev 15.2: marks are a thin line under the bar, no highlight.
+- Owner: "why does the player becomes fill up when it reached the moment thats bad… dont change it when user was on moment and not on it"; asked to see other ideas. → Rev 15.2; idea batch N1–N10.

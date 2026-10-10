@@ -964,7 +964,7 @@ const MOM_PRE=10,MOM_POST=20;
 function momOf(k){return MOM.filter(m=>m.k===k)}
 function momRange(m){return fmt(m.s)+'\u2013'+fmt(m.e)}
 function momSave(){const k=curK(),s=S[k];if(!s)return;const d=s.d,t=st.t;let a=Math.max(0,t-MOM_PRE),b=Math.min(d,a+MOM_PRE+MOM_POST);if(b-a<MOM_PRE+MOM_POST)a=Math.max(0,b-(MOM_PRE+MOM_POST));a=Math.round(a);b=Math.round(b);
- const inM=momAt(k,t);if(inM){const btn0=$('momBtn');if(btn0){btn0.classList.remove('mpop');void btn0.offsetWidth;btn0.classList.add('mpop')}return momDel(inM)}
+ const inM=momAt(k,t);if(inM){const btn0=$('momBtn');if(btn0){btn0.classList.remove('mpop');void btn0.offsetWidth;btn0.classList.add('mpop')}return toast(`Already saved \u00b7 ${momRange(inM)}`,'Remove',()=>{$('toast').classList.remove('open');momDel(inM)})}
  const dup=momOf(k).find(m=>Math.abs(m.s-a)<12);const btn=$('momBtn');if(btn){btn.classList.remove('mpop');void btn.offsetWidth;btn.classList.add('mpop')}
  if(dup)return toast(`Already saved \u00b7 ${momRange(dup)}`);const m={k,s:a,e:b};MOM.unshift(m);momUI();
  toast(`Moment saved \u00b7 ${s.t} ${momRange(m)}`,'Undo',()=>{const i=MOM.indexOf(m);if(i>=0)MOM.splice(i,1);momUI();$('toast').classList.remove('open')})}
@@ -997,10 +997,7 @@ document.addEventListener('click',e=>{let x;
 {const _nb=npBuild;npBuild=function(){_nb();const a=$('np').querySelector('.npa');if(a&&!a.querySelector('[data-npmom]'))a.insertAdjacentHTML('beforeend',`<button class="btn gh mom-np" data-npmom title="Save this moment · M">${ICON('sparkle')}Save moment</button>`);momSig='';momUI()}}
 {const _na2=npAbout;npAbout=function(){const k=curK(),h=_na2(),ms=momOf(k);const blk=`<div class="npmm"><span class="cap">Your moments in this song</span>${ms.length?`<div class="npmm-l">${ms.map(m=>`<span class="mmch"><button class="chip" data-mmgo="${k}|${m.s}">${ICON('play')}${momRange(m)}</button><button class="icb mmch-x" data-mmxk="${k}|${m.s}" aria-label="Remove moment ${momRange(m)}">${ICON('x')}</button></span>`).join('')}</div>`:`<span class="mut">None yet — tap ${ICON('sparkle')} in the player at the best part.</span>`}</div>`;const i=h.indexOf('<dl class="npd">');return i<0?h:h.slice(0,i)+blk+h.slice(i)}}
 /* rev 15.1: ✦ fills while you're inside a saved moment; tap again removes it. Artist page shows your moments (D-082) */
-let momIn=null;
-setInterval(()=>{const b=$('momBtn');if(!b)return;const m=momAt(curK(),st.t)||null;if(m===momIn)return;momIn=m;b.classList.toggle('in',!!m);const l=m?`Remove this moment (${momRange(m)})`:'Save this moment (M)';b.setAttribute('aria-label',l);b.title=m?`In your moment ${momRange(m)} \u00b7 tap to remove`:'Save this moment \u00b7 M';
- const nb=document.querySelector('[data-npmom]');if(nb){nb.classList.toggle('in',!!m);nb.innerHTML=`${ICON('sparkle')}${m?'Remove moment':'Save moment'}`}
- },150);
+/* rev 15.2: the player never changes look inside a moment (owner) */
 {const _ay2=aYours;aYours=function(d){let r=_ay2(d);const l=MOM.filter(m=>S[m.k]&&S[m.k].a.split(/, | & /).includes(d.n));if(!l.length)return r;
  const b=`<div class="av-mm"><span class="av-mm-h">${ICON('sparkle')}<b>${l.length} moment${l.length>1?'s':''}</b><span class="mut">\u00a0from ${[...new Set(l.map(m=>S[m.k].t))].slice(0,2).join(', ')}${new Set(l.map(m=>m.k)).size>2?'\u2026':''}</span></span><button class="btn gh sm" data-avmm="${d.n}">${ICON('play')}Play your moments</button></div>`;
  if(!r)return `<div class="av-y"><span class="cap">You and ${d.n.split(' ')[0]}</span>${b}</div>`;const i=r.lastIndexOf('</div>');return r.slice(0,i)+b+r.slice(i)}}
