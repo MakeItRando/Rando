@@ -5,7 +5,7 @@
 Status words: **Now** (working on it) · **Next** (agreed, queued) · **Profile & social phase** (owner: "we will work on them when designing profiles") · **Real apps** (needs native apps/backend) · **Parked** (maybe, ask again later) · **Dropped** (owner said no / not useful).
 
 ## Now
-- **Rev 16 built, waiting for owner look:** timed lyrics with sections, singer, gap dots, moment marks, Back to now; new icon set (D-084). Left side of the Song room (cover, chips, action buttons) not changed yet — ask owner.
+- **Rev 16 built, waiting for owner look:** timed lyrics with sections, singer, gap dots, moment marks, Back to now; new icon set (D-084). Rev 16.1: left side tidied (no chips, Follow by artist, one action row) + lyrics selectable + Copy lyrics (end of lyrics + song menu).
 - **Song room / Now Playing + Lyrics redesign** — owner (2026-10-10): "lyrics panel and songroom doesnt look that good and creative… where user gonna spend most of time"; "the icons are bad". Part of it is demo data (4 lyric lines looping), part is design. Plan: real-length demo lyrics with verse/chorus, a lyrics layout with character, new icon set across the app, then judge again. See Holes H1, H2.
 
 ## Next (agreed order)
@@ -38,6 +38,7 @@ Owner (2026-10-10): visiting someone's profile should let you *feel their music 
 Mini player window (I4), Journey take-along offline (I7), lock-screen/car controls, widgets (E8), Room mode (N6), device hand-off.
 
 ## Parked
+- **Lyrics licence check** — full-lyrics copy/share may be limited by the lyrics provider; confirm at licensing (ARCHITECTURE/PRODUCTION_PLAN).
 - **Quiet hours (N7)** — owner: would it add an onboarding step? and many people listen after midnight. Answer: it only mutes *notifications*, never music; no onboarding step. If kept, one Settings toggle, **off** by default. Decide in Settings design.
 - Song of the day, Decades dial (Explore backlog).
 
@@ -49,7 +50,7 @@ Mini player window (I4), Journey take-along offline (I7), lock-screen/car contro
 ## Holes found (2026-10-10 audit) — things the app still lacks
 | # | Hole | Why it matters | When |
 | --- | --- | --- | --- |
-| H1 | Song room / Lyrics look plain; demo lyrics are 4 lines on loop | Where people spend most time | **Rev 16 built** (lyrics); left side pending |
+| H1 | Song room / Lyrics look plain; demo lyrics are 4 lines on loop | Where people spend most time | **Rev 16–16.1 built** (lyrics, left side, copy) |
 | H2 | Icon set is inconsistent / weak | Owner: "icons are bad"; seen on every screen | **Rev 16 built** (one set, 1.75 px round) |
 | H3 | **Import from other apps** (Spotify/Apple Music/YouTube playlists + likes) | Biggest reason people don't switch apps | First run / Library design |
 | H4 | **Explicit filter / clean versions** + "E" badge | Teen audience, parents | Settings design |

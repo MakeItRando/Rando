@@ -4,6 +4,7 @@
 
 ## Right now (2026-10-10)
 
+- **Rev 16.1:** Song room left side tidied; lyrics selectable + Copy lyrics.
 - **Rev 16 (D-084 proposal):** Song room lyrics (timed, sections, gaps, moment marks, Back to now) + new icon set. check.mjs PASS. Waiting for owner look.
 - Home E study at **rev 15.3** (Moments + remove, Artist moments, sleep chip, About auto facts). check.mjs PASS. Preview: https://makeitrando.github.io/Rando/design/studies/2026-10-05-home-e/home.html
 - **Next: Song room / Lyrics redesign + new icon set** (owner: lyrics/song room not good or creative; icons bad). Then Mixtapes + Playlist page, Pin to top, Your month. Full arranged list: [BACKLOG.md](BACKLOG.md).

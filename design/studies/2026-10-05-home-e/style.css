@@ -1440,3 +1440,11 @@ body.sb-mini .side .li.sbp::after{left:12px;right:12px}
 /* rev 16: icon set — one stroke language: 1.75 px, round caps + joins, 2 px corners */
 .ic{stroke-width:1.75;stroke-linecap:round;stroke-linejoin:round}
 .ic .f{fill:currentColor;stroke:none}
+/* rev 16.1 */
+.lyx,.lyx .ln,.lsec{user-select:text;-webkit-user-select:text}.lnt,.lgap,.lycopy{user-select:none;-webkit-user-select:none}
+.lyx .ln{cursor:pointer}.lyx ::selection{background:rgba(255,91,31,.35);color:#fff}
+.lycopy{margin-right:12px;vertical-align:middle}
+.npfol{margin-left:10px;vertical-align:middle;height:26px;padding:0 10px;font-size:12px}
+.npa .like{margin-right:2px}
+.npa .icb{width:44px;height:44px;border-radius:50%;margin:0;align-self:center;box-shadow:inset 0 0 0 1px rgba(239,238,233,.3)}.npa .icb:hover{background:rgba(239,238,233,.1)}
+.lycopy{font-family:Geist,system-ui,sans-serif;font-size:13px;color:var(--t1,#efeee9)}

@@ -74,3 +74,9 @@ Owner: lyrics panel / song room "doesnt look that good and creative… where use
 - Demo lyrics for Night Transit, Blue Hour and Small Hours are placeholder text for fictional demo songs (credited "demo lyrics"); they are not product copy.
 
 Acceptance: line sung at t is highlighted; sections + singer shown; gap dots fill with no sung line; moment lines marked; tap jumps; scroll → Back to now → follows; untimed songs say not synced yet; no missing icons.
+
+## Rev 16.1: tidy left side + copy lyrics
+Owner: "yes do that" (tidy the Song room left side); "why i cant copy the whole lyrics at a time".
+- **Left side:** removed the "3:08" and "×14 on repeat" chips (length is in the player bar; plays live in About). **Follow** sits next to the artist name. One action row: ♥ like · + add to playlist · Share · ✦ Save moment (round outlined icon buttons + two labelled buttons).
+- **Lyrics are selectable text** — drag to select any lines and copy (time stamps and dots are not copied). Selecting never jumps the song; a plain tap still jumps.
+- **Copy lyrics** — button at the end of the lyrics and in the song ⋯ menu; copies title, artists, every line with [Verse]/[Chorus] labels. Toast "Lyrics copied". Real apps: copying respects the lyrics licence (full copy may be limited per provider — check at licensing).

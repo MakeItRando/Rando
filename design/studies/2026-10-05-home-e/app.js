@@ -1011,6 +1011,7 @@ function autoFacts(k){const s=S[k];if(!s)return [];const p=(typeof REPEAT_COUNT!
  f.push(['You play it most',WHENP[(h>>7)%4]]);
  return f}
 {const _na3=npAbout;npAbout=function(){const h=_na3(),fs=autoFacts(curK());if(!fs.length)return h;let h2=h;const pm=h2.match(/<span class="mut npy-p">In ([\s\S]*?)<\/span>/);if(pm){h2=h2.replace(pm[0],'');fs.push(['In your playlists',pm[1]])}const blk=`<dl class="npy-f">${fs.map(([a,b])=>`<div><dt>${a}</dt><dd>${b}</dd></div>`).join('')}</dl>`;return h2.replace(/(<div class="npy-n">(?:<div>[\s\S]*?<\/div>){3}<\/div>)/,'$1'+blk)}}
+document.addEventListener('click',e=>{if(e.target.closest('[data-lt]')){const sel=window.getSelection();if(sel&&!sel.isCollapsed&&String(sel).trim().length>1){e.stopImmediatePropagation();e.stopPropagation()}}},true);
 /* rev 16: Song room lyrics — real-length timed demo lyrics, sections + who sings, instrumental gaps that fill, moment marks, hover time + tap to jump, follow / Back to now */
 const LT={
  night:[[12,'Headlights fold into the rain','Verse 1 \u00b7 Kairo Vale'],[17,'and the city hums in a minor key'],[22,'every signal turning green for us'],[27,'we don\u2019t stop till the river'],[33,'your hand out the window, catching the cold'],[38,'radio low so the night won\u2019t know'],[43,'I don\u2019t need the map, I know where it goes'],[48,'every street we take is a street we chose'],
@@ -1054,6 +1055,20 @@ setInterval(lyUpd,150);
 document.addEventListener('click',e=>{let x;if(x=e.target.closest('[data-lt]')){e.stopPropagation();st.t=+x.dataset.lt;X.lyFree=false;$('lyBack')&&$('lyBack').classList.remove('show');lyLast=-2;tick();lyUpd();return}
  if(e.target.closest('#lyBack')){X.lyFree=false;$('lyBack').classList.remove('show');lyLast=-2;lyUpd()}},true);
 ['wheel','touchmove'].forEach(ev=>document.addEventListener(ev,e=>{if(e.target.closest&&e.target.closest('#npr.lyx')){X.lyFree=true;const b=$('lyBack');b&&b.classList.add('show')}},{passive:true}));
+/* rev 16.1: tidy Song room left side (no chips; Follow next to the artist; one action row: like, add, share, moment) + selectable lyrics + Copy lyrics */
+{const _nb161=npBuild;npBuild=function(){_nb161();const np=$('np');const t=np.querySelector('.npi .tags');if(t)t.remove();
+ const a=np.querySelector('.npa'),lk=$('npLike'),fol=$('npFol'),p=np.querySelector('.npi-t p');
+ if(fol&&p){fol.classList.add('npfol');p.appendChild(fol)}
+ if(a&&lk){a.prepend(lk)}
+ const sh=a&&a.querySelector('[data-share]');if(sh)sh.innerHTML=`${ICON('share')}Share`}}
+function lyText(k){const s=S[k];if(!s||!s.ly)return '';if(!s.lt)return s.ly.join('\n');let o=[];s.lt.forEach(l=>{if(l[2]){if(o.length)o.push('');o.push('['+l[2]+']')}o.push(l[1])});return `${s.t} \u2014 ${s.a}\n\n${o.join('\n')}`}
+function lyCopy(){const tx=lyText(curK());const done=()=>toast('Lyrics copied');if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(tx).then(done,()=>{lyCopyFb(tx);done()});else{lyCopyFb(tx);done()}}
+function lyCopyFb(tx){const ta=document.createElement('textarea');ta.value=tx;ta.style.position='fixed';ta.style.opacity='0';document.body.appendChild(ta);ta.select();try{document.execCommand('copy')}catch(e){}ta.remove()}
+{const _lh=lyHTML;lyHTML=function(k){return _lh(k).replace(/<button class="ln([^"]*)" data-lt="(\d+)" data-li="(\d+)" title="([^"]*)">([\s\S]*?)<\/button>/g,'<div class="ln$1" role="button" tabindex="0" data-lt="$2" data-li="$3" title="$4">$5</div>').replace('<div class="cred m">','<div class="cred m"><button class="btn gh sm lycopy" id="lyCopy">Copy lyrics</button>')}}
+{const _np161=npPanel;npPanel=function(){let h=_np161();if(X.npTab==='lyrics'&&h.includes('lystatic'))h=h.replace(/<div class="cred m">/,'<div class="cred m"><button class="btn gh sm lycopy" id="lyCopy">Copy lyrics</button>');return h}}
+document.addEventListener('click',e=>{if(e.target.closest('#lyCopy')){e.stopPropagation();lyCopy()}});
+{const _m161=menu;menu=function(k,x,y){_m161(k,x,y);const s=S[k];if(!s||!s.ly)return;const pop=$('pop'),sep=pop.querySelector('.sep');const h=`<button data-lycopy="${k}">${ICON('lyrics')}Copy lyrics</button>`;if(sep)sep.insertAdjacentHTML('beforebegin',h);else pop.insertAdjacentHTML('beforeend',h)}}
+document.addEventListener('click',e=>{const x=e.target.closest('[data-lycopy]');if(x){e.stopPropagation();$('pop').classList.remove('open');const k=x.dataset.lycopy,tx=lyText(k);const done=()=>toast('Lyrics copied');if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(tx).then(done,()=>{lyCopyFb(tx);done()});else{lyCopyFb(tx);done()}}});
 /* boot */
 if(D.artist)setView('artist',{n:D.artist});
 if(D.release)setView('release',{id:D.release});
