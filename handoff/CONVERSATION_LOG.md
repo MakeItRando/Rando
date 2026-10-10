@@ -79,3 +79,4 @@
 - Owner: "now its good"; the artist playing and the playlist playing should come up to the top in the sidebar; "the ideas i like all of them". → D-080 confirmed; D-081 (all ideas, build order); rev 14.4 playing-rises-to-top + Deep cuts + Song notes.
 - Owner: "i dont see the moment button on the player" (it was only planned); moment length "like 30 sec? 10 sec from before and 20 sec later?"; "make other things better". → Rev 15 Moments built with that rule (D-082 proposal).
 - Owner: how do you remove a moment? — when playing inside one, ✦ should look filled and clicking removes it; moments should show on the Artist page like Deep cuts. → Rev 15.1.
+- Owner: "why does the player becomes fill up when it reached the moment thats bad" → Rev 15.2: marks are a thin line under the bar, no highlight.

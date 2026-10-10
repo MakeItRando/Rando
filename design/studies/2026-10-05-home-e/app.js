@@ -1000,7 +1000,7 @@ document.addEventListener('click',e=>{let x;
 let momIn=null;
 setInterval(()=>{const b=$('momBtn');if(!b)return;const m=momAt(curK(),st.t)||null;if(m===momIn)return;momIn=m;b.classList.toggle('in',!!m);const l=m?`Remove this moment (${momRange(m)})`:'Save this moment (M)';b.setAttribute('aria-label',l);b.title=m?`In your moment ${momRange(m)} \u00b7 tap to remove`:'Save this moment \u00b7 M';
  const nb=document.querySelector('[data-npmom]');if(nb){nb.classList.toggle('in',!!m);nb.innerHTML=`${ICON('sparkle')}${m?'Remove moment':'Save moment'}`}
- document.querySelectorAll('#mmL .mmk,#np .mml .mmk').forEach(el=>el.classList.toggle('now',!!m&&el.dataset.s==m.s))},150);
+ },150);
 {const _ay2=aYours;aYours=function(d){let r=_ay2(d);const l=MOM.filter(m=>S[m.k]&&S[m.k].a.split(/, | & /).includes(d.n));if(!l.length)return r;
  const b=`<div class="av-mm"><span class="av-mm-h">${ICON('sparkle')}<b>${l.length} moment${l.length>1?'s':''}</b><span class="mut">\u00a0from ${[...new Set(l.map(m=>S[m.k].t))].slice(0,2).join(', ')}${new Set(l.map(m=>m.k)).size>2?'\u2026':''}</span></span><button class="btn gh sm" data-avmm="${d.n}">${ICON('play')}Play your moments</button></div>`;
  if(!r)return `<div class="av-y"><span class="cap">You and ${d.n.split(' ')[0]}</span>${b}</div>`;const i=r.lastIndexOf('</div>');return r.slice(0,i)+b+r.slice(i)}}

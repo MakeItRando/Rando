@@ -14,9 +14,12 @@ Keep the best part of a song — the drop, the line, the chorus — and get back
 - **Share** a moment → link that starts the song at the moment (V1 backend; prototype shows the toast).
 
 ## Rev 15.1 — removing + Artist page
-- **Remove:** while the song plays inside a saved moment, ✦ fills in ("Remove this moment"); tapping it removes that moment (Undo). Now Playing button reads "Remove moment" there. The playing range on the seek bar brightens.
+- **Remove:** while the song plays inside a saved moment, ✦ fills in ("Remove this moment"); tapping it removes that moment (Undo). Now Playing button reads "Remove moment" there.
 - **×** on each Home moment card and on each range chip in Now Playing → About removes it (Undo).
 - **Artist page:** the "You and …" card shows "✦ N moments from …" with **Play your moments** — plays only that artist's moments, then stops (like Deep cuts).
+
+## Rev 15.2 — quiet marks (owner)
+Seek-bar moment marks are a thin orange line **under** the bar, not a block on it, and they never change while playing — the bar must never look like it "fills up" at a moment. Only the ✦ fills.
 
 ## Scope / data
 Moment = { songId, start, end, createdAt }. V1 local; sync + share links V1 backend. Prototype seeds two study moments so the row is visible.
