@@ -175,7 +175,7 @@ Built in rev 14.2: progress line on the playing playlist, Recently played (2 row
 
 - **S1 Pin to top** — drag a playlist/artist to the top of its section. *V1.*
 - **I1 Moments** *(built rev 15, D-082: 30 s = 10 before + 20 after)* — tap ✦ at the best part of a song (the drop at 1:42); it's saved as a moment. Share card starts the song right there; your Moments shelf replays only the best parts. *V1 local; share link V1 backend.*
-- **I2 Mixtapes** — make a playlist for someone: sticker cover, your title in your handwriting-style font, a short note. They open it as a tape with your note first. Nothing generated — all yours. *V1 local, share V1 backend.*
+- **I2 Mixtapes** — make a playlist for someone: sticker cover, your title in your handwriting-style font, a short note. They open it as a tape with your note first. Nothing generated — all yours. *V1 local, share V1 backend.* **Built rev 17 (D-085)** — For, note first, sticker from its covers, tape colour; no handwriting font (kept simple). Sharing waits for backend.
 - **I3 Deep cuts** *(built rev 14.4: "Play deep cuts · N you haven't heard" in the You and <artist> card)* — on any artist, "Play their deep cuts": songs you've never heard, least-played first. Natural Journey sidekick. *V1.*
 - **I4 Mini player window** (desktop) — small always-on-top player with cover, controls, lyric line; drag songs onto it to queue. *Real app, V1.*
 - **I5 Listen together** — share a link, friends hear the same song in sync, react with emoji. *V2 (accounts, backend).*

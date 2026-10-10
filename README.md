@@ -11,7 +11,11 @@
 
 Recheck live refs, CI, and PR status; this README is a dated checkpoint, not a substitute for GitHub. Every meaningful product, code, decision, test, design, or branch change must update relevant docs and the handoff in the same session.
 
-## Checkpoint (2026-10-07)
+## Checkpoint (2026-10-10)
+
+Latest: Home E **rev 17** — Playlist refresh + Mixtapes (D-085 proposal), Song room lyrics + new icons (rev 16–16.2). What's next: [handoff/BACKLOG.md](handoff/BACKLOG.md).
+
+### Earlier checkpoint (2026-10-07)
 
 **Phase: design-first.** Home desktop is approved (study E rev 3, D-058) — [try it](https://makeitrando.github.io/Rando/design/studies/2026-10-05-home-e/home.html). Next: Home rev 4 (phone layout, clean scrubber, Dig), then Now Playing and Journeys. The 2026-10-07 morning session's work was lost before pushing; see [handoff/SESSION_2026-10-07.md](handoff/SESSION_2026-10-07.md). Full chat history: [handoff/CONVERSATION_LOG.md](handoff/CONVERSATION_LOG.md).
 

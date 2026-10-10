@@ -36,3 +36,20 @@ Owner: "the playlist ui not that good". There was no playlist page (sidebar rows
 - **Add songs that fit (H8):** 5 songs scored from the playlist's own songs (same signals as radio), Add with Undo, Refresh for the next 5. No reasons shown. Not on Liked songs.
 - **Phone:** Back link, stacked header (cover ≈ half the width), compact rows (sleeve, title, heart, ⋯).
 - Later: drag to reorder, edit details, collaborative playlists (V2).
+
+## Rev 17 (D-085 proposal, 2026-10-10): Playlist refresh + Mixtapes
+
+Owner: Playlist page was the most boring page; Mixtapes (I2) was on the agreed list.
+
+**Playlist refresh (small, useful):**
+- Song list column header said "Tempo · key" over album names — now says **Album**.
+- An auto **"what's in it"** line under the stats, counted from the songs themselves: *Mostly genre & genre · pace range · N artists*. Nothing written by AI, nothing invented (D-050).
+- Playlist **⋯** opens a small menu: **Make it a mixtape** / **Edit mixtape**, plus "Rename, edit, delete · later" (comes with the Library design). Liked songs and radios have no mixtape option.
+
+**Mixtapes — a playlist made for someone:**
+- **Make it a mixtape** opens a sheet: **For** (a name), **Note** (140 characters, counter), **Sticker** (pick one of the covers in the playlist), **Tape** colour (4 swatches), live preview of the tape. **Make mixtape** → toast with Undo.
+- The playlist page turns into a tape: cassette with the sticker on the label, the title and "for Aki", reels turn while it plays (they stay still with reduced motion). Caption "Mixtape · from mikoto · for Aki". The **note shows first**, right under the title, signed "— mikoto".
+- Sidebar row says "Mixtape · N songs".
+- **Edit mixtape** keeps everything; **Make it a playlist again** (with Undo) turns it back. Esc / Cancel closes the sheet.
+- **Share** on a mixtape says honestly that the link comes with sharing (V1 backend): the receiver opens it as a tape, note first. Receiver view = profile & social phase.
+- Not added (on purpose): handwriting fonts, AI notes, decorations, timers.

@@ -80,3 +80,8 @@ Owner: "yes do that" (tidy the Song room left side); "why i cant copy the whole 
 - **Left side:** removed the "3:08" and "×14 on repeat" chips (length is in the player bar; plays live in About). **Follow** sits next to the artist name. One action row: ♥ like · + add to playlist · Share · ✦ Save moment (round outlined icon buttons + two labelled buttons).
 - **Lyrics are selectable text** — drag to select any lines and copy (time stamps and dots are not copied). Selecting never jumps the song; a plain tap still jumps.
 - **Copy lyrics** — button at the end of the lyrics and in the song ⋯ menu; copies title, artists, every line with [Verse]/[Chorus] labels. Toast "Lyrics copied". Real apps: copying respects the lyrics licence (full copy may be limited per provider — check at licensing).
+
+### Rev 16.2: final touches (owner: "i like that just do the final touches")
+- **Phone:** lyrics sit in their own scroll box (about 62% of the screen) that follows the sung line, so the page itself doesn't jump.
+- **Keyboard:** Tab reaches lyric lines; Enter or Space jumps there. Clear focus outline.
+- **Reduced motion:** follow-scroll is instant, no glide.

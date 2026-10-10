@@ -1,21 +1,20 @@
 # Rondo backlog — one arranged list
 
-**Updated:** 2026-10-10 (Home E rev 16). This is the single place for *what's next*. Details of each idea live in [PRODUCT_IDEAS.md](PRODUCT_IDEAS.md); decisions in [DECISIONS.md](DECISIONS.md); every owner message in [CONVERSATION_LOG.md](CONVERSATION_LOG.md). Update this file in the same session whenever the owner says yes / no / later to anything.
+**Updated:** 2026-10-10 (Home E rev 17). This is the single place for *what's next*. Details of each idea live in [PRODUCT_IDEAS.md](PRODUCT_IDEAS.md); decisions in [DECISIONS.md](DECISIONS.md); every owner message in [CONVERSATION_LOG.md](CONVERSATION_LOG.md). Update this file in the same session whenever the owner says yes / no / later to anything.
 
 Status words: **Now** (working on it) · **Next** (agreed, queued) · **Profile & social phase** (owner: "we will work on them when designing profiles") · **Real apps** (needs native apps/backend) · **Parked** (maybe, ask again later) · **Dropped** (owner said no / not useful).
 
 ## Now
-- **Rev 16 built, waiting for owner look:** timed lyrics with sections, singer, gap dots, moment marks, Back to now; new icon set (D-084). Rev 16.1: left side tidied (no chips, Follow by artist, one action row) + lyrics selectable + Copy lyrics (end of lyrics + song menu).
-- **Song room / Now Playing + Lyrics redesign** — owner (2026-10-10): "lyrics panel and songroom doesnt look that good and creative… where user gonna spend most of time"; "the icons are bad". Part of it is demo data (4 lyric lines looping), part is design. Plan: real-length demo lyrics with verse/chorus, a lyrics layout with character, new icon set across the app, then judge again. See Holes H1, H2.
+- **Rev 17 built, waiting for owner look (D-085):** Playlist refresh (Album column, auto "what's in it" line, ⋯ menu) + **Mixtapes** (For, note shown first, sticker, tape colour, tape header, Edit / Make it a playlist again + Undo). Share link + receiver view → Profile & social phase / V1 backend.
 
 ## Next (agreed order)
-1. **Mixtapes (I2) + Playlist page refresh** (owner: Playlist page most boring).
-2. **Pin to top (S1)** in the sidebar.
-3. **Your month** — improve the existing "September on Rondo" recap (owner: "already there… add things and make it better"). Any time, no streaks.
-4. Library page → Profile/Settings → First run.
-5. Build the real apps on the approved design (D-062 desktop + phone), polish/motion pass (D-073, I6 cover-tinted app).
+1. **Pin to top (S1)** in the sidebar.
+2. **Your month** — improve the existing "September on Rondo" recap (owner: "already there… add things and make it better"). Any time, no streaks.
+3. Library page (incl. playlist Rename / edit details / delete) → Profile/Settings → First run.
+4. Build the real apps on the approved design (D-062 desktop + phone), polish/motion pass (D-073, I6 cover-tinted app).
 
 ## Built recently (owner has seen)
+- Song room lyrics + new icon set (rev 16, D-084), tidy left side + selectable lyrics + Copy lyrics (16.1) — owner: "i like that". Final touches rev 16.2: phone lyrics box follows the line, Enter/Space jumps, reduced motion.
 - Moments (D-082) + remove (Already saved · Remove, ×) + Artist moments; player look never changes inside a moment (rev 15.2).
 - Sleep timer chip: one line, replaces the clock while on (rev 15.3). Timer itself existed (15/30/45/60 min, End of this song).
 - Tap a lyric line to jump — already existed (Now Playing → Lyrics).
