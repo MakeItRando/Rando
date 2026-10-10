@@ -193,7 +193,7 @@ Built in rev 14.2: progress line on the playing playlist, Recently played (2 row
 - **N6 Room mode** — one tap: big cover + big lyrics for a TV/laptop at a hangout; guests see what's playing. *Real app.*
 - **N7 Quiet hours** — no Rondo notifications at night by default (teen audience). *Settings, V1.*
 - **N8 First heard** — "You first heard this on Aug 31" in About and on stamps. *V1 backend (play history).*
-- **N9 Your month (any time)** — a plain page: what you played most this month, new artists, moments. Open whenever; no year-end hype, no streaks. *V1.*
+- **N9 Your month (any time)** — a plain page: what you played most this month, new artists, moments. Open whenever; no year-end hype, no streaks. *V1.* **Built rev 19 (D-087)** as Your month — see docs/specs/YOUR_MONTH.md.
 - **N10 Swap a song** — send one song to a friend, they send one back; that's it. *V2 (accounts).*
 
 ## Suggested order

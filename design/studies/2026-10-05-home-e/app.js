@@ -204,7 +204,7 @@ const D=window.DEMO||{};if(D.src){st.src=D.src;st.i=D.i||0}st.t=D.t??64;st.on=D.
 if(D.uq){st.uq=D.uq.slice();render()}if(D.filter)document.querySelector(`.seg [data-f=${D.filter}]`).click();if(D.menu)setTimeout(()=>$('moreBtn').click(),100);if(D.drawer){$('drawer').classList.add('open');$('qBtn').classList.add('on')}if(D.pal){palOpen();$('palIn').value=D.pal;palRender()}if(D.toast)toast(D.toast,'Undo');
 if(D.scroll)setTimeout(()=>{$('main').style.scrollBehavior='auto';$('main').scrollTop=D.scroll},50);
 volUI();repUI();sleepUI();
-if(D.np)npOpen();if(D.share)shareOpen(D.share);if(D.recap){recapOpen();rcI=D.recap-1;rcR()}if(D.ntf)$('bell').click();if(D.keys)keysOpen();if(D.prof)setTimeout(()=>$('prof').click(),60);if(D.blend)blendOpen();if(D.tm){if(D.sleep)X.sleep=D.sleep;sleepUI();setTimeout(()=>tmPop(),60)}if(D.repAll)$('repAll').click();if(D.moreG)$('browseG').click();if(D.edit)$('manageF').click();if(D.newPl)setTimeout(()=>$('newPl').click(),60);
+if(D.np)npOpen();if(D.share)shareOpen(D.share);/* D.recap: opened by rev 19 Your month */if(D.ntf)$('bell').click();if(D.keys)keysOpen();if(D.prof)setTimeout(()=>$('prof').click(),60);if(D.blend)blendOpen();if(D.tm){if(D.sleep)X.sleep=D.sleep;sleepUI();setTimeout(()=>tmPop(),60)}if(D.repAll)$('repAll').click();if(D.moreG)$('browseG').click();if(D.edit)$('manageF').click();if(D.newPl)setTimeout(()=>$('newPl').click(),60);
 /* ===== rev 4 (2026-10-07, D-060..D-063): clean scrubber, Dig, phone layout ===== */
 /* -- scrubber: thin line + thumb, grows on hover/drag, time bubble while dragging -- */
 $('wv').className='sk';$('wv').innerHTML='<span class="sk-t"><i class="sk-f"></i><i class="sk-h"></i></span><span class="sk-b m"></span>';
@@ -1124,6 +1124,88 @@ document.addEventListener('contextmenu',e=>{let x;
 document.addEventListener('click',e=>{const x=e.target.closest('[data-pin]');if(!x)return;e.stopImmediatePropagation();$('pop').classList.remove('open');pinTog(x.dataset.pin,x.dataset.pid)},true);
 /* playlist ⋯ gets Pin to top too (not for Liked songs: it is always first) */
 {const _pa18=popAt;popAt=function(btn,html,w,up){const id=PV.id;if(/data-mxo/.test(html)&&id&&SRC[id]&&document.querySelector(`#pls .li[data-src="${id}"]`))html=`<button data-pin="pl" data-pid="${id}">${ICON('pin')}${PIN.pl.includes(id)?'Unpin':'Pin to top'}</button>`+html;return _pa18(btn,html,w,up)}}
+/* rev 19: Your month (N9) — the September recap made better: built from one set of month numbers (so every number agrees), tap a day to see what you played, top songs you can play, when you listen (24 h clock), new artists you can open, moments (only when you saved some that month), Play / Save as playlist. Open any time; October shows "so far". Stories pause when you touch them. No streaks, no goals. */
+const YM=[
+ {id:'sep',name:'September',y:2026,first:1,days:30,done:true,c:['#17223a','#3a1515','#1a2c4b','#20203a','#232a1b','#2a1a35','#45200f'],
+  mins:[44,22,0,58,40,86,71,18,39,47,0,62,95,88,15,41,66,52,171,118,30,24,49,61,83,44,71,23,66,17],
+  arts:[['Kairo Vale',112],['Moni Gray',86],['Asha North',61],['Nia Vale',44],['Sora K',30]],
+  songs:[['night',38],['m1',27],['s1',22],['blue',19],['m2',17],['open',15],['north',13],['s3',11],['margins',10],['soft',9]],
+  hrs:[22,14,8,3,1,0,0,1,4,6,5,7,9,8,6,7,9,12,15,19,26,33,41,35],
+  found:{n:9,arts:['Moni Gray','Dax Moreno','Sora K','Theo June','Mira Son'],j:3,fin:'Kairo Vale, Dax Moreno and Asha North'},
+  snd:[['Laid back','your pace'],['Late night','when you listen most'],['Hip-Hop','top genre']]},
+ {id:'oct',name:'October',y:2026,first:3,days:31,upto:10,done:false,c:['#1b2a2a','#3a2415','#1a2c4b','#20203a','#232a1b','#2a1a35','#45200f'],
+  mins:[52,31,77,12,94,103,40,28,61,80],
+  arts:[['Kairo Vale',41],['Nia Vale',29],['Asha North',22],['Mira Son',14],['Moni Gray',11]],
+  songs:[['night',16],['blue',12],['north',9],['s2',7],['soft',6],['m1',5],['first',4],['s4',4]],
+  hrs:[9,6,2,1,0,0,1,2,3,4,3,4,5,4,3,4,5,6,8,10,13,15,18,14],
+  found:{n:2,arts:['Mira Son','Theo June'],j:0,fin:''},
+  snd:[['Laid back','your pace'],['Late night','when you listen most'],['Indie pop','top genre']]}];
+const YMS={m:0,i:0,day:null,paused:false,touched:false};
+const ymWD=['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+const ymWDL=['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'];
+function ymOrd(n){const s=['th','st','nd','rd'],v=n%100;return n+(s[(v-20)%10]||s[v]||s[0])}
+function ymHM(m){return `${Math.floor(m/60)}<small>h</small> ${m%60}<small>m</small>`}
+function ymTot(M){return M.mins.reduce((x,y)=>x+y,0)}
+function ymSongsN(M){return Math.round(ymTot(M)/3.15)}
+function ymBusy(M){let b=0;M.mins.forEach((v,i)=>{if(v>M.mins[b])b=i});return b}
+function ymDayName(M,d){return ymWD[(M.first+d)%7]+' '+(d+1)}
+function ymDaySongs(M,d){const pool=M.songs.map(s=>s[0]),n=Math.max(1,Math.round(M.mins[d]/3.15)),r=[];let x=(d*7+M.days)%pool.length;while(r.length<Math.min(3,pool.length)){const k=pool[x%pool.length];if(!r.includes(k))r.push(k);x+=d%3+2}return {n,ks:r}}
+function ymPeak(M){let b=0,best=-1;for(let h=0;h<24;h++){const v=M.hrs[h]+M.hrs[(h+1)%24]+M.hrs[(h+2)%24];if(v>best){best=v;b=h}}return b}
+function ymH(h){h=(h+24)%24;return h===0?'12 am':h<12?h+' am':h===12?'12 pm':(h-12)+' pm'}
+function ymMoms(M){return M.done?[]:MOM.slice()}
+function ymCards(M){const tot=ymTot(M),b=ymBusy(M),so=M.done?'':' so far',lbl=`${M.name}${M.done?' '+M.y:' so far'}`,days=M.upto||M.days,cards=[];
+ const day=YMS.day!=null&&YMS.day<days?YMS.day:null,ds=day!=null?ymDaySongs(M,day):null;
+ cards.push(`<span class="cap">${lbl}</span><div class="ym-wd">${ymWD.map(w=>`<span>${w[0]}</span>`).join('')}</div><div class="cal ym-cal">${'<i class="ym-e"></i>'.repeat(M.first)}${Array.from({length:M.days},(_,d)=>{if(d>=days)return `<i class="ym-f" aria-hidden="true"></i>`;const v=M.mins[d],l=v===0?0:v<30?1:v<55?2:v<80?3:v<110?4:5;return `<button class="v${l}${day===d?' on':''}" data-ymd="${d}" aria-label="${ymDayName(M,d)}, ${Math.floor(v/60)} h ${v%60} min"><span>${d+1}</span></button>`}).join('')}</div>
+  ${ds?`<div class="ym-day"><div class="ym-dh"><b>${ymDayName(M,day)}</b><span>${ds.n} songs \u00b7 ${Math.floor(M.mins[day]/60)}h ${M.mins[day]%60}m</span><button class="ym-x" data-ymd="-1" aria-label="Close day">${ICON('x')}</button></div>${M.mins[day]?ds.ks.map(k=>`<button class="ym-s" data-yms="${k}"><span class="cover">${svg(S[k].art)}</span><span><b>${S[k].t}</b><span>${S[k].ar}</span></span>${ICON(curK()===k&&st.on?'pause':'play')}</button>`).join(''):'<p class="ym-q">Nothing played. A quiet day.</p>'}</div>`
+  :`<div class="huge">${ymHM(tot)}</div><p>${ymSongsN(M)} songs${so}. Your busiest day was ${ymWDL[(M.first+b)%7]} the ${ymOrd(b+1)}. <span class="ym-hint">Tap a day to see what you played.</span></p>`}`);
+ const mx=M.arts[0][1];
+ cards.push(`<span class="cap">Top artists${so}</span><ol class="ta ym-ta">${M.arts.map(([n,pl],i)=>{const d=aData(n);return `<li><button data-yma="${n}" aria-label="Open ${n}"><span class="m">${i+1}</span><span class="cover">${svg(d?d.art:'night')}</span><span class="ym-an"><b>${n}</b><i style="--w:${(pl/mx*100).toFixed(0)}%"></i></span><span class="m">${pl}</span></button></li>`}).join('')}</ol><p class="m sm">plays \u00b7 tap to open</p>`);
+ const [k1,p1]=M.songs[0];
+ cards.push(`<span class="cap">Song of the month${so}</span><button class="ym-top" data-yms="${k1}" aria-label="Play ${S[k1].t}"><span class="cover big">${svg(S[k1].art)}<span class="ym-pp">${ICON(curK()===k1&&st.on?'pause':'play')}</span></span></button><h2>${S[k1].t}</h2><p>${S[k1].a} \u00b7 ${p1} plays</p><div class="ym-sl">${M.songs.slice(1,5).map(([k,pl],i)=>`<button class="ym-s" data-yms="${k}"><span class="m">${i+2}</span><span class="cover">${svg(S[k].art)}</span><span><b>${S[k].t}</b><span>${S[k].ar} \u00b7 ${pl}</span></span>${ICON(curK()===k&&st.on?'pause':'play')}</button>`).join('')}</div>`);
+ const pk=ymPeak(M),hm=Math.max(...M.hrs),R=108,r0=46;
+ const wedge=h=>{const a0=(h/24)*Math.PI*2-Math.PI/2+.02,a1=((h+1)/24)*Math.PI*2-Math.PI/2-.02,rr=r0+(R-r0)*(M.hrs[h]/hm||0)+2,P=(a,r)=>`${(130+r*Math.cos(a)).toFixed(1)} ${(130+r*Math.sin(a)).toFixed(1)}`;return `<path class="${h>=pk&&h<pk+3||h+24<pk+3?'pk':''}" d="M${P(a0,r0)}L${P(a0,rr)}A${rr} ${rr} 0 0 1 ${P(a1,rr)}L${P(a1,r0)}A${r0} ${r0} 0 0 0 ${P(a0,r0)}Z"/>`};
+ cards.push(`<span class="cap">When you listen</span><svg class="ym-clk" viewBox="0 0 260 260" role="img" aria-label="Listening by hour, most between ${ymH(pk)} and ${ymH(pk+3)}">${Array.from({length:24},(_,h)=>wedge(h)).join('')}<text x="130" y="12">12 am</text><text x="258" y="134" text-anchor="end">6 am</text><text x="130" y="256">12 pm</text><text x="2" y="134" text-anchor="start">6 pm</text></svg><p>Mostly between <b>${ymH(pk)}</b> and <b>${ymH(pk+3)}</b>. Mornings are quiet.</p>`);
+ const F=M.found;
+ cards.push(`<span class="cap">Found${so}</span><div class="huge">${F.n}</div><p>new artist${F.n>1?'s':''}${F.j?`, ${F.j} of them through your Hip-Hop Journey`:''}.${F.fin?` You finished ${F.fin}.`:''}</p><div class="ym-fa">${F.arts.map(n=>{const d=aData(n);return d?`<button data-yma="${n}" aria-label="Open ${n}"><span class="cover">${svg(d.art)}</span><span>${n.split(' ')[0]}</span></button>`:''}).join('')}</div>`);
+ const ms=ymMoms(M);
+ if(ms.length)cards.push(`<span class="cap">Moments you saved${so}</span><div class="huge">${ms.length}</div><p>bits of songs you kept.</p><div class="ym-sl">${ms.map((m,i)=>`<button class="ym-s" data-ymm="${i}"><span class="cover">${svg(S[m.k].art)}</span><span><b>${S[m.k].t}</b><span>${ICON('sparkle')}${fmt(m.s)}\u2013${fmt(m.e)}</span></span>${ICON('play')}</button>`).join('')}</div>`);
+ cards.push(`<span class="cap">Your sound${so}</span><div class="snd">${M.snd.map(([v,l])=>`<div><b>${v}</b><span>${l}</span></div>`).join('')}</div><div class="ym-act"><button class="btn pri" data-ymp>${ICON('play')}Play your ${M.name}</button><button class="btn ym-gh" data-ymsave>${ICON('plus')}Save as playlist</button><button class="btn ym-gh" data-sht="Card saved to Downloads">${ICON('dl')}Save card</button></div>`);
+ return cards}
+function ymR(){const M=YM[YMS.m],C=ymCards(M);YMS.i=Math.min(YMS.i,C.length-1);const w=$('modal').querySelector('.rcw');if(!w)return;
+ w.style.background=M.c[Math.min(YMS.i,M.c.length-1)];
+ w.querySelector('.segs').innerHTML=C.map((_,i)=>`<button data-ymg="${i}" class="${i<YMS.i?'d':i===YMS.i?'a':''}" aria-label="Card ${i+1} of ${C.length}"><b></b></button>`).join('');
+ w.classList.toggle('ym-pz',YMS.paused||YMS.touched);
+ const still=YMS.last===YMS.m+':'+YMS.i;YMS.last=YMS.m+':'+YMS.i;$('rcS').innerHTML=`<div class="sl2 ym-sl2${still?' ym-still':''}" data-c="${YMS.i}">${C[YMS.i]}</div>`;
+ $('ymPz').innerHTML=ICON(YMS.paused||YMS.touched?'play':'pause');$('ymPz').setAttribute('aria-label',YMS.paused||YMS.touched?'Play cards':'Pause cards');
+ w.querySelectorAll('[data-ymm]').forEach(b=>b.classList.toggle('on',st.src==='moments'&&st.on));
+ $('ymTabs').querySelectorAll('button').forEach((b,i)=>{b.classList.toggle('on',i===YMS.m);b.setAttribute('aria-selected',i===YMS.m)});
+ $('rcP').disabled=YMS.i===0;$('rcN').disabled=YMS.i===C.length-1;ymTimer()}
+function ymTimer(){clearInterval(rcT);const n=ymCards(YM[YMS.m]).length;if(YMS.paused||YMS.touched||YMS.i>=n-1||(window.DEMO||{}).recap||matchMedia('(prefers-reduced-motion: reduce)').matches)return;rcT=setInterval(()=>{if(!$('modal').classList.contains('recap')||!anyOpen())return clearInterval(rcT);ymGo(1)},6500)}
+function ymGo(d){const n=ymCards(YM[YMS.m]).length;YMS.i=Math.max(0,Math.min(n-1,YMS.i+d));YMS.day=null;ymR()}
+recapOpen=function(m){YMS.last=null;YMS.m=m==null?0:m;YMS.i=0;YMS.day=null;YMS.paused=false;YMS.touched=false;
+ openModal(`<div class="rcw ym"><div class="ym-top-r"><div class="ym-tabs" id="ymTabs" role="tablist">${YM.map((M,i)=>`<button role="tab" data-ymt="${i}">${M.name}${M.done?'':' so far'}</button>`).join('')}</div><button class="ym-pzb" id="ymPz"></button>${XB}</div><div class="segs"></div><div id="rcS"></div></div><button class="rnav l" id="rcP" aria-label="Previous card">${ICON('left')}</button><button class="rnav r" id="rcN" aria-label="Next card">${ICON('right')}</button>`,'recap ymm');
+ $('rcP').onclick=()=>ymGo(-1);$('rcN').onclick=()=>ymGo(1);ymR();setTimeout(()=>{const z=$('ymPz');if(z)z.focus({preventScroll:true})},60)};
+rcR=function(){YMS.i=rcI;ymR()};rcGo=function(d){ymGo(d)};
+$('recapBtn').onclick=()=>recapOpen(0);
+{const b=$('recapBtn').querySelector('div span');if(b)b.textContent='Ready \u00b7 or see October so far'}
+document.addEventListener('click',e=>{const w=e.target.closest('.rcw.ym');if(!w&&!e.target.closest('.modal.ymm'))return;let x;
+ if(x=e.target.closest('[data-ymt]')){YMS.m=+x.dataset.ymt;YMS.i=0;YMS.day=null;YMS.touched=false;return ymR()}
+ if(x=e.target.closest('[data-ymg]')){YMS.i=+x.dataset.ymg;YMS.day=null;return ymR()}
+ if(e.target.closest('#ymPz')){if(YMS.touched){YMS.touched=false;YMS.paused=false}else YMS.paused=!YMS.paused;return ymR()}
+ if(x=e.target.closest('[data-ymd]')){YMS.touched=true;YMS.day=+x.dataset.ymd<0?null:+x.dataset.ymd;return ymR()}
+ if(x=e.target.closest('[data-yms]')){YMS.touched=true;const k=x.dataset.yms;if(curK()===k){st.on=!st.on;render()}else{playSong(k);st.on=true;render()}return ymR()}
+ if(x=e.target.closest('[data-yma]')){closeModal();return artOpen(x.dataset.yma)}
+ if(x=e.target.closest('[data-ymm]')){YMS.touched=true;const ms=ymMoms(YM[YMS.m]);startSrc(momSrc(ms,'Your moments \u00b7 '+YM[YMS.m].name),+x.dataset.ymm);st.on=true;render();return ymR()}
+ const M=YM[YMS.m],id='ym_'+M.id,ks=M.songs.map(s=>s[0]).filter(k=>S[k]);
+ if(e.target.closest('[data-ymp]')){SRC[id]=SRC[id]||{type:'Playlist',name:`Your ${M.name}${M.done?'':' so far'}`,art:S[ks[0]].art,q:ks};closeModal();startSrc(id,0);st.on=true;render();return toast(`Playing your ${M.name}: your ${ks.length} most played songs, most played first`)}
+ if(e.target.closest('[data-ymsave]')){const sk=id+'_pl';if(XP.saved.some(s=>s.k===sk))return toast(`Already in your playlists`);savePl(sk,`${M.name} ${M.y}${M.done?'':' (so far)'}`,ks,'Playlist','From Your month \u00b7 '+ks.length+' songs');return}
+ // tap left / right third of the card to move (like stories), but never on a button
+ if(w&&!e.target.closest('button,a')&&e.target.closest('#rcS')){const r=w.getBoundingClientRect(),fx=(e.clientX-r.left)/r.width;if(fx<.3)ymGo(-1);else if(fx>.7)ymGo(1)}},true);
+document.addEventListener('pointerdown',e=>{if(e.target.closest('.rcw.ym #rcS')&&!e.target.closest('button')){YMS.hold=true;clearInterval(rcT)}});
+document.addEventListener('pointerup',()=>{if(YMS.hold){YMS.hold=false;ymTimer()}});
+document.addEventListener('keydown',e=>{if(!anyOpen()||!$('modal').classList.contains('ymm'))return;if(e.key==='ArrowRight'){e.preventDefault();ymGo(1)}else if(e.key==='ArrowLeft'){e.preventDefault();ymGo(-1)}else if(e.key===' '&&!e.target.closest('button')){e.preventDefault();e.stopPropagation();YMS.paused=!YMS.paused;YMS.touched=false;ymR()}},true);
+{const _rr19=render;render=function(){_rr19();if(anyOpen()&&$('modal').classList.contains('ymm')){const sig=curK()+st.on+st.src;if(sig!==YMS.sig){YMS.sig=sig;ymR()}}}}
+if((window.DEMO||{}).recap){recapOpen(window.DEMO.ymm||0);YMS.i=DEMO.recap-1;ymR()}
 /* boot */
 if(D.artist)setView('artist',{n:D.artist});
 if(D.release)setView('release',{id:D.release});

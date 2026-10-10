@@ -13,7 +13,7 @@ Recheck live refs, CI, and PR status; this README is a dated checkpoint, not a s
 
 ## Checkpoint (2026-10-10)
 
-Latest: Home E **rev 18** — Pin to top (D-086 proposal); Playlist refresh + Mixtapes (D-085 confirmed), Song room lyrics + new icons (rev 16–16.2). What's next: [handoff/BACKLOG.md](handoff/BACKLOG.md).
+Latest: Home E **rev 19** — Your month (D-087 proposal); Pin to top (D-086 confirmed); Playlist refresh + Mixtapes (D-085 confirmed), Song room lyrics + new icons (rev 16–16.2). What's next: [handoff/BACKLOG.md](handoff/BACKLOG.md).
 
 ### Earlier checkpoint (2026-10-07)
 

@@ -25,6 +25,8 @@ Motion and polish are deferred to one pass on the real apps (D-073): see [../MOT
 | 14 | Moments | [MOMENTS.md](MOMENTS.md) | home-e rev 15 | Proposed (D-082) |
 | 13 | Sidebar (desktop) | [SIDEBAR.md](SIDEBAR.md) | home-e rev 14 | Proposed (D-078) |
 | 12 | Dig | [HOME.md § Dig](HOME.md) | home-e rev 4 | Approved (D-061, D-065) |
+| 15 | Your month (recap) | [YOUR_MONTH.md](YOUR_MONTH.md) | home-e rev 19 | Proposed (D-087) |
+| 3b | Mixtapes + playlist refresh | [PLAYLISTS.md § Rev 17](PLAYLISTS.md) | home-e rev 17 | Approved (D-085) |
 
 ## Template (copy for a new page)
 

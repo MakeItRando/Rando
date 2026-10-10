@@ -1,18 +1,19 @@
 # Rondo backlog — one arranged list
 
-**Updated:** 2026-10-10 (Home E rev 18). This is the single place for *what's next*. Details of each idea live in [PRODUCT_IDEAS.md](PRODUCT_IDEAS.md); decisions in [DECISIONS.md](DECISIONS.md); every owner message in [CONVERSATION_LOG.md](CONVERSATION_LOG.md). Update this file in the same session whenever the owner says yes / no / later to anything.
+**Updated:** 2026-10-10 (Home E rev 19). This is the single place for *what's next*. Details of each idea live in [PRODUCT_IDEAS.md](PRODUCT_IDEAS.md); decisions in [DECISIONS.md](DECISIONS.md); every owner message in [CONVERSATION_LOG.md](CONVERSATION_LOG.md). Update this file in the same session whenever the owner says yes / no / later to anything.
 
 Status words: **Now** (working on it) · **Next** (agreed, queued) · **Profile & social phase** (owner: "we will work on them when designing profiles") · **Real apps** (needs native apps/backend) · **Parked** (maybe, ask again later) · **Dropped** (owner said no / not useful).
 
 ## Now
-- **Rev 18 built, waiting for owner look (D-086):** Pin to top — right-click a sidebar playlist or artist ring, or playlist ⋯; pins stay above the playing row; Undo. Rev 17.1 mixtape final touches.
+- **Rev 19 built, waiting for owner look (D-087):** Your month — month tabs, tap a day, playable top songs, when-you-listen clock, Moments card, Play / Save as playlist. Spec: docs/specs/YOUR_MONTH.md.
 
 ## Next (agreed order)
-1. **Your month** — improve the existing "September on Rondo" recap (owner: "already there… add things and make it better"). Any time, no streaks.
-2. Library page (incl. playlist Rename / edit details / delete, pins on phone) → Profile/Settings → First run.
+1. **Library page** (incl. playlist Rename / edit details / delete, pins on phone, older months of Your month).
+2. Profile/Settings → First run.
 3. Build the real apps on the approved design (D-062 desktop + phone), polish/motion pass (D-073, I6 cover-tinted app).
 
 ## Built recently (owner has seen)
+- Pin to top (rev 18, D-086 confirmed — owner: "yes nice").
 - Playlist refresh + **Mixtapes** (rev 17, D-085 confirmed — owner: "yes, i like that"); final touches rev 17.1. Receiver view + share link → Profile & social phase / V1 backend.
 - Song room lyrics + new icon set (rev 16, D-084), tidy left side + selectable lyrics + Copy lyrics (16.1) — owner: "i like that". Final touches rev 16.2: phone lyrics box follows the line, Enter/Space jumps, reduced motion.
 - Moments (D-082) + remove (Already saved · Remove, ×) + Artist moments; player look never changes inside a moment (rev 15.2).

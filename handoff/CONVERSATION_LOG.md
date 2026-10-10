@@ -86,3 +86,4 @@
 - Owner: "yes do that" (tidy Song room left side), "also why i cant copy the whole lyrics at a time" (lines were buttons, so text could not be selected). → Rev 16.1.
 - Owner: "i like that just do the final touches on that and continue on next thing." → Rev 16.2 (phone lyrics follow, keyboard) + Rev 17 Playlist refresh + Mixtapes (D-085), next on the agreed list.
 - Owner on rev 17 (Mixtapes + playlist refresh): "yes, i like that do the final touches on that and continue" → D-085 confirmed; rev 17.1 final touches; rev 18 Pin to top (D-086), next on the list.
+- Owner on rev 18 (Pin to top + mixtape touches): "yes nice continue." → D-086 confirmed; rev 19 Your month (D-087).
