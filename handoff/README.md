@@ -4,7 +4,7 @@ This folder is the canonical continuity package. It should let another contribut
 
 ## Current checkpoint (2026-10-10)
 
-Design-first phase, Home E study rev 15.3 (Moments, About auto facts, sidebar). **What's next and every owner verdict: [BACKLOG.md](BACKLOG.md).** Now: Song room / Lyrics redesign + icon set.
+Design-first phase, Home E study rev 16 (Song room lyrics + icon set, Moments, About auto facts, sidebar). **What's next and every owner verdict: [BACKLOG.md](BACKLOG.md).** Now: Song room / Lyrics redesign + icon set.
 
 ### Earlier checkpoint (2026-10-07)
 

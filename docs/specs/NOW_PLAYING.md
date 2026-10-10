@@ -59,3 +59,18 @@ Prototype uses stable demo values per song; real apps compute from play history 
 **Sleep timer chip (rev 15.3):** when a timer is on, the clock icon in the bottom bar is replaced by one orange pill — "After this song" or "29 min left"; tap to change or turn off.
 
 **Owner note (2026-10-10):** the Song room / Lyrics panel "doesnt look that good and creative"; icons are bad → redesign is **Now** in [BACKLOG.md](../../handoff/BACKLOG.md).
+
+## Rev 16 (D-084 proposal): Song room lyrics + one icon set
+Owner: lyrics panel / song room "doesnt look that good and creative… where user gonna spend most of time"; "icons are bad"; "we dont wanna overdo… things we add should be useful, fun to use".
+- **Timed lyrics, real length.** Each line has a start time (`LT` in the prototype; real apps get synced lyrics from the licensed provider). The sung line is white, past lines fade, upcoming lines are mid-grey. No more 4 lines looping every 7 s.
+- **Sections + who sings.** Small labels above blocks: Verse 1 · Kairo Vale, Pre-chorus, Chorus, Verse 2 · Mira Son, Bridge · both. Useful on features; only shown when the lyrics data has them.
+- **Instrumental gaps.** Breaks of 8 s or more (intro, solo, outro) show three dots that fill as the break plays, plus how long it is — you see when the vocals come back.
+- **Your moments in the lyrics.** Lines inside a saved moment carry a small orange ✦ in the left gutter.
+- **Hover a line → its time; tap → jump there.**
+- **Follow / Back to now.** Lyrics scroll with the song. Scroll yourself and following stops; a "Back to now" pill brings it back.
+- **Not synced yet.** Songs whose lyrics have no timings show the lines as a still "Lyrics preview · not synced yet" — no fake highlighting.
+- Home "Now playing" lyric line uses the same timing.
+- **Icon set:** all icons redrawn in one language — 1.75 px stroke, round caps and joins, soft 2 px corners. Clearer meanings: Lyrics = speech bubble with lines; Settings = two sliders (old one looked like brightness); filled rounded play/pause.
+- Demo lyrics for Night Transit, Blue Hour and Small Hours are placeholder text for fictional demo songs (credited "demo lyrics"); they are not product copy.
+
+Acceptance: line sung at t is highlighted; sections + singer shown; gap dots fill with no sung line; moment lines marked; tap jumps; scroll → Back to now → follows; untimed songs say not synced yet; no missing icons.

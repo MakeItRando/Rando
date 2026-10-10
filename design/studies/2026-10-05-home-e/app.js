@@ -30,7 +30,7 @@ function render(){const s=cur(),src=SRC[st.src],q=src.q,k=curK();document.body.c
  const pi=ICON(st.on?'pause':'play');$('bigpp').innerHTML=pi;$('pp').innerHTML=pi;$('bigpp').setAttribute('aria-label',st.on?'Pause':'Play');$('pp').setAttribute('aria-label',st.on?'Pause':'Play');
  const lk=$('like');lk.classList.toggle('on',st.liked.has(k));lk.setAttribute('aria-pressed',st.liked.has(k));
  $('goSrc').textContent=src.journey?'Open Journey':src.type==='Playlist'?'Go to playlist':src.type==='Mix'||src.type==='Mood'?'Open '+src.name:'Go to '+src.type.toLowerCase();
- const li=s.ly?Math.floor(st.t/7)%s.ly.length:-1;if(li!==lastLy){lastLy=li;$('stLyr').innerHTML=`<span>${s.ly?s.ly[li]:'Instrumental'}</span>`}
+ const li=s.ly?lyIdx(s):-1;if(li!==lastLy){lastLy=li;$('stLyr').innerHTML=`<span>${s.ly?s.ly[li]:'Instrumental'}</span>`}
  const upn=[...st.uq.map(x=>[x,null]),...q.slice(st.i+1).map((x,j)=>[x,st.i+1+j])];const rest=upn.slice(0,2);$('stNext').innerHTML=`<div class="cap"><span>Up next</span><span>${upn.length} left</span></div>`+(rest.length?rest.map(([x,ix])=>`<button class="qi" ${ix===null?'data-k="'+x+'"':`data-src="${st.src}" data-i="${ix}"`}><span class="cover">${svg(S[x].art)}</span><div><b>${S[x].t}</b><span>${S[x].a}</span></div></button>`).join(''):`<div class="end">End of ${src.name}. Playback stops here.</div>`);
  tick();
  document.querySelectorAll('[data-src]').forEach(e=>{const same=e.dataset.src===st.src&&(e.dataset.i===undefined||e.classList.contains('qi')?e.dataset.src===st.src:+e.dataset.i===st.i||e.closest('#rels'));const on=e.dataset.src===st.src&&(e.closest('#repeat')?+e.dataset.i===st.i:true);e.classList.toggle('on',on&&!e.classList.contains('qi'));const pb=e.querySelector('.pb');if(pb)pb.innerHTML=ICON(on&&st.on?'pause':'play')});
@@ -44,7 +44,7 @@ function render(){const s=cur(),src=SRC[st.src],q=src.q,k=curK();document.body.c
  buildGJ();
  /* drawer */
  $('dSrc').textContent=`Playing from ${src.type} · ${src.name}`;$('dList').innerHTML=(st.uq.length?`<div class="cap dq-h">Next in queue</div>`+st.uq.map((x,j)=>`<button class="dq" data-k="${x}"><span class="m">+</span><span class="cover">${svg(S[x].art)}</span><div><b>${S[x].t}</b><span>${S[x].a}</span></div><span class="m">${fmt(S[x].d)}</span></button>`).join('')+`<div class="cap dq-h">Next from ${src.name}</div>`:'')+q.map((x,j)=>`<button class="dq${j===st.i?' on':j<st.i?' done':''}" data-src="${st.src}" data-i="${j}"><span class="m">${j===st.i&&st.on?'<span class="eq"><i></i><i></i><i></i></span>':pad(j+1)}</span><span class="cover">${svg(S[x].art)}</span><div><b>${S[x].t}</b><span>${S[x].a}</span></div><span class="m">${fmt(S[x].d)}</span></button>`).join('')}
-function tick(){const s=cur(),p=st.t/s.d;bars.forEach((b,i)=>b.classList.toggle('p',i/N<p));$('tNow').textContent=fmt(st.t);$('tEnd').textContent=fmt(s.d);$('stProg').style.width=(p*100)+'%';const li=s.ly?Math.floor(st.t/7)%s.ly.length:-1;if(li!==lastLy){lastLy=li;$('stLyr').innerHTML=`<span>${s.ly?s.ly[li]:'Instrumental'}</span>`}}
+function tick(){const s=cur(),p=st.t/s.d;bars.forEach((b,i)=>b.classList.toggle('p',i/N<p));$('tNow').textContent=fmt(st.t);$('tEnd').textContent=fmt(s.d);$('stProg').style.width=(p*100)+'%';const li=s.ly?lyIdx(s):-1;if(li!==lastLy){lastLy=li;$('stLyr').innerHTML=`<span>${s.ly?s.ly[li]:'Instrumental'}</span>`}}
 setInterval(()=>{if(!st.on)return;st.t+=.25;if(st.t>=cur().d)next();else tick()},250);
 /* events */
 document.addEventListener('click',e=>{const t=e.target.closest('[data-src]');if(!t||t.id==='jPP')return;if(t.classList.contains('li')||t.classList.contains('md')||t.closest('#rels')||t.classList.contains('node'))toggleSrc(t.dataset.src);else startSrc(t.dataset.src,+t.dataset.i||0)});
@@ -691,7 +691,7 @@ if(D.cold){X.cold=true;X.coldAgo=D.coldAgo||'yesterday, 11:42 pm';st.on=false;re
 if(D.radio){startRadio(D.radio);if(D.radioOff){st.on=false;render()}}
 if(D.kg){st.i=SRC[st.src].q.length-1;st.t=cur().d;st.on=false;ended=true;render()}
 /* ===== rev 11 (2026-10-07, D-072): Playlist page + Radio page. Radio keeps its picks a surprise: songs stay face down and turn over as they play (tap to peek, Show all for planners). Still finite, never autoplays. ===== */
-I.radio='<circle cx="12" cy="12" r="1.6"/><path d="M8.2 8.2a5.4 5.4 0 0 0 0 7.6M15.8 8.2a5.4 5.4 0 0 1 0 7.6M5.4 5.4a9.3 9.3 0 0 0 0 13.2M18.6 5.4a9.3 9.3 0 0 1 0 13.2"/>';
+I.radio='<circle cx="12" cy="12" r="1.5"/><path d="M8.2 8.2a5.4 5.4 0 0 0 0 7.6M15.8 8.2a5.4 5.4 0 0 1 0 7.6M5.4 5.4a9.3 9.3 0 0 0 0 13.2M18.6 5.4a9.3 9.3 0 0 1 0 13.2"/>';
 I.spin='<path d="M19.5 12a7.5 7.5 0 1 1-2.2-5.3"/><path d="M19.5 4.5v4h-4"/>';
 const PV={id:null,show:false,peek:new Set(),fit:0};
 const pvEl=document.createElement('div');pvEl.id='pv';pvEl.className='pv';$('main').appendChild(pvEl);
@@ -1011,6 +1011,49 @@ function autoFacts(k){const s=S[k];if(!s)return [];const p=(typeof REPEAT_COUNT!
  f.push(['You play it most',WHENP[(h>>7)%4]]);
  return f}
 {const _na3=npAbout;npAbout=function(){const h=_na3(),fs=autoFacts(curK());if(!fs.length)return h;let h2=h;const pm=h2.match(/<span class="mut npy-p">In ([\s\S]*?)<\/span>/);if(pm){h2=h2.replace(pm[0],'');fs.push(['In your playlists',pm[1]])}const blk=`<dl class="npy-f">${fs.map(([a,b])=>`<div><dt>${a}</dt><dd>${b}</dd></div>`).join('')}</dl>`;return h2.replace(/(<div class="npy-n">(?:<div>[\s\S]*?<\/div>){3}<\/div>)/,'$1'+blk)}}
+/* rev 16: Song room lyrics — real-length timed demo lyrics, sections + who sings, instrumental gaps that fill, moment marks, hover time + tap to jump, follow / Back to now */
+const LT={
+ night:[[12,'Headlights fold into the rain','Verse 1 \u00b7 Kairo Vale'],[17,'and the city hums in a minor key'],[22,'every signal turning green for us'],[27,'we don\u2019t stop till the river'],[33,'your hand out the window, catching the cold'],[38,'radio low so the night won\u2019t know'],[43,'I don\u2019t need the map, I know where it goes'],[48,'every street we take is a street we chose'],
+  [53,'so keep it moving, keep it slow','Pre-chorus'],[58,'nobody\u2019s waiting where we go'],
+  [63,'Night transit, lights on the water','Chorus'],[68,'night transit, nothing to prove'],[73,'we ride till the morning gets louder'],[78,'night transit, me and you'],
+  [95,'Last train hums under the bridge','Verse 2 \u00b7 Mira Son'],[100,'I count the windows still lit'],[105,'every light a life I\u2019ll never know'],[110,'every life a song I almost wrote'],
+  [115,'so keep it moving, keep it slow','Pre-chorus'],[120,'nobody\u2019s waiting where we go'],
+  [125,'Night transit, lights on the water','Chorus'],[130,'night transit, nothing to prove'],[135,'we ride till the morning gets louder'],[140,'night transit, me and you'],
+  [146,'And if the city sleeps','Bridge \u00b7 both'],[151,'we\u2019ll be the ones awake'],[156,'a little louder than the rain'],
+  [162,'Night transit, lights on the water','Last chorus'],[167,'night transit, me and you']],
+ blue:[[14,'Hold the light a little longer','Verse 1'],[20,'the street is quiet now'],[26,'blue on the window'],[32,'blue on your hands'],
+  [40,'It\u2019s the blue hour','Chorus'],[46,'everything slows'],[52,'say it soft, say it once'],[58,'and let it go'],
+  [76,'Kettle\u2019s on, the city\u2019s yawning','Verse 2'],[82,'nobody\u2019s asked for us yet'],[88,'we can stay in the in-between'],[94,'a little longer, don\u2019t forget'],
+  [102,'It\u2019s the blue hour','Chorus'],[108,'everything slows'],[114,'say it soft, say it once'],[120,'and let it go'],
+  [128,'Hold the light','Outro'],[136,'hold the light a little longer']],
+ m1:[[10,'Two a.m. and the beat still knocking','Verse 1'],[14,'neighbours asleep, I\u2019m still talking'],[18,'pen on the table'],[22,'page never stopping'],[26,'lamp on low like a lighthouse'],[30,'every bar is a way out'],[34,'mama said rest, I said soon'],[38,'got the whole city in one room'],
+  [44,'Small hours, big thoughts','Hook'],[48,'writing it down before it\u2019s lost'],[52,'small hours, nobody calls'],[56,'just me and the sound through the walls'],
+  [62,'Cold tea, warm screen','Verse 2'],[66,'half the words I mean'],[70,'cross it out, keep the line'],[74,'the good ones come at night'],[78,'bus goes by like a metronome'],[82,'I\u2019m on beat and I\u2019m on my own'],[86,'tomorrow\u2019s loud, tonight\u2019s mine'],[90,'one more verse, then I\u2019m fine'],
+  [96,'Small hours, big thoughts','Hook'],[100,'writing it down before it\u2019s lost'],[104,'small hours, nobody calls'],[108,'just me and the sound through the walls'],
+  [130,'Sun\u2019s a rumour, sky\u2019s still grey','Verse 3'],[134,'saved a draft I\u2019ll play someday'],[138,'if you\u2019re up then you know'],[142,'small hours, quiet glow'],
+  [148,'Small hours, big thoughts','Hook'],[152,'writing it down before it\u2019s lost'],[156,'small hours, nobody calls'],[160,'just me and the sound through the walls']]};
+const LY_HOLD=5,LY_GAP=8;
+Object.keys(LT).forEach(k=>{if(S[k]){S[k].lt=LT[k];S[k].ly=LT[k].map(l=>l[1])}});
+function lyIdx(s){if(!s||!s.lt)return 0;let i=0;for(let j=0;j<s.lt.length;j++)if(s.lt[j][0]<=st.t)i=j;return i}
+function lyNow(s,t){if(!s.lt)return -1;let i=-1;for(let j=0;j<s.lt.length;j++)if(s.lt[j][0]<=t)i=j;return i}
+function lyGaps(s){const L=s.lt,g=[];let pe=0;L.forEach((l,i)=>{if(l[0]-pe>=LY_GAP)g.push({b:i,s:pe,e:l[0]});pe=l[0]+LY_HOLD});if(s.d-pe>=LY_GAP)g.push({b:L.length,s:pe,e:s.d});return g}
+function lyHTML(k){const s=S[k],L=s.lt,gs=lyGaps(s),ms=typeof momOf==='function'?momOf(k):[];const gap=g=>`<div class="lgap" data-gs="${g.s}" data-ge="${g.e}" title="${g.b===0?'Intro':g.b===L.length?'Outro':'Instrumental'} \u00b7 ${fmt(g.e-g.s)}"><i></i><i></i><i></i><span class="m">${g.b===L.length?'':fmt(g.e-g.s)}</span></div>`;
+ let h='';L.forEach((l,i)=>{const g=gs.find(x=>x.b===i);if(g)h+=gap(g);if(l[2]){const [a,b]=l[2].split(' \u00b7 ');h+=`<div class="lsec">${a}${b?`<span>${b}</span>`:''}</div>`}const inm=ms.some(m=>l[0]>=m.s&&l[0]<m.e);h+=`<button class="ln${inm?' inm':''}" data-lt="${l[0]}" data-li="${i}" title="Play from ${fmt(l[0])}"><span class="lnt m">${inm?ICON('sparkle'):fmt(l[0])}</span>${l[1]}</button>`});
+ const ge=gs.find(x=>x.b===L.length);if(ge)h+=gap(ge);
+ return `<div class="npr lyx" id="npr">${h}<div class="cred m">Lyrics \u00b7 ${credits(k).write.join(', ')} \u00b7 demo lyrics</div></div><button class="btn sm lyback" id="lyBack">${ICON('down')}Back to now</button>`}
+{const _np16=npPanel;npPanel=function(){const k=curK(),s=S[k];if(X.npTab==='lyrics'&&s&&s.lt&&(typeof eff!=='function'||eff()==='lyrics')){X.lyFree=false;lyLast=-2;return lyHTML(k)}let h=_np16();if(X.npTab==='lyrics'&&s&&s.ly&&!s.lt)h=h.replace('<div class="npr" id="npr">','<div class="npr lystatic" id="npr"><div class="lsec">Lyrics preview<span>not synced yet</span></div>');return h}}
+{const _nl=npLine;npLine=function(){const s=cur();if(s&&s.ly&&!s.lt)return;if(s&&s.lt)return;_nl()}}
+let lyLast=-2;
+function lyUpd(){const r=$('npr');if(!r||!r.classList.contains('lyx')||!$('np').classList.contains('open'))return;const s=cur();if(!s.lt)return;const i=lyNow(s,st.t),held=i>=0&&st.t<s.lt[i][0]+LY_HOLD+3;
+ r.querySelectorAll('.lgap').forEach(g=>{const a=+g.dataset.gs,b=+g.dataset.ge,on=st.t>=a&&st.t<b;g.classList.toggle('on',on);g.style.setProperty('--g',on?((st.t-a)/(b-a)).toFixed(3):st.t>=b?1:0)});
+ const gOn=r.querySelector('.lgap.on');const key=gOn?'g'+gOn.dataset.gs:i;
+ if(key===lyLast)return;lyLast=key;
+ r.querySelectorAll('.ln').forEach(b=>{const j=+b.dataset.li;b.classList.toggle('past',j<i||(j===i&&!!gOn));b.classList.toggle('now',j===i&&!gOn)});
+ const tgt=gOn||r.querySelector('.ln.now')||r.querySelector('.lgap');if(tgt&&!X.lyFree)r.scrollTo({top:tgt.offsetTop-r.clientHeight*.38,behavior:'smooth'})}
+setInterval(lyUpd,150);
+document.addEventListener('click',e=>{let x;if(x=e.target.closest('[data-lt]')){e.stopPropagation();st.t=+x.dataset.lt;X.lyFree=false;$('lyBack')&&$('lyBack').classList.remove('show');lyLast=-2;tick();lyUpd();return}
+ if(e.target.closest('#lyBack')){X.lyFree=false;$('lyBack').classList.remove('show');lyLast=-2;lyUpd()}},true);
+['wheel','touchmove'].forEach(ev=>document.addEventListener(ev,e=>{if(e.target.closest&&e.target.closest('#npr.lyx')){X.lyFree=true;const b=$('lyBack');b&&b.classList.add('show')}},{passive:true}));
 /* boot */
 if(D.artist)setView('artist',{n:D.artist});
 if(D.release)setView('release',{id:D.release});

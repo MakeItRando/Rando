@@ -1,10 +1,11 @@
 # Rondo backlog — one arranged list
 
-**Updated:** 2026-10-10 (Home E rev 15.3). This is the single place for *what's next*. Details of each idea live in [PRODUCT_IDEAS.md](PRODUCT_IDEAS.md); decisions in [DECISIONS.md](DECISIONS.md); every owner message in [CONVERSATION_LOG.md](CONVERSATION_LOG.md). Update this file in the same session whenever the owner says yes / no / later to anything.
+**Updated:** 2026-10-10 (Home E rev 16). This is the single place for *what's next*. Details of each idea live in [PRODUCT_IDEAS.md](PRODUCT_IDEAS.md); decisions in [DECISIONS.md](DECISIONS.md); every owner message in [CONVERSATION_LOG.md](CONVERSATION_LOG.md). Update this file in the same session whenever the owner says yes / no / later to anything.
 
 Status words: **Now** (working on it) · **Next** (agreed, queued) · **Profile & social phase** (owner: "we will work on them when designing profiles") · **Real apps** (needs native apps/backend) · **Parked** (maybe, ask again later) · **Dropped** (owner said no / not useful).
 
 ## Now
+- **Rev 16 built, waiting for owner look:** timed lyrics with sections, singer, gap dots, moment marks, Back to now; new icon set (D-084). Left side of the Song room (cover, chips, action buttons) not changed yet — ask owner.
 - **Song room / Now Playing + Lyrics redesign** — owner (2026-10-10): "lyrics panel and songroom doesnt look that good and creative… where user gonna spend most of time"; "the icons are bad". Part of it is demo data (4 lyric lines looping), part is design. Plan: real-length demo lyrics with verse/chorus, a lyrics layout with character, new icon set across the app, then judge again. See Holes H1, H2.
 
 ## Next (agreed order)
@@ -48,8 +49,8 @@ Mini player window (I4), Journey take-along offline (I7), lock-screen/car contro
 ## Holes found (2026-10-10 audit) — things the app still lacks
 | # | Hole | Why it matters | When |
 | --- | --- | --- | --- |
-| H1 | Song room / Lyrics look plain; demo lyrics are 4 lines on loop | Where people spend most time | **Now** |
-| H2 | Icon set is inconsistent / weak | Owner: "icons are bad"; seen on every screen | **Now** (with H1) |
+| H1 | Song room / Lyrics look plain; demo lyrics are 4 lines on loop | Where people spend most time | **Rev 16 built** (lyrics); left side pending |
+| H2 | Icon set is inconsistent / weak | Owner: "icons are bad"; seen on every screen | **Rev 16 built** (one set, 1.75 px round) |
 | H3 | **Import from other apps** (Spotify/Apple Music/YouTube playlists + likes) | Biggest reason people don't switch apps | First run / Library design |
 | H4 | **Explicit filter / clean versions** + "E" badge | Teen audience, parents | Settings design |
 | H5 | **Offline/downloads** — no download button, state or storage view anywhere | Teens on mobile data | Library design |
