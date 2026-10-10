@@ -47,3 +47,15 @@ L opens with tabs; Up next lists only the active source after the user queue and
 - **BPM and key are gone from the main view.** Header chips show only length + "on repeat". Pace is a word (Laid back / Steady / High energy); the numbers stay in data and power Go from, Tune a mix, radio and Journey flow behind the scenes.
 
 - **Rev 14.4 (I8): Your note** — a private note on the song (from the song ⋯ menu → Add a note, or the dashed "Add a private note" card here) shows in About as a quote. Only you see it.
+
+## Rev 15.3 (D-083 proposal): About fills itself
+Owner: "make it more auto… people are lazy and not creative". Under the three numbers in **You and this song**, automatic facts from play history — nobody types anything:
+- **First heard** — date + where it came from (Dig, a Journey, Artist radio, Search, a playlist, a friend's share).
+- **You play it most** — late at night / in the evening / in the morning / on weekends.
+- **In your playlists** — names.
+- New song → "First listen · right now".
+Prototype uses stable demo values per song; real apps compute from play history (V1 backend). Next candidate: **Your start point** (BACKLOG H9).
+
+**Sleep timer chip (rev 15.3):** when a timer is on, the clock icon in the bottom bar is replaced by one orange pill — "After this song" or "29 min left"; tap to change or turn off.
+
+**Owner note (2026-10-10):** the Song room / Lyrics panel "doesnt look that good and creative"; icons are bad → redesign is **Now** in [BACKLOG.md](../../handoff/BACKLOG.md).

@@ -2,13 +2,17 @@
 
 This folder is the canonical continuity package. It should let another contributor resume without private chat history, while distinguishing known decisions from reconstructed screenshot notes, tested results from untested claims, and prototype from production.
 
-## Current checkpoint (2026-10-07)
+## Current checkpoint (2026-10-10)
+
+Design-first phase, Home E study rev 15.3 (Moments, About auto facts, sidebar). **What's next and every owner verdict: [BACKLOG.md](BACKLOG.md).** Now: Song room / Lyrics redesign + icon set.
+
+### Earlier checkpoint (2026-10-07)
 
 Design-first phase. Home desktop approved (rev 3, D-058); Home rev 4 + phone next. The 2026-10-07 morning session was lost before pushing ([SESSION_2026-10-07.md](SESSION_2026-10-07.md)). App candidate PR #5 unchanged with B-001/B-002 open. All owner screenshots up to 2026-10-07 are archived under [snapshots/](snapshots/).
 
 ## Reading order
 
-1. [STATE.md](STATE.md): exact current refs, quality gaps, next action.
+1. [STATE.md](STATE.md): exact current refs, quality gaps, next action. [BACKLOG.md](BACKLOG.md): the one arranged what-next list (Now / Next / Profile & social / Real apps / Parked / Dropped / Holes).
 1b. [CONVERSATION_LOG.md](CONVERSATION_LOG.md): every session and owner quote in order; [REVIEW_2026-10-07.md](REVIEW_2026-10-07.md): latest audit, critique and ideas; [DESIGN_PROGRAM.md](DESIGN_PROGRAM.md): design process and anti-slop rules.
 2. [HANDOFF_REPORT.md](HANDOFF_REPORT.md): project philosophy, implementation truth, prior-context limits, handover path.
 3. [DECISIONS.md](DECISIONS.md), [OPEN_QUESTIONS.md](OPEN_QUESTIONS.md): confirmed vs unresolved owner choices.

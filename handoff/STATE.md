@@ -2,7 +2,12 @@
 
 **Updated:** 2026-10-07 (session B part 5: Explore additions built; Now Playing page proposed). **Product:** Rondo. **Phase:** design-first program (D-048). **Last owner-approved design:** Home rev 3 (D-058), desktop.
 
-## Right now
+## Right now (2026-10-10)
+
+- Home E study at **rev 15.3** (Moments + remove, Artist moments, sleep chip, About auto facts). check.mjs PASS. Preview: https://makeitrando.github.io/Rando/design/studies/2026-10-05-home-e/home.html
+- **Next: Song room / Lyrics redesign + new icon set** (owner: lyrics/song room not good or creative; icons bad). Then Mixtapes + Playlist page, Pin to top, Your month. Full arranged list: [BACKLOG.md](BACKLOG.md).
+
+## Earlier notes
 
 - `main` = canonical docs + design studies + stable v0.3.0 app runtime. Latest design work: [Home E rev 5 — Explore proposal (D-066)](../design/studies/2026-10-05-home-e/README.md) — try it at https://makeitrando.github.io/Rando/design/studies/2026-10-05-home-e/home.html
 - **The 2026-10-07 morning session was lost** (clean scrubber, Dig feature, walkthrough, docs overhaul never pushed). See [SESSION_2026-10-07.md](SESSION_2026-10-07.md). Its scrubber + Dig work was redone and pushed as Home rev 4.
