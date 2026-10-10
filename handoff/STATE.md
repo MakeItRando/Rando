@@ -4,6 +4,7 @@
 
 ## Right now (2026-10-10)
 
+- **Rev 18 (D-086 proposal):** Pin to top for sidebar playlists + artists. **Rev 17.1:** mixtape final touches. Mixtapes confirmed (D-085). check.mjs PASS. Next: Your month → Library → Profile/Settings → First run.
 - **Rev 17 (D-085 proposal):** Playlist refresh (Album column, what's-in-it line, ⋯ menu) + Mixtapes. **Rev 16.2:** Song room final touches (phone lyrics follow, keyboard). check.mjs PASS. Waiting for owner look. Next: Pin to top → Your month → Library → Profile/Settings → First run ([BACKLOG.md](BACKLOG.md)).
 - **Rev 16.1:** Song room left side tidied; lyrics selectable + Copy lyrics.
 - **Rev 16 (D-084 proposal):** Song room lyrics (timed, sections, gaps, moment marks, Back to now) + new icon set. check.mjs PASS. Waiting for owner look.

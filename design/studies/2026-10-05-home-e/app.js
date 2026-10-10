@@ -43,7 +43,7 @@ function render(){const s=cur(),src=SRC[st.src],q=src.q,k=curK();document.body.c
  {const done=41,tot=88;$('jfoot').innerHTML=`<span><b>${done+heard}</b> of ${tot} songs</span><div class="jb"><i style="width:${done/tot*100}%"></i><i style="width:${heard/tot*100}%"></i></div><span>Then <b>Nia Vale</b> · 11 songs</span>`}
  buildGJ();
  /* drawer */
- $('dSrc').textContent=`Playing from ${src.type} · ${src.name}`;$('dList').innerHTML=(st.uq.length?`<div class="cap dq-h">Next in queue</div>`+st.uq.map((x,j)=>`<button class="dq" data-k="${x}"><span class="m">+</span><span class="cover">${svg(S[x].art)}</span><div><b>${S[x].t}</b><span>${S[x].a}</span></div><span class="m">${fmt(S[x].d)}</span></button>`).join('')+`<div class="cap dq-h">Next from ${src.name}</div>`:'')+q.map((x,j)=>`<button class="dq${j===st.i?' on':j<st.i?' done':''}" data-src="${st.src}" data-i="${j}"><span class="m">${j===st.i&&st.on?'<span class="eq"><i></i><i></i><i></i></span>':pad(j+1)}</span><span class="cover">${svg(S[x].art)}</span><div><b>${S[x].t}</b><span>${S[x].a}</span></div><span class="m">${fmt(S[x].d)}</span></button>`).join('')}
+ $('dSrc').textContent=`Playing from ${tyOf(st.src)} · ${src.name}`;$('dList').innerHTML=(st.uq.length?`<div class="cap dq-h">Next in queue</div>`+st.uq.map((x,j)=>`<button class="dq" data-k="${x}"><span class="m">+</span><span class="cover">${svg(S[x].art)}</span><div><b>${S[x].t}</b><span>${S[x].a}</span></div><span class="m">${fmt(S[x].d)}</span></button>`).join('')+`<div class="cap dq-h">Next from ${src.name}</div>`:'')+q.map((x,j)=>`<button class="dq${j===st.i?' on':j<st.i?' done':''}" data-src="${st.src}" data-i="${j}"><span class="m">${j===st.i&&st.on?'<span class="eq"><i></i><i></i><i></i></span>':pad(j+1)}</span><span class="cover">${svg(S[x].art)}</span><div><b>${S[x].t}</b><span>${S[x].a}</span></div><span class="m">${fmt(S[x].d)}</span></button>`).join('')}
 function tick(){const s=cur(),p=st.t/s.d;bars.forEach((b,i)=>b.classList.toggle('p',i/N<p));$('tNow').textContent=fmt(st.t);$('tEnd').textContent=fmt(s.d);$('stProg').style.width=(p*100)+'%';const li=s.ly?lyIdx(s):-1;if(li!==lastLy){lastLy=li;$('stLyr').innerHTML=`<span>${s.ly?s.ly[li]:'Instrumental'}</span>`}}
 setInterval(()=>{if(!st.on)return;st.t+=.25;if(st.t>=cur().d)next();else tick()},250);
 /* events */
@@ -116,7 +116,7 @@ function lines(s){return s.ly}
 function npOpen(){$('np').classList.add('open');$('lyrBtn').classList.add('on');X.npK=null;npSync()}
 function npClose(){$('np').classList.remove('open');$('lyrBtn').classList.remove('on')}
 function npSync(){if(!$('np').classList.contains('open'))return;const k=curK(),s=S[k],src=SRC[st.src];
- if(X.npK!==k){X.npK=k;const L=lines(s);$('np').innerHTML=`<div class="nph"><span class="cap">${st.uqNow?'Your queue':src.type+' · '+src.name}</span><button class="icb" id="npX" aria-label="Close (L)">${ICON('down')}</button></div>
+ if(X.npK!==k){X.npK=k;const L=lines(s);$('np').innerHTML=`<div class="nph"><span class="cap">${st.uqNow?'Your queue':tyOf(st.src)+' · '+src.name}</span><button class="icb" id="npX" aria-label="Close (L)">${ICON('down')}</button></div>
  <div class="npl"><span class="cover">${svg(s.art)}</span><h2>${s.t}</h2><p>${s.a}</p><div class="tags m"><span>${fmt(s.d)}</span></div>
  <div class="npa"><button class="icb like${st.liked.has(k)?' on':''}" id="npLike" aria-label="Like"><svg class="ic f" viewBox="0 0 24 24"><path d="M12 20s-7.5-4.4-7.5-10A4.3 4.3 0 0 1 12 7.3 4.3 4.3 0 0 1 19.5 10c0 5.6-7.5 10-7.5 10z"/></svg></button><button class="btn gh" data-share="${k}">${ICON('share')}Share lyric</button></div></div>
  <div class="npr" id="npr">${L?L.map((l,i)=>`<button class="ln" data-ln="${i}">${l}</button>`).join('')+`<div class="cred m">Lyrics · ${s.ar}</div>`:`<div class="inst"><b>Instrumental</b><span>No lyrics in this one.</span></div>`}</div>`;
@@ -424,7 +424,7 @@ function credits(k){const s=S[k],h=hsh(k);const perf=s.a.split(/, /);const write
 function byCredit(name){return Object.keys(S).filter(k=>{const c=credits(k);return [...c.write,...c.prod,...c.mix].includes(name)||c.perf.includes(name)})}
 function relOf(k){const r=Object.keys(SRC).find(x=>/EP|Album|Single/.test(SRC[x].type)&&SRC[x].q.includes(k)&&!/^x_/.test(x));return r?SRC[r]:null}
 const GEN={night:'Alt R&B',open:'Electronic',blue:'R&B',small:'Hip-Hop',silver:'Indie pop',soft:'Alt R&B',north:'Ambient pop',margins:'Electronic',first:'Jazz',cont:'Soul'};
-function npHead(){const src=SRC[st.src],q=src.q;return `<button class="icb" id="npX" aria-label="Close Now Playing (L)">${ICON('down')}</button><div class="nps"><span>${st.uqNow?'Playing from your queue':'Playing from '+src.type.toLowerCase()}</span><b>${st.uqNow?'Next in queue':src.name}</b></div><span class="m npn">${st.uqNow?'':pad(st.i+1)+'/'+pad(q.length)}</span><button class="icb" id="npMore" aria-label="More options">${ICON('more')}</button>`}
+function npHead(){const src=SRC[st.src],q=src.q;return `<button class="icb" id="npX" aria-label="Close Now Playing (L)">${ICON('down')}</button><div class="nps"><span>${st.uqNow?'Playing from your queue':'Playing from '+tyOf(st.src).toLowerCase()}</span><b>${st.uqNow?'Next in queue':src.name}</b></div><span class="m npn">${st.uqNow?'':pad(st.i+1)+'/'+pad(q.length)}</span><button class="icb" id="npMore" aria-label="More options">${ICON('more')}</button>`}
 function npTabs(){return `<div class="npt" role="tablist">${[['lyrics','Lyrics'],['next','Up next'],['credits','Credits'],['about','About']].map(([v,l])=>`<button role="tab" aria-selected="${X.npTab===v}" class="${X.npTab===v?'on':''}" data-npt="${v}">${l}</button>`).join('')}</div>`}
 function npPanel(){const k=curK(),s=S[k],src=SRC[st.src],q=src.q;
  if(X.npTab==='lyrics'&&!s.ly)return `<div class="npp npinst"><span class="npinst-eq"><i></i><i></i><i></i><i></i><i></i></span><b>Instrumental</b><span>No lyrics in this one.</span><button class="btn gh" data-npt="credits">See credits</button></div>`;
@@ -882,8 +882,8 @@ function sbR(){const g=JR.active,G=JR.G[g];
  if(G&&$('sbJ')){const ai=G.cur,a=G.A[ai],s=jState(g,ai),ks=jPace(G,a),sig=[g,ai,s.h,s.live,s.on,st.i,G.pace].join('|');
   if(sig!==sbSigJ){sbSigJ=sig;$('sbJ').innerHTML=`<div class="sbj${s.live?' live':''}" role="button" tabindex="0" data-sbj aria-label="Open Journeys" style="--tone:${TONE[a.art]||'#2a2a2a'}"><div class="sbj-t"><span class="sbj-c"><span class="cover r">${svg(a.art)}</span></span><div><span class="cap">${g} Journey</span><b>${a.n}</b><span class="sbj-s">${s.done?'Finished \u00b7 stamp collected':s.h?`${s.h} of ${s.tot} heard`:'Not started yet'}</span></div><button class="sbj-p" data-sbjp aria-label="${s.label}">${ICON(s.icon)}</button></div>${sbDots(ks,ks.indexOf(curK()),s.live)}${s.live?'<span class="sbjp"></span>':''}</div>`}
   const bar=$('sbJ').querySelector('.sbjp');if(bar){const i=Math.max(0,ks.indexOf(curK()));bar.style.setProperty('--p',Math.min(1,(i+st.t/(cur().d||1))/ks.length).toFixed(4))}}
- const ca=S[curK()]?S[curK()].ar:'',FOLS=[...FOL].sort((x,y)=>(y===ca)-(x===ca)),sigF=[...FOL].join()+'|'+[...SEEN].join()+'|'+ca+st.on;
- if(sigF!==sbSigF&&$('sbF')){sbSigF=sigF;$('sbF').innerHTML=FOLS.map(n=>{const d=aData(n);if(!d)return '';const nw=d.rels.some(r=>r.isNew)&&!SEEN.has(n),pl=ca===n&&st.on;return `<button class="sbf-a${nw?' nw':''}${pl?' pl':''}" data-sbf="${n}" title="${n}${nw?' \u00b7 new music':''}" aria-label="${n}${nw?', new music':''}"><span class="sbf-r"><span class="cover r">${svg(d.art)}</span>${pl?'<span class="eq"><i></i><i></i><i></i></span>':''}</span><span class="sbf-n">${n.split(' ')[0]}</span></button>`}).join('')+(FOL.size>3?`<button class="sbmore" data-sbmore aria-label="Show all ${FOL.size} artists you follow">+${FOL.size-3}</button>`:'')}}
+ const ca=S[curK()]?S[curK()].ar:'',FOLS=[...FOL].sort((x,y)=>pinRk(x,ca)-pinRk(y,ca)),sigF=[...FOL].join()+'|'+[...SEEN].join()+'|'+ca+st.on+'|'+(typeof PIN!=='undefined'?PIN.ar.join():'');
+ if(sigF!==sbSigF&&$('sbF')){sbSigF=sigF;$('sbF').innerHTML=FOLS.map(n=>{const d=aData(n);if(!d)return '';const nw=d.rels.some(r=>r.isNew)&&!SEEN.has(n),pl=ca===n&&st.on;return `<button class="sbf-a${nw?' nw':''}${pl?' pl':''}" data-sbf="${n}" title="${n}${nw?' \u00b7 new music':''}" aria-label="${n}${nw?', new music':''}"><span class="sbf-r"><span class="cover r">${svg(d.art)}</span>${pl?'<span class="eq"><i></i><i></i><i></i></span>':''}</span><span class="sbf-n">${typeof PIN!=='undefined'&&PIN.ar.includes(n)?ICON('pin').replace('class="ic"','class="ic sbpin" aria-hidden="true"'):''}${n.split(' ')[0]}</span></button>`}).join('')+(FOL.size>3?`<button class="sbmore" data-sbmore aria-label="Show all ${FOL.size} artists you follow">+${FOL.size-3}</button>`:'')}}
 {const _r14=render;render=function(){_r14();sbR()}}
 document.addEventListener('click',e=>{let x;
  if(x=e.target.closest('[data-sbjp]')){e.stopPropagation();const G=JR.G[JR.active];return jPlay(JR.active,G.cur)}
@@ -914,7 +914,7 @@ const REC=['north','soft'].filter(k=>SRC[k]);let recLast=null,recSig='';
 const SIDE_KEYS=()=>[...document.querySelectorAll('#pls .li[data-src], #dugLi, .li.svd')].map(e=>e.dataset.src);
 function recR(){const el=$('sbRec');if(!el)return;if(st.src!==recLast){if(recLast&&SRC[recLast]&&!/Journey/.test(SRC[recLast].type)&&!SRC[recLast].journey){const i=REC.indexOf(recLast);if(i>=0)REC.splice(i,1);REC.unshift(recLast)}recLast=st.src}
  const side=SIDE_KEYS(),list=REC.filter(k=>k!==st.src&&!side.includes(k)&&SRC[k]).slice(0,2),sig=list.join();if(sig===recSig)return;recSig=sig;
- el.innerHTML=list.length?`<div class="sh"><span class="cap">Recently played</span></div>`+list.map(k=>{const s=SRC[k],ar=s.q[0]&&S[s.q[0]]?S[s.q[0]].ar:'';return `<button class="li" data-rec="${k}"><span class="cover">${svg(s.art)}</span><div><b>${s.name.replace(/ \u00b7 Popular$/,'')}</b><span>${s.type}${/Album|EP|Single/.test(s.type)&&ar?' \u00b7 '+ar:''}</span></div></button>`}).join(''):''}
+ el.innerHTML=list.length?`<div class="sh"><span class="cap">Recently played</span></div>`+list.map(k=>{const s=SRC[k],ar=s.q[0]&&S[s.q[0]]?S[s.q[0]].ar:'';return `<button class="li" data-rec="${k}"><span class="cover">${svg(s.art)}</span><div><b>${s.name.replace(/ \u00b7 Popular$/,'')}</b><span>${tyOf(k)}${/Album|EP|Single/.test(s.type)&&ar?' \u00b7 '+ar:''}</span></div></button>`}).join(''):''}
 function sbProg(){document.querySelectorAll('.side .li.sbp').forEach(e=>{if(e.dataset.src!==st.src)e.classList.remove('sbp')});const r=document.querySelector(`#pls .li[data-src="${st.src}"], #dugLi[data-src="${st.src}"], .li.svd[data-src="${st.src}"]`);if(!r||st.uqNow)return;const q=SRC[st.src].q,d=cur().d||1;r.classList.add('sbp');r.style.setProperty('--p',Math.min(1,(st.i+st.t/d)/q.length).toFixed(4))}
 {const _r142=render;render=function(){_r142();recR();sbProg()}}
 document.addEventListener('click',e=>{const x=e.target.closest('[data-rec]');if(!x)return;e.stopImmediatePropagation();const k=x.dataset.rec,s=SRC[k];if(/^(Album|EP|Single)$/.test(s.type)&&relInfo(k))return relOpen(k);if(/Playlist|Radio/.test(s.type))return setView('src',{id:k});if(s.type==='Artist'&&s.artist)return artOpen(s.artist);toggleSrc(k)},true);
@@ -1073,7 +1073,7 @@ document.addEventListener('click',e=>{const x=e.target.closest('[data-lycopy]');
 document.addEventListener('keydown',e=>{const x=e.target.closest&&e.target.closest('[data-lt]');if(x&&(e.key==='Enter'||e.key===' ')){e.preventDefault();e.stopPropagation();x.click()}},true);
 {const _so=Element.prototype.scrollTo;Element.prototype.scrollTo=function(o){if(this.id==='npr'&&o&&typeof o==='object'&&matchMedia('(prefers-reduced-motion: reduce)').matches)o={...o,behavior:'auto'};return _so.call(this,o)}}
 /* rev 17: Playlist page refresh (auto "what's in it" line, Album column) + Mixtapes (I2: a playlist made for someone — tape, sticker, who it's for, a short note shown first) */
-const MIX={},MIXC=['#e9e4d8','#f2c14e','#ff7a45','#8ec5e8'];
+var MIX={},MIXC=['#e9e4d8','#f2c14e','#ff7a45','#8ec5e8'],MIXN=['Cream','Yellow','Orange','Sky'];
 function plFacts(id){const q=SRC[id].q;if(!q.length)return '';const gc={};q.forEach(k=>{const g=S[k].genre||GEN[S[k].art];if(g)gc[g]=(gc[g]||0)+1});const gs=Object.entries(gc).sort((a,b)=>b[1]-a[1]).slice(0,2).map(x=>x[0]);const W=['laid back','steady','high energy'],pw=b=>b<95?0:b<=120?1:2,ps=q.map(k=>pw(S[k].bpm||100)),lo=Math.min(...ps),hi=Math.max(...ps);const ar=new Set(q.flatMap(k=>S[k].a.split(/, | & /))).size;return `${gs.length?'Mostly '+gs.join(' and ')+' \u00b7 ':''}${lo===hi?W[lo]:W[lo]+' to '+W[hi]} \u00b7 ${ar} artist${ar===1?'':'s'}`}
 function tapeHTML(m,name,run){return `<div class="tape${run?' run':''}" style="--tc:${m.c}"><div class="tape-lb"><span class="tape-stk">${svg(m.stk)}</span><div class="tape-tx"><b>${name}</b><span>${m.to?'for '+m.to:'a mixtape'}</span></div></div><div class="tape-w"><i class="tape-r"></i><span class="tape-win"><i></i></span><i class="tape-r"></i></div></div>`}
 {const _pl17=plR;plR=function(id){let h=_pl17(id);const s=SRC[id];h=h.replace('<span class="pv-m">Tempo \u00b7 key</span>','<span class="pv-m">Album</span>');
@@ -1086,19 +1086,44 @@ function mxOpen(id){const s=SRC[id],m=MIX[id]||{to:'',note:'',stk:s.q.length?S[s
  <label class="mxs-f"><span class="cap">For</span><input id="mxTo" maxlength="24" placeholder="Their name (optional)" value="${(m.to||'').replace(/"/g,'&quot;')}"></label>
  <label class="mxs-f"><span class="cap">Note <span class="m" id="mxN"></span></span><textarea id="mxNote" maxlength="140" rows="3" placeholder="Why these songs?">${(m.note||'').replace(/</g,'&lt;')}</textarea></label>
  <div class="mxs-f"><span class="cap">Sticker</span><div class="mx-stk">${arts.map(a=>`<button class="cover" data-mxstk="${a}" aria-label="Sticker ${a}">${svg(a)}</button>`).join('')}</div></div>
- <div class="mxs-f"><span class="cap">Tape</span><div class="mx-col">${MIXC.map(c=>`<button data-mxc="${c}" style="--sw:${c}" aria-label="Tape colour"></button>`).join('')}</div></div>
+ <div class="mxs-f"><span class="cap">Tape</span><div class="mx-col">${MIXC.map(c=>`<button data-mxc="${c}" style="--sw:${c}" aria-label="Tape colour ${MIXN[MIXC.indexOf(c)]}" title="${MIXN[MIXC.indexOf(c)]}"></button>`).join('')}</div></div>
  <div class="mxs-a">${MIX[id]?'<button class="btn gh" id="mxOff">Make it a playlist again</button>':''}<span></span><button class="btn gh" id="mxCancel">Cancel</button><button class="btn pri" id="mxSave">${MIX[id]?'Save':'Make mixtape'}</button></div></div>`;
  d.classList.add('open');draw();d.querySelector('#mxTo').oninput=draw;d.querySelector('#mxNote').oninput=draw;setTimeout(()=>d.querySelector('#mxTo').focus(),30);
  d.onclick=e=>{let x;if(e.target===d||e.target.closest('#mxCancel'))return mxClose();if(x=e.target.closest('[data-mxstk]')){d._m.stk=x.dataset.mxstk;return draw()}if(x=e.target.closest('[data-mxc]')){d._m.c=x.dataset.mxc;return draw()}
   if(e.target.closest('#mxOff')){const old=MIX[id];delete MIX[id];mxClose();buildSide();pvR();return toast(`${s.name} is a playlist again`,'Undo',()=>{MIX[id]=old;buildSide();pvR();$('toast').classList.remove('open')})}
   if(e.target.closest('#mxSave')){const was=MIX[id];MIX[id]={...d._m,to:d.querySelector('#mxTo').value.trim(),note:d.querySelector('#mxNote').value.trim()};mxClose();buildSide();pvR();toast(was?'Mixtape saved':`${s.name} is now a mixtape${MIX[id].to?' for '+MIX[id].to:''}`,was?'':'Undo',was?null:()=>{delete MIX[id];buildSide();pvR();$('toast').classList.remove('open')})}}}
-function mxClose(){const d=$('mxS');if(d)d.classList.remove('open')}
+function mxClose(){const d=$('mxS');if(d&&d.classList.contains('open')){d.classList.remove('open');const b=$('pvMore');if(b)b.focus({preventScroll:true})}}
 document.addEventListener('keydown',e=>{if(e.key==='Escape'&&$('mxS')&&$('mxS').classList.contains('open')){e.stopPropagation();mxClose()}},true);
 document.addEventListener('click',e=>{let x;if((x=e.target.closest('#pvMore'))&&PV.id&&SRC[PV.id]){const id=PV.id;if(id==='liked'||SRC[id].type==='Radio')return;e.stopImmediatePropagation();popAt(x,`<button data-mxo>${ICON('sparkle')}${MIX[id]?'Edit mixtape':'Make it a mixtape'}</button><button data-plsoon>${ICON('more')}Rename, edit, delete <span class="mut">\u00b7 later</span></button>`,240);return}
  if(e.target.closest('[data-mxo]')){e.stopPropagation();$('pop').classList.remove('open');return mxOpen(PV.id)}
  if(e.target.closest('[data-plsoon]')){e.stopPropagation();$('pop').classList.remove('open');return toast('Rename, edit details and delete come with the Library design')}
  if(e.target.closest('.pv-h.mx #pvShare')){e.stopImmediatePropagation();const m=MIX[PV.id];return toast(`Mixtape link${m&&m.to?' for '+m.to:''} comes with sharing (V1 backend) \u2014 they\u2019ll open it as a tape, note first`)}},true);
 {const _bs17=buildSide;buildSide=function(){_bs17();Object.keys(MIX).forEach(id=>{const li=document.querySelector(`#pls .li[data-src="${id}"]`);if(!li)return;li.classList.add('mxli');const sp=li.querySelector(':scope>div>span');if(sp&&!/Mixtape/.test(sp.textContent))sp.textContent='Mixtape \u00b7 '+sp.textContent})}}
+/* rev 17.1: Mixtape final touches — say "mixtape" wherever the source is named; keyboard in the sheet */
+function tyOf(k){return typeof MIX!=='undefined'&&MIX[k]?'Mixtape':SRC[k]?SRC[k].type:''}
+document.addEventListener('keydown',e=>{const d=$('mxS');if(!d||!d.classList.contains('open'))return;
+ if(e.key==='Enter'&&e.target.id==='mxTo'){e.preventDefault();return $('mxNote').focus()}
+ if(e.key==='Enter'&&(e.metaKey||e.ctrlKey)){e.preventDefault();return $('mxSave').click()}
+ if(e.key==='Tab'){const f=[...d.querySelectorAll('button,input,textarea')].filter(x=>x.offsetParent);const i=f.indexOf(document.activeElement);if(e.shiftKey&&i<=0){e.preventDefault();f[f.length-1].focus()}else if(!e.shiftKey&&i===f.length-1){e.preventDefault();f[0].focus()}}},true);
+/* rev 18: Pin to top (S1) — pin playlists and artists to the top of their sidebar section. Right-click (or the keyboard menu key) a row or ring, or use the playlist ⋯. Newest pin goes on top. */
+I.pin='<path d="M9 4h6M10 4v5l-3 4h10l-3-4V4M12 13v7"/>';
+var PIN={pl:[],ar:[]};
+function pinRk(n,ca){const i=PIN?PIN.ar.indexOf(n):-1;return i>=0?i:n===ca?100:200}
+function pinSide(){const pls=$('pls');if(!pls)return;const lk=pls.querySelector('.li[data-src="liked"]');let after=lk;
+ pls.querySelectorAll('.li.pnd').forEach(e=>{e.classList.remove('pnd');const g=e.querySelector('.sbpin');if(g)g.remove()});
+ PIN.pl.forEach(id=>{const li=pls.querySelector(`.li[data-src="${id}"]`);if(!li)return;li.classList.add('pnd');const b=li.querySelector(':scope>div>b');if(b)b.insertAdjacentHTML('afterbegin',ICON('pin').replace('class="ic"','class="ic sbpin" aria-label="Pinned"'));if(after)after.after(li);else pls.prepend(li);after=li})}
+{const _bs18=buildSide;buildSide=function(){_bs18();pinSide()}}
+function pinNm(t,id){return t==='pl'?(SRC[id]||{}).name:id}
+function pinTog(t,id){const L=PIN[t],was=L.slice(),on=!L.includes(id);if(on)L.unshift(id);else L.splice(L.indexOf(id),1);
+ const re=()=>{if(t==='pl')buildSide();else{sbSigF='';sbR()}};re();
+ toast(on?`Pinned ${pinNm(t,id)} to the top`:`Unpinned ${pinNm(t,id)}`,'Undo',()=>{PIN[t]=was;re();$('toast').classList.remove('open')})}
+function pinMenu(el,t,id){const on=PIN[t].includes(id);popAt(el,`<button data-pin="${t}" data-pid="${id.replace(/"/g,'&quot;')}">${ICON('pin')}${on?'Unpin':'Pin to top'}</button>`,200,el.getBoundingClientRect().bottom>innerHeight-180)}
+document.addEventListener('contextmenu',e=>{let x;
+ if((x=e.target.closest('#pls .li[data-src]'))&&x.dataset.src!=='liked'&&SRC[x.dataset.src]){e.preventDefault();e.stopImmediatePropagation();return pinMenu(x,'pl',x.dataset.src)}
+ if(x=e.target.closest('#sbF [data-sbf]')){e.preventDefault();e.stopImmediatePropagation();return pinMenu(x,'ar',x.dataset.sbf)}},true);
+document.addEventListener('click',e=>{const x=e.target.closest('[data-pin]');if(!x)return;e.stopImmediatePropagation();$('pop').classList.remove('open');pinTog(x.dataset.pin,x.dataset.pid)},true);
+/* playlist ⋯ gets Pin to top too (not for Liked songs: it is always first) */
+{const _pa18=popAt;popAt=function(btn,html,w,up){const id=PV.id;if(/data-mxo/.test(html)&&id&&SRC[id]&&document.querySelector(`#pls .li[data-src="${id}"]`))html=`<button data-pin="pl" data-pid="${id}">${ICON('pin')}${PIN.pl.includes(id)?'Unpin':'Pin to top'}</button>`+html;return _pa18(btn,html,w,up)}}
 /* boot */
 if(D.artist)setView('artist',{n:D.artist});
 if(D.release)setView('release',{id:D.release});

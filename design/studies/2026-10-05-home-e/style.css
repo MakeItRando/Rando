@@ -1475,3 +1475,8 @@ body.sb-mini .side .li.sbp::after{left:12px;right:12px}
 .mx-col{display:flex;gap:10px}.mx-col button{width:30px;height:30px;border-radius:50%;border:0;background:var(--sw);cursor:pointer}.mx-col button.on{box-shadow:0 0 0 2px var(--bg),0 0 0 4px var(--acc)}
 .mxs-a{display:flex;gap:8px;align-items:center;margin-top:6px}.mxs-a>span{flex:1}
 @media (max-width:640px){.tape{width:100%;max-width:300px}.pv-h.mx{align-items:flex-start}}
+
+/* rev 18: Pin to top */
+.side .li .sbpin{width:12px;height:12px;margin-right:5px;vertical-align:-1px;color:var(--acc);stroke-width:2}
+.sbf-n .sbpin{width:10px;height:10px;margin-right:2px;vertical-align:-1px;color:var(--acc);stroke-width:2.2}
+.plw .li.pnd,.plw .li.pnd.playtop{order:-2}.plw .li.pnd.playtop{animation:none}

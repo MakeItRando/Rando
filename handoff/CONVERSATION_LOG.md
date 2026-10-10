@@ -85,3 +85,4 @@
 - Owner: "hmm yeah work on that, we dont wanna overdo shit, and make shit up and things we add should be useful, fun to use it continue." → Rev 16 Song room lyrics + icon set (D-084), kept to useful parts only.
 - Owner: "yes do that" (tidy Song room left side), "also why i cant copy the whole lyrics at a time" (lines were buttons, so text could not be selected). → Rev 16.1.
 - Owner: "i like that just do the final touches on that and continue on next thing." → Rev 16.2 (phone lyrics follow, keyboard) + Rev 17 Playlist refresh + Mixtapes (D-085), next on the agreed list.
+- Owner on rev 17 (Mixtapes + playlist refresh): "yes, i like that do the final touches on that and continue" → D-085 confirmed; rev 17.1 final touches; rev 18 Pin to top (D-086), next on the list.

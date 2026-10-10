@@ -53,3 +53,10 @@ Owner: Playlist page was the most boring page; Mixtapes (I2) was on the agreed l
 - **Edit mixtape** keeps everything; **Make it a playlist again** (with Undo) turns it back. Esc / Cancel closes the sheet.
 - **Share** on a mixtape says honestly that the link comes with sharing (V1 backend): the receiver opens it as a tape, note first. Receiver view = profile & social phase.
 - Not added (on purpose): handwriting fonts, AI notes, decorations, timers.
+
+### Rev 17.1: Mixtape final touches (owner: "yes, i like that")
+- Everywhere the source is named it says **mixtape**: Now Playing ("Playing from mixtape"), the Song room header, the queue panel, Recently played.
+- Sheet keyboard: Enter in **For** jumps to the note, **Ctrl/⌘+Enter** makes the mixtape, Tab stays inside the sheet, closing returns focus to ⋯.
+- Tape colours have names for screen readers and on hover (Cream, Yellow, Orange, Sky).
+- Checked on phone and in light mode.
+- Playlist ⋯ now also has **Pin to top** (see SIDEBAR.md rev 18).
