@@ -23,6 +23,10 @@ Owner (N9): "your september feature is already there… add things and make it b
 - Cards move on their own every 6.5 s **until you touch something** (tap a day, play a song) — then they stay put. Pause button next to ×; Space pauses; ← / → or tap the left/right edge of the card to move; the bars at the top jump to a card; hold to pause. Reduced motion: no auto-advance.
 - Esc / × closes. Phone: full screen.
 
+## Same numbers everywhere (rev 19.1)
+- Home *This week* is built from the October numbers (Mon → today; days still to come shown dashed), and its top artist / new artists come from the same month, so Home and Your month never disagree.
+- Journeys finished in a month must match the stamp dates (Asha North Aug 30, Dax Moreno Sep 9, Kairo Vale Sep 21).
+
 ## Not added (on purpose)
 - No streaks, "minutes goals", percentile bragging ("top 1% of listeners"), or AI-written summaries.
 - No comparison with friends — profile & social phase.

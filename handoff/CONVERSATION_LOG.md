@@ -87,3 +87,4 @@
 - Owner: "i like that just do the final touches on that and continue on next thing." → Rev 16.2 (phone lyrics follow, keyboard) + Rev 17 Playlist refresh + Mixtapes (D-085), next on the agreed list.
 - Owner on rev 17 (Mixtapes + playlist refresh): "yes, i like that do the final touches on that and continue" → D-085 confirmed; rev 17.1 final touches; rev 18 Pin to top (D-086), next on the list.
 - Owner on rev 18 (Pin to top + mixtape touches): "yes nice continue." → D-086 confirmed; rev 19 Your month (D-087).
+- Owner on rev 19 (Your month): "yes perfect, do the final touches on app and stuff, fix bugs and errors and if you think there are things those can be done better than that, try that. then we are good to go to library page." → D-087 confirmed; rev 19.1 audit + bug pass; next Library.

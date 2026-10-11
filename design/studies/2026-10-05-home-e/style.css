@@ -1547,3 +1547,7 @@ body.sb-mini .side .li.sbp::after{left:12px;right:12px}
 }
 @media (prefers-reduced-motion:reduce){.ym-clk path,.ym-an i,.ym-day{animation:none}}
 .rcw.ym #rcS{flex:1;min-height:0;display:flex;flex-direction:column}.rcw.ym .sl2{flex:1}
+
+/* rev 19.1: final touches pass */
+@media (max-width:640px){.node>.m{white-space:nowrap;font-size:10.5px}}
+.chart .wk-fu i{background:none;border:1px dashed var(--line2);border-bottom:0}
