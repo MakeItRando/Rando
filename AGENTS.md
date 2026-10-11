@@ -10,7 +10,11 @@ Build a distinctive, calm, accessible music product around **find → play → e
 3. App/code work: [handoff/PRODUCT_MAP.md](handoff/PRODUCT_MAP.md), [handoff/PLAYBACK_CONTEXTS.md](handoff/PLAYBACK_CONTEXTS.md), [handoff/QUALITY_GATES.md](handoff/QUALITY_GATES.md), [docs/](docs/), and the latest audit.
 4. Check live GitHub (branches, PR #5, checks) — docs can lag.
 
-## Current phase (2026-10-07)
+## Current phase (2026-10-10)
+
+Design-first (D-048). Home E study rev 19.1 — most pages approved (table in handoff/STATE.md); **next: Library page**, then Profile/Settings and First run, then build the real apps (D-062). Owner rules in practice: don't overdo, don't make things up (D-050), useful + fun, every yes/no/later goes into handoff/BACKLOG.md and every owner message into handoff/CONVERSATION_LOG.md in the same session; push to `main` after every step (D-059) and verify the GitHub copy matches.
+
+### Earlier (2026-10-07)
 
 Design-first (D-048). Home desktop approved (rev 3, D-058). Next: Home rev 4 (phone layout, clean scrubber, Dig) once the owner answers OPEN_QUESTIONS Q11–Q15, then Now Playing, then Journeys. App code is frozen at v0.3.0 on `main`; PR #5 (v0.3.2 candidate) has open bugs B-001/B-002 and will be rebuilt on the approved design. PR #9 / Living Record is rejected forever (D-042). No AI features (D-050). No payments in V1 (D-032).
 

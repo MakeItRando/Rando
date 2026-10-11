@@ -1,6 +1,6 @@
 # Product-owner decisions and remaining questions
 
-**Last updated:** 2026-10-07. New questions for the owner: **Q11–Q15** (bottom of file).
+**Last updated:** 2026-10-10 — no open questions for the owner right now; verdicts live in BACKLOG.md. (2026-10-07:) New questions for the owner: **Q11–Q15** (bottom of file).
 
 Existing v0.3.2 suites are green, but newly reproduced playback/source-queue defects block acceptance readiness. These questions do not authorize merge or production implementation. Resolve each before its dependent phase.
 

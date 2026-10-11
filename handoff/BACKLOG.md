@@ -12,7 +12,7 @@ Status words: **Now** (working on it) · **Next** (agreed, queued) · **Profile 
 2. Build the real apps on the approved design (D-062 desktop + phone), polish/motion pass (D-073, I6 cover-tinted app).
 
 ## Built recently (owner has seen)
-- Your month (rev 19, D-087 confirmed — owner: "yes perfect"). Rev 19.1 final touches + bug pass (M vs ⇧M, This week = month numbers, dates match stamps, labels).
+- Your month (rev 19, D-087 confirmed — owner: "yes perfect"). Rev 19.2 readability pass (text contrast ≥4.5:1). Rev 19.1 final touches + bug pass (M vs ⇧M, This week = month numbers, dates match stamps, labels).
 - Pin to top (rev 18, D-086 confirmed — owner: "yes nice").
 - Playlist refresh + **Mixtapes** (rev 17, D-085 confirmed — owner: "yes, i like that"); final touches rev 17.1. Receiver view + share link → Profile & social phase / V1 backend.
 - Song room lyrics + new icon set (rev 16, D-084), tidy left side + selectable lyrics + Copy lyrics (16.1) — owner: "i like that". Final touches rev 16.2: phone lyrics box follows the line, Enter/Space jumps, reduced motion.
@@ -57,7 +57,7 @@ Mini player window (I4), Journey take-along offline (I7), lock-screen/car contro
 | H5 | **Offline/downloads** — no download button, state or storage view anywhere | Teens on mobile data | Library design |
 | H6 | **No-connection, error and empty states** | Every real app hits these on day one | First run + each page |
 | H7 | **Search by a lyric line** you half remember | Common real search; we have lyrics | Search refresh |
-| H8 | **Lyrics translation / romanization** (K-pop, Latin, Afrobeats) | Global teen taste | Song room redesign |
-| H9 | **Your start point** — if you always skip a song's intro, About offers "Start at 0:18 next time" (auto, from play history) | Auto, useful, nobody has it | Song room redesign |
+| H8 | **Lyrics translation / romanization** (K-pop, Latin, Afrobeats) | Global teen taste | Not done in rev 16 — later Song room pass |
+| H9 | **Your start point** — if you always skip a song's intro, About offers "Start at 0:18 next time" (auto, from play history) | Auto, useful, nobody has it | Not done in rev 16 — later Song room pass |
 | H10 | Accessibility pass (screen reader labels, focus, reduced motion everywhere) | Required for real apps | Real apps |
 | H11 | Library page, Profile/Settings, First run not designed | Core pages | Next list |

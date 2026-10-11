@@ -1,6 +1,6 @@
 # Rondo design program — design first, then build
 
-**Started:** 2026-10-06 (folder names say 10-04/05; see handoff/SESSION_2026-10-07.md). **Status:** active — Home rev 4 approved; Explore proposed (D-066); Now Playing page next. Every page is designed for desktop and phone (D-062). **Owner direction:** design every surface first, page by page, then choose implementation approaches. Update this file whenever a page brief, study, verdict or token changes.
+**Started:** 2026-10-06 (folder names say 10-04/05; see handoff/SESSION_2026-10-07.md). **Status (2026-10-10):** active — see the page status table in STATE.md; Library next. (2026-10-07: Home rev 4 approved; Explore proposed; Now Playing next.) Every page is designed for desktop and phone (D-062). **Owner direction:** design every surface first, page by page, then choose implementation approaches. Update this file whenever a page brief, study, verdict or token changes.
 
 ## Why this program exists
 

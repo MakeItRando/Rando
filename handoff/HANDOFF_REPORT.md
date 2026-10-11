@@ -1,5 +1,7 @@
 # Rondo project handoff report
 
+**Current (2026-10-10):** design-first, Home E study rev 19.2 (readability pass); 11 pages/features approved, Library next. Read [STATE.md](STATE.md) (page status table) and [BACKLOG.md](BACKLOG.md). The sections below are the 2026-10-07 report, kept for history.
+
 **As of 2026-10-07:** this is a continuity report, not a release certificate. Read [STATE.md](STATE.md) first, then [AUDIT_2026-10-04.md](AUDIT_2026-10-04.md), and verify live GitHub state.
 
 ## Immediate verdict for the next contributor (2026-10-07)

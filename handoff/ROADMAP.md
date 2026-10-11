@@ -4,7 +4,9 @@ Dates are open pending team capacity, launch territory/platform, and owner-provi
 
 ## Phase 0a: design-first program (current, D-048)
 
-Status 2026-10-07: Home desktop approved (rev 3, D-058). Next: Home rev 4 (phone, scrubber, Dig) → Now Playing → Journey → other pages. Then choose build approach and rebuild the app on the approved design.
+Status 2026-10-10: Home, Explore, Now Playing / Song room, Journeys, Artist, Release, Sidebar, Mixtapes, Your month approved (see STATE.md page table). Next: Library → Profile/Settings → First run, then choose the build approach and build the real apps.
+
+Status 2026-10-07 (history): Home desktop approved (rev 3, D-058). Next: Home rev 4 (phone, scrubber, Dig) → Now Playing → Journey → other pages. Then choose build approach and rebuild the app on the approved design.
 
 Design all surfaces page by page (see [DESIGN_PROGRAM.md](DESIGN_PROGRAM.md)), including playlists (D-047), following + release updates (D-046) and play-first entry (D-045). Owner approves each page before implementation approach is chosen. Then rebuild the UI on the approved system together with the B-001/B-002 playback fixes.
 
