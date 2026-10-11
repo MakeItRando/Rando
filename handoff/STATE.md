@@ -8,7 +8,7 @@
 - **Last QA pass (rev 19.1):** every screen × desktop/phone × dark/light checked for script errors, overflow, broken text, duplicate ids, unnamed buttons; every visible button clicked on 8 screens × desktop/phone — zero errors. Bugs found and fixed are listed in [SESSION_2026-10-07.md](SESSION_2026-10-07.md) (rev 19.1).
 - **Rev 19.2 (readability):** grey text and light-mode orange text were below the 4.5:1 readable minimum — colour tokens fixed (`--t3`, new `--acct`), stamp labels fixed; re-audited, all pass. Checked by automated audit + pixel sampling.
 - **Rev 19.3 (by-eye review, 2026-10-11):** screenshots of every main screen reviewed by eye (desktop + phone, light + dark). Fixed: stray box around phone filter chips, cut-off 4th Following ring, Home "Next" vs Journeys "Now" for the same station. Remaining weak spots listed in BACKLOG ("Found in the by-eye review").
-- **Next:** Library page. Full ordered list + every owner verdict: [BACKLOG.md](BACKLOG.md).
+- **Next:** Song room redesign → Playlist page → Artist Journey page → Library (owner, 2026-10-11). Full ordered list + every owner verdict: [BACKLOG.md](BACKLOG.md).
 - **App runtime on `main`** is still the old v0.3.0; PR #5 (v0.3.2) is an old draft with open bugs B-001/B-002 — it will not be merged; the app gets rebuilt on the approved design.
 
 ## Page status

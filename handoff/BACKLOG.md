@@ -4,8 +4,11 @@
 
 Status words: **Now** (working on it) · **Next** (agreed, queued) · **Profile & social phase** (owner: "we will work on them when designing profiles") · **Real apps** (needs native apps/backend) · **Parked** (maybe, ask again later) · **Dropped** (owner said no / not useful).
 
-## Now
-- **Library page** — next (owner: "then we are good to go to library page"). Brings playlist Rename / edit details / delete, pins on phone, older months of Your month.
+## Now (owner 2026-10-11: "we should be working on song room for sure before going to library… its design the worst i think, following playlist and artist journey playlist")
+1. **Song room redesign** — weakest page. Problems seen by eye: static cover left / text right looks like a settings page, same as the Home hero; tabs bar sits over the first lyric lines (no fade); Credits repeats "Play their credits" 5×; About reads like a form; right third empty on wide screens; on phone the lyrics only start after scrolling past cover + controls; 4 unlabeled icons on phone. Also brings H8 (translation) and H9 (start point) if they fit.
+2. **Playlist page redesign** — table looks plain.
+3. **Artist Journey page redesign** — same cover repeated per release, long list, little sense of a journey.
+4. **Library page** (was Now). Brings playlist Rename / edit details / delete, pins on phone, older months of Your month.
 
 ## Next (agreed order)
 1. Profile/Settings → First run.
