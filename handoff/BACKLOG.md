@@ -47,6 +47,11 @@ Mini player window (I4), Journey take-along offline (I7), lock-screen/car contro
 - **Side A / Side B playlists (N4)** — owner: "should be a useful feature not an easter egg".
 - Filled ✦ / changing player look inside a moment (rev 15.1) — owner: "thats bad".
 
+## Found in the by-eye review (2026-10-11)
+- **Song room on wide screens** — lyrics stop at the middle, right third empty. Fix in the Song room pass with H8/H9 (e.g. centre the lyrics or let them use the width). Not a new feature.
+- **Placeholder art is flat** — every cover is a simple shape, so pages look alike. Real covers + I6 cover-tinted app fix it in the real apps; prototype stays as is.
+- **Day-one Home** — every screen assumes months of history; a brand-new listener's Home/sidebar/Your month are not designed. Belongs to First run (H6/H11).
+
 ## Holes found (2026-10-10 audit) — things the app still lacks
 | # | Hole | Why it matters | When |
 | --- | --- | --- | --- |
