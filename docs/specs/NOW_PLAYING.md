@@ -48,7 +48,7 @@ L opens with tabs; Up next lists only the active source after the user queue and
 
 - **Rev 14.4 (I8): Your note** — a private note on the song (from the song ⋯ menu → Add a note, or the dashed "Add a private note" card here) shows in About as a quote. Only you see it.
 
-## Rev 15.3 (D-083 proposal): About fills itself
+## Rev 15.3 (D-083 confirmed): About fills itself
 Owner: "make it more auto… people are lazy and not creative". Under the three numbers in **You and this song**, automatic facts from play history — nobody types anything:
 - **First heard** — date + where it came from (Dig, a Journey, Artist radio, Search, a playlist, a friend's share).
 - **You play it most** — late at night / in the evening / in the morning / on weekends.

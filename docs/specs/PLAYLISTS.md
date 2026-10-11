@@ -26,7 +26,7 @@
 
 Create/add/reorder/remove/delete with keyboard and touch; Undo works; playback context and natural end follow playlist; 320/390/1440 layouts; empty state ("Add songs from anywhere with +"); long names truncate; screen-reader announcements for add/remove/move.
 
-## Playlist page — Home E rev 11 (D-072 proposal, 2026-10-07)
+## Playlist page — Home E rev 11 (D-072 confirmed; proposed 2026-10-07)
 
 Owner: "the playlist ui not that good". There was no playlist page (sidebar rows only toggled play; "Go to playlist" did nothing). Now:
 

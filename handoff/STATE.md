@@ -18,13 +18,13 @@
 | Explore + search, Dig, Rabbit hole, Save a tune | 4–6 | EXPLORE.md, HOME.md § Dig | Approved (D-061, D-066); additions built (D-067) |
 | Now Playing / Song room (lyrics, Up next, Credits, About) | 7, 16–16.2 | NOW_PLAYING.md | Approved (D-068, D-084) |
 | Journeys + stamps / passport | 8–9 | JOURNEYS.md, STAMPS_PASSPORT.md | Approved (D-069, D-070) |
-| Listening flow (radio, Keep going, Pick up, Add similar) | 10 | FEATURE_PLAN.md | Proposed (D-071) — no explicit verdict |
-| Playlist page + Radio page | 11, 17 | PLAYLISTS.md | Radio/playlist page D-072 proposed; refresh + Mixtapes approved (D-085) |
+| Listening flow (radio, Keep going, Pick up, Add similar) | 10 | FEATURE_PLAN.md | Approved (D-071) |
+| Playlist page + Radio page | 11, 17 | PLAYLISTS.md | Radio/playlist page approved (D-072); refresh + Mixtapes approved (D-085) |
 | Artist page | 12–12.1 | ARTIST.md | Approved (D-074, D-075) |
 | Release page | 13 | RELEASE.md | Approved (D-076) |
 | Sidebar + Pin to top | 14, 18 | SIDEBAR.md | Approved (D-078, D-080, D-086) |
-| Moments | 15 | MOMENTS.md | Proposed (D-082) — owner gave fixes, no explicit yes |
-| About auto facts | 15.3 | NOW_PLAYING.md | Proposed (D-083) — no explicit verdict |
+| Moments | 15 | MOMENTS.md | Approved (D-082) |
+| About auto facts | 15.3 | NOW_PLAYING.md | Approved (D-083) |
 | Your month | 19–19.1 | YOUR_MONTH.md | Approved (D-087) |
 | **Library** | — | — | **Next** |
 | Profile & settings, First run | — | — | Not started |
@@ -45,9 +45,9 @@
 - Owner answered Q11–Q15 (D-060..D-064). **Home rev 4 approved** (D-065, "thats perfect"). **Explore approved** (D-066, [EXPLORE.md](../docs/specs/EXPLORE.md)); 4 phone tabs; Most kept in Dig hidden until enough listeners.
 - **Built (D-067, Home E rev 6):** search results page, Rabbit hole, Save a tune — awaiting owner look. `check.mjs` PASS. Saved for later in PRODUCT_IDEAS § Explore backlog: Song of the day, Decades dial. Original candidates: full search results page (recommended), Rabbit hole trail (hop Go from → Go from, save the trail as a playlist), Save a tune as a playlist, Song of the day (one pick for everyone, V1-backend), Decades/era dial (needs year metadata). `check.mjs` PASS.
 
-- **Rev 10 (D-071 proposal, 2026-10-07):** [FEATURE_PLAN.md](../docs/specs/FEATURE_PLAN.md) arranges all H/J/E ideas without overcrowding; built Song radio, Keep going, Pick up (in the Stage), Add similar. `check.mjs` PASS. Awaiting owner verdict; next: V1.1 items from the plan (Rewind toggle, Your mixes, New for you, Add songs that fit, Journey map views) or remaining pages (Artist, Library, Release, Playlists, Profile).
+- **Rev 10 (D-071 confirmed, 2026-10-07):** [FEATURE_PLAN.md](../docs/specs/FEATURE_PLAN.md) arranges all H/J/E ideas without overcrowding; built Song radio, Keep going, Pick up (in the Stage), Add similar. `check.mjs` PASS. Awaiting owner verdict; next: V1.1 items from the plan (Rewind toggle, Your mixes, New for you, Add songs that fit, Journey map views) or remaining pages (Artist, Library, Release, Playlists, Profile).
 
-- **Rev 11 (D-072 proposal):** Playlist page + Radio page (face-down surprise cards), radio reasons removed. Awaiting owner verdict.
+- **Rev 11 (D-072 confirmed):** Playlist page + Radio page (face-down surprise cards), radio reasons removed. Owner: "thats way better".
 
 - **D-073:** polish/motion deferred to the real apps ([MOTION.md](../docs/MOTION.md)). **Rev 12 Artist page approved (D-074)**; rev 12.1 final touches (D-075 confirmed). **Rev 13 Release page approved (D-076); D-077 clarity rule (every feature, easy to understand); rev 13.1 credits → song menu. Rev 14–14.1: sidebar with character (D-078 confirmed: Journey card, Following 3-wide rings, list playlists, collapse button) + numbers out of sight / Now Playing About (D-079 proposal). Rev 14.2–14.3 sidebar progress line, Recently played, drop to add, dividers (D-080 confirmed). Rev 14.4 playing rises to top, Deep cuts, Song notes (D-081: all ideas approved). Rev 15 Moments (D-082 proposal); rev 15.1–15.2 remove moments (Already saved · Remove, ×; player look unchanged) + Artist moments. Next: Mixtapes + Playlist page refresh → Pin to top.** Next: Library, Profile/Settings, First run. Next pages: Release, Library, Profile/Settings, First run.
 

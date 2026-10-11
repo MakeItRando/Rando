@@ -1,6 +1,6 @@
 # Spec: Moments
 
-Status: proposal D-082 (2026-10-07), Home E rev 15. Desktop + phone. Idea I1 (D-081).
+Status: confirmed D-082 (proposed 2026-10-07, confirmed 2026-10-10), Home E rev 15. Desktop + phone. Idea I1 (D-081).
 
 ## Job
 Keep the best part of a song — the drop, the line, the chorus — and get back to it in one tap.

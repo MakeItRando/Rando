@@ -1,6 +1,6 @@
 # Feature plan — where every idea lives (anti-overcrowding)
 
-Status: proposal D-071 (2026-10-07). Owner: "i like all of them (H, J, E)… i dont want to overcrowd… manage and arrange them; if it overcrowds keep the best ones."
+Status: confirmed D-071 (proposed 2026-10-07, confirmed 2026-10-10). Owner: "i like all of them (H, J, E)… i dont want to overcrowd… manage and arrange them; if it overcrowds keep the best ones."
 Covers ideas H1–H12, J1–J16, E1–E8 (handoff/PRODUCT_IDEAS.md) plus what is already designed.
 
 ## Rules for arranging

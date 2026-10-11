@@ -19,7 +19,7 @@ Status words: **Now** (working on it) · **Next** (agreed, queued) · **Profile 
 - Moments (D-082) + remove (Already saved · Remove, ×) + Artist moments; player look never changes inside a moment (rev 15.2).
 - Sleep timer chip: one line, replaces the clock while on (rev 15.3). Timer itself existed (15/30/45/60 min, End of this song).
 - Tap a lyric line to jump — already existed (Now Playing → Lyrics).
-- About fills itself (rev 15.3, D-083 proposal): First heard + where from, when you play it most, which playlists. Owner: "make it more auto, people are lazy".
+- About fills itself (rev 15.3, D-083 confirmed): First heard + where from, when you play it most, which playlists. Owner: "make it more auto, people are lazy".
 - Deep cuts, Song notes, sidebar (D-078/080/081).
 
 ## Profile & social phase (save until we design profiles)

@@ -10,11 +10,11 @@ Motion and polish are deferred to one pass on the real apps (D-073): see [../MOT
 | 1 | Home (desktop) | [HOME.md](HOME.md) | [home-e](../../design/studies/2026-10-05-home-e/README.md) | Rev 4 approved (D-065) |
 | 1b | Home (phone) | [HOME.md § Phone](HOME.md) | home-e rev 4 (≤640 px) | Rev 4 approved (D-065) |
 | 2 | Now Playing + lyrics/credits/queue | [NOW_PLAYING.md](NOW_PLAYING.md) | home-e rev 7, 16–16.2 | Approved (D-068, D-084 lyrics + icons) |
-| 3 | Playlists (page) + Radio page | [PLAYLISTS.md](PLAYLISTS.md), [FEATURE_PLAN.md § Radio](FEATURE_PLAN.md) | home-e rev 11, 17 | Proposed (D-072); refresh + Mixtapes approved (D-085) |
+| 3 | Playlists (page) + Radio page | [PLAYLISTS.md](PLAYLISTS.md), [FEATURE_PLAN.md § Radio](FEATURE_PLAN.md) | home-e rev 11, 17 | Approved (D-072); refresh + Mixtapes approved (D-085) |
 | 4 | Artist page | [ARTIST.md](ARTIST.md) | home-e rev 12–12.1 | Approved (D-074, D-075) |
 | 5 | Journeys (picker, genre, artist journey) | [JOURNEYS.md](JOURNEYS.md) | home-e rev 8 | Approved (D-069) |
 | 5b | Stamps, passport, share cards (Journey engagement) | [STAMPS_PASSPORT.md](STAMPS_PASSPORT.md) | home-e rev 9 | Approved direction (D-070) |
-| 5c | Feature plan (where every idea lives) + listening flow (radio, Keep going, Pick up, Add similar) | [FEATURE_PLAN.md](FEATURE_PLAN.md) | home-e rev 10 | Proposed (D-071) |
+| 5c | Feature plan (where every idea lives) + listening flow (radio, Keep going, Pick up, Add similar) | [FEATURE_PLAN.md](FEATURE_PLAN.md) | home-e rev 10 | Approved (D-071) |
 | 6 | Search | [EXPLORE.md](EXPLORE.md) (search lives in Explore) | ⌘K palette + Explore header in home-e | Search page built (D-067) |
 | 6b | Explore | [EXPLORE.md](EXPLORE.md) | home-e rev 5–6 | Approved (D-066); search page, Rabbit hole, Save a tune built (D-067) |
 | 7 | Library | — | — | **Next** |
@@ -22,7 +22,7 @@ Motion and polish are deferred to one pass on the real apps (D-073): see [../MOT
 | 9 | Profile & settings | — | profile menu in home-e | Not started |
 | 10 | First run (play first, setup optional, D-045) | ../ONBOARDING.md | — | Not started |
 | 11 | Following + notifications | [FOLLOWING.md](FOLLOWING.md) | bell panel in home-e | Product spec only |
-| 14 | Moments | [MOMENTS.md](MOMENTS.md) | home-e rev 15 | Proposed (D-082) |
+| 14 | Moments | [MOMENTS.md](MOMENTS.md) | home-e rev 15 | Approved (D-082) |
 | 13 | Sidebar (desktop) | [SIDEBAR.md](SIDEBAR.md) | home-e rev 14, 18 | Approved (D-078, D-080, Pin to top D-086) |
 | 12 | Dig | [HOME.md § Dig](HOME.md) | home-e rev 4 | Approved (D-061, D-065) |
 | 15 | Your month (recap) | [YOUR_MONTH.md](YOUR_MONTH.md) | home-e rev 19–19.1 | Approved (D-087) |
