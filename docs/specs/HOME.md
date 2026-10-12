@@ -7,6 +7,7 @@ Try it: https://makeitrando.github.io/Rando/design/studies/2026-10-05-home-e/hom
 ## Rev 4 changes (owner feedback 2026-10-07, D-060..D-063) — done in the study
 
 - **Scrubber** (player bar + mini player): 3 px line, played part in text colour (accent on hover/drag), line grows to 5 px on hover; thumb 12 px + time bubble only on hover/drag; click or drag seeks; ←/→ ±5 s when focused; `role=slider` with aria-valuenow/valuetext. No waveform in the bar (waveform may return later in Now Playing only).
+- **♥ in the player bar** (rev 20.1, desktop + phone mini player): next to ✦ Save moment, same state as the hero ♥. Outline = not liked, filled orange = liked.
 - **Dig** (new, D-061) — see § Dig.
 - **Phone layout** — see § Phone.
 - **Labels:** sentence case everywhere; no UPPERCASE letter-spaced micro labels.

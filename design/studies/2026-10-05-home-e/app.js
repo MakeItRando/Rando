@@ -53,7 +53,7 @@ document.addEventListener('click',e=>{const g=e.target.closest('[data-go]');if(g
 $('bigpp').onclick=$('pp').onclick=()=>{if(ended){ended=false;st.i=0;st.t=0;onTrack(true)}st.on=!st.on;render()};
 $('next').onclick=()=>next(true);$('prev').onclick=()=>{if(st.t>3||st.i===0){st.t=0;tick()}else{st.i--;st.t=0;onTrack(true)}};
 $('wv').onclick=e=>{const r=$('wv').getBoundingClientRect();st.t=(e.clientX-r.left)/r.width*cur().d;tick()};
-$('like').onclick=()=>{const k=curK();st.liked.has(k)?st.liked.delete(k):st.liked.add(k);const l=$('like');l.classList.remove('pop');void l.offsetWidth;l.classList.add('pop');toast(st.liked.has(k)?'Added to Liked songs':'Removed from Liked songs');buildSide();render()};
+$('like').onclick=()=>{const k=curK();st.liked.has(k)?st.liked.delete(k):st.liked.add(k);const l=$('like');l.classList.remove('lpop');void l.offsetWidth;l.classList.add('lpop');toast(st.liked.has(k)?'Added to Liked songs':'Removed from Liked songs');buildSide();render()};
 $('fol').onclick=()=>{const f=$('fol');f.classList.toggle('on');f.textContent=f.classList.contains('on')?'Following':'Follow'};
 $('qBtn').onclick=()=>{$('drawer').classList.toggle('open');$('qBtn').classList.toggle('on')};
 /* add to playlist */
@@ -1247,6 +1247,8 @@ document.addEventListener('click',e=>{if(!e.target.closest('#np'))return;let x;
  return T.innerHTML}}
 /* First ♥ on a song: the toast offers "Add a note" (nothing pops up over the music) */
 {const L=$('like'),_on=L.onclick;L.onclick=function(){const k=curK(),was=st.liked.has(k);_on.call(this);if(!was&&st.liked.has(k)&&!NOTES[k]&&!(X.likedOnce||(X.likedOnce=new Set())).has(k)){X.likedOnce.add(k);toast('Added to Liked songs','Add a note',()=>setTimeout(()=>{$('toast').classList.remove('open');noteEdit(k);const p=$('pop'),r=$('like').getBoundingClientRect(),w=300;p.style.width=w+'px';p.style.left=Math.max(8,Math.min(innerWidth-w-8,r.left-20))+'px';p.style.top=Math.max(8,r.top-p.offsetHeight-12)+'px'},0))}}}
+/* rev 20.1: ♥ in the player bar too (owner: "i dont see the like icon on the main page or the player"); not-liked = outline heart, liked = filled */
+{const bl=$('barLike');bl.onclick=e=>{e.stopPropagation();$('like').click()};const sync=()=>{const on=st.liked.has(curK());bl.classList.toggle('on',on);bl.setAttribute('aria-label',on?'Unlike':'Like');bl.setAttribute('aria-pressed',on);const l=$('like');if(l){l.setAttribute('aria-label',on?'Unlike':'Like');l.setAttribute('aria-pressed',on)}};const _r201=render;render=function(){_r201();sync()};sync()}
 /* boot */
 if(D.artist)setView('artist',{n:D.artist});
 if(D.release)setView('release',{id:D.release});

@@ -95,3 +95,4 @@ Owner (2026-10-11): "its not that bad either… what does play their credits mea
 - **Phone:** the 4 small icons now have labels (Devices, Timer, Share, Up next).
 - **Desktop:** lyrics fade out under the tabs instead of being cut in half.
 - **Bug fixed:** Home hero kept showing the last song's lyric line after skipping to a song without lyrics.
+- **Rev 20.1 — ♥ everywhere you'd look for it:** player bar (desktop + phone mini player) has ♥ next to ✦; hero, bar and Song room hearts stay in sync. Not liked = outline, liked = filled orange. Bug fixed: after one tap the hero heart jumped off-screen (class name collision with popups).
