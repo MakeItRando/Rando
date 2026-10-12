@@ -98,3 +98,4 @@
 - Owner: "i dont see the like icon on the main page or the player. continue" → Found the cause (♥ animation class collided with the popup class, heart flew off after one tap) + no ♥ in the player bar at all. Rev 20.1: fixed, ♥ added to the bar, outline when not liked.
 - Owner: "continue" → Rev 21 Playlist page (D-089 proposal): bugs found in code (two copies of each playlist, fake Liked count, no Remove, fake New playlist) fixed; Remove, drag to reorder, Find, hero tint added.
 - Owner: "continue" → Rev 22 Artist Journey page (D-090 proposal): station strip, Starts here / Continue here, one real Follow state (fake "Following" removed), sidebar Liked count fixed.
+- Owner: "continue." (after rev 22) → D-088/089/090 confirmed (no changes asked); Rev 23 Library page (D-091 proposal): filters, Find, pins on phone, Download, Edit details, Delete + Undo, New playlist, tiles for moments / Your month / Passport.

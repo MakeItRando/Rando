@@ -5,16 +5,17 @@
 Status words: **Now** (working on it) · **Next** (agreed, queued) · **Profile & social phase** (owner: "we will work on them when designing profiles") · **Real apps** (needs native apps/backend) · **Parked** (maybe, ask again later) · **Dropped** (owner said no / not useful).
 
 ## Now (owner 2026-10-11: "we should be working on song room for sure before going to library… its design the worst i think, following playlist and artist journey playlist")
-1. **Song room fixes — rev 20 built (D-088 proposal)**: Credits → Songs with <name>, About one line, first ♥ → Add a note, phone labels, lyrics fade. Owner chose fixes over a full redesign ("its not that bad either"). Original notes: Problems seen by eye: static cover left / text right looks like a settings page, same as the Home hero; tabs bar sits over the first lyric lines (no fade); Credits repeats "Play their credits" 5×; About reads like a form; right third empty on wide screens; on phone the lyrics only start after scrolling past cover + controls; 4 unlabeled icons on phone. Also brings H8 (translation) and H9 (start point) if they fit.
-2. **Playlist page — rev 21 built (D-089 proposal)**: one list per playlist, Liked = liked, Remove + Undo, drag to reorder (desktop), Find, real New playlist, hero tint. Later: phone reorder (touch drag, real app), "date added" column if people ask.
-3. **Artist Journey page — rev 22 built (D-090 proposal)**: station strip (prev/next station + rings), Starts here / Continue here, one real Follow state + Undo. Original notes: same cover repeated per release, long list, little sense of a journey. Later: real per-release covers (catalog).
-4. **Library page** (was Now). Brings playlist Rename / edit details / delete, pins on phone, older months of Your month.
+1. **Library page — rev 23 built (D-091 proposal)**: filters, Find, Recent/A–Z, tiles (moments, Your month, Passport), ⋯ Pin to top (phone pins), Download (state), Edit details, Delete + Undo, New playlist. Later: real import (H3), real downloads/storage (H5), folders only if asked.
 
 ## Next (agreed order)
 1. Profile/Settings → First run.
 2. Build the real apps on the approved design (D-062 desktop + phone), polish/motion pass (D-073, I6 cover-tinted app).
 
 ## Built recently (owner has seen)
+- Song room fixes (rev 20, D-088), Playlist page basics (rev 21, D-089), Artist Journey page (rev 22, D-090) — confirmed, owner: "continue".
+  - **Song room fixes — rev 20 built (D-088 proposal)**: Credits → Songs with <name>, About one line, first ♥ → Add a note, phone labels, lyrics fade. Owner chose fixes over a full redesign ("its not that bad either"). Original notes: Problems seen by eye: static cover left / text right looks like a settings page, same as the Home hero; tabs bar sits over the first lyric lines (no fade); Credits repeats "Play their credits" 5×; About reads like a form; right third empty on wide screens; on phone the lyrics only start after scrolling past cover + controls; 4 unlabeled icons on phone. Also brings H8 (translation) and H9 (start point) if they fit.
+  - **Playlist page — rev 21 built (D-089 proposal)**: one list per playlist, Liked = liked, Remove + Undo, drag to reorder (desktop), Find, real New playlist, hero tint. Later: phone reorder (touch drag, real app), "date added" column if people ask.
+  - **Artist Journey page — rev 22 built (D-090 proposal)**: station strip (prev/next station + rings), Starts here / Continue here, one real Follow state + Undo. Original notes: same cover repeated per release, long list, little sense of a journey. Later: real per-release covers (catalog).
 - Your month (rev 19, D-087 confirmed — owner: "yes perfect"). Rev 19.2 readability pass (text contrast ≥4.5:1). Rev 19.1 final touches + bug pass (M vs ⇧M, This week = month numbers, dates match stamps, labels).
 - Pin to top (rev 18, D-086 confirmed — owner: "yes nice").
 - Playlist refresh + **Mixtapes** (rev 17, D-085 confirmed — owner: "yes, i like that"); final touches rev 17.1. Receiver view + share link → Profile & social phase / V1 backend.
@@ -60,9 +61,9 @@ Mini player window (I4), Journey take-along offline (I7), lock-screen/car contro
 | --- | --- | --- | --- |
 | H1 | Song room / Lyrics look plain; demo lyrics are 4 lines on loop | Where people spend most time | **Rev 16–16.1 built** (lyrics, left side, copy) |
 | H2 | Icon set is inconsistent / weak | Owner: "icons are bad"; seen on every screen | **Rev 16 built** (one set, 1.75 px round) |
-| H3 | **Import from other apps** (Spotify/Apple Music/YouTube playlists + likes) | Biggest reason people don't switch apps | First run / Library design |
+| H3 | **Import from other apps** (Spotify/Apple Music/YouTube playlists + likes) | Biggest reason people don't switch apps | First run / Library design — rev 23: Library has the entry button (real import = real app) |
 | H4 | **Explicit filter / clean versions** + "E" badge | Teen audience, parents | Settings design |
-| H5 | **Offline/downloads** — no download button, state or storage view anywhere | Teens on mobile data | Library design |
+| H5 | **Offline/downloads** — no download button, state or storage view anywhere | Teens on mobile data | Library design — rev 23: Download + Downloaded filter (state only) |
 | H6 | **No-connection, error and empty states** | Every real app hits these on day one | First run + each page |
 | H7 | **Search by a lyric line** you half remember | Common real search; we have lyrics | Search refresh |
 | H8 | **Lyrics translation / romanization** (K-pop, Latin, Afrobeats) | Global teen taste | Not done in rev 16 — later Song room pass |

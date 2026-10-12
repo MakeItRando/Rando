@@ -439,7 +439,7 @@ await p.evaluate(() => setView('src', { id: 'sunday' })); await p.waitForTimeout
 if (!(await p.evaluate(() => /Album/.test(document.querySelector('.pv-m').textContent) && !/Tempo/.test(document.body.innerHTML.match(/class="pv-m"[^<]*/)[0])))) fail('playlist column header must say Album');
 if (!(await p.evaluate(() => { const f = document.querySelector('.pv-fx'); return f && /artist/.test(f.textContent); }))) fail('playlist must show the auto what-is-in-it line');
 await p.click('#pvMore'); await p.waitForTimeout(150);
-if (!(await p.evaluate(() => !!document.querySelector('#pop.open [data-mxo]') && !!document.querySelector('#pop [data-plsoon]')))) fail('playlist ⋯ must offer Make it a mixtape');
+if (!(await p.evaluate(() => !!document.querySelector('#pop.open [data-mxo]') && !!document.querySelector('#pop [data-lbx="edit"]')))) fail('playlist ⋯ must offer Make it a mixtape + Edit details');
 await p.click('#pop [data-mxo]'); await p.waitForTimeout(200);
 if (!(await p.evaluate(() => $('mxS').classList.contains('open') && /Make it a mixtape/.test($('mxH').textContent)))) fail('Make it a mixtape must open the sheet');
 await p.fill('#mxTo', 'Aki'); await p.fill('#mxNote', 'for the train home');
@@ -591,7 +591,77 @@ await p.evaluate(() => { try { closeModal(); npClose() } catch (e) {} ; $('pop')
   await p.click('#toastBtn'); await p.waitForTimeout(200);
   if (!(await p.evaluate(([n, was]) => FOL.has(n) === was && $('jFol').textContent === (was ? 'Following' : 'Follow'), [n, was]))) fail('Undo must put Follow back');
   if (!(await p.evaluate(() => { const n = folName(curK()); return $('fol').textContent === (FOL.has(n) ? 'Following' : 'Follow') }))) fail('hero Follow chip must match the follow state'); }
+// rev 23: Library page — open, filters, find, sort, menus (pin, download, edit details, delete + Undo), back, moments, phone
+await p.evaluate(() => { try { closeModal(); npClose() } catch (e) {} ; $('pop').classList.remove('open'); $('toast').classList.remove('open'); setView('home') }); await p.waitForTimeout(200);
+{ await p.click('.side .nav [data-nav=library]'); await p.waitForTimeout(300);
+  if (!(await p.evaluate(() => XP.view === 'library' && document.body.classList.contains('v-lb') && getComputedStyle($('lb')).display === 'block' && /Library/.test($('lb').querySelector('h1').textContent)))) fail('Library nav must open the Library page');
+  if (!(await p.evaluate(() => { const r = [...document.querySelectorAll('#lb .lb-r[data-lb]')]; return r[0] && r[0].dataset.lid === 'liked' && r.some(x => x.dataset.lb === 'ar') && r.some(x => x.dataset.lb === 'al') && r.filter(x => x.dataset.lb === 'ar').length === FOL.size }))) fail('Library must list Liked songs first, playlists, every followed artist and saved albums');
+  await p.click('#lb [data-lbf="ar"]'); await p.waitForTimeout(150);
+  if (!(await p.evaluate(() => [...document.querySelectorAll('#lb .lb-r[data-lb]')].every(x => x.dataset.lb === 'ar')))) fail('Artists filter must show only artists');
+  await p.click('#lb [data-lbf="all"]'); await p.waitForTimeout(150);
+  await p.fill('#lbFind', 'sunday'); await p.waitForTimeout(150);
+  if (!(await p.evaluate(() => { const r = [...document.querySelectorAll('#lb .lb-r[data-lb]')]; return r.length === 1 && r[0].dataset.lid === 'sunday' && document.activeElement.id === 'lbFind' }))) fail('Find in Library must filter and keep focus');
+  await p.fill('#lbFind', 'zzzz'); await p.waitForTimeout(100); if (!(await p.$('#lb .lb-none'))) fail('Find with no match must say so'); await p.fill('#lbFind', ''); await p.waitForTimeout(100);
+  await p.click('#lb [data-lbsort]'); await p.waitForTimeout(150);
+  if (!(await p.evaluate(() => { const n = [...document.querySelectorAll('#lb .lb-r[data-lb]')].slice(1).map(x => x.querySelector('b').textContent); return n.join() === n.slice().sort((a, b) => a.localeCompare(b)).join() }))) fail('A–Z sort must sort by name (Liked songs stays first)');
+  await p.click('#lb [data-lbsort]'); await p.waitForTimeout(150);
+  // pin from Library (works on phone too)
+  await p.hover('#lb .lb-r[data-lid="focus"]'); await p.click('#lb .lb-r[data-lid="focus"] [data-lbm]'); await p.waitForTimeout(150);
+  await p.click('#pop [data-lbx="pin"]'); await p.waitForTimeout(200);
+  if (!(await p.evaluate(() => PIN.pl[0] === 'focus' && document.querySelectorAll('#lb .lb-r[data-lb]')[1].dataset.lid === 'focus' && !!document.querySelector('#lb .lb-r[data-lid="focus"] .lb-pin')))) fail('Pin to top from Library must put it right under Liked songs');
+  await p.click('#toastBtn'); await p.waitForTimeout(200);
+  if (!(await p.evaluate(() => !PIN.pl.includes('focus') && !document.querySelector('#lb .lb-r[data-lid="focus"] .lb-pin')))) fail('Undo pin must update Library');
+  // download
+  await p.hover('#lb .lb-r[data-lid="sunday"]'); await p.click('#lb .lb-r[data-lid="sunday"] [data-lbm]'); await p.waitForTimeout(150); await p.click('#pop [data-lbx="dl"]'); await p.waitForTimeout(150);
+  if (!(await p.$('#lb .lb-r[data-lid="sunday"] .lb-dl.ing'))) fail('Download must show downloading');
+  await p.waitForTimeout(1600);
+  if (!(await p.evaluate(() => DL.get('sunday') === 'done' && !!document.querySelector('#lb .lb-r[data-lid="sunday"] .lb-dl:not(.ing)') && /downloaded/.test($('toastTx').textContent)))) fail('Download must finish and say so');
+  await p.click('#lb [data-lbf="dl"]'); await p.waitForTimeout(150);
+  if (!(await p.evaluate(() => { const r = [...document.querySelectorAll('#lb .lb-r[data-lb]')]; const n = SRC.sunday.q.length; return r.length === 1 && r[0].dataset.lid === 'sunday' && new RegExp('^' + n + ' song').test($('lb').querySelector('.lb-ft').textContent) }))) fail('Downloaded filter must show downloads + how many songs');
+  await p.click('#lb [data-lbf="all"]'); await p.waitForTimeout(150);
+  // edit details
+  await p.hover('#lb .lb-r[data-lid="sunday"]'); await p.click('#lb .lb-r[data-lid="sunday"] [data-lbm]'); await p.waitForTimeout(150); await p.click('#pop [data-lbx="edit"]'); await p.waitForTimeout(150);
+  await p.fill('#lbNm', ''); await p.click('#pop [data-lbeds]'); await p.waitForTimeout(100);
+  if (!(await p.evaluate(() => /name/.test($('lbErr').textContent) && SRC.sunday.name === 'Sunday, slow'))) fail('Edit details must not save an empty name');
+  await p.fill('#lbNm', 'Sunday reset'); await p.fill('#lbDs', 'Coffee, windows open'); await p.press('#lbNm', 'Enter'); await p.waitForTimeout(200);
+  if (!(await p.evaluate(() => SRC.sunday.name === 'Sunday reset' && PLD.sunday === 'Coffee, windows open' && /Sunday reset/.test(document.querySelector('#pls .li[data-src="sunday"]').textContent) && /Sunday reset/.test(document.querySelector('#lb .lb-r[data-lid="sunday"]').textContent)))) fail('Edit details must rename everywhere (sidebar + Library)');
+  await p.click('#lb .lb-r[data-lid="sunday"]'); await p.waitForTimeout(300);
+  if (!(await p.evaluate(() => XP.view === 'src' && /Coffee, windows open/.test($('pv').querySelector('.pv-ds').textContent) && /Downloaded/.test($('pv').querySelector('.pv-h').textContent)))) fail('playlist page must show the description and Downloaded');
+  await p.click('#pvMore'); await p.waitForTimeout(150);
+  if (!(await p.$('#pop [data-lbx="del"]')) || await p.$('#pop [data-plsoon]')) fail('playlist ⋯ must offer Edit details + Delete (no more "later")');
+  await p.click('#pop [data-lbx="del"]'); await p.waitForTimeout(250);
+  if (!(await p.evaluate(() => XP.view === 'library' && DEL.has('sunday') && !document.querySelector('#pls .li[data-src="sunday"]') && !document.querySelector('#lb .lb-r[data-lid="sunday"]')))) fail('Delete must remove the playlist from sidebar + Library and go back to Library');
+  await p.click('#toastBtn'); await p.waitForTimeout(200);
+  if (!(await p.evaluate(() => !DEL.has('sunday') && !!document.querySelector('#pls .li[data-src="sunday"]') && !!document.querySelector('#lb .lb-r[data-lid="sunday"]')))) fail('Undo delete must bring it back');
+  await p.evaluate(() => { SRC.sunday.name = 'Sunday, slow'; delete PLD.sunday; DL.clear(); buildSide(); lbR() });
+  // play from a row
+  await p.hover('#lb .lb-r[data-lid="focus"]'); await p.click('#lb .lb-r[data-lid="focus"] [data-lbp]'); await p.waitForTimeout(250);
+  if (!(await p.evaluate(() => st.src === 'focus' && st.on && XP.view === 'library' && document.querySelector('#lb .lb-r[data-lid="focus"]').classList.contains('on')))) fail('row Play must play it and stay in Library');
+  // moments
+  await p.click('#lb [data-lbt="mo"]'); await p.waitForTimeout(150);
+  if (!(await p.evaluate(() => document.querySelectorAll('#lb .lb-mr').length === MOM.length && MOM.length > 0))) fail('Your moments tile must list moments');
+  await p.click('#lb [data-lbf="all"]'); await p.waitForTimeout(100);
+  // new playlist
+  await p.click('#lb [data-lbnew]'); await p.waitForTimeout(250);
+  if (!(await p.evaluate(() => { const k = XP.saved[XP.saved.length - 1].k; return /^My playlist/.test(SRC[k].name) && SRC[k].q.length === 0 && !!$('lbNm') && !!document.querySelector(`#lb .lb-r[data-lid="${k}"]`) }))) fail('New playlist must make an empty playlist and ask for its name');
+  await p.fill('#lbNm', 'Bus home'); await p.press('#lbNm', 'Enter'); await p.waitForTimeout(200);
+  { const k = await p.evaluate(() => XP.saved[XP.saved.length - 1].k); await p.click(`#lb .lb-r[data-lid="${k}"]`); await p.waitForTimeout(300); }
+  if (!(await p.evaluate(() => XP.view === 'src' && /Bus home/.test($('pv').querySelector('h1').textContent)))) fail('empty new playlist must open');
+  await p.evaluate(() => setView('library')); await p.waitForTimeout(200); }
+// phone: Library tab + menu works
+await p.setViewportSize({ width: 390, height: 844 }); await p.waitForTimeout(300);
+{ await p.evaluate(() => setView('home')); await p.waitForTimeout(150); await p.click('.tabs [data-tab=Library]'); await p.waitForTimeout(300);
+  if (!(await p.evaluate(() => XP.view === 'library' && document.querySelector('.tabs [data-tab=Library]').classList.contains('on') && document.documentElement.scrollWidth <= innerWidth + 1))) fail('phone Library tab must open Library without sideways scroll');
+  await p.click('#lb .lb-r[data-lid="late"] [data-lbm]'); await p.waitForTimeout(150);
+  if (!(await p.$('#pop.open [data-lbx="pin"]'))) fail('phone Library ⋯ must offer Pin to top');
+  await p.evaluate(() => $('pop').classList.remove('open'));
+  // back from a playlist opened in Library returns to Library
+  await p.click('#lb .lb-r[data-lid="late"]'); await p.waitForTimeout(300);
+  await p.click('#pv [data-pvback]'); await p.waitForTimeout(250);
+  if (!(await p.evaluate(() => XP.view === 'library'))) fail('Back from a page opened in Library must return (phone) to Library');
+}
+await p.setViewportSize({ width: 1440, height: 900 }); await p.waitForTimeout(300);
 await p.close();
 await b.close();
-console.log(errs.length ? 'FAIL\n' + errs.join('\n') : 'PASS: Artist Journey page (station strip, Starts here, one Follow state + Undo, Liked count), Playlist page (one list, Liked = liked, Remove/Undo, Find, drag to reorder, New playlist), Like in bar + heart stays + Add a note, Song room Credits -> Songs with, Final touches (M vs Shift+M, This week = month numbers, labels, dates, shortcut list), Your month (tabs, numbers agree, tap a day + play, artists, clock, October so far + moments, Save/Play, Space, Esc, phone), Pin to top (playlists right-click + ⋯, above playing, Undo, artists), Mixtape touches (colour names, Enter, Ctrl+Enter, says mixtape), Playlist refresh + Mixtapes (Album, what is in it, make/edit/undo, Esc, sidebar), Song room final touches (phone follow, keyboard), Song room tidy + Copy lyrics (end + menu) + selectable, Song room lyrics (timed, sections, gaps, moments, tap to jump, Back to now, not synced), icon set, Sleep chip, About auto facts, Remove moments (✦ unchanged + Already saved · Remove, ×, Undo), Artist moments, Moments (save 30 s, no dupes, M key, Undo, Play all, jumps), Playing rises to top (playlist + artist), Deep cuts, Song notes, Sidebar (Journey card play/pause/open, Following ring clears, playlist row on + progress line, Recently played, drop to add + Undo, collapse/expand, rail 3 artists + more, drag opens rail, Journey progress line, On repeat size), Now Playing no-lyrics About, no BPM, Release page (open from artist, in-order play + record out, track play, credits, Save/Undo, queue, More from, artist link, phone), Artist final touches (sticky bar, bell, Not for me + Undo, You and, liked), Artist page (open from menu/search/Journey, play/pause, more, follow/Undo, releases + filter, artist radio, similar, Journey both ways, phone), Playlist page (open, row play, pause, Add songs that fit/Undo, phone), Radio page (face down, peek, play, New spin/Undo, Show all, Save), Listening flow (Start radio, radio surprise + finite, Add similar/Undo, Keep going no-autostart/Esc/Radio, Journey end no card, Pick up resume, phone), Stamps + passport + share, Journeys (map, artist page, end stops + stamp, skip/undo, top mix, picker + pace, Meet, search, phone), scrubber, Dig flow, Undo, end-of-stack, Play Dug, source end stops, phone chrome, Explore tab + overflow, Dig from Explore, Tune a mix, Go from, Rabbit hole, Save tune, search page, Now Playing (tabs, Up next, queue remove/Undo, credits, phone controls)');
+console.log(errs.length ? 'FAIL\n' + errs.join('\n') : 'PASS: Library page (list, filters, Find, A–Z, pin, download, Edit details, Delete + Undo, Back, moments, New playlist, phone), Artist Journey page (station strip, Starts here, one Follow state + Undo, Liked count), Playlist page (one list, Liked = liked, Remove/Undo, Find, drag to reorder, New playlist), Like in bar + heart stays + Add a note, Song room Credits -> Songs with, Final touches (M vs Shift+M, This week = month numbers, labels, dates, shortcut list), Your month (tabs, numbers agree, tap a day + play, artists, clock, October so far + moments, Save/Play, Space, Esc, phone), Pin to top (playlists right-click + ⋯, above playing, Undo, artists), Mixtape touches (colour names, Enter, Ctrl+Enter, says mixtape), Playlist refresh + Mixtapes (Album, what is in it, make/edit/undo, Esc, sidebar), Song room final touches (phone follow, keyboard), Song room tidy + Copy lyrics (end + menu) + selectable, Song room lyrics (timed, sections, gaps, moments, tap to jump, Back to now, not synced), icon set, Sleep chip, About auto facts, Remove moments (✦ unchanged + Already saved · Remove, ×, Undo), Artist moments, Moments (save 30 s, no dupes, M key, Undo, Play all, jumps), Playing rises to top (playlist + artist), Deep cuts, Song notes, Sidebar (Journey card play/pause/open, Following ring clears, playlist row on + progress line, Recently played, drop to add + Undo, collapse/expand, rail 3 artists + more, drag opens rail, Journey progress line, On repeat size), Now Playing no-lyrics About, no BPM, Release page (open from artist, in-order play + record out, track play, credits, Save/Undo, queue, More from, artist link, phone), Artist final touches (sticky bar, bell, Not for me + Undo, You and, liked), Artist page (open from menu/search/Journey, play/pause, more, follow/Undo, releases + filter, artist radio, similar, Journey both ways, phone), Playlist page (open, row play, pause, Add songs that fit/Undo, phone), Radio page (face down, peek, play, New spin/Undo, Show all, Save), Listening flow (Start radio, radio surprise + finite, Add similar/Undo, Keep going no-autostart/Esc/Radio, Journey end no card, Pick up resume, phone), Stamps + passport + share, Journeys (map, artist page, end stops + stamp, skip/undo, top mix, picker + pace, Meet, search, phone), scrubber, Dig flow, Undo, end-of-stack, Play Dug, source end stops, phone chrome, Explore tab + overflow, Dig from Explore, Tune a mix, Go from, Rabbit hole, Save tune, search page, Now Playing (tabs, Up next, queue remove/Undo, credits, phone controls)');
 process.exit(errs.length ? 1 : 0);

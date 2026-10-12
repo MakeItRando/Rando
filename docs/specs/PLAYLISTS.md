@@ -44,7 +44,7 @@ Owner: Playlist page was the most boring page; Mixtapes (I2) was on the agreed l
 **Playlist refresh (small, useful):**
 - Song list column header said "Tempo · key" over album names — now says **Album**.
 - An auto **"what's in it"** line under the stats, counted from the songs themselves: *Mostly genre & genre · pace range · N artists*. Nothing written by AI, nothing invented (D-050).
-- Playlist **⋯** opens a small menu: **Make it a mixtape** / **Edit mixtape**, plus "Rename, edit, delete · later" (comes with the Library design). Liked songs and radios have no mixtape option.
+- Playlist **⋯** opens a small menu: **Make it a mixtape** / **Edit mixtape**, plus (rev 23, LIBRARY.md) Download · Edit details · Delete playlist — was "Rename, edit, delete · later" (comes with the Library design). Liked songs and radios have no mixtape option.
 
 **Mixtapes — a playlist made for someone:**
 - **Make it a mixtape** opens a sheet: **For** (a name), **Note** (140 characters, counter), **Sticker** (pick one of the covers in the playlist), **Tape** colour (4 swatches), live preview of the tape. **Make mixtape** → toast with Undo.

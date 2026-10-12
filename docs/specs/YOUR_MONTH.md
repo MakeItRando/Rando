@@ -2,7 +2,7 @@
 
 Owner (N9): "your september feature is already there… add things and make it better." Rule: any time, no streaks, no goals, nothing invented (D-019, D-050).
 
-**Where:** Home → This week card → **Your September** ("Ready · or see October so far"), and the notification "Your September recap is ready". Library will also list it (Library design).
+**Where:** Home → This week card → **Your September** ("Ready · or see October so far"), and the notification "Your September recap is ready". Library lists it too (rev 23: Your month tile).
 
 **Shape:** story cards (kept from the old recap), but you can *use* them, not just watch them.
 

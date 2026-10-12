@@ -1309,6 +1309,103 @@ function folSet(n,on){on?FOL.add(n):FOL.delete(n);render();if(typeof JV!=='undef
  const s=jState(g,ai);if(!s.live&&!s.done){const q=SRC[jSrc(g,ai)].q,nk=q.find(k=>!st.jHeard.has(k));if(nk){const i=q.indexOf(nk),row=el.querySelector(`.jtr[data-jtr="${ai}:${i}"]`);if(row){row.classList.add('jnx');const t=row.querySelector('.m.mut');if(t)t.innerHTML=`<span class="jnx-t">${s.h?'Continue here':'Starts here'}</span>`}}}
  return r}}
 document.addEventListener('click',e=>{const x=e.target.closest('[data-jsp]');if(!x)return;e.stopPropagation();const G=JR.G[JV.g];setView('journeys',{g:G.g,ai:+x.dataset.jsp});$('main').scrollTo({top:0,behavior:'instant'})},true);
+/* rev 23: Library page — everything you keep, in one place: playlists, artists you follow, saved albums, moments, downloads.
+   Playlists: Edit details (name + description), Delete (Undo). Pin to top from here too (so pins work on phone). Download for offline (prototype shows the state only). */
+const LB={f:'all',sort:'recent',q:'',back:false},DL=new Map(),DEL=new Set(),PLD={};
+const lbEl=document.createElement('div');lbEl.id='lb';lbEl.className='pv lb';$('main').appendChild(lbEl);
+function lbEsc(t){return String(t).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]))}
+function lbPls(){return [...new Set(['liked','late','sunday','focus',...XP.saved.map(x=>x.k)])].filter(k=>SRC[k]&&!DEL.has(k)&&SRC[k].type!=='Radio')}
+function lbN(k){return k==='liked'?st.liked.size:SRC[k].q.length}
+function lbItems(){const ca=S[curK()]?S[curK()].ar:'',I=[],rk=(id,d)=>id===st.src?0:REC.includes(id)?1+REC.indexOf(id):d;
+ lbPls().forEach((k,i)=>{const s=SRC[k],n=lbN(k),ty=k==='liked'?'Playlist':tyOf(k);I.push({t:'pl',id:k,name:s.name,sub:`${ty==='Tune'?'Tune \u00b7 updates':ty} \u00b7 ${n} song${n===1?'':'s'}`,art:s.art,lk:k==='liked',pin:PIN.pl.includes(k),dl:k,rk:rk(k,20+i)})});
+ [...FOL].forEach((n,i)=>{const d=aData(n);if(!d)return;const nw=d.rels.some(r=>r.isNew)&&!SEEN.has(n);I.push({t:'ar',id:n,name:n,sub:nw?'Artist \u00b7 new release':'Artist',art:d.art,pin:PIN.ar.includes(n),nw,rk:n===ca?0:30+i})});
+ [...LIB].forEach((id,i)=>{const s=SRC[id];if(!s||!s.q.length)return;I.push({t:'al',id,name:s.name,sub:`${s.type} \u00b7 ${S[s.q[0]].ar}`,art:s.art,dl:id,rk:rk(id,25+i)})});
+ return I}
+function lbList(){let I=lbItems();const f=LB.f;
+ if(f==='pl'||f==='ar'||f==='al')I=I.filter(x=>x.t===f);if(f==='dl')I=I.filter(x=>x.dl&&DL.has(x.dl));
+ const q=LB.q.trim().toLowerCase();if(q)I=I.filter(x=>(x.name+' '+x.sub).toLowerCase().includes(q));
+ const pr=x=>x.lk?-1:x.pin?(x.t==='pl'?PIN.pl.indexOf(x.id):PIN.ar.indexOf(x.id)):999;
+ return I.sort((a,b)=>pr(a)-pr(b)||(LB.sort==='az'?a.name.localeCompare(b.name):a.rk-b.rk))}
+function lbRow(x){const pl=x.t!=='ar'&&st.src===x.id&&!st.uqNow,on=pl&&st.on,d=x.dl?DL.get(x.dl):null,nm=lbEsc(x.name);
+ const cov=x.lk?`<span class="liked lb-cv">${ICON('heart').replace('class="ic"','class="ic f"')}</span>`:`<span class="cover lb-cv${x.t==='ar'?' r':''}">${svg(x.art)}</span>`;
+ return `<div class="lb-r${pl?' on':''}" role="button" tabindex="0" data-lb="${x.t}" data-lid="${lbEsc(x.id)}">${cov}<span class="pv-t"><b>${x.pin?ICON('pin').replace('class="ic"','class="ic lb-pin" aria-label="Pinned"'):''}${nm}</b><span>${x.nw?'<i class="lb-new" aria-label="New"></i>':''}${d==='done'?`<i class="lb-dl" title="Downloaded">${ICON('dl')}</i>`:d==='ing'?'<i class="lb-dl ing" title="Downloading"></i>':''}${on?'Playing \u00b7 ':''}${lbEsc(x.sub)}</span></span>${x.t!=='ar'?`<button class="icb lb-pp" data-lbp aria-label="${on?'Pause':'Play'} ${nm}">${on?'<span class="eq"><i></i><i></i><i></i></span>':ICON('play')}</button>`:'<span></span>'}<button class="icb lb-mo" data-lbm aria-label="More for ${nm}">${ICON('more')}</button></div>`}
+function lbMom(m,i){const s=S[m.k],pl=st.src==='moments'&&SRC.moments&&st.i===i&&st.on;return `<div class="lb-r lb-mr${pl?' on':''}" role="button" tabindex="0" data-lbmo="${i}"><span class="cover lb-cv">${svg(s.art)}</span><span class="pv-t"><b>${lbEsc(s.t)}</b><span>Moment \u00b7 ${momRange(m)} \u00b7 ${lbEsc(s.a)}</span></span><button class="icb lb-pp" data-lbmp="${i}" aria-label="Play moment">${ICON('play')}</button><button class="icb lb-mo" data-lbmx="${i}" aria-label="Remove moment">${ICON('x')}</button></div>`}
+function lbSongs(I){return [...new Set(I.flatMap(x=>x.dl&&DL.get(x.dl)==='done'?(x.lk?[...st.liked]:SRC[x.dl].q):[]))]}
+function lbR(){if(XP.view!=='library')return;const fo=document.activeElement&&document.activeElement.id==='lbFind',cs=fo?document.activeElement.selectionStart:0;
+ const all=lbItems(),np=all.filter(x=>x.t==='pl').length,na=all.filter(x=>x.t==='ar').length,nl=all.filter(x=>x.t==='al').length,P=ppStats();
+ const F=[['all','All'],['pl','Playlists'],['ar','Artists'],['al','Albums'],['mo','Moments'],['dl','Downloaded']];
+ const I=LB.f==='mo'?[]:lbList(),q=LB.q.trim().toLowerCase(),M=MOM.map((m,i)=>[m,i]).filter(([m])=>!q||(S[m.k].t+' '+S[m.k].a).toLowerCase().includes(q));
+ let body;
+ if(LB.f==='mo')body=M.length?`<div class="lb-g">${M.map(([m,i])=>lbMom(m,i)).join('')}</div>`:`<p class="lb-none">${MOM.length?`Nothing matches \u201c${lbEsc(LB.q)}\u201d.`:'No moments yet. Press \u2726 while a song plays to keep the last 30 seconds.'}</p>`;
+ else body=I.length?`<div class="lb-g">${I.map(lbRow).join('')}</div>`:`<p class="lb-none">${q?`Nothing in your library matches \u201c${lbEsc(LB.q)}\u201d.`:LB.f==='dl'?'Nothing downloaded yet. Use \u22ef \u2192 Download on a playlist or album to play it without internet.':'Nothing here yet.'}</p>`;
+ const sc=LB.f==='all'&&!q?`<div class="lb-sc"><button class="lb-tile" data-lbt="mo"><span class="lb-ti">${ICON('sparkle')}</span><span><b>Your moments</b><span>${MOM.length} saved</span></span></button><button class="lb-tile" data-lbt="ym"><span class="lb-ti">${ICON('clock')}</span><span><b>Your month</b><span>${YM.map(M=>M.name+(M.done?'':' so far')).join(' \u00b7 ')}</span></span></button><button class="lb-tile" data-lbt="pp"><span class="lb-ti">${ICON('journey')}</span><span><b>Passport</b><span>${P.st} stamp${P.st===1?'':'s'}</span></span></button></div>`:'';
+ let ft='';if(LB.f==='dl'&&I.length){const n=lbSongs(I).length;ft=`<p class="lb-ft m">${n} song${n===1?'':'s'} \u00b7 about ${Math.max(1,Math.round(n*3.3*1.2))} MB on this device \u00b7 plays without internet</p>`}
+ else if(LB.f==='all'&&!q)ft=`<button class="lb-imp" data-lbimp>${ICON('plus')}Bring playlists from another app</button>`;
+ lbEl.innerHTML=`<header class="lb-h"><div><h1>Library</h1><p class="mut">${np} playlist${np===1?'':'s'} \u00b7 ${na} artist${na===1?'':'s'} \u00b7 ${nl} album${nl===1?'':'s'} \u00b7 ${MOM.length} moment${MOM.length===1?'':'s'}</p></div><button class="btn gh sm lb-nw" data-lbnew aria-label="New playlist">${ICON('plus')}<span>New playlist</span></button></header>
+ <div class="lb-tl"><div class="lb-fs" role="tablist" aria-label="Show">${F.map(([k,t])=>`<button class="chip2${LB.f===k?' on':''}" role="tab" aria-selected="${LB.f===k}" data-lbf="${k}">${t}</button>`).join('')}</div><div class="lb-tr"><label class="pv-find">${ICON('search')}<input id="lbFind" type="search" placeholder="Find in Library" value="${lbEsc(LB.q)}" autocomplete="off"></label>${LB.f==='mo'?'':`<button class="btn gh sm lb-so" data-lbsort aria-label="Sort: ${LB.sort==='az'?'A to Z':'Recent'}">${ICON('list')}${LB.sort==='az'?'A\u2013Z':'Recent'}</button>`}</div></div>${sc}${body}${ft}`;
+ const f=$('lbFind');f.oninput=()=>{LB.q=f.value;lbR()};f.onkeydown=e=>{e.stopPropagation();if(e.key==='Escape'){LB.q='';lbR()}};if(fo){f.focus();f.setSelectionRange(cs,cs)}}
+function lbSig(){return [XP.view,LB.f,LB.sort,st.src,st.i,st.on,st.uqNow,[...FOL].join(),[...LIB].join(),[...DEL].join(),[...DL].join(),PIN.pl.join(),PIN.ar.join(),XP.saved.map(x=>x.k+SRC[x.k]?.name).join(),lbPls().map(k=>SRC[k].name+lbN(k)).join(),MOM.length,[...SEEN].join()].join('|')}
+{const _r23=render;render=function(){_r23();if(XP.view==='library'){const g=lbSig();if(lbEl.dataset.sig!==g){lbEl.dataset.sig=g;lbR()}}}}
+{const _sv23=setView;setView=function(v,o){const prev=XP.view;document.body.classList.remove('v-lb');
+ if(v==='library'){if(XP.srch)sEnter(false);if(DG.open)digClose();if($('np').classList.contains('open'))npClose();document.body.classList.remove('v-xp','v-jv','v-pv','v-av','v-rv');document.body.classList.add('v-lb');XP.view='library';LB.back=false;document.querySelectorAll('.side .nav button').forEach(b=>b.classList.toggle('on',b.dataset.nav==='library'));document.querySelectorAll('.side .li.sel').forEach(b=>b.classList.remove('sel'));tabOn('Library');lbR();lbEl.dataset.sig=lbSig();$('main').scrollTo({top:0,behavior:'instant'});return}
+ LB.back=/^(src|artist|release)$/.test(v)&&(prev==='library'||(LB.back&&/^(src|artist|release)$/.test(prev)));_sv23(v,o);if(LB.back)tabOn('Library')}}
+document.querySelector('.side .nav').addEventListener('click',e=>{const b=e.target.closest('[data-nav=library]');if(b){e.stopImmediatePropagation();setView('library')}},true);
+document.querySelector('.tabs').addEventListener('click',e=>{const b=e.target.closest('[data-tab=Library]');if(b){e.stopImmediatePropagation();if(DG.open)digClose();if($('np').classList.contains('open'))npClose();setView('library')}},true);
+document.addEventListener('click',e=>{if(LB.back&&e.target.closest('[data-pvback]')){e.stopImmediatePropagation();setView('library')}},true);
+/* open a row */
+function lbOpen(t,id){if(t==='pl')return setView('src',{id});if(t==='ar')return artOpen(id);if(t==='al')return relInfo(id)?setView('release',{id}):startSrc(id,0)}
+function lbPlay(id){if(st.src===id&&!st.uqNow){st.on=!st.on;return render()}if(id==='liked'&&!st.liked.size)return toast('Like a song first \u2014 it shows up here');if(!SRC[id].q.length)return toast('This playlist is empty \u2014 add songs from any song\u2019s \u22ef');startSrc(id,0)}
+/* playlist actions */
+function lbDel(id){const s=SRC[id],nm=s.name,pi=PIN.pl.indexOf(id);DEL.add(id);if(pi>=0)PIN.pl.splice(pi,1);buildSide();sideSaved();if(XP.view==='src'&&PV.id===id)setView('library');lbR();
+ toast(`Deleted \u201c${nm}\u201d`,'Undo',()=>{DEL.delete(id);if(pi>=0)PIN.pl.splice(pi,0,id);buildSide();sideSaved();lbR();$('toast').classList.remove('open')})}
+function lbDl(id){const nm=SRC[id].name;if(DL.has(id)){const was=DL.get(id);DL.delete(id);render();lbR();if(XP.view==='src')pvR();return toast(`Removed download \u00b7 ${nm}`,'Undo',()=>{DL.set(id,was);render();lbR();if(XP.view==='src')pvR();$('toast').classList.remove('open')})}
+ DL.set(id,'ing');render();lbR();if(XP.view==='src')pvR();toast(`Downloading ${nm}\u2026`);setTimeout(()=>{if(DL.get(id)!=='ing')return;DL.set(id,'done');render();lbR();if(XP.view==='src')pvR();toast(`${nm} is downloaded \u00b7 plays without internet`)},1400)}
+function lbEdit(id,anchor){const s=SRC[id],p=$('pop');popAt(anchor,`<div class="cap">Edit details</div><div class="lb-ed"><label><span class="m mut">Name</span><input id="lbNm" maxlength="60" value="${lbEsc(s.name)}" autocomplete="off"></label><label><span class="m mut">Description <span>\u00b7 optional</span></span><textarea id="lbDs" maxlength="140" rows="2" placeholder="What is it for? Where do you play it?">${lbEsc(PLD[id]||'')}</textarea></label><div class="snote-a"><span class="m mut" id="lbErr"></span><button class="btn gh sm" data-lbedc>Cancel</button><button class="btn pri sm" data-lbeds="${lbEsc(id)}">Save</button></div></div>`,300);
+ const n=$('lbNm');setTimeout(()=>{n.focus();n.select()},20);[n,$('lbDs')].forEach(x=>x.onkeydown=e=>{e.stopPropagation();if(e.key==='Escape')p.classList.remove('open');if(e.key==='Enter'&&(x===n||e.metaKey||e.ctrlKey)){e.preventDefault();p.querySelector('[data-lbeds]').click()}})}
+function lbSave(id){const nm=$('lbNm').value.trim().replace(/\s+/g,' '),ds=$('lbDs').value.trim();if(!nm){$('lbErr').textContent='Give it a name';return $('lbNm').focus()}
+ const s=SRC[id],old=[s.name,PLD[id]];s.name=nm;ds?PLD[id]=ds:delete PLD[id];$('pop').classList.remove('open');const re=()=>{buildSide();sideSaved();lbR();if(XP.view==='src')pvR();X.npK=null;render()};re();
+ if(old[0]!==nm||(old[1]||'')!==ds)toast('Saved changes','Undo',()=>{s.name=old[0];old[1]?PLD[id]=old[1]:delete PLD[id];re();$('toast').classList.remove('open')})}
+function lbNew(anchor){const n=1+XP.saved.filter(x=>/^My playlist/.test(SRC[x.k]&&SRC[x.k].name||'')).length,k='pl_'+Date.now();SRC[k]={type:'Playlist',name:'My playlist #'+n,art:'night',q:[]};st.pl[k]=SRC[k].q;XP.saved.push({k,sub:'0 songs'});sideSaved();lbR();
+ const r=lbEl.querySelector(`.lb-r[data-lid="${k}"] .lb-mo`)||anchor;lbEdit(k,r);toast(`Made \u201c${SRC[k].name}\u201d \u2014 add songs from any song\u2019s \u22ef`,'Undo',()=>{XP.saved=XP.saved.filter(x=>x.k!==k);delete st.pl[k];sideSaved();lbR();$('pop').classList.remove('open');$('toast').classList.remove('open')})}
+function lbMenu(t,id,el){const own=t==='pl'&&id!=='liked',dl=DL.has(id);let h='';const b=(a,ic,tx)=>`<button data-lbx="${a}" data-lbk="${t}" data-lid="${lbEsc(id)}">${ICON(ic)}${tx}</button>`;
+ if(t==='pl'){if(own)h+=b('pin','pin',PIN.pl.includes(id)?'Unpin':'Pin to top');h+=b('dl','dl',dl?'Remove download':'Download');if(own)h+=b('edit','more','Edit details')+'<div class="sep"></div>'+b('del','x','Delete playlist')}
+ if(t==='ar')h=b('pin','pin',PIN.ar.includes(id)?'Unpin':'Pin to top')+b('open','user','Go to artist')+'<div class="sep"></div>'+b('unf','x','Unfollow');
+ if(t==='al')h=b('dl','dl',dl?'Remove download':'Download')+b('art','user','Go to artist')+'<div class="sep"></div>'+b('rm','x','Remove from library');
+ popAt(el,h,220,el.getBoundingClientRect().bottom>innerHeight-220)}
+/* the playlist page ⋯ now does what it said "later" */
+{const _pa23=popAt;popAt=function(btn,html,w,up){if(/data-plsoon/.test(html)&&PV.id&&SRC[PV.id]){const id=PV.id,b=(a,ic,tx)=>`<button data-lbx="${a}" data-lbk="pl" data-lid="${lbEsc(id)}">${ICON(ic)}${tx}</button>`;html=html.replace(/<button data-plsoon>[\s\S]*?<\/button>/,b('dl','dl',DL.has(id)?'Remove download':'Download')+b('edit','more','Edit details')+'<div class="sep"></div>'+b('del','x','Delete playlist'))}return _pa23(btn,html,w,up)}}
+document.addEventListener('click',e=>{let x;const p=$('pop');
+ if(x=e.target.closest('[data-lbx]')){e.stopImmediatePropagation();const a=x.dataset.lbx,t=x.dataset.lbk,id=x.dataset.lid;
+  if(a==='edit')return lbEdit(id,XP.view==='library'?(lbEl.querySelector(`.lb-r[data-lid="${CSS.escape(id)}"] .lb-mo`)||x):($('pvMore')||x));p.classList.remove('open');
+  if(a==='pin')return pinTog(t,id);if(a==='dl')return lbDl(id);if(a==='del')return lbDel(id);if(a==='open')return artOpen(id);if(a==='unf')return folSet(id,false);
+  if(a==='art')return artOpen(S[SRC[id].q[0]].ar);
+  if(a==='rm'){LIB.delete(id);render();lbR();return toast(`Removed ${SRC[id].name} from your library`,'Undo',()=>{LIB.add(id);render();lbR();$('toast').classList.remove('open')})}return}
+ if(x=e.target.closest('[data-lbeds]')){e.stopImmediatePropagation();return lbSave(x.dataset.lbeds)}
+ if(e.target.closest('[data-lbedc]')){e.stopImmediatePropagation();return p.classList.remove('open')}
+ if(!e.target.closest('#lb'))return;
+ if(x=e.target.closest('[data-lbf]')){LB.f=x.dataset.lbf;return lbR()}
+ if(e.target.closest('[data-lbsort]')){LB.sort=LB.sort==='az'?'recent':'az';return lbR()}
+ if(x=e.target.closest('[data-lbt]')){const t=x.dataset.lbt;if(t==='mo'){LB.f='mo';return lbR()}if(t==='ym')return recapOpen(0);if(t==='pp')return setView('journeys',{pp:true})}
+ if(x=e.target.closest('[data-lbnew]')){e.stopPropagation();return lbNew(x)}
+ if(e.target.closest('[data-lbimp]'))return toast('Import from Spotify, Apple Music or YouTube Music comes with the real app \u2014 it needs you to sign in there');
+ if(x=e.target.closest('[data-lbmp]')){e.stopPropagation();return momPlay(+x.dataset.lbmp)}
+ if(x=e.target.closest('[data-lbmx]')){e.stopPropagation();momDel(MOM[+x.dataset.lbmx]);return lbR()}
+ if(x=e.target.closest('[data-lbmo]'))return momPlay(+x.dataset.lbmo);
+ const r=e.target.closest('.lb-r[data-lb]');if(!r)return;const t=r.dataset.lb,id=r.dataset.lid;
+ if(x=e.target.closest('[data-lbm]')){e.stopPropagation();return lbMenu(t,id,x)}
+ if(e.target.closest('[data-lbp]')){e.stopPropagation();return lbPlay(id)}
+ lbOpen(t,id)},true);
+document.addEventListener('contextmenu',e=>{const r=e.target.closest('#lb .lb-r[data-lb]');if(!r)return;e.preventDefault();e.stopImmediatePropagation();lbMenu(r.dataset.lb,r.dataset.lid,r.querySelector('.lb-mo'))},true);
+document.addEventListener('keydown',e=>{const r=e.target.closest&&e.target.closest('#lb .lb-r');if(!r||e.target!==r)return;if(e.key==='Enter'||e.key===' '){e.preventDefault();e.stopPropagation();r.click()}if(e.key==='ContextMenu'||(e.shiftKey&&e.key==='F10')){e.preventDefault();e.stopPropagation();const m=r.querySelector('.lb-mo');m&&m.click()}},true);
+/* deleted playlists leave the sidebar and Add to playlist; pins + renames show everywhere */
+{const _bs23=buildSide;buildSide=function(){_bs23();DEL.forEach(id=>{const li=document.querySelector(`#pls .li[data-src="${id}"]`);if(li)li.remove()})}}
+{const _ss23=sideSaved;sideSaved=function(){XP.saved.forEach(x=>{const n=SRC[x.k]&&SRC[x.k].q.length;if(SRC[x.k]&&SRC[x.k].type==='Playlist')x.sub=`${n} song${n===1?'':'s'}`});_ss23();DEL.forEach(id=>{const li=document.querySelector(`.li.svd[data-src="${id}"]`);if(li)li.remove()});document.querySelectorAll('.li.svd').forEach(li=>{const s=SRC[li.dataset.src],b=li.querySelector(':scope>div>b');if(s&&b&&b.textContent!==s.name)b.textContent=s.name})}}
+$('addBtn').addEventListener('click',()=>{DEL.forEach(id=>{const b=$('pop').querySelector(`[data-add="${id}"]`);if(b)b.remove()})});
+/* playlist page: description + Downloaded */
+{const _pl23=plR;plR=function(id){let h=_pl23(id);const d=DL.get(id);if(PLD[id])h=h.replace('</h1>',`</h1><p class="pv-ds">${lbEsc(PLD[id])}</p>`);if(d)h=h.replace(/(<\/h1>(?:<p class="pv-ds">[^<]*<\/p>)?<p class="mut">[^<]*)/,`$1 \u00b7 <span class="pv-dlt">${ICON('dl')}${d==='done'?'Downloaded':'Downloading\u2026'}</span>`);return h}}
+function lbSync(){if(XP.view==='library'){const g=lbSig();if(lbEl.dataset.sig!==g){lbEl.dataset.sig=g;lbR()}}}
+{const _bs23b=buildSide;buildSide=function(){_bs23b();lbSync()};const _sb23=sbR;sbR=function(){_sb23();lbSync()}}
+if(D.view==='library'){if(D.lbf)LB.f=D.lbf;setView('library')}
 /* boot */
 if(D.artist)setView('artist',{n:D.artist});
 if(D.release)setView('release',{id:D.release});

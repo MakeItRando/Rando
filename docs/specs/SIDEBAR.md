@@ -41,4 +41,4 @@ Journey card Play starts/pauses the Journey; card opens Journeys; Following ring
 - **Playlists:** right-click a sidebar playlist (or press the keyboard menu key on it) → **Pin to top** / **Unpin**. Also in the playlist page ⋯. Pinned rows sit at the very top of Playlists with a small orange pin before the name; newest pin goes first. A pin stays above the playing playlist (which still rises to the top under the pins). Toast with Undo.
 - **Artists:** right-click a ring in Following → Pin to top. Pinned artists lead the rail (before the playing artist) with a small pin before the name.
 - Liked songs can't be pinned or moved (it's always there).
-- Not added: drag to reorder — pins cover "keep this at the top" without a new gesture to learn. Ask again if wanted. Phone pins come with the Library page.
+- Not added: drag to reorder — pins cover "keep this at the top" without a new gesture to learn. Ask again if wanted. Phone pins: built in Library (rev 23, ⋯ → Pin to top).

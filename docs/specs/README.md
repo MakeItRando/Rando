@@ -17,7 +17,7 @@ Motion and polish are deferred to one pass on the real apps (D-073): see [../MOT
 | 5c | Feature plan (where every idea lives) + listening flow (radio, Keep going, Pick up, Add similar) | [FEATURE_PLAN.md](FEATURE_PLAN.md) | home-e rev 10 | Approved (D-071) |
 | 6 | Search | [EXPLORE.md](EXPLORE.md) (search lives in Explore) | ⌘K palette + Explore header in home-e | Search page built (D-067) |
 | 6b | Explore | [EXPLORE.md](EXPLORE.md) | home-e rev 5–6 | Approved (D-066); search page, Rabbit hole, Save a tune built (D-067) |
-| 7 | Library | — | — | **Next** |
+| 7 | Library | [LIBRARY.md](LIBRARY.md) | home-e rev 23 | Proposed (D-091) |
 | 8 | Release / album | [RELEASE.md](RELEASE.md) | home-e rev 13 | Approved (D-076) |
 | 9 | Profile & settings | — | profile menu in home-e | Not started |
 | 10 | First run (play first, setup optional, D-045) | ../ONBOARDING.md | — | Not started |
