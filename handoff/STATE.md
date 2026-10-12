@@ -1,15 +1,16 @@
 # Current project state
 
-**Updated:** 2026-10-10 (Home E rev 20.1). **Product:** Rondo. **Phase:** design-first program (D-048) — every page is designed and approved in one interactive study before the real apps are built (D-062 desktop + phone).
+**Updated:** 2026-10-10 (Home E rev 21). **Product:** Rondo. **Phase:** design-first program (D-048) — every page is designed and approved in one interactive study before the real apps are built (D-062 desktop + phone).
 
 ## Right now
 
-- **Prototype:** Home E study, rev 20.1 — https://makeitrando.github.io/Rando/design/studies/2026-10-05-home-e/home.html (code: `design/studies/2026-10-05-home-e/`). `check.mjs` (browser test suite, ~70 feature groups) **PASS on a fresh clone of `main`, 2026-10-10.**
+- **Prototype:** Home E study, rev 21 — https://makeitrando.github.io/Rando/design/studies/2026-10-05-home-e/home.html (code: `design/studies/2026-10-05-home-e/`). `check.mjs` (browser test suite, ~70 feature groups) **PASS on a fresh clone of `main`, 2026-10-10.**
 - **Last QA pass (rev 19.1):** every screen × desktop/phone × dark/light checked for script errors, overflow, broken text, duplicate ids, unnamed buttons; every visible button clicked on 8 screens × desktop/phone — zero errors. Bugs found and fixed are listed in [SESSION_2026-10-07.md](SESSION_2026-10-07.md) (rev 19.1).
 - **Rev 19.2 (readability):** grey text and light-mode orange text were below the 4.5:1 readable minimum — colour tokens fixed (`--t3`, new `--acct`), stamp labels fixed; re-audited, all pass. Checked by automated audit + pixel sampling.
 - **Rev 19.3 (by-eye review, 2026-10-11):** screenshots of every main screen reviewed by eye (desktop + phone, light + dark). Fixed: stray box around phone filter chips, cut-off 4th Following ring, Home "Next" vs Journeys "Now" for the same station. Remaining weak spots listed in BACKLOG ("Found in the by-eye review").
 - **Rev 20 (2026-10-11):** Song room fixes (D-088 proposal) — Credits → Songs with <name>, About one line, first ♥ → Add a note, phone icon labels. Rev 20.1: ♥ in the player bar + hero heart bug fixed. See NOW_PLAYING.md.
-- **Next:** Song room verdict → Playlist page → Artist Journey page → Library (owner, 2026-10-11). Full ordered list + every owner verdict: [BACKLOG.md](BACKLOG.md).
+- **Rev 21 (2026-10-11):** Playlist page basics (D-089 proposal) — one list per playlist, Liked = liked, Remove + Undo, drag to reorder, Find, real New playlist. See PLAYLISTS.md.
+- **Next:** verdicts on D-088 / D-089 → Artist Journey page → Library (owner, 2026-10-11). Full ordered list + every owner verdict: [BACKLOG.md](BACKLOG.md).
 - **App runtime on `main`** is still the old v0.3.0; PR #5 (v0.3.2) is an old draft with open bugs B-001/B-002 — it will not be merged; the app gets rebuilt on the approved design.
 
 ## Page status
@@ -21,7 +22,7 @@
 | Now Playing / Song room (lyrics, Up next, Credits, About) | 7, 16–16.2, 20 | NOW_PLAYING.md | Approved (D-068, D-084); rev 20 fixes proposed (D-088) |
 | Journeys + stamps / passport | 8–9 | JOURNEYS.md, STAMPS_PASSPORT.md | Approved (D-069, D-070) |
 | Listening flow (radio, Keep going, Pick up, Add similar) | 10 | FEATURE_PLAN.md | Approved (D-071) |
-| Playlist page + Radio page | 11, 17 | PLAYLISTS.md | Radio/playlist page approved (D-072); refresh + Mixtapes approved (D-085) |
+| Playlist page + Radio page | 11, 17, 21 | PLAYLISTS.md | Radio/playlist page approved (D-072); refresh + Mixtapes approved (D-085); rev 21 basics proposed (D-089) |
 | Artist page | 12–12.1 | ARTIST.md | Approved (D-074, D-075) |
 | Release page | 13 | RELEASE.md | Approved (D-076) |
 | Sidebar + Pin to top | 14, 18 | SIDEBAR.md | Approved (D-078, D-080, D-086) |

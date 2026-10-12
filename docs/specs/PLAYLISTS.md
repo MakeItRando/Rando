@@ -60,3 +60,12 @@ Owner: Playlist page was the most boring page; Mixtapes (I2) was on the agreed l
 - Tape colours have names for screen readers and on hover (Cream, Yellow, Orange, Sky).
 - Checked on phone and in light mode.
 - Playlist ⋯ now also has **Pin to top** (see SIDEBAR.md rev 18).
+
+## Rev 21 (D-089 proposal): Playlist page — the basics that were missing
+Owner (2026-10-11): playlist design is one of the weakest. Checked by eye and in code; fixed what was broken or missing, nothing decorative.
+- **Bugs fixed:** a playlist had two copies of its songs (page vs sidebar / Add to playlist) — adding from the bar ♥/+ or by dropping on the sidebar didn't show on the page. Now one list. **Liked songs** listed songs you hadn't liked and the sidebar said 48 while the page had 6 — now Liked songs = exactly what you liked, newest first, same count everywhere. **"New playlist"** in Add to playlist only showed a message — now it really makes "My playlist #1" with the song.
+- **Remove from this playlist** (row ⋯, your playlists + Liked songs) with Undo. Removing the song that's playing doesn't stop it; the playlist carries on after it.
+- **Drag to reorder** (desktop, your own playlists): drag a row, an orange line shows where it lands, "Moved … to number 4 · Undo". The playing song keeps its place in the queue. Off while Find is on. Phone reorder → later (needs touch drag in the real app).
+- **Find in playlist** (playlists with 6+ songs): filters by title, artist or album as you type; Esc clears; "No songs match …" when nothing fits.
+- **Hero colour from its own covers:** two tones from the first two covers instead of one flat tone (Liked songs gets its own warm tone), so playlists stop looking alike.
+- **Phone:** mini player artist line no longer wraps (ellipsis) after the ♥ was added.

@@ -7,7 +7,7 @@ const SUN='<circle cx="12" cy="12" r="4"/><path d="M12 2.5v2.5M12 19v2.5M2.5 12H
 /* waveform */
 const N=120;$('wv').innerHTML=Array.from({length:N},(_,i)=>{const v=.25+.75*Math.abs(Math.sin(i*.37)*Math.cos(i*.11+1)+.25*Math.sin(i*1.7));return `<i style="height:${Math.max(12,Math.min(100,v*100))}%"></i>`}).join('');const bars=[...$('wv').children];
 /* static builds */
-function buildSide(){$('pls').innerHTML=[['liked','Liked songs'],['late'],['sunday'],['focus']].map(([k])=>{const s=SRC[k];const n=k==='liked'?st.liked.size+45:st.pl[k].length;const art=k==='liked'?`<span class="liked">${ICON('heart').replace('class="ic"','class="ic f" style="width:15px;height:15px"')}</span>`:`<span class="cover" data-art="${s.art}">${svg(s.art)}</span>`;return `<button class="li" data-src="${k}">${art}<div><b>${s.name}</b><span>${n} songs</span></div><span class="eq"><i></i><i></i><i></i></span></button>`}).join('')}
+function buildSide(){$('pls').innerHTML=[['liked','Liked songs'],['late'],['sunday'],['focus']].map(([k])=>{const s=SRC[k];const n=k==='liked'?st.liked.size:st.pl[k].length;const art=k==='liked'?`<span class="liked">${ICON('heart').replace('class="ic"','class="ic f" style="width:15px;height:15px"')}</span>`:`<span class="cover" data-art="${s.art}">${svg(s.art)}</span>`;return `<button class="li" data-src="${k}">${art}<div><b>${s.name}</b><span>${n} songs</span></div><span class="eq"><i></i><i></i><i></i></span></button>`}).join('')}
 const ART=['cont','margins','night','small','north','open','first'],NAMES=['Asha North','Dax Moreno','Kairo Vale','Moni Gray','Nia Vale','Sora K','Theo June'],CNT=[12,9,20,6,11,16,14];
 function buildPath(){const p=$('path');p.querySelectorAll('.node').forEach(n=>n.remove());NAMES.forEach((n,i)=>{const c=i<3?'d':i===3?'c':'l';const el=document.createElement('button');el.className='node '+c;el.innerHTML=`<span class="av2"><span class="cover">${svg(ART[i])}</span>${c==='d'?`<span class="chk">${ICON('check')}</span>`:''}${c==='c'?`<svg class="ring" viewBox="0 0 74 74"><circle class="bg" cx="37" cy="37" r="35"/><circle class="fg" id="ringFg" cx="37" cy="37" r="35" stroke-dasharray="220" stroke-dashoffset="220"/></svg><span class="ov"><span class="eq"><i></i><i></i><i></i></span></span>`:''}</span><b>${n}</b><span class="m" ${c==='c'?'id="curNodeM"':''}>${c==='d'?CNT[i]+' songs':c==='c'?'Now':CNT[i]+' songs'}</span>`;if(c==='c')el.dataset.src='journey';p.appendChild(el)})}
 function buildChart(){const v=[48,66,30,78,58,100,44],d=['M','T','W','T','F','S','S'];$('chart').innerHTML=v.map((x,i)=>`<div class="${i===6?'td':''}"><i style="height:${x}%;animation-delay:${.3+i*.05}s"></i><span>${d[i]}</span></div>`).join('')}
@@ -723,7 +723,7 @@ document.addEventListener('click',e=>{const li=e.target.closest('.side .li[data-
 pvEl.addEventListener('click',e=>{const t=e.target;let x;const id=PV.id,s=SRC[id];
  if(t.closest('[data-pvback]'))return setView('home');
  if(x=t.closest('[data-pvm]')){e.stopPropagation();const r=x.getBoundingClientRect();return menu(x.dataset.pvm,r.left-200,r.bottom+4)}
- if(x=t.closest('[data-pvadd]')){const k=x.dataset.pvadd;s.q.push(k);if(st.pl[id])st.pl[id].push(k);buildSide();sideSaved();render();pvR();return toast(`Added ${S[k].t} to ${s.name}`,'Undo',()=>{const i=s.q.lastIndexOf(k);if(i>=0)s.q.splice(i,1);if(st.pl[id]){const j=st.pl[id].lastIndexOf(k);if(j>=0)st.pl[id].splice(j,1)}buildSide();sideSaved();render();pvR();$('toast').classList.remove('open')})}
+ if(x=t.closest('[data-pvadd]')){const k=x.dataset.pvadd;s.q.push(k);buildSide();sideSaved();render();pvR();return toast(`Added ${S[k].t} to ${s.name}`,'Undo',()=>{const i=s.q.lastIndexOf(k);if(i>=0)s.q.splice(i,1);buildSide();sideSaved();render();pvR();$('toast').classList.remove('open')})}
  if(t.closest('#pvFitR')){PV.fit=(PV.fit+1)%4;if(!pvFit(id).length)PV.fit=0;return pvR()}
  if(t.closest('#pvPP')){if(st.src===id){st.on=!st.on;render()}else startSrc(id,0);return pvR()}
  if(t.closest('#pvSh')){const b=$('shuf')||document.querySelector('[aria-label="Shuffle"]:not(#pvSh)');if(b)b.click();return pvR()}
@@ -1249,6 +1249,48 @@ document.addEventListener('click',e=>{if(!e.target.closest('#np'))return;let x;
 {const L=$('like'),_on=L.onclick;L.onclick=function(){const k=curK(),was=st.liked.has(k);_on.call(this);if(!was&&st.liked.has(k)&&!NOTES[k]&&!(X.likedOnce||(X.likedOnce=new Set())).has(k)){X.likedOnce.add(k);toast('Added to Liked songs','Add a note',()=>setTimeout(()=>{$('toast').classList.remove('open');noteEdit(k);const p=$('pop'),r=$('like').getBoundingClientRect(),w=300;p.style.width=w+'px';p.style.left=Math.max(8,Math.min(innerWidth-w-8,r.left-20))+'px';p.style.top=Math.max(8,r.top-p.offsetHeight-12)+'px'},0))}}}
 /* rev 20.1: ♥ in the player bar too (owner: "i dont see the like icon on the main page or the player"); not-liked = outline heart, liked = filled */
 {const bl=$('barLike');bl.onclick=e=>{e.stopPropagation();$('like').click()};const sync=()=>{const on=st.liked.has(curK());bl.classList.toggle('on',on);bl.setAttribute('aria-label',on?'Unlike':'Like');bl.setAttribute('aria-pressed',on);const l=$('like');if(l){l.setAttribute('aria-label',on?'Unlike':'Like');l.setAttribute('aria-pressed',on)}};const _r201=render;render=function(){_r201();sync()};sync()}
+/* rev 21: Playlist page — one source of truth, Liked songs = what you liked, Remove from playlist, drag to reorder, Find in playlist, hero tint from its songs (owner: playlist design is weak) */
+/* 1. a playlist's songs live in one place (the page, sidebar count and Add to playlist used two copies that drifted apart) */
+Object.keys(st.pl).forEach(k=>{if(SRC[k])SRC[k].q=st.pl[k]});
+/* 2. Liked songs is exactly the songs you liked, newest first (the page listed songs you had not liked; the sidebar said 48) */
+SRC.liked.q.forEach(k=>st.liked.add(k));let LQ=SRC.liked.q.slice();
+function likedSync(){const n=LQ.filter(k=>st.liked.has(k));[...st.liked].forEach(k=>{if(!n.includes(k))n.unshift(k)});if(n.join()===SRC.liked.q.join())return;
+ if(st.src==='liked'){const k=curK(),j=n.indexOf(k);if(st.uqNow===k&&j>=0){st.uqNow=null;st.i=j}else if(!st.uqNow){if(j>=0)st.i=j;else{st.uqNow=k;st.i=st.i-1}}}
+ LQ=n;SRC.liked.q.splice(0,SRC.liked.q.length,...n)}
+{const _r21=render;render=function(){likedSync();_r21()}}
+/* 3. Remove from this playlist (row ⋯), with Undo; the song you are hearing keeps playing */
+function plOwn(id){return id==='liked'||!!st.pl[id]}
+function plRemove(id,i){const s=SRC[id],k=s.q[i];if(k==null)return;
+ if(id==='liked'){st.liked.delete(k);buildSide();render();pvR();return toast(`Removed ${S[k].t} from Liked songs`,'Undo',()=>{LQ.splice(i,0,k);st.liked.add(k);buildSide();render();pvR();$('toast').classList.remove('open')})}
+ const was=st.src===id&&!st.uqNow,cur0=was&&st.i===i,before=was&&i<st.i;s.q.splice(i,1);if(cur0){st.uqNow=k;st.i=i-1}else if(before)st.i--;
+ buildSide();sideSaved();render();pvR();
+ toast(`Removed ${S[k].t} from ${s.name}`,'Undo',()=>{s.q.splice(i,0,k);if(st.src===id){if(cur0&&st.uqNow===k){st.uqNow=null;st.i=i}else if(!st.uqNow&&i<=st.i)st.i++}buildSide();sideSaved();render();pvR();$('toast').classList.remove('open')})}
+PV.mi=null;
+pvEl.addEventListener('click',e=>{const x=e.target.closest('[data-pvm]');PV.mi=x&&x.closest('.pv-r')?+x.closest('.pv-r').dataset.pvi:null},true);
+{const _m21=menu;menu=function(k,x,y){_m21(k,x,y);const id=PV.id,i=PV.mi;PV.mi=null;if(XP.view!=='src'||i==null||!SRC[id]||!plOwn(id)||SRC[id].q[i]!==k)return;const p=$('pop');p.dataset.rmi=i;p.insertAdjacentHTML('beforeend',`<div class="sep"></div><button data-mn="rm" data-mk="${k}">${ICON('x')}Remove from ${id==='liked'?'Liked songs':SRC[id].name}</button>`);const r=p.getBoundingClientRect();if(r.bottom>innerHeight-8)p.style.top=Math.max(8,innerHeight-8-r.height)+'px'}}
+document.addEventListener('click',e=>{const m=e.target.closest('[data-mn="rm"]');if(!m)return;e.stopPropagation();const p=$('pop');p.classList.remove('open');plRemove(PV.id,+p.dataset.rmi)},true);
+/* 4. Drag a row to a new place (desktop, your own playlists); Undo */
+PV.drag=null;
+document.addEventListener('dragstart',e=>{const r=e.target.closest&&e.target.closest('#pv .pv-r[data-pvi]');PV.drag=r&&st.pl[PV.id]&&!PV.find?+r.dataset.pvi:null},true);
+document.addEventListener('dragend',()=>{PV.drag=null;pvEl.querySelectorAll('.dro-a,.dro-b').forEach(x=>x.classList.remove('dro-a','dro-b'))});
+pvEl.addEventListener('dragover',e=>{if(PV.drag==null)return;const r=e.target.closest('.pv-l .pv-r[data-pvi]');pvEl.querySelectorAll('.dro-a,.dro-b').forEach(x=>{if(x!==r)x.classList.remove('dro-a','dro-b')});if(!r)return;e.preventDefault();e.dataTransfer.dropEffect='copy';const b=r.getBoundingClientRect(),after=e.clientY>b.top+b.height/2;r.classList.toggle('dro-a',after);r.classList.toggle('dro-b',!after)});
+pvEl.addEventListener('drop',e=>{if(PV.drag==null)return;const r=e.target.closest('.pv-l .pv-r[data-pvi]');if(!r)return;e.preventDefault();e.stopPropagation();const to=+r.dataset.pvi+(r.classList.contains('dro-a')?1:0),from=PV.drag;PV.drag=null;plMove(PV.id,from,to)});
+function plMove(id,from,to){const q=SRC[id].q;if(to===from||to===from+1)return pvR();const old=q.slice(),oi=st.i,k=q.splice(from,1)[0],t=to>from?to-1:to;q.splice(t,0,k);
+ if(st.src===id&&!st.uqNow){let i=st.i;if(i===from)i=t;else{if(from<i)i--;if(t<=i)i++}st.i=i}
+ buildSide();render();pvR();toast(`Moved ${S[k].t} to number ${t+1}`,'Undo',()=>{q.splice(0,q.length,...old);if(st.src===id&&!st.uqNow)st.i=oi;buildSide();render();pvR();$('toast').classList.remove('open')})}
+/* 5. Find in playlist + hero tint from the playlist's own covers */
+PV.find='';
+{const _pv21=pvR;pvR=function(){const fo=document.activeElement&&document.activeElement.id==='pvFind',cs=fo?document.activeElement.selectionStart:0;_pv21();if(XP.view!=='src'||!SRC[PV.id]||SRC[PV.id].type==='Radio')return;const id=PV.id,s=SRC[id];
+ const h=pvEl.querySelector('.pv-h');if(h){const a=[...new Set(s.q.map(k=>S[k].art))];h.style.setProperty('--pvt',id==='liked'?'#5c2410':tone(a[0]||s.art));h.style.setProperty('--pvt2',id==='liked'?'#2a1a3a':tone(a[1]||a[0]||s.art))}
+ const l=pvEl.querySelector('.pv-l');if(!l)return;
+ if(s.q.length>=6){l.insertAdjacentHTML('beforebegin',`<div class="pv-fb"><label class="pv-find">${ICON('search')}<input id="pvFind" type="search" placeholder="Find in ${id==='liked'?'Liked songs':s.name}" value="${PV.find.replace(/"/g,'&quot;')}" autocomplete="off"></label>${st.pl[id]?'<span class="mut pv-dh">Drag songs to change the order</span>':''}</div>`);const f=$('pvFind');f.oninput=()=>{PV.find=f.value;pvFilter()};f.onkeydown=e=>{e.stopPropagation();if(e.key==='Escape'){f.value='';PV.find='';pvFilter();f.blur()}};if(fo){f.focus();f.setSelectionRange(cs,cs)}}
+ l.classList.toggle('pv-ro',!!st.pl[id]);pvFilter()}}
+function pvFilter(){const id=PV.id,s=SRC[id],l=pvEl.querySelector('.pv-l');if(!l)return;const q=PV.find.trim().toLowerCase();let n=0;
+ l.querySelectorAll('.pv-r[data-pvi]').forEach(r=>{const k=s.q[+r.dataset.pvi],t=S[k]?(S[k].t+' '+S[k].a+' '+((relOf(k)||{}).name||'')).toLowerCase():'',on=!q||t.includes(q);r.classList.toggle("pv-hid",!on);if(on)n++});
+ l.classList.toggle('pv-ro-off',!!q);const dh=pvEl.querySelector('.pv-dh');if(dh)dh.style.visibility=q?'hidden':'';let em=l.querySelector('.pv-none');if(q&&!n){if(!em){l.insertAdjacentHTML('beforeend','<p class="pv-none mut"></p>');em=l.querySelector('.pv-none')}em.textContent=`No songs match \u201c${PV.find.trim()}\u201d in ${id==='liked'?'Liked songs':s.name}.`}else if(em)em.remove()}
+{const _sv21=setView;setView=function(v,o){if(v==='src'&&o&&o.id!==PV.id)PV.find='';_sv21(v,o)}}
+/* 6. "New playlist" in Add to playlist really makes one (it only showed a message) */
+document.addEventListener('click',e=>{const a=e.target.closest('[data-add="new"]');if(!a)return;e.stopImmediatePropagation();$('pop').classList.remove('open');const c=curK(),n=1+XP.saved.filter(x=>/^My playlist/.test(SRC[x.k]&&SRC[x.k].name||'')).length;savePl('pl_'+Date.now(),'My playlist #'+n,[c],'Playlist','1 song')},true);
 /* boot */
 if(D.artist)setView('artist',{n:D.artist});
 if(D.release)setView('release',{id:D.release});

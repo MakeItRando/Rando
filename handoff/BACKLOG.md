@@ -6,7 +6,7 @@ Status words: **Now** (working on it) · **Next** (agreed, queued) · **Profile 
 
 ## Now (owner 2026-10-11: "we should be working on song room for sure before going to library… its design the worst i think, following playlist and artist journey playlist")
 1. **Song room fixes — rev 20 built (D-088 proposal)**: Credits → Songs with <name>, About one line, first ♥ → Add a note, phone labels, lyrics fade. Owner chose fixes over a full redesign ("its not that bad either"). Original notes: Problems seen by eye: static cover left / text right looks like a settings page, same as the Home hero; tabs bar sits over the first lyric lines (no fade); Credits repeats "Play their credits" 5×; About reads like a form; right third empty on wide screens; on phone the lyrics only start after scrolling past cover + controls; 4 unlabeled icons on phone. Also brings H8 (translation) and H9 (start point) if they fit.
-2. **Playlist page redesign** — table looks plain.
+2. **Playlist page — rev 21 built (D-089 proposal)**: one list per playlist, Liked = liked, Remove + Undo, drag to reorder (desktop), Find, real New playlist, hero tint. Later: phone reorder (touch drag, real app), "date added" column if people ask.
 3. **Artist Journey page redesign** — same cover repeated per release, long list, little sense of a journey.
 4. **Library page** (was Now). Brings playlist Rename / edit details / delete, pins on phone, older months of Your month.
 
