@@ -1591,3 +1591,21 @@ body.sb-mini .side .li.sbp::after{left:12px;right:12px}
 @media (max-width:640px){.pv-dh{display:none}.pv-fb{margin:16px 0 2px}.pv-find{width:100%}
  .bar .cur div{min-width:0;overflow:hidden}.bar .cur b,.bar .cur span{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}}
 .pv-r.pv-hid{display:none!important}
+/* rev 22: Journey station strip */
+.jsps{display:flex;align-items:center;gap:16px;margin:-6px 0 22px;position:relative}
+.jsp-n{display:flex;align-items:center;gap:8px;min-width:150px;font-size:13px;font-weight:600;color:var(--t2);text-align:left}
+.jsp-n.nx{justify-content:flex-end;text-align:right}
+.jsp-n:hover{color:var(--t1)}.jsp-n .ic{width:16px;height:16px;flex:none}
+.jsp-n .cap{display:block;font-size:10px;margin-bottom:1px}
+.jsp-n.off{visibility:hidden}
+.jsp-r{flex:1;display:flex;align-items:center;justify-content:center;min-width:0}
+.jsp{position:relative;width:30px;height:30px;border-radius:50%;padding:2px;flex:none;background:var(--line2);opacity:.6;transition:opacity .15s,transform .15s}
+.jsp .cover{width:100%;height:100%}
+.jsp:hover{opacity:1;transform:scale(1.08)}
+.jsp.dn{opacity:.9;background:var(--t2)}
+.jsp.on{width:40px;height:40px;opacity:1;background:var(--acc)}
+.jsp i{position:absolute;right:-3px;bottom:-3px;width:15px;height:15px;border-radius:50%;background:var(--t1);color:var(--inv);display:grid;place-items:center}.jsp i .ic{width:10px;height:10px}
+.jsp-l{flex:1;max-width:40px;height:2px;background:var(--line2);margin:0 4px}
+.jtr.jnx{box-shadow:inset 3px 0 0 var(--acc)}
+.jnx-t{font-family:inherit;font-size:11.5px;font-weight:600;color:var(--acct);letter-spacing:.02em}
+@media (max-width:640px){.jsps{gap:8px;margin:-4px 0 16px}.jsp-n{min-width:0;font-size:0}.jsp-n .cap{display:none}.jsp-n .ic{width:20px;height:20px}.jsp{width:24px;height:24px}.jsp.on{width:32px;height:32px}.jsp-l{max-width:14px;margin:0 2px}}

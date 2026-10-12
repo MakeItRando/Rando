@@ -97,3 +97,4 @@
 - Owner: "continue." → Agent went with its recommendation: Song room fixes (not a full redesign) + "Add a note" on first ♥ (no popup). Rev 20, D-088 proposal.
 - Owner: "i dont see the like icon on the main page or the player. continue" → Found the cause (♥ animation class collided with the popup class, heart flew off after one tap) + no ♥ in the player bar at all. Rev 20.1: fixed, ♥ added to the bar, outline when not liked.
 - Owner: "continue" → Rev 21 Playlist page (D-089 proposal): bugs found in code (two copies of each playlist, fake Liked count, no Remove, fake New playlist) fixed; Remove, drag to reorder, Find, hero tint added.
+- Owner: "continue" → Rev 22 Artist Journey page (D-090 proposal): station strip, Starts here / Continue here, one real Follow state (fake "Following" removed), sidebar Liked count fixed.

@@ -13,7 +13,7 @@ Recheck live refs, CI, and PR status; this README is a dated checkpoint, not a s
 
 ## Checkpoint (2026-10-10)
 
-Latest: Home E **rev 21** — Playlist page basics (D-089 proposal); rev 20.1 ♥ in the player bar + hero heart bug fixed; rev 20 Song room fixes (D-088 proposal); rev 19.2 — readability pass (grey + light-mode orange text now meet 4.5:1); rev 19.1 final touches + bug pass; Your month (D-087 confirmed); Pin to top (D-086 confirmed); Playlist refresh + Mixtapes (D-085 confirmed), Song room lyrics + new icons (rev 16–16.2). What's next: [handoff/BACKLOG.md](handoff/BACKLOG.md).
+Latest: Home E **rev 22** — Artist Journey page (station strip, Starts here, one Follow state; D-090 proposal); rev 21 Playlist page basics (D-089 proposal); rev 20.1 ♥ in the player bar + hero heart bug fixed; rev 20 Song room fixes (D-088 proposal); rev 19.2 — readability pass (grey + light-mode orange text now meet 4.5:1); rev 19.1 final touches + bug pass; Your month (D-087 confirmed); Pin to top (D-086 confirmed); Playlist refresh + Mixtapes (D-085 confirmed), Song room lyrics + new icons (rev 16–16.2). What's next: [handoff/BACKLOG.md](handoff/BACKLOG.md).
 
 ### Earlier checkpoint (2026-10-07)
 

@@ -78,6 +78,18 @@ Desktop: hero with actions right, horizontal map, two columns (Now + Stamps). �
 - The Home Journey card still shows Hip-Hop.
 - *All catalog* toggle only shows a toast (study artists have no non-genre releases).
 
+## Rev 22 (D-090 proposal): Artist Journey page
+
+Owner (2026-10-11): the Artist Journey page was one of the weakest designs — "little sense of a journey". Fixes, kept small:
+
+- **Station strip** under the breadcrumb: ‹ previous station (number + name) · 7 small station rings (finished ones get ✓, the one you are on is larger with an orange ring) · next station ›. Tap any ring or name to open that artist. No need to go back to the map.
+- **Starts here / Continue here**: when the Journey is not playing, the song that Start will play gets an orange left bar and the label (Starts here if nothing heard yet, Continue here otherwise).
+- **One Follow state**: the hero chip, the Song room chip and the Journey page all read and change the same follow list, with Undo. Before, almost every artist showed a hardcoded "Following".
+- Bug fixed on the way: sidebar "Liked songs" count showed 3 after rev 21; now it is the real number.
+- Not done: each release still uses the artist's placeholder art (real covers come from the catalog); phone strip shows rings + arrows only (names don't fit).
+
+Renders: 117 (desktop), 118 (phone).
+
 ## Acceptance tests (`check.mjs`)
 
 Journeys nav opens the genre page with the map · station opens the Artist Journey · Start plays from the first unheard song · end of artist stops, stamp + toast, never autoplays the next artist · Skip ahead + Undo keeps progress · Play top mix doesn't change progress · Change genre switches, applies pace, erases nothing · Meet pauses main playback; Start makes that artist current and plays · scoped search no-results · phone Journeys tab + no sideways scroll at 390 px.

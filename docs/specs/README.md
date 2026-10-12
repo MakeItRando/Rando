@@ -12,7 +12,7 @@ Motion and polish are deferred to one pass on the real apps (D-073): see [../MOT
 | 2 | Now Playing + lyrics/credits/queue | [NOW_PLAYING.md](NOW_PLAYING.md) | home-e rev 7, 16–16.2, 20 | Approved (D-068, D-084 lyrics + icons); rev 20 fixes proposed (D-088) |
 | 3 | Playlists (page) + Radio page | [PLAYLISTS.md](PLAYLISTS.md), [FEATURE_PLAN.md § Radio](FEATURE_PLAN.md) | home-e rev 11, 17, 21 | Approved (D-072); refresh + Mixtapes approved (D-085); rev 21 basics proposed (D-089) |
 | 4 | Artist page | [ARTIST.md](ARTIST.md) | home-e rev 12–12.1 | Approved (D-074, D-075) |
-| 5 | Journeys (picker, genre, artist journey) | [JOURNEYS.md](JOURNEYS.md) | home-e rev 8 | Approved (D-069) |
+| 5 | Journeys (picker, genre, artist journey) | [JOURNEYS.md](JOURNEYS.md) | home-e rev 8, 22 | Approved (D-069); rev 22 Artist Journey page proposed (D-090) |
 | 5b | Stamps, passport, share cards (Journey engagement) | [STAMPS_PASSPORT.md](STAMPS_PASSPORT.md) | home-e rev 9 | Approved direction (D-070) |
 | 5c | Feature plan (where every idea lives) + listening flow (radio, Keep going, Pick up, Add similar) | [FEATURE_PLAN.md](FEATURE_PLAN.md) | home-e rev 10 | Approved (D-071) |
 | 6 | Search | [EXPLORE.md](EXPLORE.md) (search lives in Explore) | ⌘K palette + Explore header in home-e | Search page built (D-067) |

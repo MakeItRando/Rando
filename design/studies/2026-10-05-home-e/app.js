@@ -1291,6 +1291,24 @@ function pvFilter(){const id=PV.id,s=SRC[id],l=pvEl.querySelector('.pv-l');if(!l
 {const _sv21=setView;setView=function(v,o){if(v==='src'&&o&&o.id!==PV.id)PV.find='';_sv21(v,o)}}
 /* 6. "New playlist" in Add to playlist really makes one (it only showed a message) */
 document.addEventListener('click',e=>{const a=e.target.closest('[data-add="new"]');if(!a)return;e.stopImmediatePropagation();$('pop').classList.remove('open');const c=curK(),n=1+XP.saved.filter(x=>/^My playlist/.test(SRC[x.k]&&SRC[x.k].name||'')).length;savePl('pl_'+Date.now(),'My playlist #'+n,[c],'Playlist','1 song')},true);
+/* rev 22: Artist Journey page — station strip (move along the Journey without going back), "Starts here" on the next song, one real Follow state everywhere */
+buildSide();
+/* one follow state (FOL): hero chip, Song room chip and Journey page used to say "Following" for almost everyone */
+function folName(k){const s=S[k];return s?(s.ar||s.a.split(/, | & /)[0]):''}
+function folSet(n,on){on?FOL.add(n):FOL.delete(n);render();if(typeof JV!=='undefined'&&XP.view==='journeys'&&JV.ai!==null)jaR();if($('np').classList.contains('open'))npBuild();
+ toast(on?`Following ${n}`:`Unfollowed ${n}`,'Undo',()=>{on?FOL.delete(n):FOL.add(n);render();if(XP.view==='journeys'&&JV.ai!==null)jaR();if($('np').classList.contains('open'))npBuild();$('toast').classList.remove('open')})}
+{const f=$('fol');f.onclick=e=>{e.stopPropagation();const n=folName(curK());folSet(n,!FOL.has(n))};const _r22=render;render=function(){_r22();const n=folName(curK()),on=FOL.has(n);f.classList.toggle('on',on);f.textContent=on?'Following':'Follow';f.setAttribute('aria-pressed',on)}}
+{const _w22=npWire;npWire=function(){_w22();const b=$('npFol');if(!b)return;const n=folName(curK()),on=FOL.has(n);b.classList.toggle('on',on);b.textContent=on?'Following':'Follow';b.onclick=e=>{e.stopPropagation();folSet(n,!FOL.has(n))}}}
+{const _ja22=jaR;jaR=function(){const r=_ja22.apply(this,arguments);const G=JR.G[JV.g];if(!G||JV.ai===null)return r;const g=G.g,ai=JV.ai,a=G.A[ai],el=$('jv');
+ const b=$('jFol');if(b){const on=FOL.has(a.n);b.classList.toggle('on',on);b.textContent=on?'Following':'Follow';b.onclick=e=>{e.stopPropagation();folSet(a.n,!FOL.has(a.n))}}
+ /* station strip */
+ const bc=el.querySelector('.jbc');if(bc){const st2=G.A.map((x,i)=>{const s=jState(g,i);return `<button class="jsp${i===ai?' on':''}${s.done?' dn':''}" data-jsp="${i}" aria-label="Station ${i+1}: ${x.n}${s.done?', finished':i===ai?', you are here':''}" title="${x.n}"><span class="cover r">${svg(x.art)}</span>${s.done?`<i>${ICON('check')}</i>`:''}</button>`}).join('<span class="jsp-l"></span>');
+  const pv=G.A[ai-1],nx=G.A[ai+1];
+  bc.insertAdjacentHTML('afterend',`<div class="jsps">${pv?`<button class="jsp-n" data-jsp="${ai-1}">${ICON('left')}<span><span class="cap">Station ${ai}</span>${pv.n}</span></button>`:'<span class="jsp-n off"></span>'}<div class="jsp-r">${st2}</div>${nx?`<button class="jsp-n nx" data-jsp="${ai+1}"><span><span class="cap">Station ${ai+2}</span>${nx.n}</span>${ICON('right')}</button>`:'<span class="jsp-n off"></span>'}</div>`)}
+ /* where Start begins */
+ const s=jState(g,ai);if(!s.live&&!s.done){const q=SRC[jSrc(g,ai)].q,nk=q.find(k=>!st.jHeard.has(k));if(nk){const i=q.indexOf(nk),row=el.querySelector(`.jtr[data-jtr="${ai}:${i}"]`);if(row){row.classList.add('jnx');const t=row.querySelector('.m.mut');if(t)t.innerHTML=`<span class="jnx-t">${s.h?'Continue here':'Starts here'}</span>`}}}
+ return r}}
+document.addEventListener('click',e=>{const x=e.target.closest('[data-jsp]');if(!x)return;e.stopPropagation();const G=JR.G[JV.g];setView('journeys',{g:G.g,ai:+x.dataset.jsp});$('main').scrollTo({top:0,behavior:'instant'})},true);
 /* boot */
 if(D.artist)setView('artist',{n:D.artist});
 if(D.release)setView('release',{id:D.release});
