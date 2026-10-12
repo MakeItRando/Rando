@@ -1551,3 +1551,22 @@ body.sb-mini .side .li.sbp::after{left:12px;right:12px}
 /* rev 19.1: final touches pass */
 @media (max-width:640px){.node>.m{white-space:nowrap;font-size:10.5px}}
 .chart .wk-fu i{background:none;border:1px dashed var(--line2);border-bottom:0}
+/* rev 20: Song room fixes */
+.npc2 .npc-rb{width:100%;text-align:left;border-radius:10px;padding:8px 10px;margin:0 -10px;width:calc(100% + 20px);transition:background .15s}
+.npc2 .npc-rb:not([disabled]):hover{background:rgba(239,238,233,.07)}
+.npc2 .npc-rb[disabled]{cursor:default}
+.npc-m{display:flex;align-items:center;gap:4px;font-size:12.5px;color:rgba(239,238,233,.6);white-space:nowrap}.npc-m .ic{width:15px;height:15px}
+.npc2>.npc-rb+.npc-l{margin-top:12px}
+.npc-bk{display:inline-flex;align-items:center;gap:4px;font-size:13px;color:rgba(239,238,233,.7);margin:4px 0 14px}.npc-bk:hover{color:#fff}.npc-bk .ic{width:16px;height:16px}
+.npc-hd{display:flex;align-items:center;gap:14px;margin-bottom:14px}.npc-hd>div{flex:1;min-width:0}.npc-hd h3{font-size:22px;font-weight:700;letter-spacing:-.02em;margin:1px 0 2px}.npc-hd .mut{font-size:12.5px;color:rgba(239,238,233,.6)}
+.npc-av.lg{width:56px;height:56px;font-size:16px}
+.npc-sl{display:flex;flex-direction:column}
+.npy-l{font-size:14px;color:rgba(239,238,233,.75);margin:6px 0 2px}.npy-l b{color:#fff;font-weight:600}.npy-l i{font-style:normal;margin:0 8px;color:rgba(239,238,233,.35)}
+.npd-l{font-size:13px;color:rgba(239,238,233,.6);margin:14px 0 4px}
+@media (min-width:641px){.npP .npr.lyx{-webkit-mask-image:linear-gradient(transparent,#000 56px,#000 calc(100% - 80px),transparent);mask-image:linear-gradient(transparent,#000 56px,#000 calc(100% - 80px),transparent)}}
+@media (max-width:640px){
+ .npbt2 .icb{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;width:auto;min-width:56px;height:auto;padding:4px}
+ .npbt2 .icb::after{content:attr(data-lab);font-size:10.5px;color:rgba(239,238,233,.65)}
+ .npc-m{font-size:12px}
+}
+.npc-all{align-self:flex-start;margin:10px 0 0 6px}

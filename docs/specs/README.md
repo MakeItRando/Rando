@@ -9,7 +9,7 @@ Motion and polish are deferred to one pass on the real apps (D-073): see [../MOT
 | 0 | Foundation (tokens, type, icons, player) | [../../handoff/DESIGN_PROGRAM.md](../../handoff/DESIGN_PROGRAM.md) | studies B → E | Settled in Home E |
 | 1 | Home (desktop) | [HOME.md](HOME.md) | [home-e](../../design/studies/2026-10-05-home-e/README.md) | Rev 4 approved (D-065) |
 | 1b | Home (phone) | [HOME.md § Phone](HOME.md) | home-e rev 4 (≤640 px) | Rev 4 approved (D-065) |
-| 2 | Now Playing + lyrics/credits/queue | [NOW_PLAYING.md](NOW_PLAYING.md) | home-e rev 7, 16–16.2 | Approved (D-068, D-084 lyrics + icons) |
+| 2 | Now Playing + lyrics/credits/queue | [NOW_PLAYING.md](NOW_PLAYING.md) | home-e rev 7, 16–16.2, 20 | Approved (D-068, D-084 lyrics + icons); rev 20 fixes proposed (D-088) |
 | 3 | Playlists (page) + Radio page | [PLAYLISTS.md](PLAYLISTS.md), [FEATURE_PLAN.md § Radio](FEATURE_PLAN.md) | home-e rev 11, 17 | Approved (D-072); refresh + Mixtapes approved (D-085) |
 | 4 | Artist page | [ARTIST.md](ARTIST.md) | home-e rev 12–12.1 | Approved (D-074, D-075) |
 | 5 | Journeys (picker, genre, artist journey) | [JOURNEYS.md](JOURNEYS.md) | home-e rev 8 | Approved (D-069) |

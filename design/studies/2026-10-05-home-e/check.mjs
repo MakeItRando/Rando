@@ -80,7 +80,7 @@ await p.click('[data-uqx="0"]'); await p.waitForTimeout(100);
 if (await p.evaluate(() => st.uq.length)) fail('removing from the queue must work');
 await p.click('#toastBtn'); if (!(await p.evaluate(() => st.uq[0] === 'm2'))) fail('Undo must restore the queue item');
 await p.keyboard.press('3'); await p.waitForTimeout(150);
-const crBtn = await p.$('[data-crp]'); if (!crBtn) fail('Credits must offer Play their credits'); else { await crBtn.click(); await p.waitForTimeout(150); if (!(await p.evaluate(() => st.src.startsWith('cr_') && SRC[st.src].q.includes(curK())))) fail('Play their credits must play that person\'s songs'); }
+const crRow = await p.$('[data-crv]:not([disabled])'); if (!crRow) fail('Credits must list people you can open'); else { const k0 = await p.evaluate(() => curK()); await crRow.click(); await p.waitForTimeout(150); if (!(await p.evaluate(() => !!document.querySelector('.npc-hd h3') && document.querySelectorAll('[data-crs]').length > 1))) fail('Tapping a person must open Songs with <name>'); await p.evaluate(() => { st.t = 40; tick() }); await p.click('[data-crpl]'); await p.waitForTimeout(150); if (!(await p.evaluate((k0) => st.src.startsWith('cr_') && SRC[st.src].q.includes(curK()) && curK() === k0 && st.t >= 40, k0))) fail('Play on Songs with <name> must keep the current song going (no restart) and queue their songs'); await p.click('[data-crb]'); await p.waitForTimeout(100); if (!(await p.$('[data-crv]'))) fail('Back must return to the credits list'); }
 await p.keyboard.press('Escape'); await p.waitForTimeout(200);
 if (await p.evaluate(() => $('np').classList.contains('open'))) fail('Esc must close Now Playing');
 await p.close();

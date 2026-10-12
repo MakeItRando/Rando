@@ -85,3 +85,13 @@ Owner: "yes do that" (tidy the Song room left side); "why i cant copy the whole 
 - **Phone:** lyrics sit in their own scroll box (about 62% of the screen) that follows the sung line, so the page itself doesn't jump.
 - **Keyboard:** Tab reaches lyric lines; Enter or Space jumps there. Clear focus outline.
 - **Reduced motion:** follow-scroll is instant, no glide.
+
+## Rev 20 (D-088 proposal): Song room fixes
+Owner (2026-10-11): "its not that bad either… what does play their credits mean"; asked about a note popup on first listen.
+- **Credits:** one row per person, roles merged ("Kairo Vale — Performed and wrote"), "N more songs ›". Tap → **Songs with <name>**: count, what they did on this song, Play, list (first 20, Show all), Back to Credits. People with no other songs aren't tappable ("Only this song so far").
+- **Play keeps your place:** if the song you're hearing is in their list, it keeps playing; the rest is queued after it ("Up next: 283 more songs with Rue Adeyemi"). Tapping another song plays it. Source name "Songs with <name>" (shows in Recently played).
+- **About:** the three number boxes → one line (plays · liked · playlists), auto facts below; Genre/Pace/Length table → one line "Alt R&B · High energy" (length is already under the title).
+- **Notes:** no popup on first listen (it would interrupt music; Dig alone is 10 new songs a day; First heard is already remembered automatically). Instead the first ♥ on a song shows "Added to Liked songs · Add a note" — ignore it and nothing happens.
+- **Phone:** the 4 small icons now have labels (Devices, Timer, Share, Up next).
+- **Desktop:** lyrics fade out under the tabs instead of being cut in half.
+- **Bug fixed:** Home hero kept showing the last song's lyric line after skipping to a song without lyrics.

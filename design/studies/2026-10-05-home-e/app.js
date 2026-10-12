@@ -21,7 +21,7 @@ function startSrc(k,i=0){if(st.src===k&&st.i===i&&!st.uqNow){st.on=!st.on;return
 function toggleSrc(k){if(st.src===k){st.on=!st.on;render()}else startSrc(k,0)}
 function onTrack(anim){if(SRC[st.src].journey&&!st.uqNow)st.jHeard.add(curK());const s=cur();document.documentElement.style.setProperty('--tone',TONE[s.art]);
  $('stArt').innerHTML=svg(s.art);$('lab').innerHTML=svg(s.art);$('barArt').innerHTML=svg(s.art);
- if(anim){$('stArt').classList.remove('swap');void $('stArt').offsetWidth;$('stArt').classList.add('swap')}lastLy=-1;render()}
+ if(anim){$('stArt').classList.remove('swap');void $('stArt').offsetWidth;$('stArt').classList.add('swap')}lastLy=-2;render()}
 function next(manual){if(st.uq.length){st.uqNow=st.uq.shift();st.t=0;onTrack(true);return}const was=st.uqNow;st.uqNow=null;const q=SRC[st.src].q;if(was&&false){}if(st.i<q.length-1){st.i++;st.t=0;onTrack(true)}else{st.on=false;st.t=manual?st.t:cur().d;ended=true;render()}}
 let lastLy=-1,ended=false;
 function render(){const s=cur(),src=SRC[st.src],q=src.q,k=curK();document.body.classList.toggle('paused',!st.on);document.body.classList.toggle('playing',st.on);
@@ -442,7 +442,7 @@ function npPanel(){const k=curK(),s=S[k],src=SRC[st.src],q=src.q;
   <div class="npab-a"><button class="btn gh" id="npGoFrom">${ICON('explore')}Go from this song</button><button class="btn gh" data-share="${k}">${ICON('share')}Share</button></div></div>`}
 function npCtl(){return `<div class="npctl"><div class="sk npsk" id="npSk" role="slider" tabindex="0" aria-label="Seek"><span class="sk-t"><i class="sk-f"></i><i class="sk-h"></i></span><span class="sk-b m"></span></div><div class="npti m"><span id="npT0"></span><span id="npT1"></span></div>
  <div class="npbt"><button class="icb${X.shuf?' on':''}" data-pr="shuf" aria-label="Shuffle">${ICON('shuffle')}</button><button class="icb" data-pr="prev" aria-label="Previous">${ICON('prev')}</button><button class="nppp" data-pr="pp" aria-label="${st.on?'Pause':'Play'}">${ICON(st.on?'pause':'play')}</button><button class="icb" data-pr="next" aria-label="Next">${ICON('next')}</button><button class="icb rep${X.rep?' on':''}${X.rep===2?' r1':''}" data-pr="rep" aria-label="Repeat">${ICON('repeat')}<span class="one">1</span></button></div>
- <div class="npbt2"><button class="icb" data-pr="devBtn" aria-label="Devices">${ICON('dev')}</button><button class="icb" data-pr="tmBtn" aria-label="Sleep timer">${ICON('clock')}</button><button class="icb" data-share="${curK()}" aria-label="Share">${ICON('share')}</button><button class="icb" data-npt="next" aria-label="Up next">${ICON('queue')}</button></div></div>`}
+ <div class="npbt2"><button class="icb" data-pr="devBtn" aria-label="Devices" data-lab="Devices">${ICON('dev')}</button><button class="icb" data-pr="tmBtn" aria-label="Sleep timer" data-lab="Timer">${ICON('clock')}</button><button class="icb" data-share="${curK()}" aria-label="Share" data-lab="Share">${ICON('share')}</button><button class="icb" data-npt="next" aria-label="Up next" data-lab="Up next">${ICON('queue')}</button></div></div>`}
 function npBuild(){const k=curK(),s=S[k];X.npK=k;X.npTabR=X.npTab;const fol=!k.startsWith('dg');
  $('np').innerHTML=`<div class="nph">${npHead()}</div><div class="npL"><div class="npart"><div class="vinyl"><span class="lab">${svg(s.art)}</span></div><span class="cover">${svg(s.art)}</span></div>
  <div class="npi"><div class="npi-t"><div><h2>${s.t}</h2><p>${s.a.split(/, /).map(n=>`<button class="npar" data-art-n="${n}">${n}</button>`).join(', ')}</p></div><button class="icb like${st.liked.has(k)?' on':''}" id="npLike" aria-label="${st.liked.has(k)?'Unlike':'Like'}"><svg class="ic f" viewBox="0 0 24 24"><path d="M12 20s-7.5-4.4-7.5-10A4.3 4.3 0 0 1 12 7.3 4.3 4.3 0 0 1 19.5 10c0 5.6-7.5 10-7.5 10z"/></svg></button></div>
@@ -1212,6 +1212,41 @@ buildChart=function(){const M=YM[1],t=M.upto-1,mon=t-((M.first+t)%7),d=['M','T',
  const big=document.querySelector('.wk .big');if(big)big.innerHTML=`${Math.floor(tot/60)}<span>h</span> ${tot%60}<span>m</span>`;
  const dd=document.querySelectorAll('.wk dl dd');if(dd[0])dd[0].textContent=M.arts[0][0];if(dd[1])dd[1].textContent=M.found.n};
 buildChart();
+/* rev 20: Song room fixes (owner 2026-10-11: "what does play their credits mean") — Credits: one row per person, tap opens "Songs with <name>"; Play keeps the current song going. About: one short "you and this song" block. First ♥ offers "Add a note" (no popup). */
+X.crv=null;
+function crPeople(k){const c=credits(k),m=new Map();[['perf','Performed'],['write','Wrote'],['prod','Produced'],['mix','Mixed']].forEach(([f,l])=>c[f].forEach(n=>{if(!m.has(n))m.set(n,[]);m.get(n).push(l)}));return {m,label:c.label}}
+function crRoleTx(r){return r.map((x,i)=>i?x.toLowerCase():x).join(', ').replace(/, ([^,]*)$/,' and $1')}
+function crKey(n){return 'cr_'+slug(n)}
+function crList(n){const k=curK(),ks=byCredit(n),you=crPeople(k).m.get(n)||[];
+ return `<div class="npp npc npc2"><button class="lnk npc-bk" data-crb>${ICON('left')}Credits</button>
+ <div class="npc-hd"><span class="npc-av lg">${n.split(' ').map(w=>w[0]).join('').slice(0,2)}</span><div><span class="cap">Songs with</span><h3>${n}</h3><span class="mut">${ks.length} song${ks.length===1?'':'s'} in Rondo${you.length?' \u00b7 '+crRoleTx(you).toLowerCase()+' this one':''}</span></div><button class="btn pri sm" data-crpl="${n}">${ICON('play')}Play</button></div>
+ <div class="npc-sl">${ks.map((x,i)=>i>=(X.crAll?1e9:20)&&x!==k?'':`<button class="npq${x===k?' now':''}" data-crs="${n}" data-i="${i}"><span class="m">${x===k?(st.on?'<span class="eq"><i></i><i></i><i></i></span>':'\u2016'):pad(i+1)}</span><span class="cover">${svg(S[x].art)}</span><div><b>${S[x].t}</b><span>${S[x].a}</span></div><span class="m">${fmt(S[x].d)}</span></button>`).join('')}${ks.length>20&&!X.crAll?`<button class="btn gh sm npc-all" data-crall>Show all ${ks.length}</button>`:''}</div></div>`}
+function crPanel(){const k=curK();if(X.crv)return crList(X.crv);const {m,label}=crPeople(k);
+ return `<div class="npp npc npc2">${[...m].map(([n,r])=>{const more=byCredit(n).filter(x=>x!==k).length;return `<button class="npc-r npc-rb" data-crv="${n}" ${more?'':'disabled'}><span class="npc-av">${n.split(' ').map(w=>w[0]).join('').slice(0,2)}</span><div><b>${n}</b><span>${crRoleTx(r)}</span></div><span class="npc-m">${more?`${more} more song${more===1?'':'s'}${ICON('right')}`:'Only this song so far'}</span></button>`}).join('')}
+ <div class="npc-l"><span>Label</span><b>${label}</b></div><p class="mut npc-n">Credits come from the label. Names here are study placeholders.</p></div>`}
+{const _p20=npPanel;npPanel=function(){if(X.npTab==='credits')return crPanel();return _p20()}}
+function crPlay(n,i){const k=curK(),ks=byCredit(n),key=crKey(n);SRC[key]={type:'Credits',name:'Songs with '+n,art:S[ks[0]].art,q:ks};
+ const at=ks.indexOf(k);
+ if(i==null&&at>=0){/* keep the song you are hearing; the rest follows it */st.uqNow=null;st.src=key;st.i=at;render();return toast(`Up next: ${ks.length-1} more song${ks.length===2?'':'s'} with ${n}`)}
+ startSrc(key,i==null?0:i)}
+document.addEventListener('click',e=>{if(!e.target.closest('#np'))return;let x;
+ const re=()=>{$('npP').innerHTML=npPanel();lastNp=-1;$('npP').scrollTop=0};
+ if(x=e.target.closest('[data-crv]')){e.stopPropagation();X.crv=x.dataset.crv;X.crAll=false;return re()}
+ if(e.target.closest('[data-crb]')){e.stopPropagation();X.crv=null;X.crAll=false;return re()}
+ if(e.target.closest('[data-crall]')){e.stopPropagation();X.crAll=true;const y=$('npP').scrollTop;re();$('npP').scrollTop=y;return}
+ if(x=e.target.closest('[data-crpl]')){e.stopPropagation();crPlay(x.dataset.crpl);return re()}
+ if(x=e.target.closest('[data-crs]')){e.stopPropagation();const n=x.dataset.crs,i=+x.dataset.i,ks=byCredit(n);if(ks[i]===curK()&&st.src===crKey(n)){$('pp').click();return re()}crPlay(n,i);return re()}
+ if(x=e.target.closest('[data-npt]'))X.crv=null},true);
+{const _c20=npClose;npClose=function(){X.crv=null;_c20()}}
+/* About: the three number boxes + table become one short block */
+{const _na20=npAbout;npAbout=function(){const k=curK(),s=S[k],h=_na20(),T=document.createElement('div');T.innerHTML=h;
+ const y=T.querySelector('.npy');if(y){const plays=REPEAT_COUNT[k]||0,lk=st.liked.has(k),pls=Object.keys(st.pl).filter(p=>st.pl[p].includes(k)).length;
+  const bits=[plays?`<b class="m">${plays}</b> play${plays===1?'':'s'}${plays>=5?' \u00b7 on repeat':''}`:'<b>First listen</b>',lk?'<b>\u2665</b> liked':'',pls?`in <b class="m">${pls}</b> playlist${pls===1?'':'s'}`:''].filter(Boolean);
+  const n=y.querySelector('.npy-n');if(n)n.outerHTML=`<p class="npy-l">${bits.join('<i>\u00b7</i>')}</p>`}
+ const d=T.querySelector('dl.npd');if(d){const g=s.genre||GEN[s.art]||'';const pace=s.bpm<95?'Laid back':s.bpm<=120?'Steady':'High energy';d.outerHTML=`<p class="npd-l">${[g,pace].filter(Boolean).join(' \u00b7 ')}</p>`}
+ return T.innerHTML}}
+/* First ♥ on a song: the toast offers "Add a note" (nothing pops up over the music) */
+{const L=$('like'),_on=L.onclick;L.onclick=function(){const k=curK(),was=st.liked.has(k);_on.call(this);if(!was&&st.liked.has(k)&&!NOTES[k]&&!(X.likedOnce||(X.likedOnce=new Set())).has(k)){X.likedOnce.add(k);toast('Added to Liked songs','Add a note',()=>setTimeout(()=>{$('toast').classList.remove('open');noteEdit(k);const p=$('pop'),r=$('like').getBoundingClientRect(),w=300;p.style.width=w+'px';p.style.left=Math.max(8,Math.min(innerWidth-w-8,r.left-20))+'px';p.style.top=Math.max(8,r.top-p.offsetHeight-12)+'px'},0))}}}
 /* boot */
 if(D.artist)setView('artist',{n:D.artist});
 if(D.release)setView('release',{id:D.release});
