@@ -45,3 +45,7 @@ Inspect changed source/config/patches for credentials, production personal data 
 Candidate workflow currently only triggers on its named branch; main Pages deploy is not equivalent QA. Before accepted integration, enforce equivalent PR/main/post-merge checks and artifact identity. A deploy success alone is not a release certificate.
 
 Update [STATE.md](STATE.md), [SNAPSHOTS.md](SNAPSHOTS.md), affected specs, and PR description with exact candidate SHA, commands/results, workflow, preview blob, visual review, exceptions, secret review, owner decision and merge status. For any candidate source change, rerun the entire gate and republish exact-head evidence. Recheck PR integration after acceptance, then post-merge gate and handoff update. Never attach an older green result to a newer source head.
+
+## Library design-study check — 2026-10-13
+
+Home E rev 24 / source commit `31e3ebf`: full study suite and 46 focused Library checks pass on a fresh clone. Delivery PNGs and additional narrow/editor/empty states inspected individually; phone overlap/width and paused Undo bugs fixed. Live GitHub Pages HTML/JS/CSS byte-identical to tested source. Evidence scope/limitations: SESSION_2026-10-13_LIBRARY.md. This is design-study evidence, not a clearance of old runtime PR #5 or production gates. Library D-092 is not owner-approved.

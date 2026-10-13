@@ -39,4 +39,8 @@ Study catalog and sleeves are still fictional placeholders. Prototype playback/c
 
 ## Publication
 
-Code/docs/tests and five reviewed study renders are pushed to `main` in bounded commits. Verify the pushed tree against the local copy and rerun both study suites on a fresh clone; publication verification is recorded below when complete. A GitHub source push and GitHub Pages deployment are separate checks.
+- Code/docs/tests commit **`31e3ebfb997152bee856a6228505f4a1f6254e83`** is pushed to `main`.
+- Fresh clone `/data/lib24-verify` of that commit: full study suite **exit 0**, focused suite **46 passed / zero errors, exit 0**. JS/CSS exactly match the local reviewed source.
+- GitHub Pages `home.html`, `app.js` and `style.css` fetched independently after deployment: **all three byte-identical** to this source, 2026-10-13. Direct entry opens Library.
+- The final screenshot/documentation commit archives renders 123–127 and this verification; it does not change the tested JavaScript/CSS. Final tree comparison is performed after that commit.
+- Source push, deployed assets, QA and owner approval remain separate. D-092 still needs owner review.
