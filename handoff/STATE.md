@@ -1,10 +1,10 @@
 # Current project state
 
-**Updated:** 2026-10-11 (Home E rev 23). **Product:** Rondo. **Phase:** design-first program (D-048) — every page is designed and approved in one interactive study before the real apps are built (D-062 desktop + phone).
+**Updated:** 2026-10-13 (Home E rev 24). **Product:** Rondo. **Phase:** design-first program (D-048) — every page is designed and approved in one interactive study before the real apps are built (D-062 desktop + phone).
 
 ## Right now
 
-- **Prototype:** Home E study, rev 23 — https://makeitrando.github.io/Rando/design/studies/2026-10-05-home-e/home.html (code: `design/studies/2026-10-05-home-e/`). `check.mjs` (browser test suite, ~70 feature groups) **PASS on a fresh clone of `main`, 2026-10-10.**
+- **Prototype:** Home E study, rev 24 — https://makeitrando.github.io/Rando/design/studies/2026-10-05-home-e/home.html (code: `design/studies/2026-10-05-home-e/`). `check.mjs` (browser test suite, ~70 feature groups) **PASS on a fresh clone of `main`, 2026-10-10.**
 - **Last QA pass (rev 19.1):** every screen × desktop/phone × dark/light checked for script errors, overflow, broken text, duplicate ids, unnamed buttons; every visible button clicked on 8 screens × desktop/phone — zero errors. Bugs found and fixed are listed in [SESSION_2026-10-07.md](SESSION_2026-10-07.md) (rev 19.1).
 - **Rev 19.2 (readability):** grey text and light-mode orange text were below the 4.5:1 readable minimum — colour tokens fixed (`--t3`, new `--acct`), stamp labels fixed; re-audited, all pass. Checked by automated audit + pixel sampling.
 - **Rev 19.3 (by-eye review, 2026-10-11):** screenshots of every main screen reviewed by eye (desktop + phone, light + dark). Fixed: stray box around phone filter chips, cut-off 4th Following ring, Home "Next" vs Journeys "Now" for the same station. Remaining weak spots listed in BACKLOG ("Found in the by-eye review").
@@ -12,7 +12,8 @@
 - **Rev 21 (2026-10-11):** Playlist page basics (D-089 proposal) — one list per playlist, Liked = liked, Remove + Undo, drag to reorder, Find, real New playlist. See PLAYLISTS.md.
 - **Rev 22 (2026-10-11):** Artist Journey page (D-090 proposal) — station strip (move along the Journey without the map), Starts here / Continue here, one real Follow state + Undo; sidebar Liked count fixed. See JOURNEYS.md.
 - **Rev 23 (2026-10-11):** Library page (D-091 proposal) — everything you keep in one place; Edit details / Delete playlists (Undo), pins on phone, Download (state), moments + Your month + Passport tiles. D-088/089/090 confirmed (owner "continue"). See LIBRARY.md.
-- **Next:** verdict on D-091 → Profile/Settings → First run (owner, 2026-10-11). Full ordered list + every owner verdict: [BACKLOG.md](BACKLOG.md).
+- **Rev 24 (2026-10-13):** Library collection shelves (D-092 proposal): owner rejected rev 23 as too small / below target level. Wider Liked feature, playable covers, artist circles, album track previews, Notes filter, moments with ranges + pause/resume, Shelf/List alternative. Import/offline state honestly labelled. See LIBRARY.md and SESSION_2026-10-13_LIBRARY.md.
+- **Next:** owner review / refine Library D-092 → Profile/Settings → First run. Library is NOT approved. Full ordered list + every owner verdict: [BACKLOG.md](BACKLOG.md).
 - **App runtime on `main`** is still the old v0.3.0; PR #5 (v0.3.2) is an old draft with open bugs B-001/B-002 — it will not be merged; the app gets rebuilt on the approved design.
 
 ## Page status
@@ -28,11 +29,10 @@
 | Artist page | 12–12.1 | ARTIST.md | Approved (D-074, D-075) |
 | Release page | 13 | RELEASE.md | Approved (D-076) |
 | Sidebar + Pin to top | 14, 18 | SIDEBAR.md | Approved (D-078, D-080, D-086) |
-| Library | 23 | LIBRARY.md | Proposed (D-091) |
+| Library | 24 | LIBRARY.md | Proposed (D-092); rev 23 / D-091 superseded |
 | Moments | 15 | MOMENTS.md | Approved (D-082) |
 | About auto facts | 15.3 | NOW_PLAYING.md | Approved (D-083) |
 | Your month | 19–19.1 | YOUR_MONTH.md | Approved (D-087) |
-| **Library** | — | — | **Next** |
 | Profile & settings, First run | — | — | Not started |
 
 ## Repo (checked live on GitHub, 2026-10-10)

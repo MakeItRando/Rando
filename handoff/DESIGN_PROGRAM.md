@@ -1,6 +1,6 @@
 # Rondo design program — design first, then build
 
-**Started:** 2026-10-06 (folder names say 10-04/05; see handoff/SESSION_2026-10-07.md). **Status (2026-10-10):** active — see the page status table in STATE.md; Library next. (2026-10-07: Home rev 4 approved; Explore proposed; Now Playing next.) Every page is designed for desktop and phone (D-062). **Owner direction:** design every surface first, page by page, then choose implementation approaches. Update this file whenever a page brief, study, verdict or token changes.
+**Started:** 2026-10-06 (folder names say 10-04/05; see handoff/SESSION_2026-10-07.md). **Status (2026-10-13):** active — Library rev 24 / D-092 needs owner review; rev 23 was below the owner’s bar. See STATE.md. (2026-10-07: Home rev 4 approved; Explore proposed; Now Playing next.) Every page is designed for desktop and phone (D-062). **Owner direction:** design every surface first, page by page, then choose implementation approaches. Update this file whenever a page brief, study, verdict or token changes.
 
 ## Why this program exists
 
@@ -52,7 +52,7 @@ Each page goes through: **brief → study (real-size desktop + mobile renders in
 | 4 | Artist page (follow, releases, Journey entry) | Not started |
 | 5 | Journeys (picker, Genre page, Artist Journey) | **Approved D-069** (Home E rev 8, docs/specs/JOURNEYS.md); stamps/passport/share **D-070** (rev 9, docs/specs/STAMPS_PASSPORT.md) |
 | 6 | Search (instant results, recents, empty/error) | ⌘K palette in Home E; page not started |
-| 7 | Library (playlists, liked, artists, albums, moments/notes) | Not started |
+| 7 | Library (playlists, liked, artists, albums, moments/notes) | Rev 24 / D-092 proposed; rev 23 too small, not approved |
 | 8 | Release/album page | Not started |
 | 9 | Profile & settings | Profile menu in Home E; page not started |
 | 10 | First run (play-first, optional setup) | Not started; D-045 play before setup |
@@ -104,3 +104,7 @@ Files: [`design/studies/2026-10-04-foundation-a/`](../design/studies/2026-10-04-
 - Never merge a study into app code before the owner marks it approved here.
 - Keep every study's HTML and renders in the repo; rejected studies stay with a recorded reason.
 - Specs describe states: loading, empty, error, long text, offline/unavailable, reduced motion, 320 / 390 / 1440 widths.
+
+## Library rev 24 (2026-10-13)
+
+Owner asked for more depth/presence, not simply a larger list. Proposal: cover-led saved collections; circular artist shelf; actual album previews; clips and private notes; optional compact list. Neutral system retained, no fake inventory or discovery feed. Existing placeholder sleeves are for the fictional study catalog only. Review renders 123–127 before proceeding. Spec: LIBRARY.md; QA: SESSION_2026-10-13_LIBRARY.md.

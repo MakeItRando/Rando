@@ -74,3 +74,7 @@ Fresh candidate automation captured 18 states with no automated failures/runtime
 ## Owner conversation archive — 2026-10-07
 
 13 screenshots covering 2026-10-04 → 2026-10-07 (orientation, owner answers, studies A → E rev 3 verdicts, and the lost 2026-10-07 session) are in [snapshots/2026-10-07-owner-context/](snapshots/2026-10-07-owner-context/README.md), lossless SVG wrappers with SHA-256 manifest. Use `scripts/archive-screenshot.py` for future owner screenshots. Conversation text is summarized in [CONVERSATION_LOG.md](CONVERSATION_LOG.md). Design-study renders live with each study under `design/studies/`.
+
+## Library rev 24 — 2026-10-13 (proposal, not owner approval)
+
+Home E renders 123–127: desktop shelves, phone shelves, album/memory area, desktop light, compact list. PNGs rendered at delivery dimensions then inspected individually; published SVGs embed those raster captures. No user notes or extra catalog inventory added for the delivery renders. Additional local QA states: 320px, phone artists/albums, note editor with explicitly synthetic QA text, moments filter, playlist editor, empty search. See SESSION_2026-10-13_LIBRARY.md.

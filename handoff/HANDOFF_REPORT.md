@@ -1,6 +1,6 @@
 # Rondo project handoff report
 
-**Current (2026-10-10):** design-first, Home E study rev 19.2 (readability pass); 11 pages/features approved, Library next. Read [STATE.md](STATE.md) (page status table) and [BACKLOG.md](BACKLOG.md). The sections below are the 2026-10-07 report, kept for history.
+**Current (2026-10-13):** design-first, Home E rev 24. Library rev 23 was not approved; owner asked for a stronger / larger iteration. D-092 cover shelves, Shelf/List, album track previews and private notes are now proposed; review Library before Profile/Settings. Study tests and by-eye evidence are in [SESSION_2026-10-13_LIBRARY.md](SESSION_2026-10-13_LIBRARY.md). The old app runtime and draft PR #5 remain untouched. Read [STATE.md](STATE.md) and [BACKLOG.md](BACKLOG.md).
 
 **As of 2026-10-07:** this is a continuity report, not a release certificate. Read [STATE.md](STATE.md) first, then [AUDIT_2026-10-04.md](AUDIT_2026-10-04.md), and verify live GitHub state.
 

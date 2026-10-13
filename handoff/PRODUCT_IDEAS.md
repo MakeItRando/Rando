@@ -204,3 +204,14 @@ Built in rev 14.2: progress line on the playing playlist, Recently played (2 row
 4. Add explainable queue reasons and tuning controls.
 5. Deepen artist worlds, credits, and private moments.
 6. Build device/offline continuity after production accounts and authorized playback exist.
+
+## Library iteration — 2026-10-13 (D-092 proposal)
+
+Owner: rev 23 was too small / not at the app's target level; take time, think more, show useful results. Built in the design study, not owner-approved:
+- **Collection shelves:** bigger playable cover cards, real Liked sleeves and pinned items; one artist shelf, no duplication.
+- **Shelf / List:** visual browsing or fast scanning, same music and playback state.
+- **Album previews:** first actual tracks inline, exact album queue; sparse saved albums do not consume a mostly empty cover grid.
+- **Find your notes:** existing private song notes now searchable and editable from Library; no entry popup / typing obligation.
+- **Saved clip cards:** actual range, duration, pause/resume; not a fake waveform.
+
+Good next candidates, **not built or approved**: folders/grouping for large collections; “saved but not heard” filter from real history; bulk selection for organizing many items. Do not create fictitious saves, recommendations or social playlists to make the screen look full. Shared collections and following real people's playlists remain in the Profile & social phase. Import / real offline storage require the real apps.

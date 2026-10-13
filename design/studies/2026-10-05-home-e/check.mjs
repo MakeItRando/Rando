@@ -639,7 +639,7 @@ await p.evaluate(() => { try { closeModal(); npClose() } catch (e) {} ; $('pop')
   if (!(await p.evaluate(() => st.src === 'focus' && st.on && XP.view === 'library' && document.querySelector('#lb .lb-r[data-lid="focus"]').classList.contains('on')))) fail('row Play must play it and stay in Library');
   // moments
   await p.click('#lb [data-lbt="mo"]'); await p.waitForTimeout(150);
-  if (!(await p.evaluate(() => document.querySelectorAll('#lb .lb-mr').length === MOM.length && MOM.length > 0))) fail('Your moments tile must list moments');
+  if (!(await p.evaluate(() => document.querySelectorAll('#lb .lb-memory').length === MOM.length && MOM.length > 0))) fail('Moments section must list every saved moment');
   await p.click('#lb [data-lbf="all"]'); await p.waitForTimeout(100);
   // new playlist
   await p.click('#lb [data-lbnew]'); await p.waitForTimeout(250);

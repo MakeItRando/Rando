@@ -1,3 +1,5 @@
+> **Current: rev 24, Library D-092 proposal (2026-10-13).** Owner called rev 23 too small / below the target level; it is not approved. Review Library before moving to Profile/Settings. Direct entry: [Library](home.html?view=library). Spec: docs/specs/LIBRARY.md. Full study checks: `check.mjs`; focused Library checks: `library-check.mjs`.
+
 # Home study E — interactive (2026-10-05)
 
 **Status:** rev 4 approved (D-065, "thats perfect"); **rev 23 Library page** (filters, Find, pins on phone, Download, Edit details, Delete; D-091), **rev 22 Artist Journey page** (station strip, Starts here, one real Follow state; D-090), **rev 21 Playlist page basics** (one list, Liked = liked, Remove, drag to reorder, Find; D-089), **rev 20.1 ♥ in player bar + hero heart bug**, **rev 20 Song room fixes** (Credits → Songs with <name>, About one line, first ♥ → Add a note, phone labels; D-088), **rev 19.3 by-eye fixes** (phone chips box, Following edge fade, Journey "Now" label), **rev 19.2 readability pass** (`--t3` + new `--acct` text-accent token, all text ≥4.5:1), **rev 19–19.1 Your month + bug pass** (D-087 confirmed, [YOUR_MONTH.md](../../../docs/specs/YOUR_MONTH.md)), **rev 18 Pin to top** (D-086 confirmed, [SIDEBAR.md](../../../docs/specs/SIDEBAR.md)), **rev 17 Playlist refresh + Mixtapes** (D-085 confirmed, [PLAYLISTS.md](../../../docs/specs/PLAYLISTS.md)), **rev 16–16.2 Song room lyrics + new icon set** (D-084), **rev 15 Moments** (D-082), **rev 5 adds the Explore page** (approved, D-066), **rev 6 adds search page, Rabbit hole, Save a tune** (D-067), **rev 7 adds the Now Playing page** (approved, D-068, [NOW_PLAYING.md](../../../docs/specs/NOW_PLAYING.md)), **rev 8 adds Journeys** (approved, D-069, [JOURNEYS.md](../../../docs/specs/JOURNEYS.md)), **rev 9 adds stamps, passport, share cards** (D-070, [STAMPS_PASSPORT.md](../../../docs/specs/STAMPS_PASSPORT.md)), **rev 14–14.1 sidebar with character + Now Playing About, BPM/key hidden** (D-078 confirmed, D-079 proposal; [SIDEBAR.md](../../../docs/specs/SIDEBAR.md)), **rev 13 adds the Release page** (approved D-076; rev 13.1 clarity pass, D-077; [RELEASE.md](../../../docs/specs/RELEASE.md)), **rev 12 adds the Artist page** (approved D-074; final touches rev 12.1, D-075; [ARTIST.md](../../../docs/specs/ARTIST.md)), **rev 11 adds the Playlist page + Radio page** (D-072 proposal), **rev 10 adds the listening flow** (D-071 proposal, [FEATURE_PLAN.md](../../../docs/specs/FEATURE_PLAN.md); spec [EXPLORE.md](../../../docs/specs/EXPLORE.md)). Rev 3 (D-058). Owner on rev 3 (2026-10-07): bottom scrubber looks untidy; Home "boring sometimes… not giving the vibe to explore"; then approved all review feedback (D-060), Dig (D-061), desktop + mobile apps first (D-062). Rev 3: Home complete (D-058). Owner on rev 2: liked every suggestion, light mode "awesome", bottom bar left to us (kept). Rev 2 (D-057): Owner on rev 1: "way way better… so close"; keep the Journeys filter but don't leave it empty; add light mode.
@@ -127,3 +129,15 @@ All counts come from `data.js`; sleeves are code-drawn placeholders, not product
 
 
 > **CSS rule for this study:** before adding a class, `grep -n "\.name" style.css` — names are global and several short ones are already taken (`.shelf` = On repeat row, `.hd`, `.pk`, `.av`, `.nb`). Rev 14 broke On repeat by reusing `.shelf`.
+
+## Rev 24 — collection-first Library (D-092 proposal)
+
+Not a new discovery feed: saved playlist shelves, Liked cover stack from the actual liked set, artist circles, compact album summaries with exact playable track previews, existing private notes + search, clip ranges, Shelf/List. Your month and Passport remain lower down. Download UI is an explicit state preview; no real offline playback. Study catalog/sleeves remain fictional placeholders. QA and remaining limits: handoff/SESSION_2026-10-13_LIBRARY.md.
+
+| Render | State |
+| --- | --- |
+| ![](renders/123-library-shelves.svg) | Shelf view, desktop dark |
+| ![](renders/124-library-phone.svg) | Shelf view, 390px phone |
+| ![](renders/125-library-albums-memories.svg) | Saved album track previews, moments and honest empty notes |
+| ![](renders/126-library-light.svg) | Shelf view, desktop light |
+| ![](renders/127-library-list.svg) | Compact List alternative |

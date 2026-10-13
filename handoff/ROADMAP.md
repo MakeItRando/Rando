@@ -4,7 +4,9 @@ Dates are open pending team capacity, launch territory/platform, and owner-provi
 
 ## Phase 0a: design-first program (current, D-048)
 
-Status 2026-10-10: Home, Explore, Now Playing / Song room, Journeys, Artist, Release, Sidebar, Mixtapes, Your month approved (see STATE.md page table). Next: Library → Profile/Settings → First run, then choose the build approach and build the real apps.
+Status 2026-10-13: Library rev 24 / D-092 is proposed after the owner said rev 23 was too small / below target. Review and refine Library before advancing.
+
+Status 2026-10-10 (history): Home, Explore, Now Playing / Song room, Journeys, Artist, Release, Sidebar, Mixtapes, Your month approved (see STATE.md page table). Next: Library → Profile/Settings → First run, then choose the build approach and build the real apps.
 
 Status 2026-10-07 (history): Home desktop approved (rev 3, D-058). Next: Home rev 4 (phone, scrubber, Dig) → Now Playing → Journey → other pages. Then choose build approach and rebuild the app on the approved design.
 

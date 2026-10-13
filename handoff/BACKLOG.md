@@ -1,11 +1,12 @@
 # Rondo backlog — one arranged list
 
-**Updated:** 2026-10-10 (Home E rev 19.1). This is the single place for *what's next*. Details of each idea live in [PRODUCT_IDEAS.md](PRODUCT_IDEAS.md); decisions in [DECISIONS.md](DECISIONS.md); every owner message in [CONVERSATION_LOG.md](CONVERSATION_LOG.md). Update this file in the same session whenever the owner says yes / no / later to anything.
+**Updated:** 2026-10-13 (Home E rev 24). This is the single place for *what's next*. Details of each idea live in [PRODUCT_IDEAS.md](PRODUCT_IDEAS.md); decisions in [DECISIONS.md](DECISIONS.md); every owner message in [CONVERSATION_LOG.md](CONVERSATION_LOG.md). Update this file in the same session whenever the owner says yes / no / later to anything.
 
 Status words: **Now** (working on it) · **Next** (agreed, queued) · **Profile & social phase** (owner: "we will work on them when designing profiles") · **Real apps** (needs native apps/backend) · **Parked** (maybe, ask again later) · **Dropped** (owner said no / not useful).
 
-## Now (owner 2026-10-11: "we should be working on song room for sure before going to library… its design the worst i think, following playlist and artist journey playlist")
-1. **Library page — rev 23 built (D-091 proposal)**: filters, Find, Recent/A–Z, tiles (moments, Your month, Passport), ⋯ Pin to top (phone pins), Download (state), Edit details, Delete + Undo, New playlist. Later: real import (H3), real downloads/storage (H5), folders only if asked.
+## Now — Library needs a stronger iteration (owner 2026-10-13)
+1. **Library rev 24 — D-092 proposal / awaiting review.** Rev 23 was too small / below the target level, not approved. Collection shelves + Shelf/List alternative, album track previews, searchable song notes, playable saved clips, listening links lower down. Review / refine this before moving on.
+2. **Library ideas not yet built or approved:** folders/grouping for large collections; genuine-history “saved but not heard” filter; clear bulk selection. No extra discovery feed or fake collection abundance. Import and real offline storage remain H3/H5 (real apps).
 
 ## Next (agreed order)
 1. Profile/Settings → First run.

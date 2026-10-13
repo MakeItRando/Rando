@@ -1,4 +1,5 @@
 const I={
+grid:'<rect x="4" y="4" width="6" height="6" rx="1"/><rect x="14" y="4" width="6" height="6" rx="1"/><rect x="4" y="14" width="6" height="6" rx="1"/><rect x="14" y="14" width="6" height="6" rx="1"/>',
 explore:'<rect x="4" y="4" width="6.5" height="6.5" rx="2"/><rect x="13.5" y="4" width="6.5" height="6.5" rx="2"/><rect x="4" y="13.5" width="6.5" height="6.5" rx="2"/><circle cx="16.75" cy="16.75" r="3.25"/>',
 home:'<path d="M4.5 10.2 12 4.5l7.5 5.7V19a1.5 1.5 0 0 1-1.5 1.5h-3.5V16a2.5 2.5 0 0 0-5 0v4.5H6A1.5 1.5 0 0 1 4.5 19z"/>',
 search:'<circle cx="10.5" cy="10.5" r="6"/><path d="m15 15 4.5 4.5"/>',

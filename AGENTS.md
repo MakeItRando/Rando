@@ -10,9 +10,9 @@ Build a distinctive, calm, accessible music product around **find → play → e
 3. App/code work: [handoff/PRODUCT_MAP.md](handoff/PRODUCT_MAP.md), [handoff/PLAYBACK_CONTEXTS.md](handoff/PLAYBACK_CONTEXTS.md), [handoff/QUALITY_GATES.md](handoff/QUALITY_GATES.md), [docs/](docs/), and the latest audit.
 4. Check live GitHub (branches, PR #5, checks) — docs can lag.
 
-## Current phase (2026-10-10)
+## Current phase (2026-10-13)
 
-Design-first (D-048). Home E study rev 19.1 — most pages approved (table in handoff/STATE.md); **next: Library page**, then Profile/Settings and First run, then build the real apps (D-062). Owner rules in practice: don't overdo, don't make things up (D-050), useful + fun, every yes/no/later goes into handoff/BACKLOG.md and every owner message into handoff/CONVERSATION_LOG.md in the same session; push to `main` after every step (D-059) and verify the GitHub copy matches.
+Design-first (D-048). Home E study rev 24. Library revision D-092 is proposed: rev 23 was too small / below the owner’s bar and was not approved. **Stay on Library until reviewed.** Profile/Settings → First run come after that, then real apps (D-062). Spec LIBRARY.md; QA SESSION_2026-10-13_LIBRARY.md. Owner rules: useful + fun, don't overdo or invent data (D-050); all owner messages/verdicts logged in the same session; push to `main` and verify (D-059). Approved Song room / Playlist / Artist Journey changes are D-088/089/090.
 
 ### Earlier (2026-10-07)
 
